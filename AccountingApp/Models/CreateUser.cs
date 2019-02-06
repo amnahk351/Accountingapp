@@ -16,13 +16,31 @@ namespace AccountingApp.Models
     public partial class CreateUser
     {
         public int ID { get; set; }
+
+        [Required(ErrorMessage = "Please Enter first name")]
         public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Please Enter Last name")]
         public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Please Enter Email Address")]
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "Please Enter Username")]
         public string Username { get; set; }
+
+        [Required(ErrorMessage = "Please Enter Password")]
         public string Password { get; set; }
+
+        [Required(ErrorMessage = "Please Select Role")]
         public string Role { get; set; }
+
+        [Required(ErrorMessage = "Please Enter Phone no.")]
+        [Phone]
         public string Phone { get; set; }
+
+        [Required(ErrorMessage = "Please Select Date")]
         public System.DateTime Date { get; set; }
+        
     }
 }

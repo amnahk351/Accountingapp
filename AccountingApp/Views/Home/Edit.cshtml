@@ -15,50 +15,60 @@
 
 @using (Html.BeginForm())
 {
-    <div class="container">
-        <div class="form-group">
-            <label>FirstName</label>
-            @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control" })
-        </div>
+<div class="container">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            <label>LastName</label>
-            @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })
-        </div>
-
-        <div class="form-group">
-            <label>Email</label>
-            @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
-        </div>
-
-        <div class="form-group">
-            <label>Username</label>
-            @Html.TextBoxFor(x => x.Username, new { @class = "form-control" })
-        </div>
-
-        <div class="form-group">
-            <label>Password</label>
-            @Html.TextBoxFor(x => x.Password, new { @class = "form-control" })
-        </div>
-
-        <div class="form-group">
-            <label>Role</label>
-            @Html.DropDownListFor(x => x.Role, selectListItems, new { @class = "form-control" })
-        </div>
-
-        <div class="form-group">
-            <label>Phone</label>
-            @Html.TextBoxFor(x => x.Phone, new { @class = "form-control" })
-        </div>
-
-        <div class="form-group">
-            <label>Date</label>
-            @Html.TextBoxFor(x => x.Date, new { @class = "form-control" })
-        </div>
-
-        <div class="button">
-            <button class="btn btn-success btn-lg margin-right"><span class="glyphicon glyphicon-save"></span>Update</button>
-        </div>
+    <div class="form-group">
+        <label>FirstName</label>
+        @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control" })
 
     </div>
+
+    <div class="form-group">
+        <label>LastName</label>
+        @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+        <label>Username</label>
+        @Html.TextBoxFor(x => x.Username, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+        <label>Password</label>
+        @Html.TextBoxFor(x => x.Password, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+        <label>Role</label>
+        @Html.DropDownListFor(x => x.Role, selectListItems, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+        <label>Phone</label>
+        @Html.TextBoxFor(x => x.Phone, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+        <label>Date</label>
+        @Html.TextBoxFor(x => x.Date, new { @class = "form-control" })
+
+    </div>
+
+    <div class="button">
+        <button class="btn btn-success btn-lg margin-right"><span class="glyphicon glyphicon-save"></span>Update</button>
+    </div>
+
+</div>
 }

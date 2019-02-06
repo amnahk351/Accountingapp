@@ -9,7 +9,17 @@ namespace AccountingApp.Controllers
 {
     public class HomeController : Controller
     {
+        public ActionResult LogIn()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult LogIn(String username, String password)
+        {
+            return View("Index");
+        }
         Database1Entities db = new Database1Entities();
+
         public ActionResult Index()
         {
             return View();
@@ -27,9 +37,11 @@ namespace AccountingApp.Controllers
              return View();
         }
         [HttpPost]
-        public ActionResult NewUser(CreateUser model)
+        public ActionResult NewUser(CreateUser model )
         {
+            //ModelState.AddModelError("","");
             CreateUser tbl = new CreateUser();
+
             tbl.FirstName = model.FirstName;
             tbl.LastName = model.LastName;
             tbl.Username = model.Username;
@@ -39,16 +51,20 @@ namespace AccountingApp.Controllers
             tbl.Email = model.Email;
             tbl.Date = model.Date;
 
-            db.CreateUsers.Add(tbl);
-
-            db.SaveChanges();
-            var item = db.CreateUsers.ToList();
-            
             if (ModelState.IsValid)
             {
+                db.CreateUsers.Add(tbl);
+
+                db.SaveChanges();
+                var item = db.CreateUsers.ToList();
+                TempData["Message"] = "Your entry was successfully added!";
+                
+
                 return RedirectToAction("ShowUserData");
             }
-            return View("ShowUserData",item);
+            
+            
+            return View(model);
         }
 
         public ActionResult ShowUserData()
@@ -75,7 +91,9 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult Edit(CreateUser model)
         {
-            var item = db.CreateUsers.Where(x => x.ID == model.ID).First();
+            if (ModelState.IsValid)
+            {
+                var item = db.CreateUsers.Where(x => x.ID == model.ID).First();
             item.FirstName = model.FirstName;
             item.LastName = model.LastName;
             item.Email = model.Email;
@@ -84,11 +102,14 @@ namespace AccountingApp.Controllers
             item.Role = model.Role;
             item.Phone = model.Phone;
             item.Date = model.Date;
-
-            db.SaveChanges();
+           
+                db.SaveChanges();
             var item2 = db.CreateUsers.ToList();
+                TempData["Message"] = "Your entry was successfully updated!";
 
-            return View("ShowUserData", item2);
+                return RedirectToAction("ShowUserData");
+            }
+            return View(model);
         }
 
     }

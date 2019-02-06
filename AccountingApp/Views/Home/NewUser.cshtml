@@ -7,79 +7,99 @@
 }
 <h2>@ViewBag.Title</h2>
 
-@Html.ValidationSummary()
 
 @using (Html.BeginForm())
 {
-    <form method="post">
-        <div class="row">
 
-            <div class="col-md-6">
+<form method="post">
+    @Html.ValidationSummary(true, "The following errors were found:", new { @class="alert alert-danger"})
 
-                <div class="form-group">
-                    <label for="Date" class="control-label">Date</label>
-                    <input type="date" id="Date" name="Date" class="form-control" />
-                </div>
+    <div class="row">
+        <div class="col-md-6">
 
-                <div class="form-group">
-                    <label for="FirstName" class="control-label">First Name</label>
-                    <input type="text" id="FirstName" name="FirstName" class="form-control" />
-                    @Html.ValidationMessageFor(m => m.FirstName)
-                </div>
-
-                <div class="form-group">
-                    <label for="LastName" class="control-label">Last Name</label>
-                    <input type="text" id="LastName" name="LastName" class="form-control" />
-                </div>
-
-                <div class="form-group">
-                    <label for="Email" class="control-label">Email Address</label>
-                    <input type="email" id="Email" name="Email" class="form-control" />
-                </div>
-
-                <div class="form-group">
-                    <label for="Username" class="control-label">UserName</label>
-                    <input type="text" id="Username" name="Username" class="form-control" />
-                </div>
-
-                <div class="form-group">
-                    <label for="Password" class="control-label">Password</label>
-                    <input type="text" id="Password" name="Password" class="form-control" />
-                </div>
-
-                <div class="form-group">
-                    <label for="Role" class="control-label">Role</label><br />
-                    <select name="Role" class="form-control" id="Role">
-                        <option value="Manager">Manager</option>
-                        <option value="Accountant">Accountant</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="phone" class="control-label">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" class="form-control" />
-                </div>
+            <div class="form-group">
+                <label for="Date" class="control-label">Date</label>
+                <input type="date" id="Date" name="Date" class="form-control" />
+                @Html.ValidationMessageFor(m => m.Date, "", new { @class = "text-danger" })
 
             </div>
 
+            <div class="form-group">
+                <label for="FirstName" class="control-label">First Name</label>
+                <input type="text" id="FirstName" name="FirstName" class="form-control" />
+                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                <label for="LastName" class="control-label">Last Name</label>
+                <input type="text" id="LastName" name="LastName" class="form-control" />
+                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
 
 
+            </div>
 
-            <div class="col-md-12">
-                <div class="button">
-                    
-                        <button type="submit"  href="@Url.Action("ShowUserData")" class="btn btn-success btn-lg margin-right">
-                            <span class="glyphicon glyphicon-save"></span> Save
-                        </button>
-                   
-                    <a href="@Url.Action("Index")" class="btn btn-warning btn-lg">
-                        <span class="glyphicon glyphicon-remove"></span> Cancel
-                    </a>
-                </div>
+            <div class="form-group">
+                <label for="Email" class="control-label">Email Address</label>
+                <input type="email" id="Email" name="Email" class="form-control" />
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                <label for="Username" class="control-label">UserName</label>
+                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @placeholder = "Username" })
+                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+
+                @*<input type="text" id="Username" name="Username" class="form-control" />*@
+
+            </div>
+
+            <div class="form-group">
+                <label for="Password" class="control-label">Password</label>
+                <input type="text" id="Password" name="Password" class="form-control" />
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                <label for="Role" class="control-label">Role</label><br />
+                <select name="Role" class="form-control" id="Role">
+                    <option value="Manager">Manager</option>
+                    <option value="Accountant">Accountant</option>
+                </select>
+                @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
+
+
+            </div>
+
+            <div class="form-group">
+                <label for="phone" class="control-label">Phone Number</label>
+                <input type="tel" id="phone" name="phone" class="form-control" />
+                @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+
             </div>
 
         </div>
-    </form>
+
+
+
+
+        <div class="col-md-12">
+            <div class="button">
+
+                <button type="submit" href="@Url.Action("ShowUserData")" class="btn btn-success btn-lg margin-right">
+                    <span class="glyphicon glyphicon-save"></span> Save
+                </button>
+
+                <a href="@Url.Action("Index")" class="btn btn-warning btn-lg">
+                    <span class="glyphicon glyphicon-remove"></span> Cancel
+                </a>
+            </div>
+        </div>
+
+    </div>
+</form>
 }
 
 
