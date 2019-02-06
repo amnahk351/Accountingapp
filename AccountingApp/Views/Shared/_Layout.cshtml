@@ -6,29 +6,135 @@
     <title>@ViewBag.Title - Objective Accounting</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <style>
+
+        .mynav_navbar {
+            overflow: hidden;
+            background-color: #333;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+
+            .mynav_navbar a {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+
+
+        .mynav_dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+
+
+            .mynav_dropdown .mynav_dropbtn {
+                font-size: 16px;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 14px 16px;
+                background-color: inherit;
+                font-family: inherit;
+                margin: 0;
+            }
+
+
+
+            .mynav_navbar a:hover, .mynav_dropdown:hover .mynav_dropbtn {
+                background-color: red;
+            }
+
+
+
+        .mynav_dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+
+
+            .mynav_dropdown-content a {
+                float: none;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+            }
+
+
+
+                .mynav_dropdown-content a:hover {
+                    background-color: #ddd;
+                }
+
+
+
+        .mynav_dropdown:hover .mynav_dropdown-content {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Objective Accounting", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Objective Accounting</a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Users", "ShowUserData", "Home")</li>
-                    <li>@Html.ActionLink("Add New Users", "NewUser", "Home")</li>
-                    <li style="float:right">@Html.ActionLink("SignOut", "SignOut", "Home")</li>
+            <div class="mynav_navbar">
+                <a asp-area="" asp-controller="Jounralize" asp-action="Journalize">Journalize</a>
+                <div class="mynav_dropdown">
+                    <button class="mynav_dropbtn">
+                        Reports
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="mynav_dropdown-content">
+                        <a asp-area="" asp-controller="Trial Balance" asp-action="Trail Balance">Trial Balance</a>
+                        <a asp-area="" asp-controller="Income Statement" asp-action="Income Statement">Income Statement</a>
+                        <a asp-area="" asp-controller="Balance Sheet" asp-action="Balance Sheet">Balance Sheet</a>
+                        <a asp-area="" asp-controller="SORE" asp-action="SORE">SORE</a>
+                    </div>
+                </div>
+                <div class="mynav_dropdown">
+                    <button class="mynav_dropbtn">
+                        Transactions
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="mynav_dropdown-content">
+                        <a asp-area="" asp-controller="Pending Transactions" asp-action="Pending Transactions">Pending Transactions</a>
+                        <a asp-area="" asp-controller="Posted Transactions" asp-action="Posted Transactions">Posted Transactions</a>
+                        <a asp-area="" asp-controller="Balance Sheet" asp-action="Balance Sheet">Rejected Transactions</a>
+                        <a asp-area="" asp-controller="SORE" asp-action="SORE">Suspended Transactions</a>
+                    </div>
+                </div>
+                <a asp-area="" asp-controller="Jounralize" asp-action="Journalize">View Ledger</a>
+                <div class="mynav_dropdown">
+                    <button class="mynav_dropbtn">
+                        Finacial Analysis
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="mynav_dropdown-content">
+                        <a asp-area="" asp-controller="Ratio Analysis" asp-action="Ratio Analysis">Ratio Analysis</a>
+                        <a asp-area="" asp-controller="Dashboards" asp-action="Dashboards">Dashboards</a>
+                    </div>
+                </div>
+                <a asp-area="" asp-controller="View Chart of Accounts" asp-action="View Chart of Accounts">View Chart of Accounts</a>
 
-                </ul>
             </div>
-        </div>
-    </div>
+
+    </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -36,7 +142,7 @@
             <p>&copy; @DateTime.Now.Year - Objective Accounting</p>
         </footer>
     </div>
-    
+
     @Scripts.Render("~/bundles/jquery")
 
     @Scripts.Render("~/bundles/bootstrap")
