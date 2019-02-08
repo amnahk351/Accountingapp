@@ -18,7 +18,7 @@ namespace AccountingApp.Controllers
         {
             return View("Index");
         }
-        Database1Entities db = new Database1Entities();
+        Database1Entities2 db = new Database1Entities2();
 
         public ActionResult Index()
         {
