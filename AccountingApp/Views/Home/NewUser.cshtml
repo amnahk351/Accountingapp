@@ -26,14 +26,14 @@
 
             <div class="form-group">
                 <label for="FirstName" class="control-label">First Name</label>
-                <input type="text" id="FirstName" name="FirstName" class="form-control" />
+                <input type="text" id="FirstName" name="FirstName" class="form-control" value="@Request["FirstName"]" />
                 @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
 
             </div>
 
             <div class="form-group">
                 <label for="LastName" class="control-label">Last Name</label>
-                <input type="text" id="LastName" name="LastName" class="form-control" />
+                <input type="text" id="LastName" name="LastName" class="form-control" value="@Request["LastName"]" />
                 @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
 
 
@@ -41,30 +41,44 @@
 
             <div class="form-group">
                 <label for="Email" class="control-label">Email Address</label>
-                <input type="email" id="Email" name="Email" class="form-control" />
+                <input type="email" id="Email" name="Email" class="form-control" value="@Request["Email"]" />
                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
 
             </div>
 
             <div class="form-group">
-                <label for="Username" class="control-label">UserName</label>
-                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @placeholder = "Username" })
+                <label for="Username" class="control-label">Username</label>
+                <input type="text" id="Username" name="Username" class="form-control" value="@Request["Username"]" />
+                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+
+            </div>
+
+            @*<div class="form-group">
+                <label for="Username" class="control-label">Username</label>
+                @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
 
                 @*<input type="text" id="Username" name="Username" class="form-control" />*@
 
-            </div>
+          
 
             <div class="form-group">
                 <label for="Password" class="control-label">Password</label>
-                <input type="text" id="Password" name="Password" class="form-control" />
+                <input type="password" id="Password" name="Password" class="form-control" />
                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
 
             </div>
 
             <div class="form-group">
+                <label for="ConfirmPassword" class="control-label">Confirm Password</label>
+                <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" />
+                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
                 <label for="Role" class="control-label">Role</label><br />
                 <select name="Role" class="form-control" id="Role">
+                    <option value="Admin">Admin</option>
                     <option value="Manager">Manager</option>
                     <option value="Accountant">Accountant</option>
                 </select>
@@ -74,9 +88,45 @@
             </div>
 
             <div class="form-group">
+                <label for="Active" class="control-label">Allow Access</label>
+                <input data-val="true" id="Active" name="Active" type="checkbox" value="true" />
+                <input name="Active" type="hidden" value="false" />
+
+                @*@Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })*@
+            </div>
+
+            <div class="form-group">
                 <label for="phone" class="control-label">Phone Number</label>
                 <input type="tel" id="phone" name="phone" class="form-control" />
                 @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                <label for="Address" class="control-label">Address</label>
+                <input type="text" id="Address" name="Address" class="form-control" value="@Request["Address"]" />
+                @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                <label for="City" class="control-label">City</label>
+                <input type="text" id="City" name="City" class="form-control" value="@Request["City"]" />
+                @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                <label for="State" class="control-label">State</label>
+                <input type="text" id="State" name="State" class="form-control" value="@Request["State"]" />
+                @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
+
+            </div>
+
+            <div class="form-group">
+                <label for="ZIP_Code" class="control-label">ZIP Code</label>
+                <input type="text" id="ZIP_Code" name="ZIP_Code" class="form-control" value="@Request["ZIP_Code"]" />
+                @Html.ValidationMessageFor(m => m.ZIP_Code, "", new { @class = "text-danger" })
 
             </div>
 
@@ -101,7 +151,5 @@
     </div>
 </form>
 }
-
-
 
 
