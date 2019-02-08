@@ -19,14 +19,19 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>FirstName</th>
-                <th>LastName</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Email</th>
                 <th>Username</th>
                 <th>Password</th>
                 <th>Role</th>
                 <th>Phone</th>
                 <th>Date</th>
+                <th>Allowed Access</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>ZIP Code</th>
                 <th>Action</th>
 
             </tr>
@@ -34,24 +39,29 @@
         <tbody>
             @for (int i = 0; i < Model.Count(); i++)
             {
-                <tr>
-                    <td>@Model[i].ID</td>
-                    <td>@Model[i].FirstName</td>
-                    <td>@Model[i].LastName</td>
-                    <td>@Model[i].Email</td>
-                    <td>@Model[i].Username</td>
-                    <td>@Model[i].Password</td>
-                    <td>@Model[i].Role</td>
-                    <td>@Model[i].Phone</td>
-                    <td>@Model[i].Date</td>
+            <tr>
+                <td>@Model[i].ID</td>
+                <td>@Model[i].FirstName</td>
+                <td>@Model[i].LastName</td>
+                <td>@Model[i].Email</td>
+                <td>@Model[i].Username</td>
+                <td>@Model[i].Password</td>
+                <td>@Model[i].Role</td>
+                <td>@Model[i].Phone</td>
+                <td>@Model[i].Date</td>
+                <td>@Model[i].Active</td>
+                <td>@Model[i].Address</td>
+                <td>@Model[i].City</td>
+                <td>@Model[i].State</td>
+                <td>@Model[i].ZIP_Code</td>
 
-                    <td>
-                        <a href="@Url.Action("Delete", new { id = Model[i].ID})"><i class="glyphicon glyphicon-off"></i></a>
-                        <a href="@Url.Action("Edit", new { id = Model[i].ID})"><i class="glyphicon glyphicon-edit"></i></a>
+                <td>
+                    <a href="@Url.Action("Delete", new { id = Model[i].ID})"><i class="glyphicon glyphicon-off"></i></a>
+                    <a href="@Url.Action("Edit", new { id = Model[i].ID})"><i class="glyphicon glyphicon-edit"></i></a>
 
-                    </td>
+                </td>
 
-                </tr>
+            </tr>
             }
         </tbody>
     </table>
