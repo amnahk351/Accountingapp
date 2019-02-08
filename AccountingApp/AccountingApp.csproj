@@ -173,8 +173,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Models\CreateUsers.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CreateUsers.Context.cs</LastGenOutput>
       <DependentUpon>CreateUsers.edmx</DependentUpon>
+      <LastGenOutput>CreateUsers.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\CreateUsers.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
