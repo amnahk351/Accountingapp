@@ -34,12 +34,12 @@ namespace AccountingApp.Controllers
 
         public ActionResult NewUser()
         {
-             return View();
+            //CreateUser user = new CreateUser();
+            return View();
         }
         [HttpPost]
-        public ActionResult NewUser(CreateUser model )
+        public ActionResult NewUser(CreateUser model)
         {
-            //ModelState.AddModelError("","");
             CreateUser tbl = new CreateUser();
 
             tbl.FirstName = model.FirstName;
@@ -50,6 +50,11 @@ namespace AccountingApp.Controllers
             tbl.Phone = model.Phone;
             tbl.Email = model.Email;
             tbl.Date = model.Date;
+            tbl.Active = model.Active;
+            tbl.Address = model.Address;
+            tbl.City = model.City;
+            tbl.State = model.State;
+            tbl.ZIP_Code = model.ZIP_Code;
 
             if (ModelState.IsValid)
             {
@@ -58,13 +63,13 @@ namespace AccountingApp.Controllers
                 db.SaveChanges();
                 var item = db.CreateUsers.ToList();
                 TempData["Message"] = "Your entry was successfully added!";
-                
+
 
                 return RedirectToAction("ShowUserData");
             }
-            
-            
-            return View(model);
+
+
+            return View("NewUser", new CreateUser());
         }
 
         public ActionResult ShowUserData()
