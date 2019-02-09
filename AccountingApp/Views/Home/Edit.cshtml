@@ -4,6 +4,7 @@
     ViewBag.Title = "Edit/Update";
     var selectListItems = new[]
     {
+        new SelectListItem(){ Value = "Admin", Text = "Admin", Selected = false},
         new SelectListItem(){ Value = "Manager", Text = "Manager", Selected = false},
         new SelectListItem(){ Value = "Accountant", Text = "Accountant", Selected = false},
 
@@ -19,13 +20,27 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
     <div class="form-group">
-        <label>FirstName</label>
+        <label for="Date" class="control-label">Date</label>
+        <input type="date" id="Date_Modified" name="Date_Modified" class="form-control" />
+        @Html.TextBoxFor(x => x.Date_Modified, new { @class = "form-control" })
+        @*@Html.ValidationMessageFor(m => m.Date, "", new { @class = "text-danger" })*@
+
+    </div>
+
+    @*<div class="form-group">
+        <label>Date</label>
+        @Html.TextBoxFor(x => x.Date_Modified, new { @class = "form-control" })
+
+    </div>*@
+
+    <div class="form-group">
+        <label>First Name</label>
         @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control" })
 
     </div>
 
     <div class="form-group">
-        <label>LastName</label>
+        <label>Last Name</label>
         @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })
 
     </div>
@@ -55,14 +70,38 @@
     </div>
 
     <div class="form-group">
+        <label>Allow Access</label>
+        @Html.CheckBoxFor(x => x.Active, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
         <label>Phone</label>
         @Html.TextBoxFor(x => x.Phone, new { @class = "form-control" })
 
     </div>
 
     <div class="form-group">
-        <label>Date</label>
-        @Html.TextBoxFor(x => x.Date, new { @class = "form-control" })
+        <label>Address</label>
+        @Html.TextBoxFor(x => x.Address, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+        <label>City</label>
+        @Html.TextBoxFor(x => x.City, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+        <label>State</label>
+        @Html.TextBoxFor(x => x.State, new { @class = "form-control" })
+
+    </div>
+
+    <div class="form-group">
+        <label>ZIP Code</label>
+        @Html.TextBoxFor(x => x.ZIP_Code, new { @class = "form-control" })
 
     </div>
 

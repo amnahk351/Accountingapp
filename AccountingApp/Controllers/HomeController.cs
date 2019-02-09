@@ -99,17 +99,22 @@ namespace AccountingApp.Controllers
             if (ModelState.IsValid)
             {
                 var item = db.CreateUsers.Where(x => x.ID == model.ID).First();
-            item.FirstName = model.FirstName;
-            item.LastName = model.LastName;
-            item.Email = model.Email;
-            item.Username = model.Username;
-            item.Password = model.Password;
-            item.Role = model.Role;
-            item.Phone = model.Phone;
-            item.Date = model.Date;
+                item.Date_Modified = model.Date_Modified;
+                item.FirstName = model.FirstName;
+                item.LastName = model.LastName;
+                item.Email = model.Email;
+                item.Username = model.Username;
+                item.Password = model.Password;
+                item.Role = model.Role;
+                item.Phone = model.Phone;
+                item.Active = model.Active;
+                item.Address = model.Address;
+                item.City = model.City;
+                item.State = model.State;
+                item.ZIP_Code = model.ZIP_Code;
            
                 db.SaveChanges();
-            var item2 = db.CreateUsers.ToList();
+                var item2 = db.CreateUsers.ToList();
                 TempData["Message"] = "Your entry was successfully updated!";
 
                 return RedirectToAction("ShowUserData");
