@@ -26,12 +26,13 @@
                 <th>Password</th>
                 <th>Role</th>
                 <th>Phone</th>
-                <th>Date</th>
                 <th>Allowed Access</th>
                 <th>Address</th>
                 <th>City</th>
                 <th>State</th>
                 <th>ZIP Code</th>
+                <th>Date Created</th>
+                <th>Date Modified</th>
                 <th>Action</th>
 
             </tr>
@@ -48,12 +49,13 @@
                 <td>@Model[i].Password</td>
                 <td>@Model[i].Role</td>
                 <td>@Model[i].Phone</td>
-                <td>@Model[i].Date</td>
-                <td>@Model[i].Active</td>
+                <td>@(Model[i].Active ? "Yes" : "No")</td>
                 <td>@Model[i].Address</td>
                 <td>@Model[i].City</td>
                 <td>@Model[i].State</td>
                 <td>@Model[i].ZIP_Code</td>
+                <td>@Model[i].Date</td>
+                <td>@Model[i].Date_Modified</td>
 
                 <td>
                     <a href="@Url.Action("Delete", new { id = Model[i].ID})"><i class="glyphicon glyphicon-off"></i></a>

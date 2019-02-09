@@ -12,12 +12,31 @@ namespace AccountingApp.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel;    
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations.Schema;
-    
 
     public partial class CreateUser
     {
+        //public int ID { get; set; }
+        //public string FirstName { get; set; }
+        //public string LastName { get; set; }
+        //public string Email { get; set; }
+        //public string Username { get; set; }
+        //public string Password { get; set; }
+        //public string Role { get; set; }
+        //public string Phone { get; set; }
+        //public Nullable<System.DateTime> Date { get; set; }
+        //public bool Active { get; set; }
+        //public Nullable<System.DateTime> Date_Modified { get; set; }
+        //public string Old_Passwords { get; set; }
+        //public string Address { get; set; }
+        //public string City { get; set; }
+        //public string State { get; set; }
+        //public string ZIP_Code { get; set; }
+
+
+
+
         public int ID { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please Enter First Name.")]
@@ -50,14 +69,14 @@ namespace AccountingApp.Models
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Please Select a Date.")]
-        public System.DateTime Date { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
 
 
         public bool Active { get; set; }
 
 
         //[Required(ErrorMessage = "Please Select a Date.")]   //TURNING THIS ON MESSES IT UP ON NEW USER PAGE
-        //[DataType(DataType.Date)]
+        [DataType(DataType.Date)]
         public Nullable<System.DateTime> Date_Modified { get; set; }
 
 
