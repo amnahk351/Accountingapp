@@ -28,7 +28,6 @@ namespace AccountingApp.Controllers
 
                 if (userDetails == null)
                 {
-                    userLoggingIn.Empty = true;
                     return View("LogIn", userLoggingIn);
                 }
             }
