@@ -93,6 +93,6 @@ namespace AccountingApp.Models
         [MinLength(5, ErrorMessage = "Minimum of 5 Characters is allowed for ZIP.")]
         public string ZIP_Code { get; set; }
 
-        
+        public bool Empty = false;
     }
 }
