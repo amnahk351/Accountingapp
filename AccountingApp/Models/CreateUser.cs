@@ -53,6 +53,7 @@ namespace AccountingApp.Models
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please Enter Password.")]
         [MinLength(6, ErrorMessage = "Minimum of 6 Characters is Required.")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         ////DOES NOT WORK BECAUSE CONFIRM PASSWORD IS NOT IN DATABASE

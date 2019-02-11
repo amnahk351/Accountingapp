@@ -9,15 +9,6 @@ namespace AccountingApp.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult LogIn()
-        {
-            return View("LogIn");
-        }
-        [HttpPost]
-        public ActionResult LogIn(String username, String password)
-        {
-            return View("Index");
-        }
         Database1Entities2 db = new Database1Entities2();
 
         public ActionResult Index()
