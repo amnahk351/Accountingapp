@@ -11,7 +11,7 @@ namespace AccountingApp.Controllers
     {
         public ActionResult LogIn()
         {
-            return View();
+            return View("LogIn");
         }
         [HttpPost]
         public ActionResult LogIn(String username, String password)
@@ -59,7 +59,6 @@ namespace AccountingApp.Controllers
             if (ModelState.IsValid)
             {
                 db.CreateUsers.Add(tbl);
-
                 db.SaveChanges();
                 var item = db.CreateUsers.ToList();
                 TempData["Message"] = "Your entry was successfully added!";
