@@ -90,7 +90,7 @@
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
+            <div class="navbar-header" width="100%">
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Objective Accounting</a>
             </div>
             <div class="mynav_navbar">
@@ -104,7 +104,7 @@
                         <a asp-area="" asp-controller="Trial Balance" asp-action="Trail Balance">Trial Balance</a>
                         <a asp-area="" asp-controller="Income Statement" asp-action="Income Statement">Income Statement</a>
                         <a asp-area="" asp-controller="Balance Sheet" asp-action="Balance Sheet">Balance Sheet</a>
-                        <a asp-area="" asp-controller="SORE" asp-action="SORE">SORE</a>
+                        <a asp-area="" asp-controller="SORE" asp-action="SORE">Statement of Returned Earnings</a>
                     </div>
                 </div>
                 <div class="mynav_dropdown">
@@ -122,7 +122,7 @@
                 <a asp-area="" asp-controller="Jounralize" asp-action="Journalize">View Ledger</a>
                 <div class="mynav_dropdown">
                     <button class="mynav_dropbtn">
-                        Finacial Analysis
+                        Analysis
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <div class="mynav_dropdown-content">
@@ -130,9 +130,18 @@
                         <a asp-area="" asp-controller="Dashboards" asp-action="Dashboards">Dashboards</a>
                     </div>
                 </div>
-                <a asp-area="" asp-controller="View Chart of Accounts" asp-action="View Chart of Accounts">View Chart of Accounts</a>
-                <a asp-area="" asp-controller="Sign In" href="Home/LogIn" asp-action="Sign In">Sign In</a>
-
+                <a asp-area="" asp-controller="View Chart of Accounts" asp-action="View Chart of Accounts">Chart of Accounts</a>
+                <a asp-area="" asp-controller="Sign In" href="/LogIn/LogIn" asp-action="Sign In">Sign In</a>
+                <div class="mynav_dropdown">
+                    <button class="mynav_dropbtn">
+                        Admin
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="mynav_dropdown-content">
+                        <a asp-area="" asp-controller="" asp-action="" href="/Home/ShowUserData">View Users</a>
+                        <a asp-area="" asp-controller="" asp-action="" href="/Home/NewUser">Create New User</a>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -141,7 +150,8 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Objective Accounting</p>
+            <p>&copy; @DateTime.Now.Year - Objective Accounting
+            Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer</p>
         </footer>
     </div>
 
