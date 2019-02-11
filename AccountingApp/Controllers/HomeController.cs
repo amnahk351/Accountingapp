@@ -50,6 +50,7 @@ namespace AccountingApp.Controllers
             if (ModelState.IsValid)
             {
                 db.CreateUsers.Add(tbl);
+
                 db.SaveChanges();
                 var item = db.CreateUsers.ToList();
                 TempData["Message"] = "Your entry was successfully added!";
