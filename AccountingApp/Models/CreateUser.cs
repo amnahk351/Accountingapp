@@ -58,8 +58,8 @@ namespace AccountingApp.Models
         ////DOES NOT WORK BECAUSE CONFIRM PASSWORD IS NOT IN DATABASE
         ////IT WANTS TO SAVE CONFIRMPASSWORD IN DATABASE BUT IT DOES NOT EXIST
         ////[DataType(DataType.Password)]
-        //[NotMapped] //Attempted fix
-        //[Compare("Password", ErrorMessage = "Confirm Password and Password do not match.")]  //This line specifically crashes it
+        [NotMapped] //Attempted fix
+        [Compare(nameof(Password), ErrorMessage = "Confirm Password and Password do not match.")]  //This line specifically crashes it
         public string ConfirmPassword { get; set; }
 
 
