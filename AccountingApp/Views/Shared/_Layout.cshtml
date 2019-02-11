@@ -80,8 +80,12 @@
     </style>
 </head>
 <body>
+<<<<<<< HEAD
 
     <nav class="navbar navbar-inverse navbar-static-top">
+=======
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+>>>>>>> fiddling
         <div class="container">
             <div class="navbar-header" width="100%">
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Objective Accounting</a>
@@ -124,7 +128,6 @@
                     </div>
                 </div>
                 <a asp-area="" asp-controller="View Chart of Accounts" asp-action="View Chart of Accounts">Chart of Accounts</a>
-                <a asp-area="" asp-controller="Sign In" href="/LogIn/LogIn" asp-action="Sign In">Sign In</a>
                 <div class="mynav_dropdown">
                     <button class="mynav_dropbtn">
                         Admin
@@ -135,6 +138,7 @@
                         <a asp-area="" asp-controller="" asp-action="" href="/Home/NewUser">Create New User</a>
                     </div>
                 </div>
+				<a asp-area="" asp-controller="Log Out" href="Account/LogIn" asp-action="Log Out">Log Out</a>
 
             </div>
         </div>
