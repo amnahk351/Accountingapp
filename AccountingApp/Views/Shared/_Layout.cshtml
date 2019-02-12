@@ -8,13 +8,15 @@
     @Scripts.Render("~/bundles/modernizr")
     <style>
 
+        body {
+            padding-top: 0px;
+        }
+
         .mynav_navbar {
             overflow: hidden;
             background-color: #333;
             font-family: Arial, Helvetica, sans-serif;
         }
-
-
 
             .mynav_navbar a {
                 float: left;
@@ -26,12 +28,10 @@
             }
 
 
-
         .mynav_dropdown {
             float: left;
             overflow: hidden;
         }
-
 
 
             .mynav_dropdown .mynav_dropbtn {
@@ -46,11 +46,9 @@
             }
 
 
-
             .mynav_navbar a:hover, .mynav_dropdown:hover .mynav_dropbtn {
                 background-color: red;
             }
-
 
 
         .mynav_dropdown-content {
@@ -62,8 +60,6 @@
             z-index: 1;
         }
 
-
-
             .mynav_dropdown-content a {
                 float: none;
                 color: black;
@@ -73,12 +69,9 @@
                 text-align: left;
             }
 
-
-
                 .mynav_dropdown-content a:hover {
                     background-color: #ddd;
                 }
-
 
 
         .mynav_dropdown:hover .mynav_dropdown-content {
@@ -88,7 +81,7 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-static-top">
         <div class="container">
             <div class="navbar-header" width="100%">
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Objective Accounting</a>

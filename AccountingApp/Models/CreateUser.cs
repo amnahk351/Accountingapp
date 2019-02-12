@@ -33,9 +33,7 @@ namespace AccountingApp.Models
         //public string City { get; set; }
         //public string State { get; set; }
         //public string ZIP_Code { get; set; }
-
-
-
+                
 
         public int ID { get; set; }
 
@@ -91,5 +89,7 @@ namespace AccountingApp.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please Enter a ZIP.")]
         [MinLength(5, ErrorMessage = "Minimum of 5 Characters is allowed for ZIP.")]
         public string ZIP_Code { get; set; }
+
+        
     }
 }
