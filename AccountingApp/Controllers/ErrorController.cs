@@ -15,7 +15,7 @@ namespace AccountingApp.Controllers
             SqlConnection sqlCon = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
             sqlCon.Open();
 
-            string query = "SELECT Description FROM ErrorMessages WHERE ErrorID = '" + id + "'";
+            string query = "SELECT Description FROM ErrorMessages WHERE Error_ID = '" + id + "'";
             SqlCommand conData = new SqlCommand(query, sqlCon);
             SqlDataReader myReader;
 

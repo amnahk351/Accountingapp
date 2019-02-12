@@ -158,6 +158,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateUsers.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ValidPassword.cs" />
+    <Compile Include="Models\ValidUsername.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

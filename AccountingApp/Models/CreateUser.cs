@@ -47,11 +47,15 @@ namespace AccountingApp.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please Enter Email Address.")]
         public string Email { get; set; }
 
+        
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please Enter Username.")]
+        [ValidUsername]
         public string Username { get; set; }
 
+        
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please Enter Password.")]
-        [MinLength(6, ErrorMessage = "Minimum of 6 Characters is Required.")]
+        //[MinLength(6, ErrorMessage = "Minimum of 6 Characters is Required.")]
+        [ValidPassword]
         public string Password { get; set; }
 
         [NotMapped]
