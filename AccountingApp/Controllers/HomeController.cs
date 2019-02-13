@@ -9,15 +9,6 @@ namespace AccountingApp.Controllers
 {
     public class HomeController : Controller
     {
-        //public ActionResult LogIn()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public ActionResult LogIn(String username, String password)
-        //{
-        //    return View("Index");
-        //}
         Database1Entities2 db = new Database1Entities2();
 
         public ActionResult Index()
@@ -43,7 +34,6 @@ namespace AccountingApp.Controllers
             if (ModelState.IsValid)
             {
                 db.CreateUsers.Add(model);
-
                 db.SaveChanges();
                 var item = db.CreateUsers.ToList();
                 TempData["Message"] = "Your entry was successfully added!";
