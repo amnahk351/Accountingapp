@@ -136,7 +136,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Controllers\LogInController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -223,22 +223,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\ShowUserData.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <Content Include="Views\LogIn\LogIn.cshtml" />
+    <Content Include="Views\Account\LogIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Error\" />
-=======
-    <Content Include="Views\Account\LogIn.cshtml" />
->>>>>>> initial login authentication working
-=======
-    <Content Include="Views\LogIn\LogIn.cshtml" />
->>>>>>> Update AccountingApp.csproj
-=======
-    <Content Include="Views\Account\LogIn.cshtml" />
->>>>>>> Update AccountingApp.csproj
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
