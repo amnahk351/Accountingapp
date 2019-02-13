@@ -16,6 +16,14 @@
     </script>
 }
 
+@*@if (ViewBag.Message == "Invalid Credentials")
+{
+    <script type="text/javascript">
+        alert("Invalid Credentials");
+    </script>
+}*@
+
+
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
@@ -109,6 +117,9 @@
         @using (Html.BeginForm("Authenticate", "Account", FormMethod.Post))
         {
             <div class="login-box">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @*@Html.HiddenFor(model => model.Username)
+                    @Html.HiddenFor(model => model.Password)*@
                 <h1>Login</h1>
                 <div class="textbox">
                     <i class="fas fa-user"></i>
@@ -117,17 +128,17 @@
                 </div>
                 <br />
                 <div>
-                    @Html.ValidationMessageFor(model => Model.Username)
+                    @Html.ValidationMessageFor(model => model.Username, "")
                 </div>
                 <br />
                 <div class="textbox">
                     <i class="fas fa-lock"></i>
                     @Html.LabelFor(model => model.Password)
-                    @Html.EditorFor(model => model.Password)
+                    @Html.PasswordFor(model => model.Password)
                 </div>
                 <br />
                 <div>
-                    @Html.ValidationMessageFor(model => Model.Password)
+                    @Html.ValidationMessageFor(model => model.Password, "")
                 </div>
                 <br />
 

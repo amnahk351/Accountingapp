@@ -29,6 +29,10 @@ namespace AccountingApp.Controllers
                 if (userDetails == null)
                 {
                     return View("LogIn", userLoggingIn);
+                    //TempData["invalidAuthMessage"] = "Invalid Credentials.";
+                    //ViewBag.Message = "Invalid Credentials";
+                    //Response.Write("<script language='javascript'>window.alert('Invalid Credentials');window.location='~/Views/Account/LogIn.cshtml';</script>");
+                    //Response.Redirect("LogIn");
                 }
             }
             catch (Exception exception)
