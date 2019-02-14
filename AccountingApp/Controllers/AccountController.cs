@@ -27,17 +27,11 @@ namespace AccountingApp.Controllers
                                                                     validUser.Password == userLoggingIn.Password).FirstOrDefault();
 
                 if (userDetails == null)
-                {
-                    return View("LogIn", userLoggingIn);
-                    //TempData["invalidAuthMessage"] = "Invalid Credentials.";
-                    //ViewBag.Message = "Invalid Credentials";
-                    //Response.Write("<script language='javascript'>window.alert('Invalid Credentials');window.location='~/Views/Account/LogIn.cshtml';</script>");
-                    //Response.Redirect("LogIn");
-                }
+                    throw new Exception("Invalid Credentials.");
             }
             catch (Exception exception)
             {
-                Response.Write(exception);
+                Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'LogIn';</script>");
             }
 
             return View("~/Views/Home/Index.cshtml");

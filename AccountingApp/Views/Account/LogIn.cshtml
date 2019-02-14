@@ -9,21 +9,6 @@
     ViewBag.Title = "Log In";
 }
 
-@if (Model != null)
-{
-    <script type="text/javascript">
-        alert("Invalid Credentials");
-    </script>
-}
-
-@*@if (ViewBag.Message == "Invalid Credentials")
-{
-    <script type="text/javascript">
-        alert("Invalid Credentials");
-    </script>
-}*@
-
-
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
@@ -118,8 +103,6 @@
         {
             <div class="login-box">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @*@Html.HiddenFor(model => model.Username)
-                    @Html.HiddenFor(model => model.Password)*@
                 <h1>Login</h1>
                 <div class="textbox">
                     <i class="fas fa-user"></i>
@@ -128,7 +111,7 @@
                 </div>
                 <br />
                 <div>
-                    @Html.ValidationMessageFor(model => model.Username, "Please enter username.")
+                    @Html.ValidationMessageFor(model => model.Username, "")
                 </div>
                 <br />
                 <div class="textbox">
@@ -138,7 +121,7 @@
                 </div>
                 <br />
                 <div>
-                    @Html.ValidationMessageFor(model => model.Password, "Please enter password.")
+                    @Html.ValidationMessageFor(model => model.Password, "")
                 </div>
                 <br />
 
