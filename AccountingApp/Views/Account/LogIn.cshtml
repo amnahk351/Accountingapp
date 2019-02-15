@@ -1,5 +1,5 @@
 ﻿
-@model AccountingApp.Models.CreateUser
+@model AccountingApp.Models.LoginModel
 @{
     Layout = null;
 }
@@ -9,12 +9,12 @@
     ViewBag.Title = "Log In";
 }
 
-@if (Model != null)
+@*@if (Model != null)
 {
     <script type="text/javascript">
         alert("Invalid Credentials");
     </script>
-}
+}*@
 
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -147,7 +147,7 @@
             background-image: -webkit-gradient(linear, left top, left bottom, from(#3093c7), to(#1c5a85));
             background-image: -webkit-linear-gradient(top, #3093c7, #1c5a85);
             background-image: -moz-linear-gradient(top, #3093c7, #1c5a85);
-            background-image: -ms-linear-gradient(top, #3093c7, #1c5a85);
+            /*background-image: -ms-linear-gradient(top, #3093c7, #1c5a85);*/
             background-image: -o-linear-gradient(top, #3093c7, #1c5a85);
             background-image: linear-gradient(to bottom, #3093c7, #1c5a85);
             filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#3093c7, endColorstr=#1c5a85);
@@ -159,7 +159,7 @@
                 background-image: -webkit-gradient(linear, left top, left bottom, from(#26759e), to(#133d5b));
                 background-image: -webkit-linear-gradient(top, #26759e, #133d5b);
                 background-image: -moz-linear-gradient(top, #26759e, #133d5b);
-                background-image: -ms-linear-gradient(top, #26759e, #133d5b);
+                /*background-image: -ms-linear-gradient(top, #26759e, #133d5b);*/
                 background-image: -o-linear-gradient(top, #26759e, #133d5b);
                 background-image: linear-gradient(to bottom, #26759e, #133d5b);
                 filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#26759e, endColorstr=#133d5b);
