@@ -175,6 +175,7 @@
         <div class="login-box">
             @using (Html.BeginForm("Authenticate", "Account", FormMethod.Post))
             {
+                <img src="~/img/Accounting Logo.PNG" alt="Logo" width="330" height="110" />
                 <h1 style="color:dodgerblue;border-bottom: 4px solid dodgerblue;padding: 5px">Login</h1><br />
                 <i class="fas fa-user"></i>
                 @Html.LabelFor(model => model.Username)
@@ -190,7 +191,6 @@
                 <i class="fas fa-lock"></i>
                 @Html.LabelFor(model => model.Password)
                 <div class="textbox">
-
                     @Html.EditorFor(model => model.Password)
                 </div>
 
@@ -201,7 +201,7 @@
 
                 <input type="submit" name="Login" value="Login" class="button_example  margin-left" />
             }   <br />
-            <p class="pointer" style="color:blue;margin: 9px 0;font-size: 14px;" onclick="displayToggle()">Forgot Password?</p>
+                <p class="pointer" style="color:blue;margin: 9px 0;font-size: 14px;" onclick="displayToggle()">Forgot Password?</p>
             <div style="font-size:15px;text-align:left;color:black;" id="hiddenreset">
                 <b>Enter your email address:</b>
                 <br><input style="outline: none;width: 100%;font-size:15px;margin: 7px 0;padding: 9px 11px;border: 2px solid dodgerblue;border-radius: 6px;" type="email" email="email"><br>

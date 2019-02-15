@@ -195,6 +195,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="img\ac.jpg" />
+    <Content Include="img\Accounting Logo.PNG" />
     <Content Include="img\chartofacc.jpg" />
     <Content Include="img\dashboard.png" />
     <Content Include="img\dimensional-chart-of-accounts.jpg" />
