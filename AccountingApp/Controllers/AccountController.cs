@@ -15,9 +15,11 @@ namespace AccountingApp.Controllers
             return View("LogIn");
         }
         [HttpPost]
-        public ActionResult Authenticate(AccountingApp.Models.CreateUser userLoggingIn)
+        public ActionResult Authenticate(CreateUser userLoggingIn)
         {
-
+            ErrorController GetErr = new ErrorController();
+            string inv = GetErr.GetErrorMessage(19);
+            string denied = GetErr.GetErrorMessage(21);
             var db = new Database1Entities2();
 
             try
@@ -26,13 +28,20 @@ namespace AccountingApp.Controllers
                                                                     validUser.Password == userLoggingIn.Password).FirstOrDefault();
 
                 if (userDetails == null)
-                    throw new Exception("Invalid Credentials.");
+                    throw new Exception(inv);
+
+                else if (userDetails.Active == false)
+                    throw new Exception(denied);
+                else {
+                    //The account is allowed
+                    System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
+                }
             }
             catch (Exception exception)
             {
                 Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'LogIn';</script>");
             }
-
+            
             return View("~/Views/Admin/AdminIndex.cshtml");
         }
     }
