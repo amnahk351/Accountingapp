@@ -9,6 +9,7 @@ namespace AccountingApp.Controllers
 {
     public class HomeController : Controller
     {
+        
         Database1Entities2 db = new Database1Entities2();
 
         public ActionResult Index()
@@ -31,9 +32,26 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult NewUser(CreateUser model)
         {
+            CreateUser tbl = new CreateUser();
+
+            tbl.FirstName = model.FirstName;
+            tbl.LastName = model.LastName;
+            tbl.Username = model.Username;
+            tbl.Password = model.Password;
+            tbl.Role = model.Role;
+            tbl.Phone = model.Phone;
+            tbl.Email = model.Email;
+            tbl.Date = model.Date;
+            tbl.Active = model.Active;
+            tbl.Address = model.Address;
+            tbl.City = model.City;
+            tbl.State = model.State;
+            tbl.ZIP_Code = model.ZIP_Code;
+
             if (ModelState.IsValid)
             {
-                db.CreateUsers.Add(model);
+                db.CreateUsers.Add(tbl);
+
                 db.SaveChanges();
                 var item = db.CreateUsers.ToList();
                 TempData["Message"] = "Your entry was successfully added!";

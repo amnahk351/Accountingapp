@@ -134,12 +134,29 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\LogInController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChartOfAcc.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChartOfAcc.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChartOfAcc.cs">
+      <DependentUpon>ChartOfAcc.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChartOfAcc.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChartOfAcc.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChartOfAcc1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChartOfAcc.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CreateUser.cs">
       <DependentUpon>CreateUsers.tt</DependentUpon>
@@ -159,8 +176,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateUsers.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\ValidPassword.cs" />
-    <Compile Include="Models\ValidUsername.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -168,7 +183,6 @@
     <Content Include="App_Data\Database1_log.ldf">
       <DependentUpon>Database1.mdf</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap-materia.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -177,6 +191,22 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\ac.jpg" />
+    <Content Include="img\chartofacc.jpg" />
+    <Content Include="img\dashboard.png" />
+    <Content Include="img\dimensional-chart-of-accounts.jpg" />
+    <Content Include="img\user-avatars.jpg" />
+    <Content Include="img\user-portal.png" />
+    <Content Include="Models\ChartOfAcc.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ChartOfAcc.edmx</DependentUpon>
+      <LastGenOutput>ChartOfAcc.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\ChartOfAcc.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ChartOfAcc.edmx</DependentUpon>
+      <LastGenOutput>ChartOfAcc1.cs</LastGenOutput>
+    </Content>
     <Content Include="Models\CreateUsers.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>CreateUsers.edmx</DependentUpon>
@@ -195,6 +225,13 @@
     </EntityDeploy>
     <Content Include="Models\CreateUsers.edmx.diagram">
       <DependentUpon>CreateUsers.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\ChartOfAcc.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ChartOfAcc.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\ChartOfAcc.edmx.diagram">
+      <DependentUpon>ChartOfAcc.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -224,10 +261,12 @@
     <Content Include="Views\Home\ShowUserData.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
     <Content Include="Views\Account\LogIn.cshtml" />
+    <Content Include="Views\Admin\AdminIndex.cshtml" />
+    <Content Include="Views\Admin\ChartOfAccounts.cshtml" />
+    <Content Include="Views\Admin\NewAccount.cshtml" />
+    <Content Include="Views\Admin\EditAccount.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Error\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

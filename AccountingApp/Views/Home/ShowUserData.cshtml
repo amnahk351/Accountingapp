@@ -2,70 +2,197 @@
 
 @{
     ViewBag.Title = "Current Users";
+    Layout = null;
 }
-<h2>@ViewBag.Title</h2>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-@if (TempData["Message"] != null)
-{
-<div class="alert alert-success alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-    @TempData["Message"]</div>
-}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
-<div class="container">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Username</th>
-                <th>Password</th>
-                <th>Role</th>
-                <th>Phone</th>
-                <th>Allowed Access</th>
-                <th>Address</th>
-                <th>City</th>
-                <th>State</th>
-                <th>ZIP Code</th>
-                <th>Date Created</th>
-                <th>Date Modified</th>
-                <th>Action</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < Model.Count(); i++)
-            {
-            <tr>
-                <td>@Model[i].ID</td>
-                <td>@Model[i].FirstName</td>
-                <td>@Model[i].LastName</td>
-                <td>@Model[i].Email</td>
-                <td>@Model[i].Username</td>
-                <td>@Model[i].Password</td>
-                <td>@Model[i].Role</td>
-                <td>@Model[i].Phone</td>
-                <td>@(Model[i].Active ? "Yes" : "No")</td>
-                <td>@Model[i].Address</td>
-                <td>@Model[i].City</td>
-                <td>@Model[i].State</td>
-                <td>@Model[i].ZIP_Code</td>
-                <td>@Model[i].Date</td>
-                <td>@Model[i].Date_Modified</td>
 
-                <td>
-                    <a href="@Url.Action("Delete", new { id = Model[i].ID})"><i class="glyphicon glyphicon-off"></i></a>
-                    <a href="@Url.Action("Edit", new { id = Model[i].ID})"><i class="glyphicon glyphicon-edit"></i></a>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
 
-                </td>
 
-            </tr>
+    <style>
+        /*body {
+            padding-top: 70px;
+            margin: 40px;
+            background-color: gainsboro;
+        }
+
+        .nav {
+            padding-right: 70px;
+        }
+
+        .navbar-header {
+            padding-left: 70px;
+        }*/
+        .navbar-text {
+            padding-right: 20px;
+        }
+
+        .container {
+            width: 100%;
+            margin-top: 2%;
+        }
+
+        .inner {
+            overflow: hidden;
+        }
+
+            .inner img {
+                transition: all 1.5s ease;
             }
-        </tbody>
-    </table>
 
-</div>
+            .inner:hover img {
+                transform: scale(1.5);
+            }
+        .icon i {
+            width: 24px;
+            float: left;
+            text-align: center;
+        }
+        
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <a class="navbar-brand" href="#">Objective Accounting</a>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+
+            </ul>
+            @*<form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>*@
+            <ul class="nav navbar-nav navbar-right">
+                <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
+                <br />
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <br />
+    <div style="width:85%; margin:0 auto">
+
+        <h4>@ViewBag.Title</h4>
+        <hr />
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                @TempData["Message"]
+            </div>
+        }
+        <br />
+            <div>
+                <button type="button" class="btn btn-success icon"  >
+                    
+                    <a href="@Url.Action("NewUser")" class="btn btn-success icon" role="button" aria-pressed="true">
+                        <i class="far fa-user"></i>
+                        Create User
+                    </a>
+                        
+                </button>
+            </div>
+        <br />
+        <br />
+        <table class="table table-responsive table-striped" id="users">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Role</th>
+                    <th>Phone</th>
+                    <th>Allowed Access</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>ZIP Code</th>
+                    @*<th>Date Created</th>
+                    <th>Date Modified</th>*@
+                    <th>Edit</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                <tr>
+
+                    <td>@Model[i].ID</td>
+                    <td>@Model[i].FirstName</td>
+                    <td>@Model[i].LastName</td>
+                    <td>@Model[i].Email</td>
+                    <td>@Model[i].Username</td>
+                    <td>@Model[i].Password</td>
+                    <td>@Model[i].Role</td>
+                    <td>@Model[i].Phone</td>
+                    <td>@(Model[i].Active ? "Yes" : "No")</td>
+                    <td>@Model[i].Address</td>
+                    <td>@Model[i].City</td>
+                    <td>@Model[i].State</td>
+                    <td>@Model[i].ZIP_Code</td>
+                    @*<td>@Model[i].Date</td>
+                    <td>@Model[i].Date_Modified</td>*@
+                    <td>
+                        <a href="@Url.Action("Edit", new { id = Model[i].ID})">
+                            <i class="fas fa-user-edit"></i>
+
+
+                        </a>
+
+                    </td>
+
+
+                </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+        <hr />
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#users').DataTable();
+        });
+    </script>
+
+
+
+
+</body>

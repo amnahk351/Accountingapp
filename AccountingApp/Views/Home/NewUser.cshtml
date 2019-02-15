@@ -1,64 +1,180 @@
 ﻿@model AccountingApp.Models.CreateUser
 
-<style>
-    .container {        
-        margin: 0 auto;
-    }
 
-</style>
 
 @{
-    ViewBag.Title = "Create User";
+    ViewBag.Title = "Create A New User";
+    Layout = null;
 }
-<h2>Create A New User</h2>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
 
 
-@using (Html.BeginForm())
-{
+    <style>
+        /*body {
+            padding-top: 70px;
+            margin: 40px;
+            background-color: gainsboro;
+        }
 
-<form method="post">
-    @Html.ValidationSummary(true, "The following errors were found:", new { @class="alert alert-danger"})
+        .nav {
+            padding-right: 70px;
+        }
 
-    <div class="row">
-        <div class="col-md-6">
+        .navbar-header {
+            padding-left: 70px;
+        }*/
+        .navbar-text {
+            padding-right: 20px;
+        }
 
-            <div class="form-group">
-                <label for="Date" class="control-label">Date</label>
-                <input type="date" id="Date" name="Date" class="form-control" />
-                @Html.ValidationMessageFor(m => m.Date, "", new { @class = "text-danger" })
+        .container {
+            width: 100%;
+            margin-top: 2%;
+        }
 
+        .inner {
+            overflow: hidden;
+        }
+
+            .inner img {
+                transition: all 1.5s ease;
+            }
+
+            .inner:hover img {
+                transform: scale(1.5);
+            }
+    </style>
+</head>
+<body>
+    @*<div class="nav">
+            <nav class="navbar navbar-inverse navbar-fixed-top navbar-collapse navbar-nav">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">Objective Accounting</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Home</a></li>
+
+                        <li><a href="#">User Log</a></li>
+
+                        <li><a href="@Url.Action("ShowUserData","Home")">Users</a></li>
+
+                        <li><a href="#">Chart Of Accounts</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
+                        <li><a href="#">SignOut</a></li>
+                    </ul>
+                </div>
+
+            </nav>
+        </div>*@
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <a class="navbar-brand" href="#">Objective Accounting</a>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+
+            </ul>
+            @*<form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>*@
+            <ul class="nav navbar-nav navbar-right">
+                <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
+                <br />
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <br />
+
+    @using (Html.BeginForm())
+    {
+
+        <form method="post">
+            <div class="container" style=" width: 43%">
+                @Html.ValidationSummary(true, "The following errors were found:", new { @class = "alert alert-danger" })
             </div>
+            <div class="container shadow" style="width:40%">
+                <h2>Create New User</h2>
+                <hr />
+                <div class="form-row">
+                    <div class="col-md-4">
 
-            <div class="form-group">
-                <label for="FirstName" class="control-label">First Name</label>
-                <input type="text" id="FirstName" name="FirstName" class="form-control" value="@Request["FirstName"]" />
-                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            <label for="Date" class="control-label">Date</label>
+                            <input type="date" id="Date" name="Date" class="form-control" />
+                            @Html.ValidationMessageFor(m => m.Date, "", new { @class = "text-danger" })
 
-            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
 
-            <div class="form-group">
-                <label for="LastName" class="control-label">Last Name</label>
-                <input type="text" id="LastName" name="LastName" class="form-control" value="@Request["LastName"]" />
-                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            <label for="FirstName" class="control-label">First Name</label>
+                            <input type="text" id="FirstName" name="FirstName" class="form-control" value="@Request["FirstName"]" />
+                            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label for="LastName" class="control-label">Last Name</label>
+                            <input type="text" id="LastName" name="LastName" class="form-control" value="@Request["LastName"]" />
+                            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
 
 
-            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="Email" class="control-label">Email Address</label>
+                            <input type="email" id="Email" name="Email" class="form-control" value="@Request["Email"]" />
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
 
-            <div class="form-group">
-                <label for="Email" class="control-label">Email Address</label>
-                <input type="email" id="Email" name="Email" class="form-control" value="@Request["Email"]" />
-                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
 
-            </div>
+                        <div class="form-group">
+                            <label for="Username" class="control-label">Username</label>
+                            <input type="text" id="Username" name="Username" class="form-control" value="@Request["Username"]" />
+                            @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
 
-            <div class="form-group">
-                <label for="Username" class="control-label">Username</label>
-                <input type="text" id="Username" name="Username" class="form-control" value="@Request["Username"]" />
-                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
-            </div>
-
-            @*<div class="form-group">
+                </div>
+                @*<div class="form-group">
         <label for="Username" class="control-label">Username</label>
         @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
@@ -66,90 +182,148 @@
         @*<input type="text" id="Username" name="Username" class="form-control" />*@
 
 
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="Password" class="control-label">Password</label>
+                            <input type="password" id="Password" name="Password" class="form-control" />
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
 
-            <div class="form-group">
-                <label for="Password" class="control-label">Password</label>
-                <input type="password" id="Password" name="Password" class="form-control" />
-                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-
-            </div>
-
-            <div class="form-group">
-                <label for="ConfirmPassword" class="control-label">Confirm Password</label>
-                <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" />
-                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
-            </div>
-
-            <div class="form-group">
-                <label for="Role" class="control-label">Role</label><br />
-                <select name="Role" class="form-control" id="Role">
-                    <option value="Admin">Admin</option>
-                    <option value="Manager">Manager</option>
-                    <option value="Accountant">Accountant</option>
-                </select>
-                @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
-
-
-            </div>
-
-            <div class="form-group">
-                <label for="Active" class="control-label">Allow Access</label>
-                <input data-val="true" id="Active" name="Active" type="checkbox" value="true" />
-                <input name="Active" type="hidden" value="false" />
-
-                @*@Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })*@
-            </div>
-
-            <div class="form-group">
-                <label for="phone" class="control-label">Phone Number</label>
-                <input type="tel" id="phone" maxlength="10" name="phone" class="form-control" />
-                @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
-
-            </div>
-
-            <div class="form-group">
-                <label for="Address" class="control-label">Address</label>
-                <input type="text" id="Address" name="Address" class="form-control" value="@Request["Address"]" />
-                @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
-
-            </div>
-
-            <div class="form-group">
-                <label for="City" class="control-label">City</label>
-                <input type="text" id="City" name="City" class="form-control" value="@Request["City"]" />
-                @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
-
-            </div>
-
-            <div class="form-group">
-                <label for="State" class="control-label">State</label>
-                <input type="text" id="State" name="State" class="form-control" value="@Request["State"]" />
-                @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
-
-            </div>
-
-            <div class="form-group">
-                <label for="ZIP_Code" class="control-label">ZIP Code</label>
-                <input type="text" maxlength="5" id="ZIP_Code" name="ZIP_Code" class="form-control" value="@Request["ZIP_Code"]" />
-                @Html.ValidationMessageFor(m => m.ZIP_Code, "", new { @class = "text-danger" })
-
-            </div>
-
-            <div class="col-md-12">
-                <div class="button">
-
-                    <button type="submit" href="@Url.Action("ShowUserData")" class="btn btn-success btn-lg margin-right">
-                        <span class="glyphicon glyphicon-save"></span> Save
-                    </button>
-
-                    <a href="@Url.Action("Index")" class="btn btn-warning btn-lg">
-                        <span class="glyphicon glyphicon-remove"></span> Cancel
-                    </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ConfirmPassword" class="control-label">Confirm Password</label>
+                            <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" />
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
                 </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label for="Role" class="control-label">Role</label><br />
+                            <select name="Role" class="form-control" id="Role">
+                                <option value="Admin">Admin</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Accountant">Accountant</option>
+                            </select>
+                            @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger" })
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        @*<div class="form-group">
+                    <label for="Active" class="control-label">Allow Access</label>
+                    <input data-val="true" id="Active" name="Active" type="checkbox" value="true" />
+                    <input name="Active" type="hidden" value="false" />
+
+                    @Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })
+                </div>*@
+                        <div class="form-group">
+                            <label for="phone" class="control-label">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="form-control" />
+                            @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+
+                        </div>
+
+                    </div>
+
+                </div>
+                @*<div class="form-group">
+            <label for="phone" class="control-label">Phone Number</label>
+            <input type="tel" id="phone" name="phone" class="form-control" />
+            @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+
+        </div>*@
+
+                <div class="form-group">
+                    <label for="Address" class="control-label">Address</label>
+                    <input type="text" id="Address" name="Address" class="form-control" value="@Request["Address"]" />
+                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="City" class="control-label">City</label>
+                            <input type="text" id="City" name="City" class="form-control" value="@Request["City"]" />
+                            @Html.ValidationMessageFor(m => m.City, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label for="State" class="control-label">State</label>
+                            <input type="text" id="State" name="State" class="form-control" value="@Request["State"]" />
+                            @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label for="ZIP_Code" class="control-label">ZIP Code</label>
+                            <input type="text" id="ZIP_Code" name="ZIP_Code" class="form-control" value="@Request["ZIP_Code"]" />
+                            @Html.ValidationMessageFor(m => m.ZIP_Code, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                </div>
+                        <div class="form-group">
+                            <label for="Active" class="control-label">Allow Access</label>
+                            <input data-val="true" id="Active" name="Active" type="checkbox" value="true" />
+                            <input name="Active" type="hidden" value="false" />
+
+                            @Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })
+                        </div>
+                <hr />
+                <div>
+                    <div class="button">
+
+                        <button type="submit" href="@Url.Action("ShowUserData")" class="btn btn-success btn-lg margin-right">
+                            <span class="glyphicon glyphicon-save"></span> Save
+                        </button>
+
+                        <a href="@Url.Action("Index")" class="btn btn-warning btn-lg">
+                            <span class="glyphicon glyphicon-remove"></span> Cancel
+                        </a>
+                    </div>
+                </div>
+
+
+                <br />
             </div>
-        </div>
-    </div>
+
+
+
+
+
+
+
 </form>
-}
+    }
+
+    <hr />
+    <p> &copy; @DateTime.Now.Year - Objective Accounting</p>
+     
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+</body>
+</html>
+
+
+    
 
 
