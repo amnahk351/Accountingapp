@@ -8,13 +8,15 @@
     @Scripts.Render("~/bundles/modernizr")
     <style>
 
+        body {
+            padding-top: 0px;  /*Do not delete this line, it's an override*/
+        }
+
         .mynav_navbar {
             overflow: hidden;
             background-color: #333;
             font-family: Arial, Helvetica, sans-serif;
         }
-
-
 
             .mynav_navbar a {
                 float: left;
@@ -26,12 +28,10 @@
             }
 
 
-
         .mynav_dropdown {
             float: left;
             overflow: hidden;
         }
-
 
 
             .mynav_dropdown .mynav_dropbtn {
@@ -46,11 +46,9 @@
             }
 
 
-
             .mynav_navbar a:hover, .mynav_dropdown:hover .mynav_dropbtn {
                 background-color: red;
             }
-
 
 
         .mynav_dropdown-content {
@@ -62,8 +60,6 @@
             z-index: 1;
         }
 
-
-
             .mynav_dropdown-content a {
                 float: none;
                 color: black;
@@ -73,12 +69,9 @@
                 text-align: left;
             }
 
-
-
                 .mynav_dropdown-content a:hover {
                     background-color: #ddd;
                 }
-
 
 
         .mynav_dropdown:hover .mynav_dropdown-content {
@@ -87,10 +80,10 @@
     </style>
 </head>
 <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-static-top">
+    @*<nav class="navbar navbar-inverse navbar-fixed-top">*@
         <div class="container">
-            <div class="navbar-header">
+            <div class="navbar-header" width="100%">
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Objective Accounting</a>
             </div>
             <div class="mynav_navbar">
@@ -104,7 +97,7 @@
                         <a asp-area="" asp-controller="Trial Balance" asp-action="Trail Balance">Trial Balance</a>
                         <a asp-area="" asp-controller="Income Statement" asp-action="Income Statement">Income Statement</a>
                         <a asp-area="" asp-controller="Balance Sheet" asp-action="Balance Sheet">Balance Sheet</a>
-                        <a asp-area="" asp-controller="SORE" asp-action="SORE">SORE</a>
+                        <a asp-area="" asp-controller="SORE" asp-action="SORE">Statement of Returned Earnings</a>
                     </div>
                 </div>
                 <div class="mynav_dropdown">
@@ -122,7 +115,7 @@
                 <a asp-area="" asp-controller="Jounralize" asp-action="Journalize">View Ledger</a>
                 <div class="mynav_dropdown">
                     <button class="mynav_dropbtn">
-                        Finacial Analysis
+                        Analysis
                         <i class="fa fa-caret-down"></i>
                     </button>
                     <div class="mynav_dropdown-content">
@@ -131,9 +124,17 @@
                     </div>
                 </div>
                 <a asp-area="" asp-controller="View Chart of Accounts" asp-action="View Chart of Accounts">View Chart of Accounts</a>
-                <a asp-area="" asp-controller="Sign In" href="Home/LogIn" asp-action="Sign In">Sign In</a>
-
-
+                <a asp-area="" asp-controller="Log Out" href="LogIn" asp-action="Log Out">Log Out</a>
+                <div class="mynav_dropdown">
+                    <button class="mynav_dropbtn">
+                        Admin
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="mynav_dropdown-content">
+                        <a asp-area="" asp-controller="" asp-action="" href="/Home/ShowUserData">View Users</a>
+                        <a asp-area="" asp-controller="" asp-action="" href="/Home/NewUser">Create New User</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -141,7 +142,8 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Objective Accounting</p>
+            <p>&copy; @DateTime.Now.Year - Objective Accounting
+            Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer</p>
         </footer>
     </div>
 

@@ -33,9 +33,7 @@ namespace AccountingApp.Models
         //public string City { get; set; }
         //public string State { get; set; }
         //public string ZIP_Code { get; set; }
-
-
-
+                
 
         public int ID { get; set; }
 
@@ -45,23 +43,23 @@ namespace AccountingApp.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please Enter Last Name.")]
         public string LastName { get; set; }
 
+        [DataType(DataType.EmailAddress)]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please Enter Email Address.")]
         public string Email { get; set; }
 
+        
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please Enter Username.")]
+        [ValidUsername]
         public string Username { get; set; }
 
+        
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please Enter Password.")]
-        [MinLength(6, ErrorMessage = "Minimum of 6 Characters is Required.")]
+        [ValidPassword]
         public string Password { get; set; }
 
-        ////DOES NOT WORK BECAUSE CONFIRM PASSWORD IS NOT IN DATABASE
-        ////IT WANTS TO SAVE CONFIRMPASSWORD IN DATABASE BUT IT DOES NOT EXIST
-        ////[DataType(DataType.Password)]
-        //[NotMapped] //Attempted fix
-        //[Compare("Password", ErrorMessage = "Confirm Password and Password do not match.")]  //This line specifically crashes it
+        [NotMapped]
+        [Compare(nameof(Password), ErrorMessage = "Confirm Password and Password do not match.")]
         public string ConfirmPassword { get; set; }
-
 
         public string Role { get; set; }
 
