@@ -34,6 +34,7 @@ namespace AccountingApp.Controllers
                     throw new Exception(denied);
                 else {
                     //The account is allowed
+                    System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
                     System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
                 }
             }
