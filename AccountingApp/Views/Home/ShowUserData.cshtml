@@ -86,7 +86,7 @@
                 </form>*@
             <ul class="nav navbar-nav navbar-right">
                 <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
-                <br />
+                @*<br />*@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Sign Out</a>
                 </li>
@@ -130,7 +130,6 @@
                     <th>Last Name</th>
                     <th>Email</th>
                     <th>Username</th>
-                    <th>Password</th>
                     <th>Role</th>
                     <th>Phone</th>
                     <th>Allowed Access</th>
@@ -154,10 +153,9 @@
                     <td>@Model[i].LastName</td>
                     <td>@Model[i].Email</td>
                     <td>@Model[i].Username</td>
-                    <td>@Model[i].Password</td>
                     <td>@Model[i].Role</td>
                     <td>@Model[i].Phone</td>
-                    <td>@(Model[i].Active ? "Yes" : "No")</td>
+                    <td>@(Model[i].Active ? "Y" : "N")</td>
                     <td>@Model[i].Address</td>
                     <td>@Model[i].City</td>
                     <td>@Model[i].State</td>
