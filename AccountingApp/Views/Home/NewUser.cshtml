@@ -104,7 +104,7 @@
                 </form>*@
             <ul class="nav navbar-nav navbar-right">
                 <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
-                <br />
+                @*<br />*@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Sign Out</a>
                 </li>
@@ -129,7 +129,7 @@
 
                         <div class="form-group">
                             <label for="Date" class="control-label">Date</label>
-                            <input type="date" id="Date" name="Date" class="form-control" />
+                            <input type="date" id="Date" name="Date" class="form-control" value="@Request["Date"]" />
                             @Html.ValidationMessageFor(m => m.Date, "", new { @class = "text-danger" })
 
                         </div>
@@ -186,7 +186,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="Password" class="control-label">Password</label>
-                            <input type="password" id="Password" name="Password" class="form-control" />
+                            <input type="password" id="Password" name="Password" class="form-control" value="@Request["Password"]" />
                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
 
                         </div>
@@ -225,7 +225,7 @@
                 </div>*@
                         <div class="form-group">
                             <label for="phone" class="control-label">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" class="form-control" />
+                            <input type="tel" id="phone" maxlength="10" name="phone" class="form-control" value="@Request["phone"]"/>
                             @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
 
                         </div>
@@ -259,7 +259,58 @@
 
                         <div class="form-group">
                             <label for="State" class="control-label">State</label>
-                            <input type="text" id="State" name="State" class="form-control" value="@Request["State"]" />
+                            <select name="State" class="form-control" id="State" value="@Request["State"]">
+                                <option value="AL">Alabama</option>
+                                <option value="AK">Alaska</option>
+                                <option value="AZ">Arizona</option>
+                                <option value="AR">Arkansas</option>
+                                <option value="CA">California</option>
+                                <option value="CO">Colorado</option>
+                                <option value="CT">Connecticut</option>
+                                <option value="DE">Delaware</option>
+                                <option value="FL">Florida</option>
+                                <option value="GA">Georgia</option>
+                                <option value="HI">Hawaii</option>
+                                <option value="ID">Idaho</option>
+                                <option value="IL">Illinois</option>
+                                <option value="IN">Indiana</option>
+                                <option value="IA">Iowa</option>
+                                <option value="KS">Kansas</option>
+                                <option value="KY">Kentucky</option>
+                                <option value="LA">Louisiana</option>
+                                <option value="ME">Maine</option>
+                                <option value="MD">Maryland</option>
+                                <option value="MA">Massachusetts</option>
+                                <option value="MI">Michigan</option>
+                                <option value="MN">Minnesota</option>
+                                <option value="MS">Mississippi</option>
+                                <option value="MO">Missouri</option>
+                                <option value="MT">Montana</option>
+                                <option value="NE">Nebraska</option>
+                                <option value="NV">Nevada</option>
+                                <option value="NH">New Hampshire</option>
+                                <option value="NJ">New Jersey</option>
+                                <option value="NM">New Mexico</option>
+                                <option value="NY">New York</option>
+                                <option value="NC">North Carolina</option>
+                                <option value="ND">North Dakota</option>
+                                <option value="OH">Ohio</option>
+                                <option value="OK">Oklahoma</option>
+                                <option value="OR">Oregon</option>
+                                <option value="PA">Pennsylvania</option>
+                                <option value="RI">Rhode Island</option>
+                                <option value="SC">South Carolina</option>
+                                <option value="SD">South Dakota</option>
+                                <option value="TN">Tennessee</option>
+                                <option value="TX">Texas</option>
+                                <option value="UT">Utah</option>
+                                <option value="VT">Vermont</option>
+                                <option value="VA">Virginia</option>
+                                <option value="WA">Washington</option>
+                                <option value="WV">West Virginia</option>
+                                <option value="WI">Wisconsin</option>
+                                <option value="WY">Wyoming</option>
+                            </select>
                             @Html.ValidationMessageFor(m => m.State, "", new { @class = "text-danger" })
 
                         </div>
@@ -268,7 +319,7 @@
 
                         <div class="form-group">
                             <label for="ZIP_Code" class="control-label">ZIP Code</label>
-                            <input type="text" id="ZIP_Code" name="ZIP_Code" class="form-control" value="@Request["ZIP_Code"]" />
+                            <input type="text" id="ZIP_Code" maxlength="5" name="ZIP_Code" class="form-control" value="@Request["ZIP_Code"]" />
                             @Html.ValidationMessageFor(m => m.ZIP_Code, "", new { @class = "text-danger" })
 
                         </div>
