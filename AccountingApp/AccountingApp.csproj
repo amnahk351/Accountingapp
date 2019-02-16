@@ -177,7 +177,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateUsers.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Extended\EditUserModel.cs" />
     <Compile Include="Models\Extended\LoginModel.cs" />
+    <Compile Include="Models\Extended\NewUserModel.cs" />
     <Compile Include="Models\ValidField.cs" />
     <Compile Include="Models\ValidPassword.cs" />
     <Compile Include="Models\ValidUsername.cs" />
