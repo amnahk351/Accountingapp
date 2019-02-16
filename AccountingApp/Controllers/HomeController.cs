@@ -30,7 +30,7 @@ namespace AccountingApp.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult NewUser(CreateUser model)
+        public ActionResult NewUser(NewUserModel model)
         {
             CreateUser tbl = new CreateUser();
 
@@ -61,7 +61,7 @@ namespace AccountingApp.Controllers
             }
 
 
-            return View("NewUser", new CreateUser());
+            return View("NewUser", new NewUserModel());
         }
 
         public ActionResult ShowUserData()
@@ -81,37 +81,73 @@ namespace AccountingApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            var item = db.CreateUsers.Where(x => x.ID == id).First();
-            return View(item);
+            CreateUser item = db.CreateUsers.Where(x => x.ID == id).First();
+
+            EditUserModel EditView = new EditUserModel();
+            EditView.FirstName = item.FirstName;
+            EditView.LastName = item.LastName;
+            EditView.Email = item.Email;
+            EditView.Username = item.Username;
+            EditView.Password = item.Password;
+            EditView.Role = item.Role;
+            EditView.Phone = item.Phone;
+            EditView.Active = item.Active;
+            EditView.Address = item.Address;
+            EditView.City = item.City;
+            EditView.State = item.State;
+            EditView.ZIP_Code = item.ZIP_Code;
+            return View(EditView);
         }
 
         [HttpPost]
-        public ActionResult Edit(CreateUser model)
+        public ActionResult Edit(EditUserModel value)
         {
-            if (ModelState.IsValid)
-            {
-                var item = db.CreateUsers.Where(x => x.ID == model.ID).First();
-                item.Date_Modified = model.Date_Modified;
-                item.FirstName = model.FirstName;
-                item.LastName = model.LastName;
-                item.Email = model.Email;
-                item.Username = model.Username;
-                item.Password = model.Password;
-                item.Role = model.Role;
-                item.Phone = model.Phone;
-                item.Active = model.Active;
-                item.Address = model.Address;
-                item.City = model.City;
-                item.State = model.State;
-                item.ZIP_Code = model.ZIP_Code;
-           
-                db.SaveChanges();
-                var item2 = db.CreateUsers.ToList();
-                TempData["Message"] = "Your entry was successfully updated!";
+            CreateUser CurrentUser = db.CreateUsers.Where(x => x.ID == value.ID).First();
 
-                return RedirectToAction("ShowUserData");
-            }
-            return View(model);
+            CurrentUser.Date_Modified = value.Date_Modified;
+            CurrentUser.FirstName = value.FirstName;
+            CurrentUser.LastName = value.LastName;
+            CurrentUser.Email = value.Email;
+            //CurrentUser.Username = value.Username;  //username is not suppossed to be changed
+            CurrentUser.Password = value.Password;
+            CurrentUser.Role = value.Role;
+            CurrentUser.Phone = value.Phone;
+            CurrentUser.Active = value.Active;
+            CurrentUser.Address = value.Address;
+            CurrentUser.City = value.City;
+            CurrentUser.State = value.State;
+            CurrentUser.ZIP_Code = value.ZIP_Code;
+
+            db.SaveChanges();
+            var item2 = db.CreateUsers.ToList();
+            TempData["Message"] = "Your entry was successfully updated!";
+
+            return RedirectToAction("ShowUserData");
+
+            //if (ModelState.IsValid)
+            //{
+            //    var item = db.CreateUsers.Where(x => x.ID == model.ID).First();
+            //    item.Date_Modified = model.Date_Modified;
+            //    item.FirstName = model.FirstName;
+            //    item.LastName = model.LastName;
+            //    item.Email = model.Email;
+            //    item.Username = model.Username;
+            //    item.Password = model.Password;
+            //    item.Role = model.Role;
+            //    item.Phone = model.Phone;
+            //    item.Active = model.Active;
+            //    item.Address = model.Address;
+            //    item.City = model.City;
+            //    item.State = model.State;
+            //    item.ZIP_Code = model.ZIP_Code;
+
+            //    db.SaveChanges();
+            //    var item2 = db.CreateUsers.ToList();
+            //    TempData["Message"] = "Your entry was successfully updated!";
+
+            //    return RedirectToAction("ShowUserData");
+            //}
+            //return View(model);
         }
 
     }
