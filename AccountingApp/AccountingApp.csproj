@@ -138,6 +138,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\OldPasswordHandler.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -159,23 +160,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ChartOfAcc.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CreateUser.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreateUser.Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CreateUser.cs">
-      <DependentUpon>CreateUsers.tt</DependentUpon>
+      <DependentUpon>CreateUser.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CreateUsers.Context.cs">
+    <Compile Include="Models\CreateUser.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CreateUsers.Context.tt</DependentUpon>
+      <DependentUpon>CreateUser.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\CreateUsers.cs">
+    <Compile Include="Models\CreateUser1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CreateUsers.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\CreateUsers.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CreateUsers.edmx</DependentUpon>
+      <DependentUpon>CreateUser.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Extended\EditUserModel.cs" />
     <Compile Include="Models\Extended\LoginModel.cs" />
@@ -215,31 +216,31 @@
       <DependentUpon>ChartOfAcc.edmx</DependentUpon>
       <LastGenOutput>ChartOfAcc1.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\CreateUsers.Context.tt">
+    <Content Include="Models\CreateUser.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CreateUsers.edmx</DependentUpon>
-      <LastGenOutput>CreateUsers.Context.cs</LastGenOutput>
+      <DependentUpon>CreateUser.edmx</DependentUpon>
+      <LastGenOutput>CreateUser.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\CreateUsers.tt">
+    <Content Include="Models\CreateUser.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CreateUsers.edmx</DependentUpon>
-      <LastGenOutput>CreateUsers.cs</LastGenOutput>
+      <DependentUpon>CreateUser.edmx</DependentUpon>
+      <LastGenOutput>CreateUser1.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\CreateUsers.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CreateUsers.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\CreateUsers.edmx.diagram">
-      <DependentUpon>CreateUsers.edmx</DependentUpon>
-    </Content>
     <EntityDeploy Include="Models\ChartOfAcc.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ChartOfAcc.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="Models\ChartOfAcc.edmx.diagram">
       <DependentUpon>ChartOfAcc.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\CreateUser.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CreateUser.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\CreateUser.edmx.diagram">
+      <DependentUpon>CreateUser.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />

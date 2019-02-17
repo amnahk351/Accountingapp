@@ -20,7 +20,7 @@ namespace AccountingApp.Controllers
             ErrorController GetErr = new ErrorController();
             string inv = GetErr.GetErrorMessage(19);
             string denied = GetErr.GetErrorMessage(21);
-            var db = new Database1Entities2();
+            var db = new Database1Entities4();
 
             try
             {

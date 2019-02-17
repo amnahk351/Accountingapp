@@ -10,7 +10,6 @@ namespace AccountingApp.Controllers
     {
         public string GetErrorMessage(int id)
         {
-
             string error = "";
             SqlConnection sqlCon = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
             sqlCon.Open();
