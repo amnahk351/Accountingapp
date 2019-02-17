@@ -6,11 +6,10 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace AccountingApp.Controllers
-{
+{    
     public class HomeController : Controller
     {
-        
-        Database1Entities2 db = new Database1Entities2();
+        Database1Entities4 db = new Database1Entities4();
 
         public ActionResult Index()
         {
@@ -81,7 +80,7 @@ namespace AccountingApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            CreateUser item = db.CreateUsers.Where(x => x.ID == id).First();
+            CreateUser item = db.CreateUsers.Where(x => x.ID == id).First();            
 
             EditUserModel EditView = new EditUserModel();
             EditView.FirstName = item.FirstName;
@@ -103,6 +102,9 @@ namespace AccountingApp.Controllers
         public ActionResult Edit(EditUserModel value)
         {
             CreateUser CurrentUser = db.CreateUsers.Where(x => x.ID == value.ID).First();
+            string CurrentPassword = CurrentUser.Password.ToString();
+            int id = CurrentUser.ID;
+            //System.Diagnostics.Debug.WriteLine("current stored pass test: " + CurrentUser.Password);
 
             CurrentUser.Date_Modified = value.Date_Modified;
             CurrentUser.FirstName = value.FirstName;
@@ -110,6 +112,20 @@ namespace AccountingApp.Controllers
             CurrentUser.Email = value.Email;
             //CurrentUser.Username = value.Username;  //username is not suppossed to be changed
             CurrentUser.Password = value.Password;
+
+            //System.Diagnostics.Debug.WriteLine("Output Password:");
+            if (CurrentPassword != value.Password)
+            {
+                //System.Diagnostics.Debug.WriteLine("value pass: " + value.Password);
+                //System.Diagnostics.Debug.WriteLine("It got here");
+                OldPasswordHandler PassHand = new OldPasswordHandler();
+                PassHand.AdjustOldPasswords(CurrentPassword, id);
+                //CurrentUser.Old_Passwords = CurrentPassword;
+            }
+            //else {
+            //    CurrentUser.Old_Passwords = null;
+            //}
+
             CurrentUser.Role = value.Role;
             CurrentUser.Phone = value.Phone;
             CurrentUser.Active = value.Active;

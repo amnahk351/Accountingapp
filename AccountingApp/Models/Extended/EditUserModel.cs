@@ -43,6 +43,8 @@ namespace AccountingApp.Models
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
 
+        public string Old_Passwords { get; set; }
+
         public string Role { get; set; }
 
         [ValidField(ErrorMessageID = 7)]
