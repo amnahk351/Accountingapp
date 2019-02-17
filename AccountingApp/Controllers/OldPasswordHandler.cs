@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -56,8 +56,6 @@ namespace AccountingApp.Controllers
                 }
             }
 
-            //SqlConnection sqlCon = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
-
             string Upd = "UPDATE CreateUsers SET Old_Passwords=@Passwords WHERE ID='" + UserId + "';";
             sqlCon.Open();
             SqlCommand sqlUpdate = new SqlCommand(Upd, sqlCon);
@@ -68,19 +66,5 @@ namespace AccountingApp.Controllers
             sqlCon.Close();
 
         }
-
-        //private void InsertPassword(string pass) {
-        //SqlConnection sqlCon = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
-
-        //string Upd = "UPDATE CreateUsers SET FirstName=@firstname WHERE UserID='" + UserIDTextbox.Text + "';";
-        //sqlCon.Open();
-        //    SqlCommand sqlUpdate = new SqlCommand(Upd, sqlCon);
-        //sqlUpdate.Parameters.AddWithValue("@firstname", FirstnameTextbox.Text.Trim());
-        //    sqlUpdate.Parameters.AddWithValue("@lastname", LastnameTextbox.Text.Trim());
-
-        //    sqlUpdate.ExecuteNonQuery();
-
-        //    sqlCon.Close();
-        //}
     }
 }
