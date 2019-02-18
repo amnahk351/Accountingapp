@@ -22,10 +22,12 @@ namespace AccountingApp.Controllers
             string denied = GetErr.GetErrorMessage(21);
             var db = new Database1Entities4();
 
+            var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username &&
+                                                                    validUser.Password == userLoggingIn.Password).FirstOrDefault();
+
             try
             {
-                var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username &&
-                                                                    validUser.Password == userLoggingIn.Password).FirstOrDefault();
+                
 
                 if (userDetails == null)
                     throw new Exception(inv);
@@ -42,8 +44,19 @@ namespace AccountingApp.Controllers
             {
                 Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'LogIn';</script>");
             }
-            
-            return View("~/Views/Admin/AdminIndex.cshtml");
+
+            if (userDetails.Role == "Admin") {
+                return View("~/Views/Admin/AdminIndex.cshtml"); //takes user to admin page
+            }
+
+            else if (userDetails.Role == "Accountant") {
+                return View("~/Views/Home/Index.cshtml"); //takes user to accountant page, probably should make this one go to a manager page
+            }
+            return View("~/Views/Admin/AdminIndex.cshtml"); //just a default page to end up at if neither option above was used, probably should make this an accountant
+
+
+
+
         }
     }
 }
