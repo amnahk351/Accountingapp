@@ -30,5 +30,6 @@ namespace AccountingApp.Models
         public string City { get; set; }
         public string State { get; set; }
         public string ZIP_Code { get; set; }
+        public string ResetPasswordCode { get; set; }
     }
 }
