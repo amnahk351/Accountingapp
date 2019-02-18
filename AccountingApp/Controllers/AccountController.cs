@@ -40,24 +40,23 @@ namespace AccountingApp.Controllers
                     //The account is allowed
                     System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
                     System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
+
+                    if (userDetails.Role == "Admin")
+                    {
+                        return View("~/Views/Admin/AdminIndex.cshtml"); //takes user to admin page
+                    }
+                    else if (userDetails.Role == "Accountant")
+                    {
+                        return View("~/Views/Home/Index.cshtml"); //takes user to accountant page, probably should make this one go to a manager page
+                    }
                 }
             }
             catch (Exception exception)
             {
                 Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'Login';</script>");
             }
-
-            if (userDetails.Role == "Admin") {
-                return View("~/Views/Admin/AdminIndex.cshtml"); //takes user to admin page
-            }
-
-            else if (userDetails.Role == "Accountant") {
-                return View("~/Views/Home/Index.cshtml"); //takes user to accountant page, probably should make this one go to a manager page
-            }
+            
             return View("~/Views/Admin/AdminIndex.cshtml"); //just a default page to end up at if neither option above was used, probably should make this an accountant
-
-
-
 
         }
 
