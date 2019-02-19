@@ -134,6 +134,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountantController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -205,6 +206,7 @@
     <Content Include="img\dashboard.png" />
     <Content Include="img\dimensional-chart-of-accounts.jpg" />
     <Content Include="img\user-avatars.jpg" />
+    <Content Include="img\user-log.jpg" />
     <Content Include="img\user-portal.png" />
     <Content Include="Models\ChartOfAcc.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -274,6 +276,7 @@
     <Content Include="Views\Admin\ChartOfAccounts.cshtml" />
     <Content Include="Views\Admin\NewAccount.cshtml" />
     <Content Include="Views\Admin\EditAccount.cshtml" />
+    <Content Include="Views\Accountant\AccountantIndex.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

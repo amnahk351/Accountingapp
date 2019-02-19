@@ -1,0 +1,374 @@
+﻿@model AccountingApp.Models.ChartOfAcc
+
+@{
+    ViewBag.Title = "AccountantIndex";
+    Layout = null;
+
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+
+
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+
+
+    <style>
+        /*body {
+            padding-top: 70px;
+            margin: 40px;
+            background-color: gainsboro;
+        }
+
+        .nav {
+            padding-right: 70px;
+        }
+
+        .navbar-header {
+            padding-left: 70px;
+        }*/
+        .navbar-text {
+            padding-right: 20px;
+        }
+
+        .container {
+            width: 100%;
+            margin-top: 2%;
+        }
+
+        .inner {
+            overflow: hidden;
+        }
+
+            .inner img {
+                transition: all 1.5s ease;
+            }
+
+            .inner:hover img {
+                transform: scale(1.5);
+            }
+    </style>
+</head>
+<body>
+    @*<div class="nav">
+            <nav class="navbar navbar-inverse navbar-fixed-top navbar-collapse navbar-nav">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">Objective Accounting</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Home</a></li>
+
+                        <li><a href="#">User Log</a></li>
+
+                        <li><a href="@Url.Action("ShowUserData","Home")">Users</a></li>
+
+                        <li><a href="#">Chart Of Accounts</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
+                        <li><a href="#">SignOut</a></li>
+                    </ul>
+                </div>
+
+            </nav>
+        </div>*@
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top ">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <a class="navbar-brand" href="#">Objective Accounting</a>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+
+            </ul>
+            @*<form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>*@
+            <ul class="nav navbar-nav navbar-right">
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+                    Journalize
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog modal-lg" style="width:100%" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Journal Entry</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" class="needs-validation" novalidate>
+                                    <div class="form-group col-md-4">
+
+                                        <label for="Date" class="control-label">Date</label>
+                                        <input type="date" class="form-control" id="Date" name="Date" required/>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <table class="table table-hover small-text" id="tb">
+                                            <tr class="tr-header">
+                                                <th>Account Name</th>
+                                                <th>Debit</th>
+                                                <th>Credit</th>
+                                                <th>
+                                                    <a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person"><i class="fas fa-plus"></i>
+
+                                                </th>
+                                            </tr>
+                                            <tr>
+
+                                                <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
+                                                    <div>
+                                                        @Html.DropDownList("AccountName", ViewBag.accountlist as SelectList, "Please select an account", htmlAttributes: new { @class = "form-control "})
+
+                                                    </div>
+                                                </td>
+                                                <td><input type="text" name="Debit[]" class="form-control " style="text-align:right" placeholder="$0.00" id="Debit" required></td>
+
+                                                <td><input type="text" name="Credit[]" class="form-control " style="text-align:right" placeholder="$0.00" id="Crebit" required></td>
+                                                <td>
+                                                    <a href='javascript:void(0);' class='remove'>
+                                                        <i class="fas fa-times"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <div class="form-group col-md-10">
+                                            <label for="Comment" class="control-label">Comment</label>
+                                            <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="optional"></textarea>
+
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <input type="file" class="form-control-file" id="comment">
+                                        </div>
+                                    </div>
+
+
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                <a href="/Accountant/AccountantIndex"><button type="submit" class="btn btn-success">Submit</button></a>
+                                <button type="button" class="btn btn-info">Reset</button>
+                                <button type="button" class="btn btn-warning">Suspend</button>
+
+
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <li>
+                    <a class="nav-link active" href="#">General Ledger</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="#">Reports</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="#">Transactions</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="#">Chart Of Accounts</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="#">Dashboard</a>
+                </li>
+                <br />
+                <h3 style="color:white">|</h3>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    @*<div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    @*<table class="table table-hover small-text" id="tb">
+                <tr class="tr-header">
+                    <th>Full Name</th>
+                    <th>Designation</th>
+                    <th>Mobile No.</th>
+                    <th>Email Id</th>
+                    <th><a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person"><i class="fas fa-plus"></i>
+
+        </th>
+                <tr>
+                    <td><input type="text" name="fullname[]" class="form-control"></td>
+                    <td>
+                        <select name="designation[]" class="form-control">
+                            <option value="" selected>Select Designation</option>
+                            <option value="Engineer">Engineer</option>
+                            <option value="Accountant">Accountant</option>
+                        </select>
+                    </td>
+                    <td><input type="text" name="mobileno[]" class="form-control"></td>
+                    <td><input type="text" name="emailid[]" class="form-control"></td>
+                    <td><a href='javascript:void(0);' class='remove'>
+            <i class="fas fa-times"></i>
+
+        </a></td>
+                </tr>
+            </table>*@
+    <br />
+    <br />
+    <div style="width:55%; margin:0 auto">
+        <h5 style="margin-left: 5px;">Welcome, Accountant!</h5>
+
+        <hr />
+        <h5>General Journal</h5>
+        <hr />
+        <div>
+            <table id="JournalEntries" class="table table-responsive table-striped">
+                <thead>
+                    <tr>
+                        <th style="width:80px">Date</th>
+                        <th style="width:200px">Accounts</th>
+                        <th style="width:120px">Debit</th>
+                        <th style="width:120px">Credit</th>
+                        <th style="width:80px">Status</th>
+                        <th style="width:80px">Created By</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @*@for (int i = 0; i < Model.Count(); i++)
+                        {
+                            <tr>
+                                <td>@Model[i].AccountNumber</td>
+                                <td>@Model[i].AccountName</td>
+                                <td>@Model[i].AccountType</td>
+                                <td>@Model[i].NormalSide</td>
+                                <td>@Model[i].OriginalBalance</td>
+                                <td>@Model[i].CurrentBalance</td>
+                                <td>@Model[i].AccountDescription</td>
+                                <td>@(Model[i].Active ? "Yes" : "No")</td>
+                                <td>@Model[i].CreatedBy</td>
+                                <td>
+
+                                    <a href="@Url.Action("EditAccount", new { id = Model[i].AccountNumber})">
+                                        Edit
+                                    </a>
+
+                                    <a href="@Url.Action("Delete", new { id = Model[i].AccountNumber})">
+                                        <i class="fas fa-user-edit"></i>
+                                        Delete
+                                    </a>
+                                </td>
+
+
+
+                            </tr>
+                        }*@
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <hr />
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-success">All</button>
+            <button type="button" class="btn btn-success">Approved</button>
+            <button type="button" class="btn btn-success">Declined</button>
+            <button type="button" class="btn btn-success">Pending</button>
+
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            $('#addMore').on('click', function () {
+                var data = $("#tb tr:eq(1)").clone(true).appendTo("#tb");
+                data.find("input").val('');
+            });
+            $(document).on('click', '.remove', function () {
+                var trIndex = $(this).closest("tr").index();
+                if (trIndex > 1) {
+                    $(this).closest("tr").remove();
+                } else {
+                    alert("Can't remove first row!");
+                }
+            });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#JournalEntries').DataTable();
+        });
+    </script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+
+    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>*@
+</body>
