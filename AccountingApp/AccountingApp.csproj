@@ -180,8 +180,10 @@
       <DependentUpon>CreateUser.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Extended\EditUserModel.cs" />
+    <Compile Include="Models\Extended\ForgotPasswordModel.cs" />
     <Compile Include="Models\Extended\LoginModel.cs" />
     <Compile Include="Models\Extended\NewUserModel.cs" />
+    <Compile Include="Models\Extended\ResetPasswordModel.cs" />
     <Compile Include="Models\ValidField.cs" />
     <Compile Include="Models\ValidPassword.cs" />
     <Compile Include="Models\ValidUsername.cs" />
@@ -277,6 +279,8 @@
     <Content Include="Views\Admin\NewAccount.cshtml" />
     <Content Include="Views\Admin\EditAccount.cshtml" />
     <Content Include="Views\Accountant\AccountantIndex.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
