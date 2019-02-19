@@ -81,17 +81,15 @@
         </div>*@
 
 
-    <nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">
-                <img src="~/img/Accounting Logo.PNG" width="150" height="40" />
-            </a>
+            <a class="navbar-brand" href="#">Objective Accounting</a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
@@ -103,10 +101,10 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>*@
             <ul class="nav navbar-nav navbar-right">
-                <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
+                <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
                 <br />
                 <li class="nav-item">
-                    <a class="nav-link" href="/Account/Login">Sign Out</a>
+                    <a class="nav-link" href="#">Sign Out</a>
                 </li>
             </ul>
         </div>
@@ -117,101 +115,111 @@
     @using (Html.BeginForm())
     {
 
-    <form method="post" id="accountform">
-        <div class="container" style="width: 43%">
-            @Html.ValidationSummary(true, "The following errors were found:", new { @class = "alert alert-danger" })
-        </div>
-
-        <div class="container shadow" style="width: 40%">
-            <h2>NewAccount</h2>
-            <hr />
-            <div class="form-row">
-                <div class="form-group col-md-6">
-
-                    <label for="AccountNumber" class="control-label">Account Number</label>
-                    <input type="text" class="form-control" id="AccountNumber" name="AccountNumber">
-
-                </div>
-                <div class="form-group col-md-6">
-
-                    <label for="AccountName" class="control-label">Account Name</label>
-                    <input type="text" class="form-control" id="AccountName" name="AccountName">
-
-                </div>
+        <form method="post" id="accountform" >
+            <div class="container" style="width: 43%">
+                @Html.ValidationSummary(true, "The following errors were found:", new { @class = "alert alert-danger" })
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <div class="form-group">
-                        <label for="AccountType" class="control-label">Account Type</label>
-                        <select name="AccountType" class="form-control" id="AccountType">
-                            <option value="Assets">Assets</option>
-                            <option value="Liabilities">Liabilities</option>
-                            <option value="Equity">Equity</option>
-                            <option value="Revenue">Revenue</option>
-                            <option value="Expense">Expense</option>
 
-                        </select>
+            <div class="container shadow" style="width: 40%">
+                <h2>NewAccount</h2>
+                <hr />
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+
+                        <label for="AccountNumber" class="control-label">Account Number</label>
+                        <input type="text" class="form-control" id="AccountNumber" name="AccountNumber" >
+                        @Html.ValidationMessageFor(m => m.AccountNumber, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="form-group col-md-6">
+
+                        <label for="AccountName" class="control-label">Account Name</label>
+                        <input type="text" class="form-control" id="AccountName" name="AccountName" >
+                        @Html.ValidationMessageFor(m => m.AccountName, "", new { @class = "text-danger" })
+
                     </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <div class="form-group">
+                            <label for="AccountType" class="control-label">Account Type</label>
+                            <select name="AccountType" class="form-control" id="AccountType" >
+                                <option value="Assets">Assets</option>
+                                <option value="Liabilities">Liabilities</option>
+                                <option value="Equity">Equity</option>
+                                <option value="Revenue">Revenue</option>
+                                <option value="Expense">Expense</option>
 
-                    <div class="form-group">
-                        <label for="NormalSide">Normal Side</label>
-                        <select class="cutom-select form-control" id="NormalSide" name="NormalSide">
-                            <option value="Debit">Debit</option>
-                            <option value="Credit">Credit</option>
+                            </select>
+                            @Html.ValidationMessageFor(m => m.AccountType, "", new { @class = "text-danger" })
 
-                        </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+
+                        <div class="form-group">
+                            <label for="NormalSide">Normal Side</label>
+                            <select class="cutom-select form-control" id="NormalSide" name="NormalSide" >
+                                <option value="Debit">Debit</option>
+                                <option value="Credit">Credit</option>
+
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <div class="form-group">
+                            <label for="OriginalBalance">Original Balance</label>
+                            <input type="text" class="form-control text-right right-justified" id="OriginalBalance" placeholder="0.00" name="OriginalBalance" >
+                            @Html.ValidationMessageFor(m => m.OriginalBalance, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <div class="form-group">
+                            <label for="CurrentBalance">Current Balance</label>
+                            <input type="text" class="form-control text-right" id="CurrentBalance" placeholder="0.00" name="CurrentBalance" >
+                            @Html.ValidationMessageFor(m => m.CurrentBalance, "", new { @class = "text-danger" })
+
+                        </div>
                     </div>
                 </div>
 
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <div class="form-group">
-                        <label for="OriginalBalance">Original Balance</label>
-                        <input type="text" class="form-control text-right" id="OriginalBalance" placeholder="0.00" name="OriginalBalance">
-                    </div>
+                <div class="form-group">
+                    <label for="AccountDescription">Account Description</label>
+                    <textarea class="form-control" id="AccountDescription" rows="5" name="AccountDescription"></textarea>
                 </div>
-                <div class="form-group col-md-6">
-                    <div class="form-group">
-                        <label for="CurrentBalance">Current Balance</label>
-                        <input type="text" class="form-control text-right" id="CurrentBalance" placeholder="0.00" name="CurrentBalance">
-                    </div>
+                <div class="form-group">
+                    <label for="CreatedBy">Created By</label>
+                    <input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy" >
+                    @Html.ValidationMessageFor(m => m.CreatedBy, "", new { @class = "text-danger" })
+
                 </div>
-            </div>
 
-            <div class="form-group col-md-12">
-                <label for="AccountDescription">Account Description</label>
-                <textarea class="form-control" id="AccountDescription" rows="5" name="AccountDescription"></textarea>
-            </div>
-            <div class="form-group col-md-12">
-                <label for="CreatedBy">Created By</label>
-                <input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy">
-            </div>
+                <div class="form-group">
+                    <label for="Active" class="control-label">Active</label>
+                    <input data-val="true" id="Active" name="Active" type="checkbox" value="true" />
+                    <input name="Active" type="hidden" value="false" />
 
-            <div class="form-group col-md-12">
-                <label for="Active" class="control-label">Active</label>
-                <input data-val="true" id="Active" name="Active" type="checkbox" value="true" />
-                <input name="Active" type="hidden" value="false" />
+                    @*@Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })*@
+                </div>
 
-                @*@Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })*@
+                <hr />
+                <a href="@Url.Action("ChartOfAccounts")" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-remove"></span> Cancel
+                </a>
+                <button type="submit" class="btn btn-success" href="@Url.Action("ChartOfAccounts")" id="btnsubmit">Save</button>
+                <hr />
             </div>
-
-            <hr />
-            <button type="submit" class="btn btn-success" href="@Url.Action("ChartOfAccounts")" id="btnsubmit">Save</button>
-            <a href="@Url.Action("ChartOfAccounts")" class="btn btn-warning">
-                <span class="glyphicon glyphicon-remove"></span> Cancel
-            </a>            
-            <hr />
-        </div>
             <br />
             <br />
-    </form>
+        </form>
     }
     <hr />
     <p> &copy; @DateTime.Now.Year - Objective Accounting</p>
-
+    
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
@@ -222,12 +230,3 @@
 
 </body>
 </html>
-
-<script type="text/javascript">
-
-    window.onload = function () {
-        var username = '@Session["FirstNameofUser"]';
-        document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
-    };
-
-</script>

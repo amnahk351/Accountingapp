@@ -16,14 +16,22 @@ namespace AccountingApp.Models
     using System.ComponentModel.DataAnnotations.Schema;
     public partial class ChartOfAcc
     {
+        [Required]
         public double AccountNumber { get; set; }
+        [Required]
         public string AccountName { get; set; }
+        [Required]
         public string AccountType { get; set; }
+        [Required]
         public string NormalSide { get; set; }
+        [Required]
         public decimal OriginalBalance { get; set; }
+        [Required]
         public decimal CurrentBalance { get; set; }
         public string AccountDescription { get; set; }
         public bool Active { get; set; }
+        [Required]
+
         public string CreatedBy { get; set; }
     }
 }

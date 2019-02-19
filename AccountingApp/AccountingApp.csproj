@@ -134,6 +134,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountantController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -179,10 +180,8 @@
       <DependentUpon>CreateUser.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Extended\EditUserModel.cs" />
-    <Compile Include="Models\Extended\ForgotPasswordModel.cs" />
     <Compile Include="Models\Extended\LoginModel.cs" />
     <Compile Include="Models\Extended\NewUserModel.cs" />
-    <Compile Include="Models\Extended\ResetPasswordModel.cs" />
     <Compile Include="Models\ValidField.cs" />
     <Compile Include="Models\ValidPassword.cs" />
     <Compile Include="Models\ValidUsername.cs" />
@@ -207,6 +206,7 @@
     <Content Include="img\dashboard.png" />
     <Content Include="img\dimensional-chart-of-accounts.jpg" />
     <Content Include="img\user-avatars.jpg" />
+    <Content Include="img\user-log.jpg" />
     <Content Include="img\user-portal.png" />
     <Content Include="Models\ChartOfAcc.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -271,13 +271,12 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\ShowUserData.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\LogIn.cshtml" />
     <Content Include="Views\Admin\AdminIndex.cshtml" />
     <Content Include="Views\Admin\ChartOfAccounts.cshtml" />
     <Content Include="Views\Admin\NewAccount.cshtml" />
     <Content Include="Views\Admin\EditAccount.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Accountant\AccountantIndex.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
