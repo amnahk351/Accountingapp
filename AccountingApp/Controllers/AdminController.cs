@@ -60,7 +60,7 @@ namespace AccountingApp.Controllers
             
         }
 
-        public ActionResult EditAccount(double id)
+        public ActionResult EditAccount(int id)
         {
             var item = db.ChartOfAccs.Where(x => x.AccountNumber == id).First();
             return View(item);
