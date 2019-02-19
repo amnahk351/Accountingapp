@@ -37,10 +37,12 @@ namespace AccountingApp.Models
 
         [ValidPassword]
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [DisplayName("Confirm Password")]
         [Compare("Password")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
         public string Old_Passwords { get; set; }
