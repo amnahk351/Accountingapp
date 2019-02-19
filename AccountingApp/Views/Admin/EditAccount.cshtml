@@ -121,8 +121,8 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>*@
             <ul class="nav navbar-nav navbar-right">
-                <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
-                <br />
+                <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
+                
                 <li class="nav-item">
                     <a class="nav-link" href="#">Sign Out</a>
                 </li>
@@ -257,3 +257,11 @@
 </body>
 </html>
 
+<script type="text/javascript">
+
+    window.onload = function () {
+        var username = '@Session["FirstNameofUser"]';
+        document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
+    };
+
+</script>

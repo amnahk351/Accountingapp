@@ -11,8 +11,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
-
-
+        
 
     @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -104,7 +103,7 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>*@
             <ul class="nav navbar-nav navbar-right">
-                <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
+                <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="/Account/Login">Sign Out</a>
@@ -204,4 +203,15 @@
    
 </footer>
 
+
+
+
+<script type="text/javascript">
+    
+    window.onload = function () {
+        var username = '@Session["FirstNameofUser"]';
+        document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
+    };
+
+</script>
 

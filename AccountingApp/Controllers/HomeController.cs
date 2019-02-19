@@ -88,6 +88,7 @@ namespace AccountingApp.Controllers
             EditView.Email = item.Email;
             EditView.Username = item.Username;
             EditView.Password = item.Password;
+            EditView.ConfirmPassword = item.Password;
             EditView.Role = item.Role;
             EditView.Phone = item.Phone;
             EditView.Active = item.Active;
