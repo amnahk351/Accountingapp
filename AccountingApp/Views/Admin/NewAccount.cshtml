@@ -81,15 +81,17 @@
         </div>*@
 
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">Objective Accounting</a>
+            <a class="navbar-brand" href="#">
+                <img src="~/img/Accounting Logo.PNG" width="150" height="40" />
+            </a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
@@ -101,10 +103,10 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>*@
             <ul class="nav navbar-nav navbar-right">
-                <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
-                <br />
+                <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
+                @*<br />*@
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Sign Out</a>
+                    <a class="nav-link" href="/Account/Login">Sign Out</a>
                 </li>
             </ul>
         </div>
@@ -115,7 +117,7 @@
     @using (Html.BeginForm())
     {
 
-        <form method="post" id="accountform" >
+        <form method="post" id="accountform">
             <div class="container" style="width: 43%">
                 @Html.ValidationSummary(true, "The following errors were found:", new { @class = "alert alert-danger" })
             </div>
@@ -127,14 +129,14 @@
                     <div class="form-group col-md-6">
 
                         <label for="AccountNumber" class="control-label">Account Number</label>
-                        <input type="text" class="form-control" id="AccountNumber" name="AccountNumber" >
+                        <input type="text" class="form-control" id="AccountNumber" name="AccountNumber">
                         @Html.ValidationMessageFor(m => m.AccountNumber, "", new { @class = "text-danger" })
 
                     </div>
                     <div class="form-group col-md-6">
 
                         <label for="AccountName" class="control-label">Account Name</label>
-                        <input type="text" class="form-control" id="AccountName" name="AccountName" >
+                        <input type="text" class="form-control" id="AccountName" name="AccountName">
                         @Html.ValidationMessageFor(m => m.AccountName, "", new { @class = "text-danger" })
 
                     </div>
@@ -143,7 +145,7 @@
                     <div class="form-group col-md-6">
                         <div class="form-group">
                             <label for="AccountType" class="control-label">Account Type</label>
-                            <select name="AccountType" class="form-control" id="AccountType" >
+                            <select name="AccountType" class="form-control" id="AccountType">
                                 <option value="Assets">Assets</option>
                                 <option value="Liabilities">Liabilities</option>
                                 <option value="Equity">Equity</option>
@@ -159,7 +161,7 @@
 
                         <div class="form-group">
                             <label for="NormalSide">Normal Side</label>
-                            <select class="cutom-select form-control" id="NormalSide" name="NormalSide" >
+                            <select class="cutom-select form-control" id="NormalSide" name="NormalSide">
                                 <option value="Debit">Debit</option>
                                 <option value="Credit">Credit</option>
 
@@ -172,7 +174,7 @@
                     <div class="form-group col-md-6">
                         <div class="form-group">
                             <label for="OriginalBalance">Original Balance</label>
-                            <input type="text" class="form-control text-right right-justified" id="OriginalBalance" placeholder="0.00" name="OriginalBalance" >
+                            <input type="text" class="form-control text-right right-justified" id="OriginalBalance" placeholder="0.00" name="OriginalBalance">
                             @Html.ValidationMessageFor(m => m.OriginalBalance, "", new { @class = "text-danger" })
 
                         </div>
@@ -180,7 +182,7 @@
                     <div class="form-group col-md-6">
                         <div class="form-group">
                             <label for="CurrentBalance">Current Balance</label>
-                            <input type="text" class="form-control text-right" id="CurrentBalance" placeholder="0.00" name="CurrentBalance" >
+                            <input type="text" class="form-control text-right" id="CurrentBalance" placeholder="0.00" name="CurrentBalance">
                             @Html.ValidationMessageFor(m => m.CurrentBalance, "", new { @class = "text-danger" })
 
                         </div>
@@ -193,7 +195,7 @@
                 </div>
                 <div class="form-group">
                     <label for="CreatedBy">Created By</label>
-                    <input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy" >
+                    <input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy">
                     @Html.ValidationMessageFor(m => m.CreatedBy, "", new { @class = "text-danger" })
 
                 </div>
@@ -219,13 +221,20 @@
     }
     <hr />
     <p> &copy; @DateTime.Now.Year - Objective Accounting</p>
-    
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
 
+    window.onload = function () {
+        var username = '@Session["FirstNameofUser"]';
+        document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
+    };
+
+    </script>
 
 
 </body>

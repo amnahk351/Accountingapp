@@ -202,6 +202,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\ac.jpg" />
+    <Content Include="images\user-avatars.jpg" />
     <Content Include="img\ac.jpg" />
     <Content Include="img\Accounting Logo.PNG" />
     <Content Include="img\chartofacc.jpg" />

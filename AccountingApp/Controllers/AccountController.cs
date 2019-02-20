@@ -47,7 +47,7 @@ namespace AccountingApp.Controllers
                     }
                     else if (userDetails.Role == "Accountant")
                     {
-                        return View("~/Views/Home/Index.cshtml"); //takes user to accountant page, probably should make this one go to a manager page
+                        return View("~/Views/Accountant/AccountantIndex.cshtml"); //takes user to accountant page, probably should make this one go to a manager page
                     }
                 }
             }
