@@ -29,14 +29,15 @@ namespace AccountingApp.Controllers
 
             try
             {
-                
+
 
                 if (userDetails == null)
                     throw new Exception(inv);
 
                 else if (userDetails.Active == false)
                     throw new Exception(denied);
-                else {
+                else
+                {
                     //The account is allowed
                     System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
                     System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
@@ -55,11 +56,12 @@ namespace AccountingApp.Controllers
             {
                 Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'Login';</script>");
             }
-            
+
             return View("~/Views/Admin/AdminIndex.cshtml"); //just a default page to end up at if neither option above was used, probably should make this an accountant
 
         }
 
+        [HttpGet]
         public ActionResult ForgotPassword()
         {
             var PartForgot = new ForgotPasswordModel();
@@ -67,32 +69,31 @@ namespace AccountingApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult ForgotPassword(ForgotPasswordModel ForgotPass)
+        public void ForgotPassword(ForgotPasswordModel ForgotPass, string Email)
         {
-            string Em = ForgotPass.Email;
-            string message = "If an account uses that email, a password reset link has been sent.";
+            string Em = Email;
+            //string message = "If an account uses that email, a password reset link has been sent.";
+            
             using (Database1Entities4 dc = new Database1Entities4())
-            {
+            {                
                 var account = dc.CreateUsers.Where(a => a.Email == Em).FirstOrDefault();
+
                 if (account != null)
                 {
                     //send email
                     string resetCode = Guid.NewGuid().ToString();
-                    SendEmail(Em,resetCode);
+                    SendEmail(Em, resetCode);
                     account.ResetPasswordCode = resetCode;
 
                     //dc.Configuration.ValidateOnSaveEnabled = false;
 
                     dc.SaveChanges();
+                    System.Diagnostics.Debug.WriteLine("Email was sent");
+                }
+                else {
+                    System.Diagnostics.Debug.WriteLine("Fail, no email sent");
                 }
             }
-            ViewBag.Message = message;
-            //var PartForgot = new ForgotPasswordModel();
-            //return PartialView(PartForgot);
-            //return Json(new { message });
-            //LoginModel Lm = new LoginModel();
-
-            return View();
         }
 
         [NonAction]
