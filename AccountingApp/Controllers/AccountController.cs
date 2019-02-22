@@ -196,15 +196,10 @@ namespace AccountingApp.Controllers
 
                         dc.SaveChanges();
                         message = "Password updated successfully.";
+                        ViewBag.Message = message;
                     }
                 }
             }
-            else
-            {
-                message = "An error occurred.";
-            }
-
-            ViewBag.Message = message;
             return View(model);
         }
     }
