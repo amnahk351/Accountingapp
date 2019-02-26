@@ -1,74 +1,66 @@
-﻿using System;
+﻿using AccountingApp.Controllers;
+using FluentValidation;
+using FluentValidation.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
 
 namespace AccountingApp.Models
 {
+    [Validator(typeof(EditUserValidator))]
     public class EditUserModel
     {
         public int ID { get; set; }
 
         [DisplayName("Date")]
-        [DataType(DataType.Date)]
-        [Required]
-        public Nullable<System.DateTime> Date_Modified { get; set; }
+        //[DataType(DataType.Date)]
+        public DateTime? Date_Modified { get; set; }
 
         [DisplayName("First Name")]
-        [ValidField(ErrorMessageID = 1)]
-        [Required]
         public string FirstName { get; set; }
 
         [DisplayName("Last Name")]
-        [ValidField(ErrorMessageID = 2)]
-        [Required]
         public string LastName { get; set; }
 
         [DisplayName("Email Address")]
-        [DataType(DataType.EmailAddress)]
-        [ValidField(ErrorMessageID = 3)]
-        [Required]
         public string Email { get; set; }
-
-        [ValidField(ErrorMessageID = 4)]       
+              
         public string Username { get; set; }
 
-        [ValidPassword]
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [DisplayName("Confirm Password")]
-        [Compare("Password")]
-        [DataType(DataType.Password)]
-        public string ConfirmPassword { get; set; }
-
-        public string Old_Passwords { get; set; }
-
         public string Role { get; set; }
-
-        [ValidField(ErrorMessageID = 7)]
-        [Required]
+   
         public string Phone { get; set; }
 
         [DisplayName("Allow Access")]
         public bool Active { get; set; }
 
-        [ValidField(ErrorMessageID = 9)]
-        [Required]
         public string Address { get; set; }
-
-        [ValidField(ErrorMessageID = 10)]
-        [Required]
+     
         public string City { get; set; }
 
         public string State { get; set; }
 
         [DisplayName("ZIP Code")]
-        [ValidField(ErrorMessageID = 12)]
-        [Required]
         public string ZIP_Code { get; set; }
+    }
+
+    public class EditUserValidator : AbstractValidator<EditUserModel>
+    {
+        ErrorController ErrorFinder = new ErrorController();
+
+        public EditUserValidator()
+        {
+            RuleFor(x => x.Date_Modified).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(8));
+            RuleFor(x => x.FirstName).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(1));
+            RuleFor(x => x.LastName).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(2));
+            RuleFor(x => x.Email).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(3));
+            RuleFor(x => x.Email).EmailAddress().WithMessage(ErrorFinder.GetErrorMessage(29));
+            RuleFor(x => x.Phone).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(7)).Length(10,10).WithMessage(ErrorFinder.GetErrorMessage(17)).Matches("^[0-9]*$").WithMessage(ErrorFinder.GetErrorMessage(16));
+            RuleFor(x => x.Address).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(9));
+            RuleFor(x => x.City).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(10));
+            RuleFor(x => x.ZIP_Code).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(12)).Length(5,5).WithMessage(ErrorFinder.GetErrorMessage(18)).Matches("^[0-9]*$").WithMessage(ErrorFinder.GetErrorMessage(16));
+
+        }        
     }
 }

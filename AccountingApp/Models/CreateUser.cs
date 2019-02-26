@@ -22,7 +22,7 @@ namespace AccountingApp.Models
         public string Password { get; set; }
         public string Role { get; set; }
         public string Phone { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
+        public Nullable<System.DateTime> Date_Created { get; set; }
         public bool Active { get; set; }
         public Nullable<System.DateTime> Date_Modified { get; set; }
         public string Old_Passwords { get; set; }
@@ -31,5 +31,16 @@ namespace AccountingApp.Models
         public string State { get; set; }
         public string ZIP_Code { get; set; }
         public string ResetPasswordCode { get; set; }
+        public Nullable<int> Login_Amount { get; set; }
+        public Nullable<int> Login_Fails { get; set; }
+        public Nullable<bool> Account_Locked { get; set; }
+        public Nullable<System.DateTime> Last_Signout { get; set; }
+        public string Security_Question1 { get; set; }
+        public string Answer_1 { get; set; }
+        public string Security_Question2 { get; set; }
+        public string Answer_2 { get; set; }
+        public Nullable<short> Login_Attempts { get; set; }
+        public Nullable<System.DateTime> Last_Login { get; set; }
+        public Nullable<int> TotalOnline_Mins { get; set; }
     }
 }

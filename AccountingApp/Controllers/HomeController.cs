@@ -9,7 +9,7 @@ namespace AccountingApp.Controllers
 {    
     public class HomeController : Controller
     {
-        Database1Entities4 db = new Database1Entities4();
+        Database1Entities5 db = new Database1Entities5();
 
         public ActionResult Index()
         {
@@ -40,7 +40,7 @@ namespace AccountingApp.Controllers
             tbl.Role = model.Role;
             tbl.Phone = model.Phone;
             tbl.Email = model.Email;
-            tbl.Date = model.Date;
+            tbl.Date_Created = model.Date_Created;
             tbl.Active = model.Active;
             tbl.Address = model.Address;
             tbl.City = model.City;
@@ -83,12 +83,11 @@ namespace AccountingApp.Controllers
             CreateUser item = db.CreateUsers.Where(x => x.ID == id).First();            
 
             EditUserModel EditView = new EditUserModel();
+            EditView.Date_Modified = DateTime.Now;
             EditView.FirstName = item.FirstName;
             EditView.LastName = item.LastName;
             EditView.Email = item.Email;
             EditView.Username = item.Username;
-            EditView.Password = item.Password;
-            EditView.ConfirmPassword = item.Password;
             EditView.Role = item.Role;
             EditView.Phone = item.Phone;
             EditView.Active = item.Active;
@@ -103,26 +102,21 @@ namespace AccountingApp.Controllers
         public ActionResult Edit(EditUserModel value)
         {
             CreateUser CurrentUser = db.CreateUsers.Where(x => x.ID == value.ID).First();
-            string CurrentPassword = CurrentUser.Password.ToString();
             int id = CurrentUser.ID;
-            //System.Diagnostics.Debug.WriteLine("current stored pass test: " + CurrentUser.Password);
 
             CurrentUser.Date_Modified = value.Date_Modified;
             CurrentUser.FirstName = value.FirstName;
             CurrentUser.LastName = value.LastName;
             CurrentUser.Email = value.Email;
-            //CurrentUser.Username = value.Username;  //username is not suppossed to be changed
-            CurrentUser.Password = value.Password;
-
-            //System.Diagnostics.Debug.WriteLine("Output Password:");
-            if (CurrentPassword != value.Password)
-            {
-                //System.Diagnostics.Debug.WriteLine("value pass: " + value.Password);
-                //System.Diagnostics.Debug.WriteLine("It got here");
-                OldPasswordHandler PassHand = new OldPasswordHandler();
-                PassHand.AdjustOldPasswords(CurrentPassword, id);
-                //CurrentUser.Old_Passwords = CurrentPassword;
-            }
+            
+            //if (CurrentPassword != value.Password)
+            //{
+            //    //System.Diagnostics.Debug.WriteLine("value pass: " + value.Password);
+            //    //System.Diagnostics.Debug.WriteLine("It got here");
+            //    OldPasswordHandler PassHand = new OldPasswordHandler();
+            //    PassHand.AdjustOldPasswords(CurrentPassword, id);
+            //    //CurrentUser.Old_Passwords = CurrentPassword;
+            //}
             //else {
             //    CurrentUser.Old_Passwords = null;
             //}
@@ -140,31 +134,7 @@ namespace AccountingApp.Controllers
             TempData["Message"] = "Your entry was successfully updated!";
 
             return RedirectToAction("ShowUserData");
-
-            //if (ModelState.IsValid)
-            //{
-            //    var item = db.CreateUsers.Where(x => x.ID == model.ID).First();
-            //    item.Date_Modified = model.Date_Modified;
-            //    item.FirstName = model.FirstName;
-            //    item.LastName = model.LastName;
-            //    item.Email = model.Email;
-            //    item.Username = model.Username;
-            //    item.Password = model.Password;
-            //    item.Role = model.Role;
-            //    item.Phone = model.Phone;
-            //    item.Active = model.Active;
-            //    item.Address = model.Address;
-            //    item.City = model.City;
-            //    item.State = model.State;
-            //    item.ZIP_Code = model.ZIP_Code;
-
-            //    db.SaveChanges();
-            //    var item2 = db.CreateUsers.ToList();
-            //    TempData["Message"] = "Your entry was successfully updated!";
-
-            //    return RedirectToAction("ShowUserData");
-            //}
-            //return View(model);
+          
         }
 
     }
