@@ -13,10 +13,10 @@ namespace AccountingApp.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Database1Entities4 : DbContext
+    public partial class Database1Entities5 : DbContext
     {
-        public Database1Entities4()
-            : base("name=Database1Entities4")
+        public Database1Entities5()
+            : base("name=Database1Entities5")
         {
         }
     

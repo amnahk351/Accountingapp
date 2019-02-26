@@ -130,9 +130,9 @@
                     <div class="col-md-4">
 
                         <div class="form-group">
-                            <label for="Date" class="control-label">Date</label>
-                            <input type="date" id="Date" name="Date" class="form-control" value="@Request["Date"]" />
-                            @Html.ValidationMessageFor(m => m.Date, "", new { @class = "text-danger" })
+                            <label for="Date_Created" class="control-label">Date</label>
+                            <input type="date" id="Date_Created" name="Date_Created" class="form-control" value="@Request["Date_Created"]" />
+                            @Html.ValidationMessageFor(m => m.Date_Created, "", new { @class = "text-danger" })
 
                         </div>
                     </div>
@@ -370,6 +370,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 
 
 

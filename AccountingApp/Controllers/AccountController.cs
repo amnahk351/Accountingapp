@@ -22,7 +22,7 @@ namespace AccountingApp.Controllers
             ErrorController GetErr = new ErrorController();
             string inv = GetErr.GetErrorMessage(19);
             string denied = GetErr.GetErrorMessage(21);
-            var db = new Database1Entities4();
+            var db = new Database1Entities5();
 
             var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username &&
                                                                     validUser.Password == userLoggingIn.Password).FirstOrDefault();
@@ -40,6 +40,7 @@ namespace AccountingApp.Controllers
                 {
                     //The account is allowed
                     System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
+                    System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
                     System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
 
                     if (userDetails.Role == "Admin")
@@ -74,7 +75,7 @@ namespace AccountingApp.Controllers
             string Em = Email;
             //string message = "If an account uses that email, a password reset link has been sent.";
             
-            using (Database1Entities4 dc = new Database1Entities4())
+            using (Database1Entities5 dc = new Database1Entities5())
             {                
                 var account = dc.CreateUsers.Where(a => a.Email == Em).FirstOrDefault();
 
@@ -157,7 +158,7 @@ namespace AccountingApp.Controllers
         public ActionResult ResetPassword(string id)
         {
 
-            using (Database1Entities4 dc = new Database1Entities4())
+            using (Database1Entities5 dc = new Database1Entities5())
             {
                 var user = dc.CreateUsers.Where(a => a.ResetPasswordCode == id).FirstOrDefault();
                 if (user != null)
@@ -183,7 +184,7 @@ namespace AccountingApp.Controllers
             var message = "";
             if (ModelState.IsValid)
             {
-                using (Database1Entities4 dc = new Database1Entities4())
+                using (Database1Entities5 dc = new Database1Entities5())
                 {
                     var user = dc.CreateUsers.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
                     if (user != null)
@@ -200,6 +201,18 @@ namespace AccountingApp.Controllers
                     }
                 }
             }
+            return View(model);
+        }
+
+        public ActionResult ChangePassword()
+        {
+            ChangePasswordModel ChgePass = new ChangePasswordModel();
+            return View(ChgePass);
+        }
+
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePasswordModel model)
+        {
             return View(model);
         }
     }
