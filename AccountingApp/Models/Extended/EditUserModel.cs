@@ -56,10 +56,10 @@ namespace AccountingApp.Models
             RuleFor(x => x.LastName).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(2));
             RuleFor(x => x.Email).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(3));
             RuleFor(x => x.Email).EmailAddress().WithMessage(ErrorFinder.GetErrorMessage(29));
-            RuleFor(x => x.Phone).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(7));
+            RuleFor(x => x.Phone).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(7)).Length(10,10).WithMessage(ErrorFinder.GetErrorMessage(17)).Matches("^[0-9]*$").WithMessage(ErrorFinder.GetErrorMessage(16));
             RuleFor(x => x.Address).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(9));
             RuleFor(x => x.City).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(10));
-            RuleFor(x => x.ZIP_Code).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(12));
+            RuleFor(x => x.ZIP_Code).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(12)).Length(5,5).WithMessage(ErrorFinder.GetErrorMessage(18)).Matches("^[0-9]*$").WithMessage(ErrorFinder.GetErrorMessage(16));
 
         }        
     }
