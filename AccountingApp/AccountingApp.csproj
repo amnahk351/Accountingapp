@@ -197,6 +197,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateUser.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Extended\AccountRecoveryModel.cs" />
     <Compile Include="Models\Extended\ChangePasswordModel.cs" />
     <Compile Include="Models\Extended\EditUserModel.cs" />
     <Compile Include="Models\Extended\ForgotPasswordModel.cs" />

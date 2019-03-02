@@ -78,7 +78,7 @@ namespace AccountingApp.Models
             var nullableValue = cmd.ExecuteScalar();
             if (nullableValue == null || nullableValue == DBNull.Value)
             {
-                return matches;
+                return !matches;
             }
             else
             {
@@ -93,7 +93,7 @@ namespace AccountingApp.Models
                 }
                 con.Close();
             }
-            return matches;
+            return !matches;
         }
     }
 }
