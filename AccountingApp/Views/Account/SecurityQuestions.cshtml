@@ -1,0 +1,144 @@
+﻿@model AccountingApp.Models.SecurityQuestionsModel
+
+@{
+    ViewBag.Title = "Security Questions";
+    Layout = "~/Views/Shared/_Layout-Account.cshtml";
+}
+
+<style>
+
+    .container.body-content {
+        padding-bottom: 0px;
+    }
+
+    
+    .group {
+        display: inline-block;        
+    }
+
+    .form-control.text-box.single-line {
+        width: 150%;
+        overflow: hidden;
+        font-size: 18px;
+        padding: 8px 0;
+        margin: 8px 0;
+        border: 2px solid dodgerblue;
+        border-radius: 6px;
+        padding-left: 8px;
+    }
+
+    .field-validation-error.text-danger {
+        color: red;
+        font-size: 14px;
+    }
+
+    .button_example {
+        margin-top: 20px;       
+    }
+
+    .form-control {
+        width: 145%;
+        overflow: hidden;
+        font-size: 14px;
+        margin: 8px 0;
+        border: 2px solid dodgerblue;
+        border-radius: 6px;
+        padding-left: 8px;
+    }
+
+    .button_example {
+        position: absolute
+        
+    }
+
+    
+
+</style>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+
+    <h1 style="font-size: 28px; color:dodgerblue;border-bottom: 4px solid dodgerblue;margin-bottom: 5px;padding: 5px">Security Questions</h1>
+
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <form>
+
+        <div class="group">
+            @*@Html.LabelFor(model => model.Security_Question1, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label for="Security_Question1">Question 1</label> <br />
+
+            <div class="col-md-10">
+                <select name="Security_Question1" class="form-control" id="Security_Question1">
+                    <option value="What was the make of your first car?">What was the make of your first car?</option>
+                    <option value="Whose phone number do you know by heart?">Whose phone number do you know by heart?</option>
+                    <option value="Who is your favorite actor, musician, or artist?">Who is your favorite actor, musician, or artist?</option>
+                    <option value="What is the name of your favorite pet?">What is the name of your favorite pet?</option>
+                    <option value="What is the name of your first school?">What is the name of your first school?</option>
+                    <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                    <option value="What street did you grow up on?">What street did you grow up on?</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.Security_Question1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="group">
+            @*@Html.LabelFor(model => model.Answer_1, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label for="Answer_1">Answer 1</label> <br />
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Answer_1, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Answer_1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="group">
+            @*@Html.LabelFor(model => model.Security_Question2, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label for="Security_Question2">Question 2</label> <br />
+            <div class="col-md-10">
+                <select name="Security_Question2" class="form-control" id="Security_Question2">
+                    <option value="What city were you born in?">What city were you born in?</option>
+                    <option value="When is your anniversary?">When is your anniversary?</option>
+                    <option value="What is your father's middle name?">What is your father's middle name?</option>
+                    <option value="What was your high school mascot?">What was your high school mascot?</option>
+                    <option value="What was the first company that you worked for?">What was the first company that you worked for?</option>
+                    <option value="Where did you meet your spouse?">Where did you meet your spouse?</option>
+                    <option value="Where is your favorite place to vacation?">Where is your favorite place to vacation?</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.Security_Question2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="group">
+            @*@Html.LabelFor(model => model.Answer_2, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label for="Answer_2">Answer 2</label> <br />
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Answer_2, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Answer_2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </form>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Submit" class="button_example" style="right: 50px;">
+        </div>
+    </div>
+
+    <br />
+    <br />
+    <br />
+    <h5>Please Create Your Security Questions Before Continuing</h5>
+</div>
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

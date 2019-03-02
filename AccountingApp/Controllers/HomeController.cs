@@ -46,6 +46,10 @@ namespace AccountingApp.Controllers
             tbl.City = model.City;
             tbl.State = model.State;
             tbl.ZIP_Code = model.ZIP_Code;
+            tbl.Account_Locked = false;
+            tbl.Login_Attempts = 10;
+            tbl.Login_Amount = 0;
+            tbl.Login_Fails = 0;
 
             if (ModelState.IsValid)
             {

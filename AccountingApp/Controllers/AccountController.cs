@@ -7,6 +7,9 @@ using System.Net;
 using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using System.Configuration;
+using System.Data;
 
 namespace AccountingApp.Controllers
 {
@@ -22,20 +25,55 @@ namespace AccountingApp.Controllers
             ErrorController GetErr = new ErrorController();
             string inv = GetErr.GetErrorMessage(19);
             string denied = GetErr.GetErrorMessage(21);
+            string locked = GetErr.GetErrorMessage(30);
+            string attempts = GetErr.GetErrorMessage(31);
             var db = new Database1Entities5();
-
-            var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username &&
-                                                                    validUser.Password == userLoggingIn.Password).FirstOrDefault();
+            
+            //checks username and password both exists for an account, left for reference
+            //var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username && validUser.Password == userLoggingIn.Password).FirstOrDefault();
+                        
+            var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username).FirstOrDefault();  //get the account for the typed username
 
             try
             {
-
-
                 if (userDetails == null)
-                    throw new Exception(inv);
+                {
+                    throw new Exception(inv);  //the username does not exist                    
+                }
+
+                else if (userLoggingIn.Password != userDetails.Password)
+                {
+                    //usernames exists, but password is wrong                    
+                    if (userDetails.Login_Attempts == 1)
+                    {
+                        userDetails.Account_Locked = true;
+                        db.SaveChanges();
+                        throw new Exception(locked);
+                    }
+
+                    userDetails.Login_Fails++;
+                    userDetails.Login_Attempts--;
+                    db.SaveChanges();
+
+                    throw new Exception(attempts + " " + userDetails.Login_Attempts.ToString());
+                }
 
                 else if (userDetails.Active == false)
                     throw new Exception(denied);
+                else if (userDetails.Account_Locked == true)
+                    throw new Exception(locked);
+                else if (userDetails.Security_Question1 == null) {
+                    //Not answered security questions
+                    System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
+                    System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
+                    System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;
+                                        
+                    userDetails.Login_Amount++;
+                    db.SaveChanges();
+
+                    System.Diagnostics.Debug.WriteLine("Went to security questions.");
+                    return Redirect("~/Account/SecurityQuestions");
+                }
                 else
                 {
                     //The account is allowed
@@ -43,13 +81,17 @@ namespace AccountingApp.Controllers
                     System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
                     System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
 
+                    userDetails.Login_Attempts = 10;
+                    userDetails.Login_Amount++;
+                    db.SaveChanges();
+
                     if (userDetails.Role == "Admin")
                     {
-                        return View("~/Views/Admin/AdminIndex.cshtml"); //takes user to admin page
+                        return Redirect("~/Admin/AdminIndex"); //takes user to admin page
                     }
                     else if (userDetails.Role == "Accountant")
                     {
-                        return View("~/Views/Accountant/AccountantIndex.cshtml"); //takes user to accountant page, probably should make this one go to a manager page
+                        return Redirect("~/Accountant/AccountantIndex");  //takes user to accountant page, probably should make this one go to a manager page
                     }
                 }
             }
@@ -58,7 +100,7 @@ namespace AccountingApp.Controllers
                 Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'Login';</script>");
             }
 
-            return View("~/Views/Admin/AdminIndex.cshtml"); //just a default page to end up at if neither option above was used, probably should make this an accountant
+            return Redirect("~/Admin/AdminIndex");  //just a default page to end up at if neither option above was used, probably should make this an accountant
 
         }
 
@@ -73,7 +115,6 @@ namespace AccountingApp.Controllers
         public void ForgotPassword(ForgotPasswordModel ForgotPass, string Email)
         {
             string Em = Email;
-            //string message = "If an account uses that email, a password reset link has been sent.";
             
             using (Database1Entities5 dc = new Database1Entities5())
             {                
@@ -85,10 +126,8 @@ namespace AccountingApp.Controllers
                     string resetCode = Guid.NewGuid().ToString();
                     SendEmail(Em, resetCode);
                     account.ResetPasswordCode = resetCode;
-
-                    //dc.Configuration.ValidateOnSaveEnabled = false;
-
                     dc.SaveChanges();
+
                     System.Diagnostics.Debug.WriteLine("Email was sent");
                 }
                 else {
@@ -133,27 +172,6 @@ namespace AccountingApp.Controllers
             })
                 smtp.Send(message);
         }
-
-        //private bool EmailExists(string Email)
-        //{
-        //    bool found = false;
-        //    SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
-        //    SqlCommand cmd = new SqlCommand("Select count(*) from CreateUsers where Email=@email", con);
-        //    cmd.Parameters.AddWithValue("@email", Email);
-        //    con.Open();
-        //    int result = (int)cmd.ExecuteScalar();
-        //    if (result != 0)
-        //    {
-        //        found = true;
-        //    }
-        //    else
-        //    {
-        //        found = false;
-        //    }
-        //    con.Close();
-
-        //    return found;
-        //}
 
         public ActionResult ResetPassword(string id)
         {
@@ -204,6 +222,30 @@ namespace AccountingApp.Controllers
             return View(model);
         }
 
+        public void GetErrors()
+        {
+            List<String> Errors = new List<String>();
+
+            using (SqlConnection connection = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True"))
+            {
+                connection.Open();
+                string query = "SELECT Description FROM ErrorMessages";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Errors.Add(reader.GetString(0));
+                        }
+                    }
+                }
+            }
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            Response.Write(js.Serialize(Errors));
+        }
+
         public ActionResult ChangePassword()
         {
             ChangePasswordModel ChgePass = new ChangePasswordModel();
@@ -213,7 +255,64 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordModel model)
         {
+            //have to add code to replace password still
+            //use old passsword handler
+
+            using (Database1Entities5 dc = new Database1Entities5())
+            {
+                var sessionUser = Session["Username"] as string;
+
+                var user = dc.CreateUsers.Where(a => a.Username == sessionUser).FirstOrDefault();
+                if (user != null)
+                {
+                    OldPasswordHandler PassHand = new OldPasswordHandler();
+                    PassHand.AdjustOldPasswords(model.CurrentPassword, user.ID);
+
+                    user.Password = model.NewPassword;
+                    dc.SaveChanges();
+                }
+            }
+            
             return View(model);
+        }
+
+        public ActionResult SecurityQuestions()
+        {
+            var Security = new SecurityQuestionsModel();
+            System.Diagnostics.Debug.WriteLine("It got here 0");
+            return View(Security);           
+        }
+
+        [HttpPost]
+        public ActionResult SecurityQuestions(SecurityQuestionsModel model)
+        {
+            var sessionUser = Session["Username"] as string;
+            var sessionRole = Session["UserRole"] as string;
+
+            using (Database1Entities5 dc = new Database1Entities5())
+            {
+                var account = dc.CreateUsers.Where(a => a.Username == sessionUser).FirstOrDefault();
+
+                account.Security_Question1 = model.Security_Question1;
+                account.Answer_1 = model.Answer_1;
+                account.Security_Question2 = model.Security_Question2;
+                account.Answer_2 = model.Answer_2;
+                dc.SaveChanges();
+
+                ModelState.Clear();
+                ViewBag.SuccessMessage = "Password Updated Successfully.";
+            }
+
+            if (sessionRole == "Admin")
+            {
+                return Redirect("~/Admin/AdminIndex");
+            }
+            else if (sessionRole == "Accountant")
+            {
+                return Redirect("~/Accountant/AccountantIndex");
+            }
+
+            return Redirect("~/Admin/AdminIndex");
         }
     }
 }
