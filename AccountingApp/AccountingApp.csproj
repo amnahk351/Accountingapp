@@ -205,6 +205,10 @@
     <Compile Include="Models\Extended\NewUserModel.cs" />
     <Compile Include="Models\Extended\ResetPasswordModel.cs" />
     <Compile Include="Models\Extended\SecurityQuestionsModel.cs" />
+    <Compile Include="Models\Transaction.cs" />
+    <Compile Include="Models\Transaction.Designer.cs">
+      <DependentUpon>Transaction.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ValidField.cs" />
     <Compile Include="Models\ValidPassword.cs" />
     <Compile Include="Models\ValidUsername.cs" />
