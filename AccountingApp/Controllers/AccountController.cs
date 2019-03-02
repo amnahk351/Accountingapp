@@ -1,4 +1,4 @@
-﻿using AccountingApp.Models;
+using AccountingApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -10,7 +10,6 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Configuration;
 using System.Data;
-using System.Diagnostics;
 
 namespace AccountingApp.Controllers
 {
@@ -56,8 +55,9 @@ namespace AccountingApp.Controllers
                     userDetails.Login_Attempts--;
                     db.SaveChanges();
 
-                    throw new Exception(attempts + " " + userDetails.Login_Attempts);
+                    throw new Exception(attempts + " " + userDetails.Login_Attempts.ToString());
                 }
+
                 else if (userDetails.Active == false)
                     throw new Exception(denied);
                 else if (userDetails.Account_Locked == true)
@@ -72,8 +72,9 @@ namespace AccountingApp.Controllers
                     db.SaveChanges();
 
                     System.Diagnostics.Debug.WriteLine("Went to security questions.");
-                    return View("~/Views/Account/SecurityQuestions.cshtml");
-                }else
+                    return Redirect("~/Account/SecurityQuestions");
+                }
+                else
                 {
                     //The account is allowed
                     System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
@@ -86,21 +87,23 @@ namespace AccountingApp.Controllers
 
                     if (userDetails.Role == "Admin")
                     {
-                        return View("~/Views/Admin/AdminIndex.cshtml"); //takes user to admin page
+                        return Redirect("~/Admin/AdminIndex"); //takes user to admin page
+                        //return View("~/Views/Admin/AdminIndex.cshtml"); //takes user to admin page
                     }
                     else if (userDetails.Role == "Accountant")
                     {
-                        return View("~/Views/Accountant/AccountantIndex.cshtml");  //takes user to accountant page, probably should make this one go to a manager page
+                        return Redirect("~/Accountant/AccountantIndex");  //takes user to accountant page, probably should make this one go to a manager page
+                        //return View("~/Views/Home/Index.cshtml"); //takes user to accountant page, probably should make this one go to a manager page
                     }
                 }
             }
             catch (Exception exception)
             {
-                Trace.WriteLine("hi");
                 Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'Login';</script>");
             }
 
-            return View("~/Views/Account/Login.cshtml");  //just a default page to end up at if neither option above was used, probably should make this an accountant
+            //return Redirect("~/Admin/AdminIndex");  //just a default page to end up at if neither option above was used, probably should make this an accountant
+            return View("~/Views/Admin/AdminIndex.cshtml"); //just a default page to end up at if neither option above was used, probably should make this an accountant
 
         }
 
@@ -198,8 +201,7 @@ namespace AccountingApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ResetPassword(ResetPasswordModel model)
-        {
-            var message = "";
+        {            
             if (ModelState.IsValid)
             {
                 using (Database1Entities5 dc = new Database1Entities5())
@@ -214,7 +216,7 @@ namespace AccountingApp.Controllers
                         user.ResetPasswordCode = "";
 
                         dc.SaveChanges();
-                        message = "Password updated successfully.";
+                        var message = "Password updated successfully.";
                         ViewBag.Message = message;
                     }
                 }
@@ -270,6 +272,9 @@ namespace AccountingApp.Controllers
 
                     user.Password = model.NewPassword;
                     dc.SaveChanges();
+                                       
+                    var message = "Password updated successfully.";
+                    ViewBag.Message = message;
                 }
             }
             
@@ -279,7 +284,6 @@ namespace AccountingApp.Controllers
         public ActionResult SecurityQuestions()
         {
             var Security = new SecurityQuestionsModel();
-            System.Diagnostics.Debug.WriteLine("It got here 0");
             return View(Security);           
         }
 
@@ -297,10 +301,8 @@ namespace AccountingApp.Controllers
                 account.Answer_1 = model.Answer_1;
                 account.Security_Question2 = model.Security_Question2;
                 account.Answer_2 = model.Answer_2;
-                dc.SaveChanges();
-
-                ModelState.Clear();
-                ViewBag.SuccessMessage = "Password Updated Successfully.";
+                dc.SaveChanges();                               
+                
             }
 
             if (sessionRole == "Admin")
