@@ -83,7 +83,6 @@ namespace AccountingApp.Models
             else
             {
                 var SavedString = (string)cmd.ExecuteScalar();
-                System.Diagnostics.Debug.WriteLine("current pass value: " + SavedString);
                 if (SavedString == Password)
                 {
                     matches = true;
@@ -94,7 +93,6 @@ namespace AccountingApp.Models
                 }
                 con.Close();
             }
-            System.Diagnostics.Debug.WriteLine("matches value: " + matches);
             return matches;
         }
     }
