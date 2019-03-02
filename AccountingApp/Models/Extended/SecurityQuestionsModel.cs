@@ -11,16 +11,12 @@ namespace AccountingApp.Models
 {
     [Validator(typeof(SecurityQuestionsValidator))]
     public class SecurityQuestionsModel
-    {
-        
+    {        
         public string Security_Question1 { get; set; }
-
         
         public string Answer_1 { get; set; }
-
         
         public string Security_Question2 { get; set; }
-
         
         public string Answer_2 { get; set; }
     }
