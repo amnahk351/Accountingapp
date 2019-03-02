@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 
 namespace AccountingApp.Controllers
 {
@@ -55,9 +56,8 @@ namespace AccountingApp.Controllers
                     userDetails.Login_Attempts--;
                     db.SaveChanges();
 
-                    throw new Exception(attempts + " " + userDetails.Login_Attempts.ToString());
+                    throw new Exception(attempts + " " + userDetails.Login_Attempts);
                 }
-
                 else if (userDetails.Active == false)
                     throw new Exception(denied);
                 else if (userDetails.Account_Locked == true)
@@ -72,9 +72,8 @@ namespace AccountingApp.Controllers
                     db.SaveChanges();
 
                     System.Diagnostics.Debug.WriteLine("Went to security questions.");
-                    return Redirect("~/Account/SecurityQuestions");
-                }
-                else
+                    return View("~/Views/Account/SecurityQuestions.cshtml");
+                }else
                 {
                     //The account is allowed
                     System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
@@ -87,20 +86,21 @@ namespace AccountingApp.Controllers
 
                     if (userDetails.Role == "Admin")
                     {
-                        return Redirect("~/Admin/AdminIndex"); //takes user to admin page
+                        return View("~/Views/Admin/AdminIndex.cshtml"); //takes user to admin page
                     }
                     else if (userDetails.Role == "Accountant")
                     {
-                        return Redirect("~/Accountant/AccountantIndex");  //takes user to accountant page, probably should make this one go to a manager page
+                        return View("~/Views/Accountant/AccountantIndex.cshtml");  //takes user to accountant page, probably should make this one go to a manager page
                     }
                 }
             }
             catch (Exception exception)
             {
+                Trace.WriteLine("hi");
                 Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'Login';</script>");
             }
 
-            return Redirect("~/Admin/AdminIndex");  //just a default page to end up at if neither option above was used, probably should make this an accountant
+            return View("~/Views/Account/Login.cshtml");  //just a default page to end up at if neither option above was used, probably should make this an accountant
 
         }
 
