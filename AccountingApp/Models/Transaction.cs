@@ -23,5 +23,9 @@ namespace AccountingApp.Models
         [Required]
         [StringLength(10)]
         public string Status { get; set; }
+
+        public DateTime DateSubmitted { get; set; }
+
+        public int EntryID { get; set; }
     }
 }

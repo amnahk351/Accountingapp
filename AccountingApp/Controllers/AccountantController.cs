@@ -22,5 +22,14 @@ namespace AccountingApp.Controllers
             ViewBag.accountlist = list;
             return View();
         }
+
+        public ActionResult Journalize(Transaction[] transactions)
+        {
+            //check model
+            //are both d/c 0? do all the d == c?
+            //most recent entry id = SELECT TOP 1 * FROM Table ORDER BY ID DESC .entryID
+            //foreach transaction entryID = most recent ++
+            return View();
+        }
     }
 }
