@@ -198,6 +198,7 @@
       <DependentUpon>CreateUser.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Extended\AccountRecoveryModel.cs" />
+    <Compile Include="Models\Extended\AnswerQuestionsModel.cs" />
     <Compile Include="Models\Extended\ChangePasswordModel.cs" />
     <Compile Include="Models\Extended\EditUserModel.cs" />
     <Compile Include="Models\Extended\ForgotPasswordModel.cs" />
@@ -311,6 +312,8 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Shared\_Layout-Account.cshtml" />
     <Content Include="Views\Account\SecurityQuestions.cshtml" />
+    <Content Include="Views\Account\AccountRecovery.cshtml" />
+    <Content Include="Views\Account\AnswerQuestions.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
