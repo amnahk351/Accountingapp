@@ -41,7 +41,6 @@ namespace AccountingApp.Controllers
                 {
                     throw new Exception(inv);  //the username does not exist                    
                 }
-<<<<<<< HEAD
 
                 else if (userLoggingIn.Password != userDetails.Password)
                 {
@@ -61,23 +60,6 @@ namespace AccountingApp.Controllers
                     userDetails.Login_Attempts--;
                     db.SaveChanges();
 
-=======
-
-                else if (userLoggingIn.Password != userDetails.Password)
-                {
-                    //usernames exists, but password is wrong                    
-                    if (userDetails.Login_Attempts == 1)
-                    {
-                        userDetails.Account_Locked = true;
-                        db.SaveChanges();
-                        throw new Exception(locked);
-                    }
-
-                    userDetails.Login_Fails++;
-                    userDetails.Login_Attempts--;
-                    db.SaveChanges();
-
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
                     throw new Exception(attempts + " " + userDetails.Login_Attempts.ToString());
                 }
 
@@ -142,10 +124,7 @@ namespace AccountingApp.Controllers
         public void ForgotPassword(ForgotPasswordModel ForgotPass, string Email)
         {
             string Em = Email;
-<<<<<<< HEAD
             EventLogHandler Logger = new EventLogHandler();
-=======
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
             
             using (Database1Entities5 dc = new Database1Entities5())
             {                
@@ -159,12 +138,9 @@ namespace AccountingApp.Controllers
                     account.ResetPasswordCode = resetCode;
                     dc.SaveChanges();
 
-<<<<<<< HEAD
                     Logger.LogForgotPassword(Em);
                     Database1Entities6 db2 = new Database1Entities6();
                     var events = db2.EventLogs.ToList();
-=======
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
                     System.Diagnostics.Debug.WriteLine("Email was sent");
                 }
                 else {
@@ -235,13 +211,9 @@ namespace AccountingApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ResetPassword(ResetPasswordModel model)
-<<<<<<< HEAD
         {
             EventLogHandler Logger = new EventLogHandler();
 
-=======
-        {            
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
             if (ModelState.IsValid)
             {
                 using (Database1Entities5 dc = new Database1Entities5())
@@ -256,12 +228,9 @@ namespace AccountingApp.Controllers
                         user.ResetPasswordCode = "";
 
                         dc.SaveChanges();
-<<<<<<< HEAD
                         Logger.LogPasswordReset(user.ID, user.Username);
                         Database1Entities6 db2 = new Database1Entities6();
                         var events = db2.EventLogs.ToList();
-=======
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
                         var message = "Password updated successfully.";
                         ViewBag.Message = message;
                     }
@@ -308,10 +277,7 @@ namespace AccountingApp.Controllers
 
             using (Database1Entities5 dc = new Database1Entities5())
             {
-<<<<<<< HEAD
                 EventLogHandler Logger = new EventLogHandler();
-=======
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
                 var sessionUser = Session["Username"] as string;
 
                 var user = dc.CreateUsers.Where(a => a.Username == sessionUser).FirstOrDefault();
@@ -322,14 +288,10 @@ namespace AccountingApp.Controllers
 
                     user.Password = model.NewPassword;
                     dc.SaveChanges();
-<<<<<<< HEAD
 
                     Logger.LogPasswordChange();
                     Database1Entities6 db2 = new Database1Entities6();
                     var events = db2.EventLogs.ToList();
-=======
-                                       
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
                     var message = "Password updated successfully.";
                     ViewBag.Message = message;
                 }
@@ -373,7 +335,6 @@ namespace AccountingApp.Controllers
 
             return Redirect("~/Admin/AdminIndex");
         }
-<<<<<<< HEAD
 
         public ActionResult AccountRecovery()
         {
@@ -458,7 +419,5 @@ namespace AccountingApp.Controllers
 
             return View();
         }
-=======
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
     }
 }
