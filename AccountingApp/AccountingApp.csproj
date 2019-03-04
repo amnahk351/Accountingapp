@@ -155,6 +155,7 @@
     <Compile Include="Controllers\AccountantController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\EventLogHandler.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\OldPasswordHandler.cs" />
@@ -197,7 +198,30 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateUser.tt</DependentUpon>
     </Compile>
+<<<<<<< HEAD
+    <Compile Include="Models\EventLog.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EventLog.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EventLog.cs">
+      <DependentUpon>EventLog.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EventLog.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EventLog.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EventLog1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EventLog.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Extended\AccountRecoveryModel.cs" />
+    <Compile Include="Models\Extended\AnswerQuestionsModel.cs" />
+=======
+    <Compile Include="Models\Extended\AccountRecoveryModel.cs" />
+>>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
     <Compile Include="Models\Extended\ChangePasswordModel.cs" />
     <Compile Include="Models\Extended\EditUserModel.cs" />
     <Compile Include="Models\Extended\ForgotPasswordModel.cs" />
@@ -253,6 +277,16 @@
       <DependentUpon>CreateUser.edmx</DependentUpon>
       <LastGenOutput>CreateUser1.cs</LastGenOutput>
     </Content>
+    <Content Include="Models\EventLog.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EventLog.edmx</DependentUpon>
+      <LastGenOutput>EventLog.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\EventLog.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EventLog.edmx</DependentUpon>
+      <LastGenOutput>EventLog1.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\ChartOfAcc.edmx">
@@ -268,6 +302,13 @@
     </EntityDeploy>
     <Content Include="Models\CreateUser.edmx.diagram">
       <DependentUpon>CreateUser.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\EventLog.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EventLog.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\EventLog.edmx.diagram">
+      <DependentUpon>EventLog.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -311,6 +352,12 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Shared\_Layout-Account.cshtml" />
     <Content Include="Views\Account\SecurityQuestions.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Views\Account\AccountRecovery.cshtml" />
+    <Content Include="Views\Account\AnswerQuestions.cshtml" />
+    <Content Include="Views\Home\EventLog.cshtml" />
+=======
+>>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
