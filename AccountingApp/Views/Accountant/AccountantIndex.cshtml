@@ -146,6 +146,10 @@
                                         <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
                                             <div>
                                                 @Html.DropDownListFor(model => model.AccountNumber, (List<SelectListItem>)ViewBag.accountList, "Please select an account", htmlAttributes: new { @class = "form-control " })
+                                                @*@Html.DropDownList("AccountNumber", new List<SelectListItem> {
+                                                                                                                new SelectListItem{ Value = "1234", Text="Test"}
+                                                                                                             },
+                                                "Please select an account", htmlAttributes: new { @class = "form-control " })*@
                                             </div>
                                         </td>
                                         <td>@Html.EditorFor(model => model.Debit, new { htmlAttributes = new { @class = "form-control ", @style = "text-align:right", @placeholder = "$0.00", @id = "Debit" } })</td>

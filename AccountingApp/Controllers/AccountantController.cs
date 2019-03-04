@@ -25,7 +25,12 @@ namespace AccountingApp.Controllers
 
             foreach (ChartOfAcc coa in getaccountslist)
             {
-                sliAccountList.Add(new SelectListItem() { Text = coa.AccountName, Value = coa.AccountNumber.ToString() });
+                SelectListItem item = new SelectListItem
+                {
+                    Text = coa.AccountName,
+                    Value = coa.AccountNumber.ToString()
+                };
+                sliAccountList.Add(item);
             }
 
             //SelectList list = new SelectList(sliAccountList, "Value", "Text");
@@ -33,6 +38,7 @@ namespace AccountingApp.Controllers
             return View();
         }
 
+        [HttpPost]
         public ActionResult Journalize(Transaction transaction)
         {
             //check model
@@ -41,7 +47,27 @@ namespace AccountingApp.Controllers
             //foreach transaction entryID = most recent ++
 
             Trace.WriteLine(transaction.Debit);
+            Trace.WriteLine(transaction.AccountNumber);
 
+
+            Database1Entities3 db = new Database1Entities3();
+            List<ChartOfAcc> getaccountslist = db.ChartOfAccs.ToList();
+            List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+            //IEnumerable<ChartOfAcc> accounts = new List<ChartOfAcc> { new ChartOfAcc { AccountNumber = 1234, AccountName = "Test" } };
+
+            foreach (ChartOfAcc coa in getaccountslist)
+            {
+                SelectListItem item = new SelectListItem
+                {
+                    Text = coa.AccountName,
+                    Value = coa.AccountNumber.ToString()
+                };
+                sliAccountList.Add(item);
+            }
+
+            //SelectList list = new SelectList(sliAccountList, "Value", "Text");
+            ViewBag.accountlist = sliAccountList;
             //foreach (Transaction transaction in transactions)
             //{
             //    Trace.WriteLine(transaction.Debit);
