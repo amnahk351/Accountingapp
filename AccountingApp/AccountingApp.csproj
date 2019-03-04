@@ -311,9 +311,6 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Shared\_Layout-Account.cshtml" />
     <Content Include="Views\Account\SecurityQuestions.cshtml" />
-    <Content Include="Views\Shared\_Layout-Admin.cshtml" />
-    <Content Include="Views\Shared\_Layout-Accountant.cshtml" />
-    <Content Include="Views\Shared\_Layout-Manager.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
