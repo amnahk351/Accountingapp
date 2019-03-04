@@ -326,7 +326,6 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult AccountRecovery(AccountRecoveryModel model) {
             ErrorController ErrorFinder = new ErrorController();
-            string mess = ErrorFinder.GetErrorMessage(35);
 
             Database1Entities5 db = new Database1Entities5();
             var userDetails = db.CreateUsers.Where(validUser => validUser.Username == model.Username && validUser.Email == model.Email).FirstOrDefault();
@@ -334,9 +333,14 @@ namespace AccountingApp.Controllers
             if (userDetails == null)
             {
 
-                ViewBag.Message = mess;
+                ViewBag.Message = ErrorFinder.GetErrorMessage(35);
             }
-            else {
+            else if (userDetails.Account_Locked == false)
+            {
+                ViewBag.Message = ErrorFinder.GetErrorMessage(36);
+            }
+            else
+            {
                 //store in session variables the username and email
                 System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
                 System.Web.HttpContext.Current.Session["Email"] = userDetails.Email;
@@ -362,6 +366,34 @@ namespace AccountingApp.Controllers
             ViewBag.Question_2 = userDetails.Security_Question2;
 
             return View(CustomView);
+        }
+
+        [HttpPost]
+        public ActionResult AnswerQuestions(AnswerQuestionsModel model)
+        {
+            ErrorController ErrorFinder = new ErrorController();
+
+            var sessionUser = Session["Username"] as string;
+            var sessionEmail = Session["Email"] as string;
+
+            Database1Entities5 db = new Database1Entities5();
+            var userDetails = db.CreateUsers.Where(validUser => validUser.Username == sessionUser && validUser.Email == sessionEmail).FirstOrDefault();
+
+            ViewBag.Question_1 = userDetails.Security_Question1;
+            ViewBag.Question_2 = userDetails.Security_Question2;
+
+            if (model.Answer_1 == userDetails.Answer_1 && model.Answer_2 == userDetails.Answer_2) {
+                userDetails.Account_Locked = false;
+                db.SaveChanges();
+                ViewBag.Message = "Account Unlocked Successfully.";
+            }
+            else
+            {
+                ViewBag.Error = ErrorFinder.GetErrorMessage(37);
+            }
+
+
+            return View();
         }
     }
 }

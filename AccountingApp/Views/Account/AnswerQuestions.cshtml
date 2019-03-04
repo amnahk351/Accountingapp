@@ -26,6 +26,20 @@
         padding-bottom: 5px;
     }
 
+    .text-danger {
+        color: red;
+    }
+
+    .SuccessText {
+        color: limegreen;
+    }
+
+    a {
+        color: #0000ff;
+        font-family: Arial;
+        font-size: 15px;
+    }
+
 
 </style>
 
@@ -89,12 +103,20 @@
                 <input type="submit" value="Recover" class="button_example" />
             </div>
         </div>
+
+        <br />
+        <div class="SuccessText">
+            @ViewBag.Message
+        </div>
+        <div class="text-danger">
+            @ViewBag.Error
+        </div>
     </div>
 }
 
 <br />
 <div>
-    @Html.ActionLink("Back to Login", "Login")
+    @Html.ActionLink("🡐 Login", "Login")
 </div>
 
 @section Scripts {
