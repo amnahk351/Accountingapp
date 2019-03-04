@@ -22,7 +22,6 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult Authenticate(CreateUser userLoggingIn)
         {
-            EventLogHandler Logger = new EventLogHandler();
             ErrorController GetErr = new ErrorController();
             string inv = GetErr.GetErrorMessage(19);
             string denied = GetErr.GetErrorMessage(21);
@@ -49,10 +48,6 @@ namespace AccountingApp.Controllers
                     {
                         userDetails.Account_Locked = true;
                         db.SaveChanges();
-
-                        Logger.LogAccountLocked(userDetails.ID, userDetails.Username);
-                        Database1Entities6 db2 = new Database1Entities6();
-                        var events = db2.EventLogs.ToList();
                         throw new Exception(locked);
                     }
 
@@ -82,7 +77,6 @@ namespace AccountingApp.Controllers
                 else
                 {
                     //The account is allowed
-                    System.Web.HttpContext.Current.Session["UserID"] = userDetails.ID;
                     System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
                     System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
                     System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
@@ -124,7 +118,6 @@ namespace AccountingApp.Controllers
         public void ForgotPassword(ForgotPasswordModel ForgotPass, string Email)
         {
             string Em = Email;
-            EventLogHandler Logger = new EventLogHandler();
             
             using (Database1Entities5 dc = new Database1Entities5())
             {                
@@ -138,9 +131,6 @@ namespace AccountingApp.Controllers
                     account.ResetPasswordCode = resetCode;
                     dc.SaveChanges();
 
-                    Logger.LogForgotPassword(Em);
-                    Database1Entities6 db2 = new Database1Entities6();
-                    var events = db2.EventLogs.ToList();
                     System.Diagnostics.Debug.WriteLine("Email was sent");
                 }
                 else {
@@ -211,9 +201,7 @@ namespace AccountingApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ResetPassword(ResetPasswordModel model)
-        {
-            EventLogHandler Logger = new EventLogHandler();
-
+        {            
             if (ModelState.IsValid)
             {
                 using (Database1Entities5 dc = new Database1Entities5())
@@ -228,9 +216,6 @@ namespace AccountingApp.Controllers
                         user.ResetPasswordCode = "";
 
                         dc.SaveChanges();
-                        Logger.LogPasswordReset(user.ID, user.Username);
-                        Database1Entities6 db2 = new Database1Entities6();
-                        var events = db2.EventLogs.ToList();
                         var message = "Password updated successfully.";
                         ViewBag.Message = message;
                     }
@@ -277,7 +262,6 @@ namespace AccountingApp.Controllers
 
             using (Database1Entities5 dc = new Database1Entities5())
             {
-                EventLogHandler Logger = new EventLogHandler();
                 var sessionUser = Session["Username"] as string;
 
                 var user = dc.CreateUsers.Where(a => a.Username == sessionUser).FirstOrDefault();
@@ -288,10 +272,7 @@ namespace AccountingApp.Controllers
 
                     user.Password = model.NewPassword;
                     dc.SaveChanges();
-
-                    Logger.LogPasswordChange();
-                    Database1Entities6 db2 = new Database1Entities6();
-                    var events = db2.EventLogs.ToList();
+                                       
                     var message = "Password updated successfully.";
                     ViewBag.Message = message;
                 }
@@ -334,90 +315,6 @@ namespace AccountingApp.Controllers
             }
 
             return Redirect("~/Admin/AdminIndex");
-        }
-
-        public ActionResult AccountRecovery()
-        {
-            var v = new AccountRecoveryModel();
-            return View(v);
-        }
-
-        [HttpPost]
-        public ActionResult AccountRecovery(AccountRecoveryModel model) {
-            ErrorController ErrorFinder = new ErrorController();
-
-            Database1Entities5 db = new Database1Entities5();
-            var userDetails = db.CreateUsers.Where(validUser => validUser.Username == model.Username && validUser.Email == model.Email).FirstOrDefault();
-
-            if (userDetails == null)
-            {
-
-                ViewBag.Message = ErrorFinder.GetErrorMessage(35);
-            }
-            else if (userDetails.Account_Locked == false)
-            {
-                ViewBag.Message = ErrorFinder.GetErrorMessage(36);
-            }
-            else
-            {
-                //store in session variables the username and email
-                System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
-                System.Web.HttpContext.Current.Session["Email"] = userDetails.Email;
-
-                //go to security questions page for answerings and unlocking
-
-                return Redirect("~/Account/AnswerQuestions");
-            }
-
-            return View();
-        }
-
-        public ActionResult AnswerQuestions()
-        {
-            var CustomView = new AnswerQuestionsModel();
-            var sessionUser = Session["Username"] as string;
-            var sessionEmail = Session["Email"] as string;
-
-            Database1Entities5 db = new Database1Entities5();
-            var userDetails = db.CreateUsers.Where(validUser => validUser.Username == sessionUser && validUser.Email == sessionEmail).FirstOrDefault();
-
-            ViewBag.Question_1 = userDetails.Security_Question1;
-            ViewBag.Question_2 = userDetails.Security_Question2;
-
-            return View(CustomView);
-        }
-
-        [HttpPost]
-        public ActionResult AnswerQuestions(AnswerQuestionsModel model)
-        {
-            EventLogHandler Logger = new EventLogHandler();
-            ErrorController ErrorFinder = new ErrorController();
-
-            var sessionUser = Session["Username"] as string;
-            var sessionEmail = Session["Email"] as string;
-
-            Database1Entities5 db = new Database1Entities5();
-            var userDetails = db.CreateUsers.Where(validUser => validUser.Username == sessionUser && validUser.Email == sessionEmail).FirstOrDefault();
-
-            ViewBag.Question_1 = userDetails.Security_Question1;
-            ViewBag.Question_2 = userDetails.Security_Question2;
-
-            if (model.Answer_1 == userDetails.Answer_1 && model.Answer_2 == userDetails.Answer_2) {
-                userDetails.Account_Locked = false;
-                db.SaveChanges();
-
-                Logger.LogAccountRecovered(userDetails.ID, userDetails.Username);
-                Database1Entities6 db2 = new Database1Entities6();
-                var events = db2.EventLogs.ToList();
-                ViewBag.Message = "Account Unlocked Successfully.";
-            }
-            else
-            {
-                ViewBag.Error = ErrorFinder.GetErrorMessage(37);
-            }
-
-
-            return View();
         }
     }
 }
