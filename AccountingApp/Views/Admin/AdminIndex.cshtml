@@ -1,16 +1,16 @@
 ﻿
 @{
     ViewBag.Title = "AdminIndex";
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout-Admin.cshtml";
 }
 
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    @*<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">*@
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">*@
 
 
 
@@ -21,6 +21,46 @@
 
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .column {
+            float: left;
+            width: 24%;
+            padding: 10px;
+            height: 300px;
+            text-align: center;
+            margin: 5px;
+            transform: translate(0%, 50%);
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        @@media screen and (max-width: 500px) {
+            .column {
+                width: 100%;
+            }
+        }
+
+        .center { /*maybe not going to use since it's not quite as flexible in a box*/
+            margin: 0 auto;
+            width: 70%;
+            border: 3px solid dodgerblue;
+            border-radius: 25px;
+            padding: 80px;
+            text-align: center;
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -80%);
+        }
+
+
         /*body {
             padding-top: 70px;
             margin: 40px;
@@ -34,7 +74,7 @@
         .navbar-header {
             padding-left: 70px;
         }*/
-        .navbar-text {
+        /*.navbar-text {
             padding-right: 20px;
         }
 
@@ -53,7 +93,7 @@
 
             .inner:hover img {
                 transform: scale(1.5);
-            }
+            }*/
     </style>
 </head>
 <body>
@@ -82,36 +122,36 @@
         </div>*@
 
 
-    <nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">
-                <img src="~/img/Accounting Logo.PNG" width="150" height="40" />
-            </a>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
+    @*<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <a class="navbar-brand" href="#">
+                    <img src="~/img/Accounting Logo.PNG" width="150" height="40" />
+                </a>
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
 
-            </ul>
-            @*<form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>*@
-            <ul class="nav navbar-nav navbar-right">
-                <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
-                @*<br />*@
-                <li class="nav-item">
-                    <a class="nav-link" href="/Account/Login">Sign Out</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
+                    <br />
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Account/Login">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>*@
     @*<div class="row">
             <div class="col-sm-6">
                 <div class="card">
@@ -135,75 +175,58 @@
     <br />
     <br />
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class=" col-4-lg ml-3">
-                <div class="card shadow" style="width: 16rem; height: 53%;">
-                    <div class="inner">
-                        <img src="~/img/user-avatars.jpg" class="card-img-top" alt="...">
+    <div class="row">
+        @*<div class="center">*@
+            <div class="container">
+                <div class="row justify-content-center">
 
-                    </div>
-                    <div class="card-body text-center">
+                    <div class="column" style="background-color:#bbb">
+                        <div class="inner">
+                            <img src="~/img/user-avatars.jpg" class="card-img-top" alt="..." width="165" height="165">
+                        </div>
                         <h5 class="card-title">Users</h5>
                         <p class="card-text">Click below to see/edit the list of  users.</p>
                         <a href="@Url.Action("ShowUserData","Home")" class="btn btn-primary">All Users</a>
                     </div>
-                </div>
-            </div>
 
-            <div class=" col-4-lg ml-3">
-                <div class="card shadow" style="width: 16rem; height: 53%;">
-                    <div class="inner">
-                        <img src="~/img/chartofacc.jpg" class="card-img-top" alt="...">
-
-                    </div>
-                    <div class="card-body text-center">
+                    <div class="column" style="background-color:#ddd">
+                        <div class="inner">
+                            <img src="~/img/chartofacc.jpg" class="card-img-top" alt="..." width="165" height="165">
+                        </div>
                         <h5 class="card-title">Chart Of Accounts</h5>
                         <p class="card-text">Click below to see/edit the Chart of Accounts.</p>
-                        <a href="/Admin/ChartOfAccounts" class="btn btn-primary" style="margin-top: 60px;">Chart Of Accounts</a>
+                        <a href="/Admin/ChartOfAccounts" class="btn btn-primary">Chart Of Accounts</a>
                     </div>
-                </div>
-            </div>
-            <div class=" col-4-lg ml-3">
-                <div class="card shadow" style="width: 16rem; height: 53%;">
-                    <div class="inner">
-                        <img src="~/img/user-log.jpg" class="card-img-top" alt="...">
 
-                    </div>
-                    <div class="card-body text-center">
+                    <div class="column" style="background-color:#bbb">
+                        <div class="inner">
+                            <img src="~/img/user-log.jpg" class="card-img-top" alt="..." width="165" height="165">
+                        </div>
                         <h5 class="card-title">User Log</h5>
                         <p class="card-text">Click below to view user events and login statistics.</p>
                         <a href="#" class="btn btn-primary">User Log</a>
                     </div>
-                </div>
-            </div>
-            <div class=" col-4-lg ml-3">
-                <div class="card shadow" style="width: 16rem; height: 53%;">
-                    <div class="inner">
-                        <img src="~/img/dashboard.png" class="card-img-top" alt="...">
 
-                    </div>
-                    <div class="card-body text-center">
+                    <div class="column" style="background-color:#ddd">
+                        <div class="inner">
+                            <img src="~/img/dashboard.png" class="card-img-top" alt="..." width="165" height="165">
+                        </div>
                         <h5 class="card-title">Dashboard</h5>
                         <p class="card-text">Click below to see the visual summary of the financial reports.</p>
                         <a href="#" class="btn btn-primary">Dashboard</a>
                     </div>
+
                 </div>
             </div>
-        </div>
-        <hr />
-        <p> &copy; @DateTime.Now.Year - Objective Accounting</p>
+        @*</div>*@
     </div>
-
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
 </body>
 
 
-<footer>
-   
-</footer>
+<footer></footer>
 
 <script type="text/javascript">
 
