@@ -198,7 +198,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateUser.tt</DependentUpon>
     </Compile>
-<<<<<<< HEAD
     <Compile Include="Models\EventLog.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -219,9 +218,6 @@
     </Compile>
     <Compile Include="Models\Extended\AccountRecoveryModel.cs" />
     <Compile Include="Models\Extended\AnswerQuestionsModel.cs" />
-=======
-    <Compile Include="Models\Extended\AccountRecoveryModel.cs" />
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
     <Compile Include="Models\Extended\ChangePasswordModel.cs" />
     <Compile Include="Models\Extended\EditUserModel.cs" />
     <Compile Include="Models\Extended\ForgotPasswordModel.cs" />
@@ -352,12 +348,9 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Shared\_Layout-Account.cshtml" />
     <Content Include="Views\Account\SecurityQuestions.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Account\AccountRecovery.cshtml" />
     <Content Include="Views\Account\AnswerQuestions.cshtml" />
     <Content Include="Views\Home\EventLog.cshtml" />
-=======
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
