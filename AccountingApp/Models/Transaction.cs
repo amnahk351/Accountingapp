@@ -5,6 +5,7 @@ namespace AccountingApp.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Web.Mvc;
 
     [Table("Transaction")]
     public partial class Transaction
