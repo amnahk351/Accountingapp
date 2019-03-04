@@ -25,12 +25,15 @@ namespace AccountingApp.Controllers
 
         public ActionResult NewUser()
         {
-            //CreateUser user = new CreateUser();
-            return View();
+            CreateUser user = new CreateUser();
+            user.Date_Created = DateTime.Now;
+            return View(user);
         }
         [HttpPost]
         public ActionResult NewUser(NewUserModel model)
         {
+            EventLogHandler Logger = new EventLogHandler();
+
             CreateUser tbl = new CreateUser();
 
             tbl.FirstName = model.FirstName;
@@ -56,6 +59,9 @@ namespace AccountingApp.Controllers
                 db.CreateUsers.Add(tbl);
 
                 db.SaveChanges();
+                Logger.LogNewUser(tbl.Username);
+                Database1Entities6 db2 = new Database1Entities6();
+                var events = db2.EventLogs.ToList();
                 var item = db.CreateUsers.ToList();
                 TempData["Message"] = "Your entry was successfully added!";
 
@@ -73,14 +79,14 @@ namespace AccountingApp.Controllers
             return View(item);
         }
 
-        public ActionResult Delete(int id)
-        {
-            var item = db.CreateUsers.Where(x => x.ID == id).First();
-            db.CreateUsers.Remove(item);
-            db.SaveChanges();
-            var item2 = db.CreateUsers.ToList();
-            return View("ShowUserData",item2);
-        }
+        //public ActionResult Delete(int id)
+        //{
+        //    var item = db.CreateUsers.Where(x => x.ID == id).First();
+        //    db.CreateUsers.Remove(item);
+        //    db.SaveChanges();
+        //    var item2 = db.CreateUsers.ToList();
+        //    return View("ShowUserData",item2);
+        //}
 
         public ActionResult Edit(int id)
         {
@@ -105,26 +111,99 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult Edit(EditUserModel value)
         {
+            EventLogHandler Logger = new EventLogHandler();
             CreateUser CurrentUser = db.CreateUsers.Where(x => x.ID == value.ID).First();
             int id = CurrentUser.ID;
+
+            var Original = new List<string>();
+            var Updated = new List<string>();
+
+            string OriginalModel = "";
+            string UpdatedModel = "";
+
+            if (CurrentUser.Date_Modified != value.Date_Modified) {
+                Original.Add("Date Modified: " + CurrentUser.Date_Modified);
+                Updated.Add("Date Modified: " + value.Date_Modified);
+            }
+
+            if (CurrentUser.FirstName != value.FirstName)
+            {
+                Original.Add("First Name: " + CurrentUser.FirstName);
+                Updated.Add("First Name: " + value.FirstName);
+            }
+
+            if (CurrentUser.LastName != value.LastName)
+            {
+                Original.Add("Last Name: " + CurrentUser.LastName);
+                Updated.Add("Last Name: " + value.LastName);
+            }
+
+            if (CurrentUser.Email != value.Email)
+            {
+                Original.Add("Email: " + CurrentUser.Email);
+                Updated.Add("Email: " + value.Email);
+            }
+
+            if (CurrentUser.Role != value.Role)
+            {
+                Original.Add("Role: " + CurrentUser.Role);
+                Updated.Add("Role: " + value.Role);
+            }
+
+            if (CurrentUser.Phone != value.Phone)
+            {
+                Original.Add("Phone: " + CurrentUser.Phone);
+                Updated.Add("Phone: " + value.Phone);
+            }
+
+            if (CurrentUser.Active != value.Active)
+            {
+                Original.Add("Active: " + CurrentUser.Active);
+                Updated.Add("Active: " + value.Active);
+            }
+
+            if (CurrentUser.Address != value.Address)
+            {
+                Original.Add("Address: " + CurrentUser.Address);
+                Updated.Add("Address: " + value.Address);
+            }
+
+            if (CurrentUser.City != value.City)
+            {
+                Original.Add("City: " + CurrentUser.City);
+                Updated.Add("City: " + value.City);
+            }
+
+            if (CurrentUser.State != value.State)
+            {
+                Original.Add("State: " + CurrentUser.State);
+                Updated.Add("State: " + value.State);
+            }
+
+            if (CurrentUser.ZIP_Code != value.ZIP_Code)
+            {
+                Original.Add("ZIP Code: " + CurrentUser.ZIP_Code);
+                Updated.Add("ZIP Code: " + value.ZIP_Code);
+            }
+
+            OriginalModel = String.Join(", ", Original);
+            UpdatedModel = String.Join(", ", Updated);
+
+            if (OriginalModel != "")
+            {
+                //A change has been done
+                Logger.LogEditUser(CurrentUser.ID, CurrentUser.Username, OriginalModel, UpdatedModel);
+                Database1Entities6 db2 = new Database1Entities6();
+                var events = db2.EventLogs.ToList();
+            }
+
+            Original.Clear();
+            Updated.Clear();
 
             CurrentUser.Date_Modified = value.Date_Modified;
             CurrentUser.FirstName = value.FirstName;
             CurrentUser.LastName = value.LastName;
             CurrentUser.Email = value.Email;
-            
-            //if (CurrentPassword != value.Password)
-            //{
-            //    //System.Diagnostics.Debug.WriteLine("value pass: " + value.Password);
-            //    //System.Diagnostics.Debug.WriteLine("It got here");
-            //    OldPasswordHandler PassHand = new OldPasswordHandler();
-            //    PassHand.AdjustOldPasswords(CurrentPassword, id);
-            //    //CurrentUser.Old_Passwords = CurrentPassword;
-            //}
-            //else {
-            //    CurrentUser.Old_Passwords = null;
-            //}
-
             CurrentUser.Role = value.Role;
             CurrentUser.Phone = value.Phone;
             CurrentUser.Active = value.Active;
@@ -139,6 +218,13 @@ namespace AccountingApp.Controllers
 
             return RedirectToAction("ShowUserData");
           
+        }
+
+        public ActionResult EventLog()
+        {
+            Database1Entities6 db2 = new Database1Entities6();
+            var events = db2.EventLogs.ToList();
+            return View(events);
         }
 
     }
