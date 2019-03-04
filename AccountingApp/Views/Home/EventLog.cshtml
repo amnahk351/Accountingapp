@@ -1,0 +1,72 @@
+﻿@model IEnumerable<AccountingApp.Models.EventLog>
+
+@{
+    ViewBag.Title = "Event Log";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Event Log</h2>
+
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+<table class="table" id="Events">
+    <tr>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Event_ID)*@
+            Event ID
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.User_ID)*@
+            User ID
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.From)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.To)
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.IP_Address)*@
+            IP Address
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Screen)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User_ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.From)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.To)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IP_Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Screen)
+            </td>
+
+        </tr>
+    }
+
+</table>
+
