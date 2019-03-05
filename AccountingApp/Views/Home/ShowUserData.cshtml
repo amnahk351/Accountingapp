@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Current Users";
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout-Admin.cshtml";
 }
 <head>
     <meta charset="utf-8">
@@ -65,7 +65,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver" >
+    @*<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver" >
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -82,19 +82,19 @@
                 </li>
 
             </ul>
-            @*<form class="form-inline my-2 my-lg-0">
+            <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>*@
+                </form>
             <ul class="nav navbar-nav navbar-right">
                 <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
-                @*<br />*@
+                <br />
                 <li class="nav-item">
                     <a class="nav-link" href="/Account/Login">Sign Out</a>
                 </li>
             </ul>
         </div>
-    </nav>
+    </nav>*@
 
     <br />
     <div style="width:85%; margin:0 auto">

@@ -151,15 +151,15 @@
     <nav class="navbar navbar-static-top" style="cursor: pointer">
         <div class="mynav_navbar" id="Nav_Navbar">
             <img src="~/img/Accounting Logo.PNG" width="190" height="55" style="cursor: pointer; float:left; margin: 8px 16px;" /> @*maybe add this: href="#" if we want it to go anywhere*@
-            <a asp-area="" asp-controller="Home" asp-action="Home">Home</a>
+            <a asp-area="" asp-controller="Home" asp-action="Home" href="/Admin/AdminIndex">Home</a>
             <div class="mynav_dropdown">
                 <button class="mynav_dropbtn">
                     Users
                     @*<i class="fa fa-user"></i>*@
                 </button>
                 <div class="mynav_dropdown-content">
-                    <a asp-area="" asp-controller="View Users" asp-action="View Users">View Users</a>
-                    <a asp-area="" asp-controller="Create New User" asp-action="Create New User">Create New User</a>
+                    <a asp-area="" asp-controller="View Users" asp-action="View Users" href="/Home/ShowUserData">View Users</a>
+                    <a asp-area="" asp-controller="New User" asp-action="New User" href="/Home/NewUser">Create New User</a>
                 </div>
             </div>
             <div class="mynav_dropdown">
@@ -168,11 +168,11 @@
                     @*<i class="fa fa-caret-down"></i>*@
                 </button>
                 <div class="mynav_dropdown-content">
-                    <a asp-area="" asp-controller="View Chart of Accounts" asp-action="View Chart of Accounts">View Chart of Accounts</a>
-                    <a asp-area="" asp-controller="Create New Account" asp-action="Create New Account">Create New Account</a>
+                    <a asp-area="" asp-controller="View Chart of Accounts" asp-action="View Chart of Accounts" href="/Admin/ChartOfAccounts">View Chart of Accounts</a>
+                    <a asp-area="" asp-controller="Create New Account" asp-action="Create New Account" href="/Admin/NewAccount">Create New Account</a>
                     @*<a href="#">Link 1</a>
-                        <a href="#">Link 2</a>
-                        <a href="#">Link 3</a>*@
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>*@
                 </div>
             </div>
             <div class="mynav_dropdown">
@@ -181,11 +181,11 @@
                     @*<i class="fa fa-caret-down"></i>*@
                 </button>
                 <div class="mynav_dropdown-content">
-                    <a asp-area="" asp-controller="User Statistics" asp-action="User Statistics">User Statistics</a>
-                    <a asp-area="" asp-controller="System Statistics" asp-action="System Statistics">System Statistics</a>
+                    <a href="#">User Statistics</a>
+                    <a href="#">System Statistics</a>
                 </div>
             </div>
-            <a asp-area="" asp-controller="Event Logs" asp-action="Event Logs">Event Logs</a>
+            <a href="/Home/EventLog">Event Logs</a>
 
 
 
