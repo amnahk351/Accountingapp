@@ -1,5 +1,4 @@
-﻿@model AccountingApp.Models.ChartOfAcc
-
+﻿@model AccountingApp.Models.Transaction
 @{
     ViewBag.Title = "AccountantIndex";
     Layout = null;
@@ -121,65 +120,72 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body">
-                                <form method="post" class="needs-validation" novalidate>
-                                    <div class="form-group col-md-4">
+                            @using (Html.BeginForm("Journalize", "Accountant", FormMethod.Post))
+    {
+                        <div class="modal-body">
 
-                                        <label for="Date" class="control-label">Date</label>
-                                        <input type="date" class="form-control" id="Date" name="Date" required/>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <table class="table table-hover small-text" id="tb">
-                                            <tr class="tr-header">
-                                                <th>Account Name</th>
-                                                <th>Debit</th>
-                                                <th>Credit</th>
-                                                <th>
-                                                    <a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person"><i class="fas fa-plus"></i>
+                            <div class="form-group col-md-4">
 
-                                                </th>
-                                            </tr>
-                                            <tr>
-
-                                                <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
-                                                    <div>
-                                                        @Html.DropDownList("AccountName", ViewBag.accountlist as SelectList, "Please select an account", htmlAttributes: new { @class = "form-control "})
-
-                                                    </div>
-                                                </td>
-                                                <td><input type="text" name="Debit[]" class="form-control " style="text-align:right" placeholder="$0.00" id="Debit" required></td>
-
-                                                <td><input type="text" name="Credit[]" class="form-control " style="text-align:right" placeholder="$0.00" id="Crebit" required></td>
-                                                <td>
-                                                    <a href='javascript:void(0);' class='remove'>
-                                                        <i class="fas fa-times"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <div class="form-group col-md-10">
-                                            <label for="Comment" class="control-label">Comment</label>
-                                            <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="optional"></textarea>
-
-                                        </div>
-                                        <div class="form-group col-md-12">
-                                            <input type="file" class="form-control-file" id="comment">
-                                        </div>
-                                    </div>
-
-
-
-
+                                <label for="Date" class="control-label">Date</label>
+                                <input type="date" class="form-control" id="Date" name="Date" required />
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                <a href="/Accountant/AccountantIndex"><button type="submit" class="btn btn-success">Submit</button></a>
-                                <button type="button" class="btn btn-info">Reset</button>
-                                <button type="button" class="btn btn-warning">Suspend</button>
 
+                            <div class="col-md-12">
+                                <table class="table table-hover small-text" id="tb">
+                                    <tr class="tr-header">
+                                        <th>Account Name</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
+                                        <th>
+                                            <a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person"><i class="fas fa-plus"></i>
 
+                                        </th>
+                                    </tr>
+                                    <tr>
+
+                                        <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
+                                            <div>
+                                                @Html.DropDownListFor(model => model.AccountNumber, (List<SelectListItem>)ViewBag.accountList, "Please select an account", htmlAttributes: new { @class = "form-control " })
+                                                @*@Html.DropDownList("AccountNumber", new List<SelectListItem> {
+                                                                                                                new SelectListItem{ Value = "1234", Text="Test"}
+                                                                                                             },
+                                                "Please select an account", htmlAttributes: new { @class = "form-control " })*@
+                                            </div>
+                                        </td>
+                                        <td>@Html.EditorFor(model => model.Debit, new { htmlAttributes = new { @class = "form-control ", @style = "text-align:right", @placeholder = "$0.00", @id = "Debit" } })</td>
+
+                                        <td>@Html.EditorFor(model => model.Credit, new { htmlAttributes = new { @class = "form-control ", @style = "text-align:right", @placeholder = "$0.00", @id = "Credit" } })</td>
+                                        <td>
+                                            <a href='javascript:void(0);' class='remove'>
+                                                <i class="fas fa-times"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="form-group col-md-10">
+                                    <label for="Comment" class="control-label">Comment</label>
+                                    <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="optional"></textarea>
+
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <input type="file" class="form-control-file" id="comment">
+                                </div>
                             </div>
-                            </form>
+
+
+
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-info">Reset</button>
+                            <button type="button" class="btn btn-warning">Suspend</button>
+
+
+                        </div>
+}
                         </div>
                     </div>
                 </div>

@@ -158,6 +158,7 @@
     <Compile Include="Controllers\EventLogHandler.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\OldPasswordHandler.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -225,6 +226,10 @@
     <Compile Include="Models\Extended\NewUserModel.cs" />
     <Compile Include="Models\Extended\ResetPasswordModel.cs" />
     <Compile Include="Models\Extended\SecurityQuestionsModel.cs" />
+    <Compile Include="Models\Transaction.cs" />
+    <Compile Include="Models\Transaction.Designer.cs">
+      <DependentUpon>Transaction.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ValidField.cs" />
     <Compile Include="Models\ValidPassword.cs" />
     <Compile Include="Models\ValidUsername.cs" />
@@ -352,8 +357,12 @@
     <Content Include="Views\Account\AnswerQuestions.cshtml" />
     <Content Include="Views\Home\EventLog.cshtml" />
     <Content Include="Views\Shared\_Layout - Admin.cshtml" />
+	<Content Include="Views\Manager\GeneralJournal.cshtml" />
+    <Content Include="Views\Manager\ManagerIndex.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\Error\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
