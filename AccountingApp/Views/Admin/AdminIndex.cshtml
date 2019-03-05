@@ -54,6 +54,151 @@
             .inner:hover img {
                 transform: scale(1.5);
             }
+
+
+
+
+
+        body {
+            padding-top: 0px; /*Do not delete this line, it's an override*/
+            /*margin: 0;*/
+            /*font-family: Arial;*/
+            display: block;
+            margin: 0px;
+            /*margin-top: 0px;
+            margin-right: 0px;
+            margin-bottom: 0px;
+            margin-left: 0px;*/
+        }
+
+
+        .mynav_navbar {
+            overflow: hidden;
+            background-color: silver;
+            font-family: inherit;
+            /*width: 100%;*/
+            /*position: absolute;*/
+            /*display: inline-block;*/
+            /*height: 80px;*/
+        }
+
+            .mynav_navbar a {
+                float: left;
+                display: inline-block;
+                font-size: 23px;
+                color: black;
+                text-align: center;
+                padding: 24px 25px; /*crucial for horizontal spacing*/
+                /*margin: 16px;*/
+                text-decoration: none;
+            }
+
+            .mynav_navbar .icon {
+                display: none;
+            }
+
+        .mynav_dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+            .mynav_dropdown .mynav_dropbtn {
+                font-size: 23px;
+                border: none;
+                outline: none;
+                color: black;
+                padding: 24px 25px; /*crucial for horizontal spacing*/
+                background-color: inherit;
+                font-family: inherit;
+                margin: 0;
+            }
+
+            .mynav_navbar a:hover, .mynav_dropdown:hover .mynav_dropbtn {
+                background-color: #0087ff;
+                color: white;
+            }
+
+        .mynav_dropdown-content {
+            display: none;
+            position: fixed;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .mynav_dropdown-content a {
+                float: none;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+            }
+
+                .mynav_dropdown-content a:hover {
+                    background-color: #ddd;
+                    color: black;
+                    
+                }
+
+        .mynav_dropdown:hover .mynav_dropdown-content {
+            display: block;
+        }
+
+        /*.footer {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            padding: 15px;
+            text-align: center;
+            background-color: #0066ff;
+            color: white;
+        }*/
+
+        /*@@media screen and (max-width: 600px) {
+            .mynav_navbar a:not(:first-child), .mynav_dropdown .mynav_dropbtn {
+                display: none;
+            }
+
+            .mynav_navbar a.icon {
+                float: right;
+                display: block;
+            }
+        }
+
+        @@media screen and (max-width: 600px) {
+            .mynav_navbar.responsive {
+                position: relative;
+            }
+
+                .mynav_navbar.responsive .icon {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                }
+
+                .mynav_navbar.responsive a {
+                    float: none;
+                    display: block;
+                    text-align: left;
+                }
+
+                .mynav_navbar.responsive .mynav_dropbtn {
+                    float: none;
+                }
+
+                .mynav_navbar.responsive .mynav_dropdown-content {
+                    position: relative;
+                }
+
+                .mynav_navbar.responsive .mynav_dropdown .mynav_dropbtn {
+                    display: block;
+                    width: 100%;
+                    text-align: left;
+                }
+        }*/
     </style>
 </head>
 <body>
@@ -82,34 +227,111 @@
         </div>*@
 
 
-    <nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver">
+    <nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver; padding-top: 0px; padding-bottom: 0px">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">
-                <img src="~/img/Accounting Logo.PNG" width="150" height="40" />
-            </a>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
+        <a class="navbar-brand" href="#">
+            <img src="~/img/Accounting Logo.PNG" width="190" height="55" style="cursor: pointer; margin: 8px 16px;" />
+        </a>
+        <div class="mynav_navbar">
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01" style="padding-top: 0px; padding-bottom: 0px">
+                <div class="navbar-nav">
+                    <a asp-area="" asp-controller="Home" asp-action="Home" href="/Admin/AdminIndex">Home</a>
+                    <div class="mynav_dropdown">
+                        <button class="mynav_dropbtn">
+                            Users
+                            @*<i class="fa fa-user"></i>*@
+                        </button>
+                        <div class="mynav_dropdown-content">
+                            <a asp-area="" asp-controller="View Users" asp-action="View Users" href="/Home/ShowUserData">View Users</a>
+                            <a asp-area="" asp-controller="New User" asp-action="New User" href="/Home/NewUser">Create New User</a>
+                        </div>
+                    </div>
+                    <div class="mynav_dropdown">
+                        <button class="mynav_dropbtn">
+                            Chart of Accounts
+                            @*<i class="fa fa-caret-down"></i>*@
+                        </button>
+                        <div class="mynav_dropdown-content">
+                            <a asp-area="" asp-controller="View Chart of Accounts" asp-action="View Chart of Accounts" href="/Admin/ChartOfAccounts">View Chart of Accounts</a>
+                            <a asp-area="" asp-controller="Create New Account" asp-action="Create New Account" href="/Admin/NewAccount">Create New Account</a>
+                            @*<a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>*@
+                        </div>
+                    </div>
+                    <div class="mynav_dropdown">
+                        <button class="mynav_dropbtn">
+                            Statistics
+                            @*<i class="fa fa-caret-down"></i>*@
+                        </button>
+                        <div class="mynav_dropdown-content">
+                            <a href="#">User Statistics</a>
+                            <a href="#">System Statistics</a>
+                        </div>
+                    </div>
+                    <a href="/Home/EventLog">Event Logs</a>
+                </div>
 
-            </ul>
-            @*<form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>*@
-            <ul class="nav navbar-nav navbar-right">
-                <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
-                @*<br />*@
-                <li class="nav-item">
-                    <a class="nav-link" href="/Account/Login">Sign Out</a>
-                </li>
-            </ul>
+                @*<div class="navbar-nav" style="padding-left: 800px;">         temporary solution perhaps
+            <a href="#">Right</a>
+        </div>*@
+
+
+                @*<div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto" href="#">Navbar 2</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>*@
+                @*<ul class="mynav_navbar justify-content-end">
+            <li class="navbar-brand mx-auto" href="#">Navbar 2</li>
+        </ul>*@
+
+                @*div class="navbar-nav" style="padding-left: 800px;">
+
+                    <button class="mynav_dropbtn">
+                        <i id="LoggedName" style="cursor: auto; color: black; font-size: 23px;">Welcome, Admin</i>
+                        Account
+                        <i class="fas fa-user" style="padding-left: 7px;"></i>
+                    </button>
+                    <a class="mynav_dropdown-content" style="right: 0;">
+                        <a asp-area="" asp-controller="View Profile" asp-action="View Profile">View Profile</a>
+                        <a asp-area="" asp-controller="Settings" asp-action="Settings">Settings</a>
+                        <a asp-area="" asp-controller="Sign Out" asp-action="Sign Out">Sign Out</a>
+                    </a>
+
+                </div>*@
+
+                <i id="LoggedName" class="navbar-text" style="cursor: auto; padding-left: 600px; color: black; font-size: 23px; " >Welcome, Admin</i>
+                <a asp-area="" asp-controller="Sign Out" asp-action="Sign Out" style="padding-left: 30px;" href="/Account/Login">Sign Out</a>
+
+
+
+                @*<ul class="navbar-nav mr-auto mt-2 mt-lg-0" style="list-style-type: none;">
+            <li class="nav-item active">
+                <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+
+        </ul>*@
+                @*<form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>*@
+                @*<a class="nav navbar-nav navbar-right">
+            <span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span>
+            @*<br />
+
+                <a class="nav-link" href="/Account/Login">Sign Out</a>
+
+        </a>*@
+
+
+            </div>
         </div>
     </nav>
     @*<div class="row">
