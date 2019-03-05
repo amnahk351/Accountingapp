@@ -96,6 +96,10 @@ namespace AccountingApp.Controllers
                         return Redirect("~/Admin/AdminIndex"); //takes user to admin page
                         //return View("~/Views/Admin/AdminIndex.cshtml"); //takes user to admin page
                     }
+                    else if (userDetails.Role == "Manager")
+                    {
+                        return Redirect("~/Manager/ManagerIndex");
+                    }
                     else if (userDetails.Role == "Accountant")
                     {
                         return Redirect("~/Accountant/AccountantIndex");  //takes user to accountant page, probably should make this one go to a manager page
