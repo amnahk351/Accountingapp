@@ -25,7 +25,7 @@ namespace AccountingApp.Controllers
 
         public ActionResult NewUser()
         {
-            CreateUser user = new CreateUser();
+            NewUserModel user = new NewUserModel();
             user.Date_Created = DateTime.Now;
             return View(user);
         }
