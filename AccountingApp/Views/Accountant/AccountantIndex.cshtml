@@ -24,19 +24,6 @@
 
 
     <style>
-        /*body {
-            padding-top: 70px;
-            margin: 40px;
-            background-color: gainsboro;
-        }
-
-        .nav {
-            padding-right: 70px;
-        }
-
-        .navbar-header {
-            padding-left: 70px;
-        }*/
         .navbar-text {
             padding-right: 20px;
         }
@@ -60,29 +47,6 @@
     </style>
 </head>
 <body>
-    @*<div class="nav">
-            <nav class="navbar navbar-inverse navbar-fixed-top navbar-collapse navbar-nav">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="#">Objective Accounting</a>
-                    </div>
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-
-                        <li><a href="#">User Log</a></li>
-
-                        <li><a href="@Url.Action("ShowUserData","Home")">Users</a></li>
-
-                        <li><a href="#">Chart Of Accounts</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
-                        <li><a href="#">SignOut</a></li>
-                    </ul>
-                </div>
-
-            </nav>
-        </div>*@
 
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top ">
@@ -100,10 +64,6 @@
                 </li>
 
             </ul>
-            @*<form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>*@
             <ul class="nav navbar-nav navbar-right">
 
                 <!-- Button trigger modal -->
@@ -120,74 +80,71 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            @using (Html.BeginForm("Journalize", "Accountant", FormMethod.Post))
-    {
-                        <div class="modal-body">
+                            @using (Html.BeginForm("Journalize", "Accountant", new { id = "rowForm" }))
+                            {
+                                <div class="modal-body">
 
-                            <div class="form-group col-md-4">
+                                    <div class="form-group col-md-4">
 
-                                <label for="Date" class="control-label">Date</label>
-                                <input type="date" class="form-control" id="Date" name="Date" required />
-                            </div>
+                                        <label for="Date" class="control-label">Date</label>
+                                        <input type="date" class="form-control" id="Date" name="Date" required />
+                                    </div>
 
-                            <div class="col-md-12">
-                                <table class="table table-hover small-text" id="tb">
-                                    <tr class="tr-header">
-                                        <th>Account Name</th>
-                                        <th>Debit</th>
-                                        <th>Credit</th>
-                                        <th>
-                                            <a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person"><i class="fas fa-plus"></i>
+                                    <div class="col-md-12">
+                                        <table class="table table-hover small-text" id="tb">
+                                            <tr class="tr-header">
+                                                <th>Account Name</th>
+                                                <th>Debit</th>
+                                                <th>Credit</th>
+                                                <th>
+                                                    <a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person"><i class="fas fa-plus"></i>
 
-                                        </th>
-                                    </tr>
-                                    <tr>
+                                                </th>
+                                            </tr>
+                                            <tr>
 
-                                        <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
-                                            <div>
-                                                @Html.DropDownListFor(model => model.AccountNumber, (List<SelectListItem>)ViewBag.accountList, "Please select an account", htmlAttributes: new { @class = "form-control " })
-                                                @*@Html.DropDownList("AccountNumber", new List<SelectListItem> {
-                                                                                                                new SelectListItem{ Value = "1234", Text="Test"}
-                                                                                                             },
-                                                "Please select an account", htmlAttributes: new { @class = "form-control " })*@
-                                            </div>
-                                        </td>
-                                        <td>@Html.EditorFor(model => model.Debit, new { htmlAttributes = new { @class = "form-control ", @style = "text-align:right", @placeholder = "$0.00", @id = "Debit" } })</td>
+                                                <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
+                                                    <div>
+                                                        @Html.DropDownList("AccountNumber", (List<SelectListItem>)ViewBag.accountList, "Please select an account", new { @class = "form-control ", @name = "AccountNumber[]", required = "required" })
+                                                    </div>
+                                                </td>
+                                                <td><input type="text" name="Debit[]" class="form-control " style="text-align:right" placeholder="$0.00" id="Debit" required></td>
 
-                                        <td>@Html.EditorFor(model => model.Credit, new { htmlAttributes = new { @class = "form-control ", @style = "text-align:right", @placeholder = "$0.00", @id = "Credit" } })</td>
-                                        <td>
-                                            <a href='javascript:void(0);' class='remove'>
-                                                <i class="fas fa-times"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <div class="form-group col-md-10">
-                                    <label for="Comment" class="control-label">Comment</label>
-                                    <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="optional"></textarea>
+                                                <td><input type="text" name="Credit[]" class="form-control " style="text-align:right" placeholder="$0.00" id="Crebit" required></td>
+                                                <td>
+                                                    <a href='javascript:void(0);' class='remove'><i class="fas fa-times"></i></a>
+                                                </td>
+
+                                            </tr>
+                                        </table>
+                                        <div class="form-group col-md-10">
+                                            <label for="Comment" class="control-label">Comment</label>
+                                            <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="optional"></textarea>
+
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <input type="file" class="form-control-file" id="comment">
+                                        </div>
+                                    </div>
+
+
+
+
 
                                 </div>
-                                <div class="form-group col-md-12">
-                                    <input type="file" class="form-control-file" id="comment">
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                    <button type="button" class="btn btn-info">Reset</button>
+                                    <button type="button" class="btn btn-warning">Suspend</button>
+
+
                                 </div>
-                            </div>
-
-
-
-
-
+                            }
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
-                            <button type="button" class="btn btn-info">Reset</button>
-                            <button type="button" class="btn btn-warning">Suspend</button>
 
-
-                        </div>
-}
-                        </div>
                     </div>
+
                 </div>
                 <li>
                     <a class="nav-link active" href="#">General Ledger</a>
@@ -212,52 +169,6 @@
             </ul>
         </div>
     </nav>
-    @*<div class="row">
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-            </div>
-        </div>*@
-    @*<table class="table table-hover small-text" id="tb">
-                <tr class="tr-header">
-                    <th>Full Name</th>
-                    <th>Designation</th>
-                    <th>Mobile No.</th>
-                    <th>Email Id</th>
-                    <th><a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person"><i class="fas fa-plus"></i>
-
-        </th>
-                <tr>
-                    <td><input type="text" name="fullname[]" class="form-control"></td>
-                    <td>
-                        <select name="designation[]" class="form-control">
-                            <option value="" selected>Select Designation</option>
-                            <option value="Engineer">Engineer</option>
-                            <option value="Accountant">Accountant</option>
-                        </select>
-                    </td>
-                    <td><input type="text" name="mobileno[]" class="form-control"></td>
-                    <td><input type="text" name="emailid[]" class="form-control"></td>
-                    <td><a href='javascript:void(0);' class='remove'>
-            <i class="fas fa-times"></i>
-
-        </a></td>
-                </tr>
-            </table>*@
     <br />
     <br />
     <div style="width:55%; margin:0 auto">
@@ -279,37 +190,6 @@
 
                     </tr>
                 </thead>
-                <tbody>
-
-                    @*@for (int i = 0; i < Model.Count(); i++)
-                        {
-                            <tr>
-                                <td>@Model[i].AccountNumber</td>
-                                <td>@Model[i].AccountName</td>
-                                <td>@Model[i].AccountType</td>
-                                <td>@Model[i].NormalSide</td>
-                                <td>@Model[i].OriginalBalance</td>
-                                <td>@Model[i].CurrentBalance</td>
-                                <td>@Model[i].AccountDescription</td>
-                                <td>@(Model[i].Active ? "Yes" : "No")</td>
-                                <td>@Model[i].CreatedBy</td>
-                                <td>
-
-                                    <a href="@Url.Action("EditAccount", new { id = Model[i].AccountNumber})">
-                                        Edit
-                                    </a>
-
-                                    <a href="@Url.Action("Delete", new { id = Model[i].AccountNumber})">
-                                        <i class="fas fa-user-edit"></i>
-                                        Delete
-                                    </a>
-                                </td>
-
-
-
-                            </tr>
-                        }*@
-                </tbody>
             </table>
         </div>
 
@@ -341,6 +221,20 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        function getTableData(table) {
+            var data = [];
+            table.find('tr').each(function (rowIndex, r) {
+                var cols = [];
+                $(this).find('th,td').each(function (colIndex, c) {
+                    cols.push(c.textContent);
+                });
+                data.push(cols);
+            });
+            return data;
+        }
     </script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
