@@ -287,21 +287,45 @@ namespace AccountingApp.Controllers
                 var user = dc.CreateUsers.Where(a => a.Username == sessionUser).FirstOrDefault();
                 if (user != null)
                 {
-                    OldPasswordHandler PassHand = new OldPasswordHandler();
-                    PassHand.AdjustOldPasswords(model.CurrentPassword, user.ID);
+                    string s = user.Old_Passwords;
+                    //if(s.Contains(model.NewPassword))
 
-                    user.Password = model.NewPassword;
-                    dc.SaveChanges();
+                    bool value = CheckNullableString(s, model.NewPassword);
 
-                    Logger.LogPasswordChange();
-                    Database1Entities6 db2 = new Database1Entities6();
-                    var events = db2.EventLogs.ToList();
-                    var message = "Password updated successfully.";
-                    ViewBag.Message = message;
+                    if (user.Password == model.CurrentPassword && model.CurrentPassword != model.NewPassword && value) {
+                    
+                        OldPasswordHandler PassHand = new OldPasswordHandler();
+                        PassHand.AdjustOldPasswords(model.CurrentPassword, user.ID);
+
+                        user.Password = model.NewPassword;
+                        dc.SaveChanges();
+
+                        Logger.LogPasswordChange();
+                        Database1Entities6 db2 = new Database1Entities6();
+                        var events = db2.EventLogs.ToList();
+                        var message = "Password updated successfully.";
+                        ViewBag.Message = message;
+                    }
+
+                    
                 }
             }
             
             return View(model);
+        }
+
+        private bool CheckNullableString(string s, string model) {
+            
+            if (s == null) {
+                return true;
+            }
+
+            else if (!s.Contains(model)) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
 
         public ActionResult SecurityQuestions()

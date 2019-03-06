@@ -4,6 +4,7 @@ using FluentValidation.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -14,12 +15,15 @@ namespace AccountingApp.Models
     public class ChangePasswordModel
     {
         [DisplayName("Current Password")]
+        [DataType(DataType.Password)]
         public string CurrentPassword { get; set; }
 
         [DisplayName("New Password")]
+        [DataType(DataType.Password)]
         public string NewPassword { get; set; }
 
         [DisplayName("Confirm Password")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
     }
 
@@ -78,7 +82,7 @@ namespace AccountingApp.Models
             var nullableValue = cmd.ExecuteScalar();
             if (nullableValue == null || nullableValue == DBNull.Value)
             {
-                return !matches;
+                return matches;
             }
             else
             {
@@ -93,7 +97,7 @@ namespace AccountingApp.Models
                 }
                 con.Close();
             }
-            return !matches;
+            return matches;
         }
     }
 }

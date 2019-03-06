@@ -23,13 +23,16 @@ namespace AccountingApp.Controllers
 
             while (myReader.Read())
             {
-                FoundPasswords = myReader.GetString(0);
+                //FoundPasswords = myReader.GetString(0);
+                int x = myReader.GetOrdinal("Old_Passwords");
+
+                FoundPasswords = myReader.IsDBNull(x) ? string.Empty : myReader.GetString(0);
             }
 
             myReader.Close();
             sqlCon.Close();
 
-            if (FoundPasswords == null)
+            if (FoundPasswords == null || FoundPasswords == "")
             {
                 //no passwords found, store the 1 password
                 PasswordsToInsert = Password;
