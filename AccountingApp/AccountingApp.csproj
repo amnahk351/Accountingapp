@@ -288,7 +288,12 @@
       <DependentUpon>EventLog.edmx</DependentUpon>
       <LastGenOutput>EventLog1.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\bootstrap-datetimepicker.css" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.css" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.css" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\ChartOfAcc.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -312,6 +317,7 @@
       <DependentUpon>EventLog.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -357,7 +363,7 @@
     <Content Include="Views\Account\AnswerQuestions.cshtml" />
     <Content Include="Views\Home\EventLog.cshtml" />
     <Content Include="Views\Shared\_Layout - Admin.cshtml" />
-	<Content Include="Views\Manager\GeneralJournal.cshtml" />
+    <Content Include="Views\Manager\GeneralJournal.cshtml" />
     <Content Include="Views\Manager\ManagerIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>

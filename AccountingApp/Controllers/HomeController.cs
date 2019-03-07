@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -25,7 +26,7 @@ namespace AccountingApp.Controllers
 
         public ActionResult NewUser()
         {
-            CreateUser user = new CreateUser();
+            NewUserModel user = new NewUserModel();            
             user.Date_Created = DateTime.Now;
             return View(user);
         }
