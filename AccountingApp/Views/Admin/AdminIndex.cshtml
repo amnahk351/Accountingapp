@@ -241,7 +241,7 @@
                     <div class="mynav_dropdown">
                         <button class="mynav_dropbtn">
                             Users
-                            @*<i class="fa fa-user"></i>*@
+                            <i class="fa fa-user"></i>
                         </button>
                         <div class="mynav_dropdown-content">
                             <a asp-area="" asp-controller="View Users" asp-action="View Users" href="/Home/ShowUserData">View Users</a>
@@ -289,23 +289,41 @@
             <li class="navbar-brand mx-auto" href="#">Navbar 2</li>
         </ul>*@
 
-                @*div class="navbar-nav" style="padding-left: 800px;">
 
+                @*<div class="navbar-nav navbar-right">                   what i wish would work but doesnt
+                    <i id="LoggedName" style="cursor: auto; color: black; font-size: 23px; ">Welcome, Admin</i>
+
+                    <div class="mynav_dropdown">
+                        <button class="mynav_dropbtn">
+                            Account
+                            <i class="glyphicon glyphicon-user" style="padding-left: 7px;"></i>
+                        </button>
+                        <div class="mynav_dropdown-content" style="padding-left: 800px;">
+                            <a asp-area="" asp-controller="View Profile" asp-action="View Profile">View Profile</a>
+                            <a asp-area="" asp-controller="Settings" asp-action="Settings">Settings</a>
+                            <a asp-area="" asp-controller="Sign Out" asp-action="Sign Out">Sign Out</a>
+                        </div>
+                    </div>
+                </div>*@
+
+                @*a temporary solution but isn't efficient and doesn't really work on other screen sizes*@
+                <i id="LoggedName" style="cursor: auto; color: black; font-size: 23px; padding-left: 600px">Welcome, Admin</i>
+
+                <div class="mynav_dropdown">
                     <button class="mynav_dropbtn">
-                        <i id="LoggedName" style="cursor: auto; color: black; font-size: 23px;">Welcome, Admin</i>
                         Account
-                        <i class="fas fa-user" style="padding-left: 7px;"></i>
+                        <i class="glyphicon glyphicon-user" @*style="padding-left: 7px;"*@></i>
                     </button>
-                    <a class="mynav_dropdown-content" style="right: 0;">
+                    <div class="mynav_dropdown-content" @*style="padding-left: 800px;"*@>
                         <a asp-area="" asp-controller="View Profile" asp-action="View Profile">View Profile</a>
                         <a asp-area="" asp-controller="Settings" asp-action="Settings">Settings</a>
                         <a asp-area="" asp-controller="Sign Out" asp-action="Sign Out">Sign Out</a>
-                    </a>
+                    </div>
+                </div>
 
-                </div>*@
 
-                <i id="LoggedName" class="navbar-text" style="cursor: auto; padding-left: 600px; color: black; font-size: 23px; " >Welcome, Admin</i>
-                <a asp-area="" asp-controller="Sign Out" asp-action="Sign Out" style="padding-left: 30px;" href="/Account/Login">Sign Out</a>
+                @*<i id="LoggedName" class="navbar-text" style="cursor: auto; padding-left: 600px; color: black; font-size: 23px; " >Welcome, Admin</i>*@
+                @*<a asp-area="" asp-controller="Sign Out" asp-action="Sign Out" style="padding-left: 30px;" href="/Account/Login">Sign Out</a>*@
 
 
 
