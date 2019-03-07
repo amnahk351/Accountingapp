@@ -251,14 +251,14 @@
                     <div class="mynav_dropdown">
                         <button class="mynav_dropbtn">
                             Chart of Accounts
-                            @*<i class="fa fa-caret-down"></i>*@
+                            <i class="fa fa-caret-down"></i>
                         </button>
                         <div class="mynav_dropdown-content">
                             <a asp-area="" asp-controller="View Chart of Accounts" asp-action="View Chart of Accounts" href="/Admin/ChartOfAccounts">View Chart of Accounts</a>
                             <a asp-area="" asp-controller="Create New Account" asp-action="Create New Account" href="/Admin/NewAccount">Create New Account</a>
-                            @*<a href="#">Link 1</a>
-                    <a href="#">Link 2</a>
-                    <a href="#">Link 3</a>*@
+                            <a href="#">Link 1</a>
+                            <a href="#">Link 2</a>
+                            <a href="#">Link 3</a>
                         </div>
                     </div>
                     <div class="mynav_dropdown">
@@ -274,20 +274,26 @@
                     <a href="/Home/EventLog">Event Logs</a>
                 </div>
 
+
+
+
+
+
+
                 @*<div class="navbar-nav" style="padding-left: 800px;">         temporary solution perhaps
-            <a href="#">Right</a>
-        </div>*@
+                    <a href="#">Right</a>
+                </div>*@
 
 
                 @*<div class="mx-auto order-0">
-            <a class="navbar-brand mx-auto" href="#">Navbar 2</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>*@
+                    <a class="navbar-brand mx-auto" href="#">Navbar 2</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>*@
                 @*<ul class="mynav_navbar justify-content-end">
-            <li class="navbar-brand mx-auto" href="#">Navbar 2</li>
-        </ul>*@
+                    <li class="navbar-brand mx-auto" href="#">Navbar 2</li>
+                </ul>*@
 
 
                 @*<div class="navbar-nav navbar-right">                   what i wish would work but doesnt
@@ -307,19 +313,19 @@
                 </div>*@
 
                 @*a temporary solution but isn't efficient and doesn't really work on other screen sizes*@
-                <i id="LoggedName" style="cursor: auto; color: black; font-size: 23px; padding-left: 600px">Welcome, Admin</i>
+                @*<i id="LoggedName" style="cursor: auto; color: black; font-size: 23px; padding-left: 600px">Welcome, Admin</i>
 
                 <div class="mynav_dropdown">
                     <button class="mynav_dropbtn">
                         Account
-                        <i class="glyphicon glyphicon-user" @*style="padding-left: 7px;"*@></i>
+                        <i class="glyphicon glyphicon-user" style="padding-left: 7px;"></i>
                     </button>
-                    <div class="mynav_dropdown-content" @*style="padding-left: 800px;"*@>
+                    <div class="mynav_dropdown-content" style="padding-left: 800px;">
                         <a asp-area="" asp-controller="View Profile" asp-action="View Profile">View Profile</a>
                         <a asp-area="" asp-controller="Settings" asp-action="Settings">Settings</a>
                         <a asp-area="" asp-controller="Sign Out" asp-action="Sign Out">Sign Out</a>
                     </div>
-                </div>
+                </div>*@
 
 
                 @*<i id="LoggedName" class="navbar-text" style="cursor: auto; padding-left: 600px; color: black; font-size: 23px; " >Welcome, Admin</i>*@
@@ -328,29 +334,38 @@
 
 
                 @*<ul class="navbar-nav mr-auto mt-2 mt-lg-0" style="list-style-type: none;">
-            <li class="nav-item active">
-                <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-            </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
 
-        </ul>*@
+                </ul>*@
                 @*<form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>*@
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>*@
                 @*<a class="nav navbar-nav navbar-right">
-            <span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span>
-            @*<br />
+                    <span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span>
+                    @*<br />
 
-                <a class="nav-link" href="/Account/Login">Sign Out</a>
+                        <a class="nav-link" href="/Account/Login">Sign Out</a>
 
-        </a>*@
+                </a>*@
 
 
             </div>
         </div>
+        @*<div class="collapse navbar-collapse" id="navbarTogglerDemo01" style="float: right;">
+            <ul class="navbar-nav navbar-right ">
+                <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
+                <br />
+                <li class="nav-item">
+                    <a class="nav-link" href="/Account/Login">Sign Out</a>
+                </li>
+            </ul>
+        </div>*@
     </nav>
     @*<div class="row">
             <div class="col-sm-6">
