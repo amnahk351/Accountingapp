@@ -96,7 +96,7 @@ namespace AccountingApp.Controllers
                 Transaction tran = new Transaction();
 
                 //Loop and insert records.
-                for(int i = 0; i<transactions.Length; i++)
+                for(int i = 0; i < transactions.Length; i++)
                 {
                     tran.DateSubmitted = transactions[i].DateSubmitted;
                     tran.AccountNumber = transactions[i].AccountNumber;
