@@ -201,23 +201,17 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @*<tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>*@
-                                                                                        
 
-                                            @foreach (Transaction customer in Model)
-                                            {
-                                                <tr>
-                                                    <td>@customer.Name</td>
-                                                    <td>@customer.Country</td>
-                                                    <td><input type="button" value="Remove" onclick="Remove(this)" /></td>
-                                                </tr>
-                                            }
+
+
+                                            @*@foreach (Transaction customer in Model)
+                                                {
+                                                    <tr>
+                                                        <td>@customer.Name</td>
+                                                        <td>@customer.Country</td>
+                                                        <td><input type="button" value="Remove" onclick="Remove(this)" /></td>
+                                                    </tr>
+                                                }*@
 
                                         </tbody>
                                     </table>
@@ -270,7 +264,7 @@
                                     <button type="submit" class="btn btn-success">Submit</button>
                                     <button type="button" class="btn btn-info">Reset</button>
                                     <button type="button" id="btnSave" class="btn btn-warning">Test Submit/Suspend</button>
-
+                                    <input id="btnInsert" type="button" value="Insert" />
 
                                 </div>
                             }
@@ -381,7 +375,10 @@
             var acc = document.getElementById("AccountNumber").value;
             var deb = document.getElementById("Debit").value;
             var cre = document.getElementById("Credit").value;
-            var row = table.insertRow();
+            var tableRef = document.getElementById('EntryTable').getElementsByTagName('tbody')[0];
+
+            // Insert a row in the table at the last row
+            var row = tableRef.insertRow(tableRef.rows.length);
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
@@ -409,11 +406,13 @@
         }
     </script>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>*@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+
     <script>
         $(document).ready(function () {
             $('#JournalEntries').DataTable();
@@ -446,8 +445,8 @@
 
         $("body").on("click", "#btnSave", function () {
             //Loop through the Table rows and build a JSON array.
+
             var transactions = new Array();
-            //var customers = new Array();
             $("#EntryTable TBODY TR").each(function () {
                 var row = $(this);
                 var transaction = {};
@@ -459,10 +458,13 @@
                 transactions.push(transaction);
             });
 
+            alert("here");
+
+
             //Send the JSON array to Controller using AJAX.
             $.ajax({
                 type: "POST",
-                url: "/AccountantController/InsertJournal",
+                url: "/Accountant/InsertJournal",
                 data: JSON.stringify(transactions),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -473,6 +475,99 @@
         });
 
     </script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("#btnInsert").click(function () {
+                var itemlist = [];
+
+                //get cell values, instead of the header text.
+                $("#EntryTable tr:not(:first)").each(function () {
+                    var tdlist = $(this).find("td");
+                    var Item = { Date: $(tdlist[0]).html(), AccountNumber: $(tdlist[1]).html(), Debit: $(tdlist[2]).html(), Credit: $(tdlist[3]).html() };
+                    itemlist.push(Item);
+                })
+
+                alert("here2")
+
+                @*$.ajax({
+                    url: '@Url.Action("InsertJournal", "Accountant")', //
+                    dataType: "json",
+                    data: JSON.stringify({ itemlist: itemlist }),
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                        alert("success");
+                    },
+                    error: function (xhr) {
+                        alert("error");
+                    }
+                });*@
+
+
+                @*$.ajax({
+                    url: '@Url.Action("InsertJournal", "Accountant")',
+                    type: "POST",
+                    dataType: 'json',
+                    data: JSON.stringify(itemlist),
+                    cache: false,
+                    contentType: "application/jsonrequest; charset=utf-8",
+                    success: function (data) {
+                        alert("hi"+ data);
+                    }
+                });*@
+
+
+                $.ajax({
+                    url: '@Url.Action("InsertValue", "Accountant")', //
+                    dataType: "json",
+                    data: JSON.stringify({ itemlist: itemlist }),
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                        alert("success");
+                    },
+                    error: function (xhr) {
+                        alert("error");
+                    }
+                });
+
+            });
+        });
+    </script>
+
+
+    @*<script type="text/javascript">
+            $(function () {
+                $("#btnInsert").click(function () {
+                    var itemlist = [];
+
+                    //get cell values, instead of the header text.
+                    $("#EntryTable tr:not(:first)").each(function () {
+                        var tdlist = $(this).find("td");
+                        var Item = { Date: $(tdlist[0]).html(), AccountNumber: $(tdlist[1]).html(), Debit: $(tdlist[2]).html(), Credit: $(tdlist[3]).html() };
+                        itemlist.push(Item);
+                    })
+
+                    alert(itemlist);
+
+                    $.ajax({
+                        url: "/Accountant/InsertJournal",
+                        dataType: "json",
+                        data: JSON.stringify({ itemlist: itemlist }),
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (result) {
+                            alert("success");
+                        },
+                        error: function (xhr) {
+                            alert("error");
+                        }
+                    });
+                });
+            });
+        </script>*@
 
 
     @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
