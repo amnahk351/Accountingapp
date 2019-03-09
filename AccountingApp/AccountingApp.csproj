@@ -226,9 +226,23 @@
     <Compile Include="Models\Extended\NewUserModel.cs" />
     <Compile Include="Models\Extended\ResetPasswordModel.cs" />
     <Compile Include="Models\Extended\SecurityQuestionsModel.cs" />
-    <Compile Include="Models\Transaction.cs" />
-    <Compile Include="Models\Transaction.Designer.cs">
-      <DependentUpon>Transaction.cs</DependentUpon>
+    <Compile Include="Models\Transaction.cs">
+      <DependentUpon>TransactionModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TransactionModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TransactionModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TransactionModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TransactionModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TransactionModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TransactionModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\ValidField.cs" />
     <Compile Include="Models\ValidPassword.cs" />
@@ -288,6 +302,16 @@
       <DependentUpon>EventLog.edmx</DependentUpon>
       <LastGenOutput>EventLog1.cs</LastGenOutput>
     </Content>
+    <Content Include="Models\TransactionModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TransactionModel.edmx</DependentUpon>
+      <LastGenOutput>TransactionModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\TransactionModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TransactionModel.edmx</DependentUpon>
+      <LastGenOutput>TransactionModel.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap-datetimepicker.css" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.css" />
@@ -315,6 +339,13 @@
     </EntityDeploy>
     <Content Include="Models\EventLog.edmx.diagram">
       <DependentUpon>EventLog.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\TransactionModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TransactionModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\TransactionModel.edmx.diagram">
+      <DependentUpon>TransactionModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />

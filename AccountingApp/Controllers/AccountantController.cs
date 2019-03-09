@@ -35,7 +35,9 @@ namespace AccountingApp.Controllers
 
             //SelectList list = new SelectList(sliAccountList, "Value", "Text");
             ViewBag.accountlist = sliAccountList;
-            return View();
+            Database1Entities7 entities = new Database1Entities7();
+
+            return View(entities.Transactions);
         }
 
         [HttpPost]
@@ -73,6 +75,33 @@ namespace AccountingApp.Controllers
             //    Trace.WriteLine(transaction.Debit);
             //}
             return View("~/Views/Accountant/AccountantIndex.cshtml");
+        }
+
+
+        public JsonResult InsertJournal(List<Transaction> transactions)
+        {
+            using (Database1Entities7 entities = new Database1Entities7())
+            {
+                //Truncate Table to delete all old records.
+                //entities.Database.ExecuteSqlCommand("TRUNCATE TABLE [Customers]");
+
+                //Check for NULL.
+                if (transactions == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("it got here");
+                    transactions = new List<Transaction>();
+                }
+
+                //Loop and insert records.
+                foreach (Transaction tran in transactions)
+                {
+                    System.Diagnostics.Debug.WriteLine("it got here2");
+                    entities.Transactions.Add(tran);
+                }
+                int insertedRecords = entities.SaveChanges();
+                System.Diagnostics.Debug.WriteLine("it got here3");
+                return Json(insertedRecords);
+            }
         }
     }
 }

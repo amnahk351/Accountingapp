@@ -1,4 +1,4 @@
-﻿@model AccountingApp.Models.Transaction
+﻿@model IEnumerable<AccountingApp.Models.Transaction>
 @{
     ViewBag.Title = "AccountantIndex";
     Layout = null;
@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     @Styles.Render("~/Scripts/bootstrap-datetimepicker.min.css")
 
     <!-- Bootstrap CSS -->
@@ -175,7 +175,7 @@
 
                                             <td><input type="text" id="Credit" class="form-control" style="text-align:right" value="" placeholder="$0.00"></td>
 
-                                            <td><button type="button" class="btn btn-info" onclick="AppendToList()">Add</button></td>
+                                            <td><button type="button" id="AddEntry" class="btn btn-info" onclick="AppendToList()">Add</button></td>
                                         </tr>
 
                                     </table>
@@ -201,13 +201,23 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            @*<tr>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                            </tr>
+                                            </tr>*@
+                                                                                        
+
+                                            @foreach (Transaction customer in Model)
+                                            {
+                                                <tr>
+                                                    <td>@customer.Name</td>
+                                                    <td>@customer.Country</td>
+                                                    <td><input type="button" value="Remove" onclick="Remove(this)" /></td>
+                                                </tr>
+                                            }
 
                                         </tbody>
                                     </table>
@@ -259,7 +269,7 @@
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-success">Submit</button>
                                     <button type="button" class="btn btn-info">Reset</button>
-                                    <button type="button" class="btn btn-warning">Suspend</button>
+                                    <button type="button" id="btnSave" class="btn btn-warning">Test Submit/Suspend</button>
 
 
                                 </div>
@@ -337,11 +347,12 @@
             });
             $(document).on('click', '.remove', function () {
                 var trIndex = $(this).closest("tr").index();
-                if (trIndex > 1) {
-                    $(this).closest("tr").remove();
-                } else {
-                    alert("Can't remove first row!");
-                }
+                $(this).closest("tr").remove();
+                //if (trIndex > 1) {
+                //    $(this).closest("tr").remove();
+                //} else {
+                //    alert("Can't remove first row!");
+                //}
             });
         });
     </script>
@@ -429,6 +440,40 @@
             }, false);
         })();
     </script>
+
+
+    <script>
+
+        $("body").on("click", "#btnSave", function () {
+            //Loop through the Table rows and build a JSON array.
+            var transactions = new Array();
+            //var customers = new Array();
+            $("#EntryTable TBODY TR").each(function () {
+                var row = $(this);
+                var transaction = {};
+                transaction.DateSubmitted = row.find("TD").eq(0).html();
+                transaction.AccountNumber = row.find("TD").eq(1).html();
+                transaction.Debit = row.find("TD").eq(2).html();
+                transaction.Credit = row.find("TD").eq(3).html();
+
+                transactions.push(transaction);
+            });
+
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/AccountantController/InsertJournal",
+                data: JSON.stringify(transactions),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    alert(r + " record(s) inserted.");
+                }
+            });
+        });
+
+    </script>
+
 
     @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
