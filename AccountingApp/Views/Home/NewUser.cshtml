@@ -12,7 +12,7 @@
 
         @Styles.Render("~/Scripts/bootstrap-datetimepicker.css")*@
 
-    @Styles.Render("~/Scripts/bootstrap.min.css")
+    @*@Styles.Render("~/Scripts/bootstrap.min.css")*@
 
     @Styles.Render("~/Scripts/bootstrap-datetimepicker.min.css")
 
@@ -241,29 +241,13 @@
     </div>
 }
 
-@*<script src="~/Scripts/jquery-1.8.3.min.js"></script>
-<script src="~/Scripts/bootstrap.min.js"></script>
-<script src="~/Scripts/bootstrap-datetimepicker.js"></script>*@
-
 
 @Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
 @Scripts.Render("~/Scripts/bootstrap.min.js")
 @Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
 
 
-@*@Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
-
-@Scripts.Render("~/Scripts/bootstrap-datetimepicker.min.js")*@
-
-@*<link href="~/Scripts/bootstrap-datetimepicker.css" rel="stylesheet" />*@
-@*<script src="~/Scripts/bootstrap-datetimepicker.js"></script>*@
-@*<link href="~/Scripts/bootstrap-datetimepicker.min.css" rel="stylesheet" />*@
-@*<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>*@
-
-
 <script type="text/javascript">
-    //$(".form_datetime").datetimepicker({ format: 'yyyy-mm-dd hh:ii' });
-
     $('.form_datetime').datetimepicker({ 
         format: "m/d/yyyy H:ii:ss P",
         weekStart: 1,

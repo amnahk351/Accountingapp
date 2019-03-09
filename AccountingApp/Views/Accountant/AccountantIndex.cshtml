@@ -8,6 +8,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    @Styles.Render("~/Scripts/bootstrap-datetimepicker.min.css")
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
@@ -44,6 +46,68 @@
             .inner:hover img {
                 transform: scale(1.5);
             }
+
+        .form_datetime {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.428571429;
+            color: #555;
+            vertical-align: middle;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+
+        table.EntryTable {
+            border: 1px solid #1C6EA4;
+            background-color: #EEEEEE;
+            width: 100%;
+            text-align: right;
+        }
+
+            table.EntryTable td, table.EntryTable th {
+                border: 0px solid #AAAAAA;
+                padding: 5px 10px;
+            }
+
+            table.EntryTable tbody td {
+                font-size: 16px;
+                color: #000000;
+                border-left: 2px solid #AAAAAA;
+            }
+
+                table.EntryTable tbody td:first-child {
+                    border-left: none;
+                }
+
+                table.EntryTable tbody td:nth-child(2) {
+                    text-align: left;
+                }
+
+            table.EntryTable thead {
+                background: #1C6EA4;
+                background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+                background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+                background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+                border-bottom: 3px solid #444444;
+            }
+
+                table.EntryTable thead th {
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                    text-align: center;
+                    border-left: 2px solid #D0E4F5;
+                }
+
+                    table.EntryTable thead th:first-child {
+                        border-left: none;
+                    }
     </style>
 </head>
 <body>
@@ -84,11 +148,72 @@
                             {
                                 <div class="modal-body">
 
-                                    <div class="form-group col-md-4">
+                                    @*<div class="form-group col-md-4">*@
 
-                                        <label for="Date" class="control-label">Date</label>
-                                        <input type="date" class="form-control" id="Date" name="Date" required />
-                                    </div>
+                                    <table id="InputTable" style="width:100%">
+
+                                        <tr>
+                                            <td>Date</td>
+                                            <td>Account</td>
+                                            <td>Debit</td>
+                                            <td>Credit</td>
+
+                                        </tr>
+
+                                        <tr>
+
+                                            <td><input type="text" id="Date" class="form_datetime" style="text-align:right" value="" placeholder="mm/dd/yyyy"></td>
+                                            @*<td><input type="date" class="form-control" id="Date" name="Date" /></td>>*@
+
+
+                                            <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
+                                                <div>
+                                                    @Html.DropDownList("AccountNumber", (List<SelectListItem>)ViewBag.accountList, "Please select an account", new { @class = "form-control ", @name = "AccountNumber[]", required = "required" })
+                                                </div>
+                                            </td>
+                                            <td><input type="text" id="Debit" class="form-control" style="text-align:right" value="" placeholder="$0.00"></td>
+
+                                            <td><input type="text" id="Credit" class="form-control" style="text-align:right" value="" placeholder="$0.00"></td>
+
+                                            <td><button type="button" class="btn btn-info" onclick="AppendToList()">Add</button></td>
+                                        </tr>
+
+                                    </table>
+                                    <br />
+                                    <hr>
+                                    <br />
+
+                                    <table id="EntryTable" class="EntryTable" style="table-layout: fixed; width: 700px">
+                                        <colgroup>
+                                            <col style="width: 90px">
+                                            <col style="width: 300px">
+                                            <col style="width: 130px">
+                                            <col style="width: 130px">
+                                            <col style="width: 50px">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Account</th>
+                                                <th>Debit</th>
+                                                <th>Credit</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+
+                                    <br />
+                                    @*</div>*@
 
                                     <div class="col-md-12">
                                         <table class="table table-hover small-text" id="tb">
@@ -103,20 +228,18 @@
                                             </tr>
                                             <tr>
 
-                                                <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
-                                                    <div>
-                                                        @Html.DropDownList("AccountNumber", (List<SelectListItem>)ViewBag.accountList, "Please select an account", new { @class = "form-control ", @name = "AccountNumber[]", required = "required" })
-                                                    </div>
-                                                </td>
-                                                <td><input type="text" name="Debit[]" class="form-control " style="text-align:right" placeholder="$0.00" id="Debit" required></td>
 
-                                                <td><input type="text" name="Credit[]" class="form-control " style="text-align:right" placeholder="$0.00" id="Crebit" required></td>
                                                 <td>
                                                     <a href='javascript:void(0);' class='remove'><i class="fas fa-times"></i></a>
                                                 </td>
 
                                             </tr>
                                         </table>
+
+
+
+
+
                                         <div class="form-group col-md-10">
                                             <label for="Comment" class="control-label">Comment</label>
                                             <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="optional"></textarea>
@@ -223,6 +346,44 @@
         });
     </script>
 
+    @Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
+
+    <script type="text/javascript">
+        $('.form_datetime').datetimepicker({
+            format: "m/d/yyyy",
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+    </script>
+
+    <script>
+        function AppendToList() {
+            var table = document.getElementById("EntryTable");
+            var date = document.getElementById("Date").value;
+            var acc = document.getElementById("AccountNumber").value;
+            var deb = document.getElementById("Debit").value;
+            var cre = document.getElementById("Credit").value;
+            var row = table.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+            cell1.innerHTML = date;
+            cell2.innerHTML = acc;
+            cell3.innerHTML = deb;
+            cell4.innerHTML = cre;
+            cell5.innerHTML = '<a href="javascript: void (0);" class="remove"><i class="fas fa-times"></i></a>';
+        }
+    </script>
+
     <script>
         function getTableData(table) {
             var data = [];
@@ -247,6 +408,7 @@
             $('#JournalEntries').DataTable();
         });
     </script>
+
     <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function () {
