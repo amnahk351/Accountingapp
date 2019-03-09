@@ -477,7 +477,7 @@
     </script>
 
 
-    <script type="text/javascript">
+    @*<script type="text/javascript">
         $(function () {
             $("#btnInsert").click(function () {
                 var itemlist = [];
@@ -491,32 +491,7 @@
 
                 alert("here2")
 
-                @*$.ajax({
-                    url: '@Url.Action("InsertJournal", "Accountant")', //
-                    dataType: "json",
-                    data: JSON.stringify({ itemlist: itemlist }),
-                    type: "POST",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (result) {
-                        alert("success");
-                    },
-                    error: function (xhr) {
-                        alert("error");
-                    }
-                });*@
-
-
-                @*$.ajax({
-                    url: '@Url.Action("InsertJournal", "Accountant")',
-                    type: "POST",
-                    dataType: 'json',
-                    data: JSON.stringify(itemlist),
-                    cache: false,
-                    contentType: "application/jsonrequest; charset=utf-8",
-                    success: function (data) {
-                        alert("hi"+ data);
-                    }
-                });*@
+                
 
 
                 $.ajax({
@@ -535,7 +510,7 @@
 
             });
         });
-    </script>
+    </script>*@
 
 
     @*<script type="text/javascript">

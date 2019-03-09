@@ -81,7 +81,7 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public JsonResult InsertJournal(Transaction[] transactions)
         {
-            System.Diagnostics.Debug.WriteLine("it got here0");
+            System.Diagnostics.Debug.WriteLine(transactions[0].Debit.ToString());
             using (Database1Entities7 entities = new Database1Entities7())
             {
                 //Truncate Table to delete all old records.
@@ -93,10 +93,18 @@ namespace AccountingApp.Controllers
                     System.Diagnostics.Debug.WriteLine("it got here");
                     //transactions = new List<Transaction>();
                 }
+                Transaction tran = new Transaction();
 
                 //Loop and insert records.
-                foreach (Transaction tran in transactions)
+                for(int i = 0; i<transactions.Length; i++)
                 {
+                    tran.DateSubmitted = transactions[i].DateSubmitted;
+                    tran.AccountNumber = transactions[i].AccountNumber;
+                    tran.Debit = transactions[i].Debit;
+                    tran.Credit = transactions[i].Credit;
+
+
+                    //t.DateSubmitted = 
                     System.Diagnostics.Debug.WriteLine("it got here2");
                     entities.Transactions.Add(tran);
                 }
@@ -106,18 +114,6 @@ namespace AccountingApp.Controllers
             }
         }
 
-
-        [HttpPost]
-        public JsonResult InsertValue(Transaction[] itemlist)
-        {
-            System.Diagnostics.Debug.WriteLine("it got here5");
-
-            foreach (Transaction i in itemlist)
-            {
-                //loop through the array and insert value into database.
-
-            }
-            return Json("Ok");
-        }
+               
     }
 }
