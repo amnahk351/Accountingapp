@@ -81,7 +81,7 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public JsonResult InsertJournal(Transaction[] transactions)
         {
-            System.Diagnostics.Debug.WriteLine(transactions[0].Debit.ToString());
+            System.Diagnostics.Debug.WriteLine(transactions.Length);
             using (Database1Entities7 entities = new Database1Entities7())
             {
                 //Truncate Table to delete all old records.
@@ -94,7 +94,7 @@ namespace AccountingApp.Controllers
                     //transactions = new List<Transaction>();
                 }
                 Transaction tran = new Transaction();
-
+                int insertedRecords = 0;
                 //Loop and insert records.
                 for(int i = 0; i < transactions.Length; i++)
                 {
@@ -104,12 +104,12 @@ namespace AccountingApp.Controllers
                     tran.Credit = transactions[i].Credit;
 
 
-                    //t.DateSubmitted = 
-                    System.Diagnostics.Debug.WriteLine("it got here2");
+                    //System.Diagnostics.Debug.WriteLine("it got here2");
                     entities.Transactions.Add(tran);
+                    entities.SaveChanges();
+                    insertedRecords++;
                 }
-                int insertedRecords = entities.SaveChanges();
-                System.Diagnostics.Debug.WriteLine("it got here3");
+                //System.Diagnostics.Debug.WriteLine("it got here3");
                 return Json(insertedRecords);
             }
         }
