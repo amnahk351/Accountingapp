@@ -66,11 +66,14 @@
         .deletebutton {
             background-image: url('../../img/trashcan-delete.png');
             background-color: transparent;
+            background-size: 100%;
+            width: 18px;
+            height: 18px;
             border: none;
             cursor: pointer;
             color: white;
-            padding: 4px 14px;
-            font-size: 16px;
+            /*padding: 4px 14px;
+            font-size: 16px;*/
         }
 
             .deletebutton:hover {
@@ -85,7 +88,6 @@
         table.EntryTable {
             border: 1px solid #1C6EA4;
             background-color: #EEEEEE;
-            width: 100%;
             text-align: right;
         }
 
@@ -105,6 +107,10 @@
                 }
 
                 table.EntryTable tbody td:nth-child(2) {
+                    text-align: left;
+                }
+
+                table.EntryTable tbody td:nth-child(5) {
                     text-align: left;
                 }
 
@@ -190,9 +196,9 @@
                                                     @Html.DropDownList("AccountNumber", (List<SelectListItem>)ViewBag.accountList, "Please select an account", new { @class = "form-control ", @name = "AccountNumber[]", required = "required" })
                                                 </div>
                                             </td>
-                                            <td><input type="text" id="Debit" class="form-control" style="text-align:right" value="" placeholder="$0.00"></td>
+                                            <td><input type="text" id="Debit" class="form-control" style="text-align:right" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
 
-                                            <td><input type="text" id="Credit" class="form-control" style="text-align:right" value="" placeholder="$0.00"></td>
+                                            <td><input type="text" id="Credit" class="form-control" style="text-align:right" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
 
                                             <td><button type="button" id="AddEntry" class="btn btn-info" onclick="AppendToList()">Add</button></td>
                                         </tr>
@@ -202,13 +208,13 @@
                                     <hr>
                                     <br />
 
-                                    <table id="EntryTable" class="EntryTable" style="table-layout: fixed; width: 700px">
+                                    <table id="EntryTable" class="EntryTable" style="table-layout: fixed; width: 98%">
                                         <colgroup>
-                                            <col style="width: 90px">
-                                            <col style="width: 300px">
-                                            <col style="width: 130px">
-                                            <col style="width: 130px">
-                                            <col style="width: 50px">
+                                            <col style="width: 15%">
+                                            <col style="width: 43%">
+                                            <col style="width: 17%">
+                                            <col style="width: 17%">
+                                            <col style="width: 6%">
                                         </colgroup>
                                         <thead>
                                             <tr>
@@ -400,6 +406,38 @@
             //Delete the Table row using it's Index.
             table.deleteRow(row[0].rowIndex);            
         };
+
+    </script>
+
+    <script>
+
+        function validateFloatKeyPress(el, evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            var number = el.value.split('.');
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            //just one dot
+            if (number.length > 1 && charCode == 46) {
+                return false;
+            }
+            //get the carat position
+            var caratPos = getSelectionStart(el);
+            var dotPos = el.value.indexOf(".");
+            if (caratPos > dotPos && dotPos > -1 && (number[1].length > 1)) {
+                return false;
+            }
+            return true;
+        }
+                
+        function getSelectionStart(o) {
+            if (o.createTextRange) {
+                var r = document.selection.createRange().duplicate()
+                r.moveEnd('character', o.value.length)
+                if (r.text == '') return o.value.length
+                return o.value.lastIndexOf(r.text)
+            } else return o.selectionStart
+        }
 
     </script>
 
