@@ -188,7 +188,7 @@
                                         <tr>
 
                                             <td><input type="text" id="Date" class="form_datetime" style="text-align:right" value="" placeholder="mm/dd/yyyy"></td>
-                                            @*<td><input type="date" class="form-control" id="Date" name="Date" /></td>>*@
+                                        
 
 
                                             <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
@@ -227,6 +227,7 @@
                                         </thead>
                                         <tbody>
 
+                                            @* Extra row in table to show brown strip *@
                                             <tr>
                                                 <td></td>
                                                 <td></td>
@@ -234,22 +235,13 @@
                                                 <td></td>
                                                 <td></td>
 
-                                            </tr>
-
-                                            @*@foreach (Transaction customer in Model)
-                                                {
-                                                    <tr>
-                                                        <td>@customer.Name</td>
-                                                        <td>@customer.Country</td>
-                                                        <td><input type="button" value="Remove" onclick="Remove(this)" /></td>
-                                                    </tr>
-                                                }*@
+                                            </tr>                                           
 
                                         </tbody>
                                     </table>
 
                                     <br />
-                                    @*</div>*@
+                                    
 
                                     <div class="col-md-12">
                                         <table class="table table-hover small-text" id="tb">
@@ -410,6 +402,7 @@
     </script>
 
     <script>
+        //Only allow digits and two decimal places in credit and debit fields
 
         function validateFloatKeyPress(el, evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode;
@@ -448,10 +441,7 @@
             var acc = document.getElementById("AccountNumber").value;
             var deb = document.getElementById("Debit").value;
             var cre = document.getElementById("Credit").value;
-            //var tableRef = document.getElementById('EntryTable').getElementsByTagName('tbody')[0];
-
-            // Insert a row in the table at the last row
-            //var row = tableRef.insertRow(tableRef.rows.length);
+            
             var row = table.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
@@ -461,9 +451,8 @@
             cell1.innerHTML = date;
             cell2.innerHTML = acc;
             cell3.innerHTML = deb;
-            cell4.innerHTML = cre;
-                       
-            //cell5.innerHTML = '<input type="button" value="Remove" onclick="RemoveLine(this)"/>';
+            cell4.innerHTML = cre;                      
+           
             cell5.innerHTML = '<input type="button" class="deletebutton" onclick="RemoveLine(this)"/>';
 
             //does not work anymore
@@ -485,6 +474,7 @@
         }
     </script>
 
+    @* The script below has been commented out because testing showed it was interfering with posting journals to the database *@
     @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>*@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
@@ -536,10 +526,7 @@
 
                 transactions.push(transaction);
             });
-
-            //alert("here");
-
-
+          
             //Send the JSON array to Controller using AJAX.
             $.ajax({
                 type: "POST",
