@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AccountingApp.Models.Transaction>
+﻿@model AccountingApp.Models.Transaction
 @{
     ViewBag.Title = "AccountantIndex";
     Layout = null;
@@ -62,6 +62,25 @@
             box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
             transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
         }
+
+        .deletebutton {
+            background-image: url('../../img/trashcan-delete.png');
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: white;
+            padding: 4px 14px;
+            font-size: 16px;
+        }
+
+            .deletebutton:hover {
+                background-color: transparent;
+            }
+
+            .deletebutton:active {
+                position: relative;
+                top: 1px;
+            }
 
         table.EntryTable {
             border: 1px solid #1C6EA4;
@@ -202,7 +221,14 @@
                                         </thead>
                                         <tbody>
 
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
 
+                                            </tr>
 
                                             @*@foreach (Transaction customer in Model)
                                                 {
@@ -239,11 +265,8 @@
 
                                             </tr>
                                         </table>
-
-
-
-
-
+                                        
+                                                                               
                                         <div class="form-group col-md-10">
                                             <label for="Comment" class="control-label">Comment</label>
                                             <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="optional"></textarea>
@@ -253,9 +276,7 @@
                                             <input type="file" class="form-control-file" id="comment">
                                         </div>
                                     </div>
-
-
-
+                                                                       
 
 
                                 </div>
@@ -368,16 +389,32 @@
     </script>
 
     <script>
+
+        function RemoveLine(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            
+            //Get the reference of the Table.
+            var table = $("#EntryTable")[0];
+
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);            
+        };
+
+    </script>
+
+    <script>
         function AppendToList() {
             var table = document.getElementById("EntryTable");
             var date = document.getElementById("Date").value;
             var acc = document.getElementById("AccountNumber").value;
             var deb = document.getElementById("Debit").value;
             var cre = document.getElementById("Credit").value;
-            var tableRef = document.getElementById('EntryTable').getElementsByTagName('tbody')[0];
+            //var tableRef = document.getElementById('EntryTable').getElementsByTagName('tbody')[0];
 
             // Insert a row in the table at the last row
-            var row = tableRef.insertRow(tableRef.rows.length);
+            //var row = tableRef.insertRow(tableRef.rows.length);
+            var row = table.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
@@ -387,7 +424,12 @@
             cell2.innerHTML = acc;
             cell3.innerHTML = deb;
             cell4.innerHTML = cre;
-            cell5.innerHTML = '<a href="javascript: void (0);" class="remove"><i class="fas fa-times"></i></a>';
+                       
+            //cell5.innerHTML = '<input type="button" value="Remove" onclick="RemoveLine(this)"/>';
+            cell5.innerHTML = '<input type="button" class="deletebutton" onclick="RemoveLine(this)"/>';
+
+            //does not work anymore
+            //cell5.innerHTML = '<a href="javascript: void (0);" class="remove"><i class="fas fa-times"></i></a>';
         }
     </script>
 
@@ -457,7 +499,7 @@
                 transactions.push(transaction);
             });
 
-            alert("here");
+            //alert("here");
 
 
             //Send the JSON array to Controller using AJAX.

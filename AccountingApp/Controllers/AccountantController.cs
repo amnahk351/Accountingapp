@@ -35,9 +35,9 @@ namespace AccountingApp.Controllers
 
             //SelectList list = new SelectList(sliAccountList, "Value", "Text");
             ViewBag.accountlist = sliAccountList;
-            Database1Entities7 entities = new Database1Entities7();
+            //Database1Entities7 entities = new Database1Entities7();
 
-            return View(entities.Transactions);
+            return View();
         }
 
         [HttpPost]
@@ -96,7 +96,7 @@ namespace AccountingApp.Controllers
                 Transaction tran = new Transaction();
                 int insertedRecords = 0;
                 //Loop and insert records.
-                for(int i = 0; i < transactions.Length; i++)
+                for(int i = 1; i < transactions.Length; i++)
                 {
                     tran.DateSubmitted = transactions[i].DateSubmitted;
                     tran.AccountNumber = transactions[i].AccountNumber;
