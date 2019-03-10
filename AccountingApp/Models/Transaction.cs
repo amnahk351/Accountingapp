@@ -15,14 +15,16 @@ namespace AccountingApp.Models
     public partial class Transaction
     {
         public int Id { get; set; }
-        public string AccountNumber { get; set; }
-        public Nullable<int> Debit { get; set; }
-        public Nullable<int> Credit { get; set; }
+        public Nullable<double> AccountNumber { get; set; }
+        public Nullable<decimal> Debit { get; set; }
+        public Nullable<decimal> Credit { get; set; }
         public string Status { get; set; }
         public Nullable<System.DateTime> DateSubmitted { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
         public string EntryId { get; set; }
         public Nullable<int> FileId { get; set; }
         public string Comment { get; set; }
+        public string AccountantUser { get; set; }
+        public string ManagerUser { get; set; }
     }
 }

@@ -10,15 +10,17 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AccountNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="Debit" Type="int" />
-          <Property Name="Credit" Type="int" />
+          <Property Name="AccountNumber" Type="float" />
+          <Property Name="Debit" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Credit" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="DateSubmitted" Type="datetime" />
           <Property Name="DateModified" Type="datetime" />
           <Property Name="EntryId" Type="nvarchar" MaxLength="50" />
           <Property Name="FileId" Type="int" />
           <Property Name="Comment" Type="nvarchar(max)" />
+          <Property Name="AccountantUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ManagerUser" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityContainer Name="TransactionModelStoreContainer">
           <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
@@ -32,15 +34,17 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="AccountNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Debit" Type="Int32" />
-          <Property Name="Credit" Type="Int32" />
+          <Property Name="AccountNumber" Type="Double" />
+          <Property Name="Debit" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Credit" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateSubmitted" Type="DateTime" Precision="3" />
           <Property Name="DateModified" Type="DateTime" Precision="3" />
           <Property Name="EntryId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FileId" Type="Int32" />
           <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountantUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ManagerUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityContainer Name="Database1Entities7" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Transactions" EntityType="Self.Transaction" />
@@ -54,6 +58,8 @@
           <EntitySetMapping Name="Transactions">
             <EntityTypeMapping TypeName="TransactionModel.Transaction">
               <MappingFragment StoreEntitySet="Transactions">
+                <ScalarProperty Name="ManagerUser" ColumnName="ManagerUser" />
+                <ScalarProperty Name="AccountantUser" ColumnName="AccountantUser" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
                 <ScalarProperty Name="Debit" ColumnName="Debit" />

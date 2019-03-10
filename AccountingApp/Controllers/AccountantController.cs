@@ -81,35 +81,65 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public JsonResult InsertJournal(Transaction[] transactions)
         {
-            System.Diagnostics.Debug.WriteLine(transactions.Length);
             using (Database1Entities7 entities = new Database1Entities7())
             {
-                //Truncate Table to delete all old records.
-                //entities.Database.ExecuteSqlCommand("TRUNCATE TABLE [Customers]");
-
-                //Check for NULL.
                 if (transactions == null)
                 {
-                    System.Diagnostics.Debug.WriteLine("it got here");
-                    //transactions = new List<Transaction>();
+                    throw new Exception("NO TRANSACTIONS");
                 }
-                Transaction tran = new Transaction();
+
+                var mostRecentEntryID = entities.Transactions.ToList().Select(eID => eID.EntryId).LastOrDefault();
+
+                var coaDB = new Database1Entities3();
                 int insertedRecords = 0;
-                //Loop and insert records.
-                for(int i = 1; i < transactions.Length; i++)
+
+                for (int i = 1; i < transactions.Length; i++)
                 {
-                    tran.DateSubmitted = transactions[i].DateSubmitted;
-                    tran.AccountNumber = transactions[i].AccountNumber;
-                    tran.Debit = transactions[i].Debit;
-                    tran.Credit = transactions[i].Credit;
+                    //query COA
+                    Trace.WriteLine("---------------------" + transactions[i].AccountNumber);
+                    var coa = coaDB.ChartOfAccs.Find(transactions[i].AccountNumber);
 
+                    if (coa == null)
+                        Trace.WriteLine("Could not find COA");
 
-                    //System.Diagnostics.Debug.WriteLine("it got here2");
-                    entities.Transactions.Add(tran);
+                    if (transactions[i].Debit == null)
+                        transactions[i].Debit = 0;
+
+                    if (transactions[i].Credit == null)
+                        transactions[i].Credit = 0;
+
+                    if (coa.NormalSide.ToLower() == "debit")
+                    {
+                        coa.CurrentBalance += transactions[i].Debit.Value;
+                        coa.CurrentBalance -= transactions[i].Credit.Value;
+                    }
+                    else //normal side is credit
+                    {
+                        coa.CurrentBalance += transactions[i].Credit.Value;
+                        coa.CurrentBalance -= transactions[i].Debit.Value;
+                    }
+                    coaDB.SaveChanges();
+                    transactions[i].EntryId = mostRecentEntryID;
+                    transactions[i].Status = "pending";
+                    entities.Transactions.Add(transactions[i]);
                     entities.SaveChanges();
                     insertedRecords++;
                 }
-                //System.Diagnostics.Debug.WriteLine("it got here3");
+
+                //Transaction tran = new Transaction();
+                
+
+                //for(int i = 1; i < transactions.Length; i++)
+                //{
+                //    tran.DateSubmitted = transactions[i].DateSubmitted;
+                //    tran.AccountNumber = transactions[i].AccountNumber;
+                //    tran.Debit = transactions[i].Debit;
+                //    tran.Credit = transactions[i].Credit;
+
+                //    entities.Transactions.Add(tran);
+                //    entities.SaveChanges();
+                //    insertedRecords++;
+                //}
                 return Json(insertedRecords);
             }
         }
