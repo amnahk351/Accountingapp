@@ -8,6 +8,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using Dapper;
+using AccountingApp.DBAccess;
 
 namespace AccountingApp.Models
 {
@@ -48,8 +50,11 @@ namespace AccountingApp.Models
         private bool CheckOldPassword(string Password)
         {
             bool found = false;
-            SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
-            SqlCommand cmd = new SqlCommand("Select Old_Passwords from CreateUsers where Username = @User", con);
+            SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
+            SqlCommand cmd = new SqlCommand("Select OldPasswords from UserTable where Username = @User", con);
+            
+            //SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+            //SqlCommand cmd = new SqlCommand("Select Old_Passwords from CreateUsers where Username = @User", con);
             cmd.Parameters.AddWithValue("@User", User);
             con.Open();
             var nullableValue = cmd.ExecuteScalar();
@@ -75,8 +80,10 @@ namespace AccountingApp.Models
         private bool CheckCurrentPassword(string Password)
         {
             bool matches = false;
-            SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
-            SqlCommand cmd = new SqlCommand("Select Password from CreateUsers where Username = @User", con);
+            SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
+            SqlCommand cmd = new SqlCommand("Select Password from UserTable where Username = @User", con);
+            //SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+            //SqlCommand cmd = new SqlCommand("Select Password from CreateUsers where Username = @User", con);
             cmd.Parameters.AddWithValue("@User", User);
             con.Open();
             var nullableValue = cmd.ExecuteScalar();

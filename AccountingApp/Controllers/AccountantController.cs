@@ -1,10 +1,14 @@
 ﻿using AccountingApp.Models;
+using AccountingApp.DBAccess;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data;
+using System.Data.SqlClient;
+using Dapper;
 
 namespace AccountingApp.Controllers
 {
@@ -17,13 +21,28 @@ namespace AccountingApp.Controllers
         //}
         public ActionResult AccountantIndex()
         {
-            Database1Entities3 db = new Database1Entities3();
-            List<ChartOfAcc> getaccountslist = db.ChartOfAccs.ToList();
+           // Database1Entities3 db = new Database1Entities3();
+            //List<ChartOfAcc> getaccountslist = db.ChartOfAccs.ToList();
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+            }
             List<SelectListItem> sliAccountList = new List<SelectListItem>();
 
             //IEnumerable<ChartOfAcc> accounts = new List<ChartOfAcc> { new ChartOfAcc { AccountNumber = 1234, AccountName = "Test" } };
 
-            foreach (ChartOfAcc coa in getaccountslist)
+            //foreach (ChartOfAcc coa in getaccountslist)
+            //{
+            //    SelectListItem item = new SelectListItem
+            //    {
+            //        Text = coa.AccountName,
+            //        Value = coa.AccountNumber.ToString()
+            //    };
+            //    sliAccountList.Add(item);
+            //}
+            foreach (ChartOfAcc coa in listAccounts)
             {
                 SelectListItem item = new SelectListItem
                 {
@@ -50,13 +69,30 @@ namespace AccountingApp.Controllers
             Trace.WriteLine(transaction.AccountNumber);
 
 
-            Database1Entities3 db = new Database1Entities3();
-            List<ChartOfAcc> getaccountslist = db.ChartOfAccs.ToList();
+            //Database1Entities3 db = new Database1Entities3();
+            //List<ChartOfAcc> getaccountslist = db.ChartOfAccs.ToList();
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+            }
             List<SelectListItem> sliAccountList = new List<SelectListItem>();
+            
 
             //IEnumerable<ChartOfAcc> accounts = new List<ChartOfAcc> { new ChartOfAcc { AccountNumber = 1234, AccountName = "Test" } };
 
-            foreach (ChartOfAcc coa in getaccountslist)
+            //foreach (ChartOfAcc coa in getaccountslist)
+            //{
+            //    SelectListItem item = new SelectListItem
+            //    {
+            //        Text = coa.AccountName,
+            //        Value = coa.AccountNumber.ToString()
+            //    };
+            //    sliAccountList.Add(item);
+            //}
+
+            foreach (ChartOfAcc coa in listAccounts)
             {
                 SelectListItem item = new SelectListItem
                 {

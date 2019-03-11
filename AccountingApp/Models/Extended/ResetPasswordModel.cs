@@ -8,6 +8,8 @@ using System.Web;
 using AccountingApp.Controllers;
 using FluentValidation;
 using FluentValidation.Attributes;
+using AccountingApp.DBAccess;
+using Dapper;
 
 namespace AccountingApp.Models
 {
@@ -52,8 +54,10 @@ namespace AccountingApp.Models
             string code = segments[(int)segments.Length - 1];
 
             bool found = false;
-            SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
-            SqlCommand cmd = new SqlCommand("Select Old_Passwords from CreateUsers where ResetPasswordCode = @Code", con);
+            SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
+            SqlCommand cmd = new SqlCommand("Select OldPasswords from UserTable where ResetPasswordCode = @Code", con);
+            //SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+            //SqlCommand cmd = new SqlCommand("Select Old_Passwords from CreateUsers where ResetPasswordCode = @Code", con);
             cmd.Parameters.AddWithValue("@Code", code);
             con.Open();
             var nullableValue = cmd.ExecuteScalar();
@@ -85,8 +89,10 @@ namespace AccountingApp.Models
             string code = segments[(int)segments.Length - 1];
 
             bool matches = false;
-            SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
-            SqlCommand cmd = new SqlCommand("Select Password from CreateUsers where ResetPasswordCode = @Code", con);
+            SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
+            SqlCommand cmd = new SqlCommand("Select Password from UserTable where ResetPasswordCode = @Code", con);
+            //SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+            //SqlCommand cmd = new SqlCommand("Select Password from CreateUsers where ResetPasswordCode = @Code", con);
             cmd.Parameters.AddWithValue("@Code", code);
             con.Open();
             var nullableValue = cmd.ExecuteScalar();
