@@ -34,6 +34,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.60.1\lib\net451\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -160,6 +164,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\OldPasswordHandler.cs" />
+    <Compile Include="DBAccess\SqlAccess.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -199,6 +204,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateUser.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ErrorMessageModel.cs" />
     <Compile Include="Models\EventLog.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -230,6 +236,7 @@
     <Compile Include="Models\Transaction.Designer.cs">
       <DependentUpon>Transaction.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\ValidField.cs" />
     <Compile Include="Models\ValidPassword.cs" />
     <Compile Include="Models\ValidUsername.cs" />
@@ -311,6 +318,7 @@
     <Content Include="Models\EventLog.edmx.diagram">
       <DependentUpon>EventLog.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\ObjectiveAccounting - Web Deploy1.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -357,7 +365,7 @@
     <Content Include="Views\Account\AnswerQuestions.cshtml" />
     <Content Include="Views\Home\EventLog.cshtml" />
     <Content Include="Views\Shared\_Layout - Admin.cshtml" />
-	<Content Include="Views\Manager\GeneralJournal.cshtml" />
+    <Content Include="Views\Manager\GeneralJournal.cshtml" />
     <Content Include="Views\Manager\ManagerIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
