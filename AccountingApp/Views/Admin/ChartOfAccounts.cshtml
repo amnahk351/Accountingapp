@@ -54,6 +54,11 @@
             .inner:hover img {
                 transform: scale(1.5);
             }
+        @@media (min-width: 1200px) {
+            .container {
+                max-width: 2000px; /*this px doesn't do much it just has to be a somewhat large number to override the 1400px*/
+            }
+        }
     </style>
 </head>
 <body>
@@ -113,8 +118,8 @@
         </div>
     </nav>*@
 
-    <br />
-    <div style="width:85%; margin:0 auto">
+
+    <div class="container body-content" style="width:85%; margin:0 auto">
         <h4>Chart Of Accounts</h4>
         <hr class="my-4" />
         @if (TempData["Message"] != null)
@@ -294,7 +299,7 @@
             </table>
         </div>
         <hr />
-        <p> &copy; @DateTime.Now.Year - Objective Accounting</p>
+        @*<p> &copy; @DateTime.Now.Year - Objective Accounting</p>*@
 
     </div>
 
