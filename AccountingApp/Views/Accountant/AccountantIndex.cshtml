@@ -83,6 +83,11 @@
                 top: 1px;
             }
 
+        .ErrorMessage {
+            color: red;
+            font-size: 14px;
+        }
+
         table.EntryTable {
             border: 1px solid #1C6EA4;
             background-color: #EEEEEE;
@@ -199,6 +204,14 @@
                                             <td><input type="text" id="Credit" class="form-control" style="text-align:right" onkeyup="AdjustTextboxes();" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
 
                                             <td><button type="button" id="AddEntry" class="btn btn-info" onclick="AppendToList()">Add</button></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><span id="DateError" class="ErrorMessage"></span></td>
+                                            <td><span id="AccountError" class="ErrorMessage"></span></td>
+                                            <td><span id="DebitError" class="ErrorMessage"></span></td>
+                                            <td><span id="CreditError" class="ErrorMessage"></span></td>
+
                                         </tr>
 
                                     </table>
@@ -377,16 +390,23 @@
             var creval = cre.value;
 
             if (debval == "" && creval == "") {
+                //turn both the debit and credit textboxes on to allow the user to pick which one to type in
                 cre.disabled = false;
                 deb.disabled = false;
             }
 
             else if (debval != "") {
                 cre.disabled = true;
+                //Hide error messages
+                document.getElementById('DebitError').innerText = "";  //innerHTML works too
+                document.getElementById('CreditError').innerText = "";  //innerHTML works too
             }
 
             else if (creval != "") {
                 deb.disabled = true;
+                //Hide error messages
+                document.getElementById('DebitError').innerText = "";  //innerHTML works too
+                document.getElementById('CreditError').innerText = "";  //innerHTML works too
             }
         }
 
@@ -491,6 +511,59 @@
 
     <script>
         function AppendToList() {
+
+
+            if ($("#Date").val() == "") {
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById('DateError').innerText = data[37];  //innerHTML works too
+                    }
+                });
+                return;
+            }
+
+            //Clear Error Message
+            document.getElementById('DateError').innerText = "";
+                        
+            if (document.getElementById('AccountNumber').selectedIndex == 0) {
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById('AccountError').innerText = data[38];  //innerHTML works too
+                    }
+                });
+                return;
+            }
+
+            //Clear Error Message
+            document.getElementById('AccountError').innerText = "";
+
+            if (($("#Debit").val() == "") && ($("#Credit").val() == "")) {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById('DebitError').innerText = data[39];  //innerHTML works too
+                        document.getElementById('CreditError').innerText = data[40];  //innerHTML works too
+                    }
+                });
+                return;
+            }         
+
+
             var table = document.getElementById("EntryTable");
             var date = document.getElementById("Date").value;
             var acc = document.getElementById("AccountNumber").value;
