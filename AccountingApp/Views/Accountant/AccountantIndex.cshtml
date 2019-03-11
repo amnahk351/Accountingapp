@@ -414,9 +414,22 @@
         function RemoveLine(button) {
             //Determine the reference of the Row using the Button.
             var row = $(button).closest("TR");
-            
+            //alert(row[0].rowIndex);
             //Get the reference of the Table.
             var table = $("#EntryTable")[0];
+
+            //Get Account Listed In Table
+            var Account = table.rows[row[0].rowIndex].cells[1].innerHTML;
+
+            var Fix1 = Account.replace("<span style=\"padding-left: 5%\">", "");
+            var ActualAccount = Fix1.replace("</span>", "");
+
+
+            var x = document.getElementById("AccountNumber");
+            var option = document.createElement("option");
+            option.text = ActualAccount;
+            x.add(option, 1);
+            
 
             //Delete the Table row using it's Index.
             table.deleteRow(row[0].rowIndex);            
@@ -458,6 +471,25 @@
     </script>
 
     <script>
+        window.onload = function () {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+
+            today = mm + '/' + dd + '/' + yyyy;
+
+            var d = document.getElementById("Date");
+            d.value = today;
+    };
+
+    </script>
+
+    <script>
         function AppendToList() {
             var table = document.getElementById("EntryTable");
             var date = document.getElementById("Date").value;
@@ -471,14 +503,30 @@
             var cell3 = row.insertCell(2);
             var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4);
+
+            if (cre != "") {
+                //credit is entered, add padding to tab over
+                cell2.innerHTML = "<span style='padding-left: 5%'>" + acc + "</span>";
+            } else {
+                //debit is entered, no padding needed
+                cell2.innerHTML = acc;
+            }
+            
             cell1.innerHTML = date;
-            cell2.innerHTML = acc;
             cell3.innerHTML = deb;
             cell4.innerHTML = cre;                      
-           
+
+            //Add delete button to last column
             cell5.innerHTML = '<input type="button" class="deletebutton" onclick="RemoveLine(this)"/>';
 
-            
+            //Delete account from list
+            var x = document.getElementById("AccountNumber");
+            x.remove(x.selectedIndex);
+
+            //Move selection back to Please select
+            document.getElementById("AccountNumber").selectedIndex = "0";
+
+            //Clear debit and credit textboxes
             var deb2 = document.getElementById("Debit");
             var cre2 = document.getElementById("Credit");
 
@@ -486,11 +534,6 @@
             cre2.disabled = false;
             deb2.value = "";
             cre2.value = "";
-
-
-
-            //does not work anymore
-            //cell5.innerHTML = '<a href="javascript: void (0);" class="remove"><i class="fas fa-times"></i></a>';
         }
     </script>
 

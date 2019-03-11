@@ -28,7 +28,7 @@ namespace AccountingApp.Controllers
                 SelectListItem item = new SelectListItem
                 {
                     Text = coa.AccountName,
-                    Value = coa.AccountNumber.ToString()
+                    Value = coa.AccountName.ToString()
                 };
                 sliAccountList.Add(item);
             }
