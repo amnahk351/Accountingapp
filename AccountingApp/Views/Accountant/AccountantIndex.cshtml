@@ -260,9 +260,9 @@
                                             <col style="width: 8%">
                                         </colgroup>
                                         <tr id="totals">
-                                            <td>Totals</td>
-                                            <td>0</td>
-                                            <td>0</td>
+                                            <td><span id="TotalLabel" class="">Totals:</span></td>
+                                            <td><span id="DebitTotal" class="">$ 0.00</span></td>
+                                            <td><span id="CreditTotal" class="">$ 0.00</span></td>
                                             <td></td>
                                         </tr>
 
@@ -398,6 +398,65 @@
     </script>
 
     <script>
+        
+        //n is the number to pass in
+        function formatMoney(n, c, d, t) {
+            var c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return "$ " + s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
+        function StripMoneyFormatting(NumValue) {            
+            //remove commas
+            var res = NumValue.replace(/,/g, "");
+
+            //remove '$ '
+            var res2 = res.replace("$ ", "");
+
+            return res2;
+        }
+
+        function AdjustTotals() {
+          
+            var table = document.getElementById("EntryTable"), sumDebit = 0, sumCredit = 0;
+
+            for (var i = 2; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[2].innerHTML;
+                var Chtml = table.rows[i].cells[3].innerHTML;
+
+                if (Dhtml != "") {
+                    var fix = StripMoneyFormatting(Dhtml)
+                    sumDebit = sumDebit + parseInt(fix);
+                }
+
+                if (Chtml != "") {
+                    var fix2 = StripMoneyFormatting(Chtml)
+                    sumCredit = sumCredit + parseInt(fix2);
+                }               
+                
+            }
+
+            //Write totals
+            if (sumDebit == "") {
+                sumDebit = 0;
+            }
+
+            if (sumCredit == "") {
+                sumCredit = 0;
+            }
+
+            document.getElementById('DebitTotal').innerHTML = formatMoney(sumDebit);
+            document.getElementById('CreditTotal').innerHTML = formatMoney(sumCredit);
+        }
+
+    </script>
+
+    <script>
 
         function AdjustTextboxes() {
             var deb = document.getElementById("Debit");
@@ -469,7 +528,9 @@
             
 
             //Delete the Table row using it's Index.
-            table.deleteRow(row[0].rowIndex);            
+            table.deleteRow(row[0].rowIndex);
+
+            AdjustTotals();
         };
 
     </script>
@@ -578,7 +639,7 @@
                     }
                 });
                 return;
-            }         
+            }
 
 
             var table = document.getElementById("EntryTable");
@@ -586,6 +647,51 @@
             var acc = document.getElementById("AccountNumber").value;
             var deb = document.getElementById("Debit").value;
             var cre = document.getElementById("Credit").value;
+
+
+            //check for only 0 in credit or debit field
+            if (cre != "") {
+                //credit is entered
+
+                var CreTest = cre.replace(/0/g, "");
+                //var res = NumValue.replace(/0/g, "");
+
+                if (CreTest == "") {
+                    //All 0's entered for Credit
+                    $.ajax({
+                        url: "/Account/GetErrors",
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            //Index starts from 0 so number is 1 off from database
+                            //Populate error message from database
+                            document.getElementById('CreditError').innerText = data[42];  //innerHTML works too
+                        }
+                    });
+
+                    return;
+                }
+
+            } else {
+                //debit is entered
+                var DebTest = deb.replace(/0/g, "");
+
+                if (DebTest == "") {
+                    //All 0's entered for Debit
+                    $.ajax({
+                        url: "/Account/GetErrors",
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            //Index starts from 0 so number is 1 off from database
+                            //Populate error message from database
+                            document.getElementById('DebitError').innerText = data[41];  //innerHTML works too
+                        }
+                    });
+
+                    return;
+                }
+            }
             
             var row = table.insertRow();
             var cell1 = row.insertCell(0);
@@ -594,27 +700,35 @@
             var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4);
 
+            cell1.innerHTML = date;
+
+            
             if (cre != "") {
-                //credit is entered, add padding to tab over
+                //credit is entered, add padding to tab over the account name
                 cell2.innerHTML = "<span style='padding-left: 5%'>" + acc + "</span>";
+
+                var CreMoney = formatMoney(cre);
+                cell4.innerHTML = CreMoney;
             } else {
                 //debit is entered, no padding needed
                 cell2.innerHTML = acc;
-            }
+
+                var DebMoney = formatMoney(deb);
+                cell3.innerHTML = DebMoney;
+            }                      
             
-            cell1.innerHTML = date;
-            cell3.innerHTML = deb;
-            cell4.innerHTML = cre;                      
 
             //Add delete button to last column
             cell5.innerHTML = '<input type="button" class="deletebutton" onclick="RemoveLine(this)"/>';
+
+            AdjustTotals();
 
             //Delete account from list
             var x = document.getElementById("AccountNumber");
             x.remove(x.selectedIndex);
 
-            //Move selection back to Please select
-            document.getElementById("AccountNumber").selectedIndex = "0";
+            //Move selection back to 'Please select an account'
+            document.getElementById("AccountNumber").selectedIndex = "0";           
 
             //Clear debit and credit textboxes
             var deb2 = document.getElementById("Debit");
