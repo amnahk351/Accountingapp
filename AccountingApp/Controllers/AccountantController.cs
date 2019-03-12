@@ -28,7 +28,7 @@ namespace AccountingApp.Controllers
                 SelectListItem item = new SelectListItem
                 {
                     Text = coa.AccountName,
-                    Value = coa.AccountName.ToString()
+                    Value = coa.AccountNumber.ToString()
                 };
                 sliAccountList.Add(item);
             }
@@ -78,6 +78,17 @@ namespace AccountingApp.Controllers
         }
 
 
+        public double GetAccountNumber(string AccName) {
+
+            //query COA and get number
+            var coaDB = new Database1Entities3();
+
+            var Account = coaDB.ChartOfAccs.Where(x => x.AccountName == AccName).FirstOrDefault();
+            
+            return Account.AccountNumber;
+        }
+
+
         [HttpPost]
         public JsonResult InsertJournal(Transaction[] transactions)
         {
@@ -121,7 +132,7 @@ namespace AccountingApp.Controllers
                     coaDB.SaveChanges();
                     transactions[i].EntryId = mostRecentEntryID;
                     transactions[i].Status = "pending";
-                    entities.Transactions.Add(transactions[i]);
+                    entities.Transactions.Add(transactions[i]);  //this line adds everything that is already filled like debit/credit and account
                     entities.SaveChanges();
                     insertedRecords++;
                 }

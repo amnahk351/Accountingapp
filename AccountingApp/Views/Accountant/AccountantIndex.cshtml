@@ -644,7 +644,12 @@
 
             var table = document.getElementById("EntryTable");
             var date = document.getElementById("Date").value;
-            var acc = document.getElementById("AccountNumber").value;
+
+            //var acc = document.getElementById("AccountNumber").value;
+            var AccountSelect = document.getElementById("AccountNumber");
+            var acc = AccountSelect.options[AccountSelect.selectedIndex].textContent;
+
+
             var deb = document.getElementById("Debit").value;
             var cre = document.getElementById("Credit").value;
 
@@ -801,9 +806,22 @@
                 var row = $(this);
                 var transaction = {};
                 transaction.DateSubmitted = row.find("TD").eq(0).html();
-                transaction.AccountNumber = row.find("TD").eq(1).html();
-                transaction.Debit = row.find("TD").eq(2).html();
-                transaction.Credit = row.find("TD").eq(3).html();
+
+
+                transaction.AccountNumber = row.find("TD").eq(1).html();  //currently gets text like cash and its padding, needs to get 101
+
+
+                var DebitFix = row.find("TD").eq(2).html();
+                var DebitFix2 = StripMoneyFormatting(DebitFix);
+                transaction.Debit = DebitFix2;
+
+                //transaction.Debit = row.find("TD").eq(2).html();
+
+                var CreditFix = row.find("TD").eq(3).html();
+                var CreditFix2 = StripMoneyFormatting(CreditFix);
+                transaction.Credit = CreditFix2;
+
+                //transaction.Credit = row.find("TD").eq(3).html();
 
                 transactions.push(transaction);
             });
