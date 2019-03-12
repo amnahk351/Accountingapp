@@ -135,10 +135,26 @@ namespace AccountingApp.Controllers
                         coa.CurrentBalance -= transactions[i].Debit.Value;
                     }
                     coaDB.SaveChanges();
-                    transactions[i].AccountNumber = GetAccountNumber(AccName);
-                    transactions[i].EntryId = mostRecentEntryID + 1;
-                    transactions[i].Status = "pending";
-                    entities.Transactions.Add(transactions[i]);  //this line adds everything that is already filled like debit/credit and account
+
+                    Transaction tran = new Transaction();
+                    tran.DateSubmitted = transactions[i].DateSubmitted;
+                    tran.AccountName = transactions[i].AccountName;
+                    tran.AccountNumber = GetAccountNumber(AccName);
+                    tran.Debit = transactions[i].Debit;
+                    tran.Credit = transactions[i].Credit;
+
+                    if (i == 1) {
+                        tran.Comment = transactions[i].Comment;
+                    }
+
+                    tran.EntryId = mostRecentEntryID + 1;
+                    tran.Status = "pending";
+                    entities.Transactions.Add(tran);
+
+                    //transactions[i].AccountNumber = GetAccountNumber(AccName);
+                    //transactions[i].EntryId = mostRecentEntryID + 1;
+                    //transactions[i].Status = "pending";
+                    //entities.Transactions.Add(transactions[i]);  //this line adds everything that is already filled like debit/credit and account
                     entities.SaveChanges();
                     insertedRecords++;
                 }
