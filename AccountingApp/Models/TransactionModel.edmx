@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="TransactionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="TransactionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Transactions">
           <Key>
             <PropertyRef Name="Id" />
@@ -16,16 +16,18 @@
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="DateSubmitted" Type="datetime" />
           <Property Name="DateModified" Type="datetime" />
-          <Property Name="EntryId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EntryId" Type="int" />
           <Property Name="FileId" Type="int" />
           <Property Name="Comment" Type="nvarchar(max)" />
           <Property Name="AccountantUser" Type="nvarchar" MaxLength="50" />
           <Property Name="ManagerUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountName" Type="nvarchar(max)" />
         </EntityType>
         <EntityContainer Name="TransactionModelStoreContainer">
           <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TransactionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -33,18 +35,19 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AccountNumber" Type="Double" />
           <Property Name="Debit" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Credit" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateSubmitted" Type="DateTime" Precision="3" />
           <Property Name="DateModified" Type="DateTime" Precision="3" />
-          <Property Name="EntryId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EntryId" Type="Int32" />
           <Property Name="FileId" Type="Int32" />
           <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AccountantUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ManagerUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityContainer Name="Database1Entities7" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Transactions" EntityType="Self.Transaction" />
@@ -58,8 +61,6 @@
           <EntitySetMapping Name="Transactions">
             <EntityTypeMapping TypeName="TransactionModel.Transaction">
               <MappingFragment StoreEntitySet="Transactions">
-                <ScalarProperty Name="ManagerUser" ColumnName="ManagerUser" />
-                <ScalarProperty Name="AccountantUser" ColumnName="AccountantUser" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
                 <ScalarProperty Name="Debit" ColumnName="Debit" />
@@ -70,6 +71,9 @@
                 <ScalarProperty Name="EntryId" ColumnName="EntryId" />
                 <ScalarProperty Name="FileId" ColumnName="FileId" />
                 <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="AccountantUser" ColumnName="AccountantUser" />
+                <ScalarProperty Name="ManagerUser" ColumnName="ManagerUser" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

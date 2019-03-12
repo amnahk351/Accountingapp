@@ -107,8 +107,13 @@ namespace AccountingApp.Controllers
                 for (int i = 1; i < transactions.Length; i++)
                 {
                     //query COA
-                    Trace.WriteLine("---------------------" + transactions[i].AccountNumber);
-                    var coa = coaDB.ChartOfAccs.Find(transactions[i].AccountNumber);
+                    Trace.WriteLine("---------------------" + transactions[i].AccountName);
+
+                    //var coa = coaDB.ChartOfAccs.Find(transactions[i].AccountName);  //needs primary key
+
+
+                    var AccName = transactions[i].AccountName;
+                    var coa = coaDB.ChartOfAccs.Where(x => x.AccountName == AccName).FirstOrDefault();
 
                     if (coa == null)
                         Trace.WriteLine("Could not find COA");
@@ -130,7 +135,8 @@ namespace AccountingApp.Controllers
                         coa.CurrentBalance -= transactions[i].Debit.Value;
                     }
                     coaDB.SaveChanges();
-                    transactions[i].EntryId = mostRecentEntryID;
+                    transactions[i].AccountNumber = GetAccountNumber(AccName);
+                    transactions[i].EntryId = mostRecentEntryID + 1;
                     transactions[i].Status = "pending";
                     entities.Transactions.Add(transactions[i]);  //this line adds everything that is already filled like debit/credit and account
                     entities.SaveChanges();

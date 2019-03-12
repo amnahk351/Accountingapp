@@ -21,10 +21,11 @@ namespace AccountingApp.Models
         public string Status { get; set; }
         public Nullable<System.DateTime> DateSubmitted { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public string EntryId { get; set; }
+        public Nullable<int> EntryId { get; set; }
         public Nullable<int> FileId { get; set; }
         public string Comment { get; set; }
         public string AccountantUser { get; set; }
         public string ManagerUser { get; set; }
+        public string AccountName { get; set; }
     }
 }

@@ -431,12 +431,12 @@
 
                 if (Dhtml != "") {
                     var fix = StripMoneyFormatting(Dhtml)
-                    sumDebit = sumDebit + parseInt(fix);
+                    sumDebit = sumDebit + parseFloat(fix);
                 }
 
                 if (Chtml != "") {
                     var fix2 = StripMoneyFormatting(Chtml)
-                    sumCredit = sumCredit + parseInt(fix2);
+                    sumCredit = sumCredit + parseFloat(fix2);
                 }               
                 
             }
@@ -808,7 +808,13 @@
                 transaction.DateSubmitted = row.find("TD").eq(0).html();
 
 
-                transaction.AccountNumber = row.find("TD").eq(1).html();  //currently gets text like cash and its padding, needs to get 101
+                var AccFix = row.find("TD").eq(1).html();
+                var AccFix1 = AccFix.replace("<span style=\"padding-left: 5%\">", "");
+                var AccFix2 = AccFix1.replace("</span>", ""); 
+                
+                transaction.AccountName = AccFix2;
+
+                //transaction.AccountName = row.find("TD").eq(1).html();  //currently gets text like cash and its padding, needs to get 101
 
 
                 var DebitFix = row.find("TD").eq(2).html();
