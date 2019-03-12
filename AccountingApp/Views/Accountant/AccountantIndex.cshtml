@@ -179,7 +179,12 @@
                                     @*<div class="form-group col-md-4">*@
 
                                     <table id="InputTable" style="width:100%">
-
+                                        <colgroup>
+                                            <col style="width: 16%">
+                                            <col style="width: 46%">
+                                            <col style="width: 19%">
+                                            <col style="width: 19%">
+                                        </colgroup>
                                         <tr>
                                             <td>Date</td>
                                             <td>Account</td>
@@ -190,8 +195,8 @@
 
                                         <tr>
 
-                                            <td><input type="text" id="Date" class="form_datetime" style="text-align:right" value="" placeholder="mm/dd/yyyy"></td>
-                                        
+                                            <td><input type="text" id="Date" onkeydown="return false;" class="form_datetime" style="text-align:right" value="" placeholder="mm/dd/yyyy"></td>
+
 
 
                                             <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
@@ -199,9 +204,9 @@
                                                     @Html.DropDownList("AccountNumber", (List<SelectListItem>)ViewBag.accountList, "Please select an account", new { @class = "form-control ", @name = "AccountNumber[]", required = "required" })
                                                 </div>
                                             </td>
-                                            <td><input type="text" id="Debit" class="form-control" style="text-align:right" onkeyup="AdjustTextboxes();" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
+                                            <td><input type="text" id="Debit" class="form-control" autocomplete="off" style="text-align:right" onkeyup="AdjustTextboxes();" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
 
-                                            <td><input type="text" id="Credit" class="form-control" style="text-align:right" onkeyup="AdjustTextboxes();" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
+                                            <td><input type="text" id="Credit" class="form-control" autocomplete="off" style="text-align:right" onkeyup="AdjustTextboxes();" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
 
                                             <td><button type="button" id="AddEntry" class="btn btn-info" onclick="AppendToList()">Add</button></td>
                                         </tr>
@@ -272,7 +277,7 @@
                                     
 
                                     <div class="col-md-12">
-                                        <table class="table table-hover small-text" id="tb">
+                                        @*<table class="table table-hover small-text" id="tb">
                                             <tr class="tr-header">
                                                 <th>Account Name</th>
                                                 <th>Debit</th>
@@ -290,7 +295,7 @@
                                                 </td>
 
                                             </tr>
-                                        </table>
+                                        </table>*@
                                         
                                                                                
                                         <div class="form-group col-md-10">
