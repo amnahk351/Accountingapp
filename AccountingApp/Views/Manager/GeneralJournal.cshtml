@@ -1,4 +1,4 @@
-﻿
+﻿@model List<AccountingApp.Models.Transaction>
 @{
     Layout = null;
 }
@@ -123,15 +123,24 @@
                 <thead>
                     <tr>
                         <th style="width:80px">Date</th>
-                        <th style="width:200px">Accounts</th>
+                        <th style="width:80px">ID</th>
+                        <th style="width:200px">Description</th>
                         <th style="width:120px">Debit</th>
                         <th style="width:120px">Credit</th>
-                        <th style="width:80px">Status</th>
-                        <th style="width:80px">Created By</th>
-
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+    {
+                <tr>
+                    <td>@Model[i].DateSubmitted</td>
+                    <td>@Model[i].EntryId</td>
+                    <td>@Model[i].AccountNumber</td>
+                    <td style="text-align: right">@Model[i].Debit</td>
+                    <td style="text-align: right">@Model[i].Credit</td>
+                </tr>
+}
+                </tbody>
             </table>
         </div>
 
