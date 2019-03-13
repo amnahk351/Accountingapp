@@ -15,6 +15,13 @@ namespace AccountingApp.Controllers
         {
             return View();
         }
+
+        public ActionResult ManagerApproval()
+        {
+            var allTransactions = db.Transactions.ToList();
+            return View(allTransactions);
+        }
+
         public ActionResult GeneralJournal()
         {
             var allTransactions = db.Transactions.ToList();
