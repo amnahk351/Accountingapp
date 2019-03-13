@@ -148,7 +148,9 @@ namespace AccountingApp.Controllers
                     }
 
                     tran.EntryId = mostRecentEntryID + 1;
-                    tran.Status = "pending";
+
+                    //tran.Status = "pending";
+                    tran.Status = transactions[i].Status;
                     entities.Transactions.Add(tran);
 
                     //transactions[i].AccountNumber = GetAccountNumber(AccName);
