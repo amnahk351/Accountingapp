@@ -10,6 +10,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    @Styles.Render("~/Scripts/bootstrap-datetimepicker.min.css")
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
@@ -35,6 +37,23 @@
         .navbar-header {
             padding-left: 70px;
         }*/
+
+        .form_datetime {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.428571429;
+            color: #555;
+            vertical-align: middle;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+
         .navbar-text {
             padding-right: 20px;
         }
@@ -119,7 +138,7 @@
 
     @using (Html.BeginForm())
     {
-        <div class="container" style="width:40%" >
+        <div class="container" style="width:40%">
 
             <div class="form-horizontal">
                 <h4>Edit User</h4>
@@ -129,7 +148,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Date_Modified, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.Date_Modified, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Date_Modified, new { htmlAttributes = new { @class = "form_datetime" } })
                         @Html.ValidationMessageFor(model => model.Date_Modified, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -161,7 +180,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.Username, new { disabled = "disabled", @readonly = "readonly" })
+                        @Html.TextBoxFor(model => model.Username, new { disabled = "disabled", @readonly = "readonly", @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -322,18 +341,37 @@
 
 </script>
 
-@*@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}*@
+
+@Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
+@Scripts.Render("~/Scripts/bootstrap.min.js")
+@Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
+
+
+<script type="text/javascript">
+    $('.form_datetime').datetimepicker({
+        format: "m/d/yyyy H:ii:ss P",
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
+</script>
 
 @*@section Scripts {
         @Scripts.Render("~/bundles/jqueryval")
     }*@
 
 @*@section Scripts {
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-}*@
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+
+@*@section Scripts {
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    }*@
 
 @*@Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")*@

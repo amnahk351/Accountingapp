@@ -4,42 +4,42 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Database1Model1.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ChartOfAcc.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ChartOfAcc">
           <Key>
             <PropertyRef Name="AccountNumber" />
           </Key>
-          <Property Name="AccountNumber" Type="float" Nullable="false" />
-          <Property Name="AccountName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="AccountType" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="NormalSide" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="OriginalBalance" Type="decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="CurrentBalance" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="AccountNumber" Type="int" Nullable="false" />
+          <Property Name="AccountName" Type="nvarchar(max)" />
+          <Property Name="AccountType" Type="nvarchar(max)" />
+          <Property Name="NormalSide" Type="nvarchar(max)" />
+          <Property Name="OriginalBalance" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CurrentBalance" Type="decimal" Precision="18" Scale="2" />
           <Property Name="AccountDescription" Type="nvarchar(max)" />
-          <Property Name="Active" Type="bit" Nullable="false" />
-          <Property Name="CreatedBy" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Active" Type="bit" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" />
         </EntityType>
-        <EntityContainer Name="Database1Model1StoreContainer">
+        <EntityContainer Name="ChartOfAccStoreContainer">
           <EntitySet Name="ChartOfAcc" EntityType="Self.ChartOfAcc" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="Database1Model1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="ChartOfAcc" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="ChartOfAcc">
           <Key>
             <PropertyRef Name="AccountNumber" />
           </Key>
-          <Property Name="AccountNumber" Type="Double" Nullable="false" />
-          <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="AccountType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="NormalSide" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="OriginalBalance" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="CurrentBalance" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="AccountNumber" Type="Int32" Nullable="false" />
+          <Property Name="AccountName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NormalSide" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalBalance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="CurrentBalance" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="AccountDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Active" Type="Boolean" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Active" Type="Boolean" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityContainer Name="Database1Entities3" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ChartOfAccs" EntityType="Self.ChartOfAcc" />
@@ -49,9 +49,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Database1Model1StoreContainer" CdmEntityContainer="Database1Entities3">
+        <EntityContainerMapping StorageEntityContainer="ChartOfAccStoreContainer" CdmEntityContainer="Database1Entities3">
           <EntitySetMapping Name="ChartOfAccs">
-            <EntityTypeMapping TypeName="Database1Model1.ChartOfAcc">
+            <EntityTypeMapping TypeName="ChartOfAcc.ChartOfAcc">
               <MappingFragment StoreEntitySet="ChartOfAcc">
                 <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
                 <ScalarProperty Name="AccountName" ColumnName="AccountName" />

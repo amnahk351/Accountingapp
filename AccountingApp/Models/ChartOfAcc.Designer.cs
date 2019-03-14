@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Accountingapp\AccountingApp\Models\ChartOfAcc.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\btwil\Documents\School\Spring 2019\Application Domain\MVC Project\Version 6\Accountingapp\AccountingApp\Models\ChartOfAcc.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

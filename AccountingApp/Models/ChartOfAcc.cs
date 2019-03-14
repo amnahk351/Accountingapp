@@ -11,27 +11,17 @@ namespace AccountingApp.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations.Schema;
+    
     public partial class ChartOfAcc
     {
-        [Required]
-        public double AccountNumber { get; set; }
-        [Required]
+        public int AccountNumber { get; set; }
         public string AccountName { get; set; }
-        [Required]
         public string AccountType { get; set; }
-        [Required]
         public string NormalSide { get; set; }
-        [Required]
-        public decimal OriginalBalance { get; set; }
-        [Required]
-        public decimal CurrentBalance { get; set; }
+        public Nullable<decimal> OriginalBalance { get; set; }
+        public Nullable<decimal> CurrentBalance { get; set; }
         public string AccountDescription { get; set; }
-        public bool Active { get; set; }
-        [Required]
-
+        public Nullable<bool> Active { get; set; }
         public string CreatedBy { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AccountingApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,6 +9,7 @@ namespace AccountingApp.Controllers
 {
     public class ManagerController : Controller
     {
+        private Database1Entities7 db = new Database1Entities7();
         // GET: Manager
         public ActionResult ManagerIndex()
         {
@@ -15,7 +17,8 @@ namespace AccountingApp.Controllers
         }
         public ActionResult GeneralJournal()
         {
-            return View();
+            var allTransactions = db.Transactions.ToList();
+            return View(allTransactions);
         }
     }
 }
