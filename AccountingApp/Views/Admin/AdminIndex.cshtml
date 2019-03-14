@@ -1,7 +1,8 @@
 ﻿
 @{
     ViewBag.Title = "AdminIndex";
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    //Layout = null;
 }
 
 
@@ -59,16 +60,16 @@
 
 
 
-        body {
-            padding-top: 0px; /*Do not delete this line, it's an override*/
-            /*margin: 0;*/
-            /*font-family: Arial;*/
+        /*body {
+            padding-top: 0px; Do not delete this line, it's an override
+            margin: 0;
+            font-family: Arial;
             display: block;
             margin: 0px;
-            /*margin-top: 0px;
+            margin-top: 0px;
             margin-right: 0px;
             margin-bottom: 0px;
-            margin-left: 0px;*/
+            margin-left: 0px;
         }
 
 
@@ -76,26 +77,26 @@
             overflow: hidden;
             background-color: silver;
             font-family: inherit;
-            /*width: 100%;*/
-            /*position: absolute;*/
-            /*display: inline-block;*/
-            /*height: 80px;*/
+            width: 100%;
+            position: absolute;
+            display: inline-block;
+            height: 80px;
         }
 
             .mynav_navbar a {
-                /*float: left;*/
+                float: left;
                 display: inline-block;
                 font-size: 23px;
                 color: black;
                 text-align: center;
-                padding: 24px 25px; /*crucial for horizontal spacing*/
-                /*margin: 16px;*/
+                padding: 24px 25px; crucial for horizontal spacing
+                margin: 16px;
                 text-decoration: none;
             }
 
-            /*.mynav_navbar .icon {
+            .mynav_navbar .icon {
                 display: none;
-            }*/
+            }
 
         .mynav_dropdown {
             float: left;
@@ -107,7 +108,7 @@
                 border: none;
                 outline: none;
                 color: black;
-                padding: 24px 25px; /*crucial for horizontal spacing*/
+                padding: 24px 25px; crucial for horizontal spacing
                 background-color: inherit;
                 font-family: inherit;
                 margin: 0;
@@ -144,7 +145,7 @@
 
         .mynav_dropdown:hover .mynav_dropdown-content {
             display: block;
-        }
+        }*/
 
         /*.footer {
             position: absolute;
@@ -227,7 +228,7 @@
         </div>*@
 
 
-    <nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver; padding-top: 0px; padding-bottom: 0px">
+    @*<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver; padding-top: 0px; padding-bottom: 0px">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -264,7 +265,7 @@
                     <div class="mynav_dropdown">
                         <button class="mynav_dropbtn">
                             Statistics
-                            @*<i class="fa fa-caret-down"></i>*@
+                            <i class="fa fa-caret-down"></i>
                         </button>
                         <div class="mynav_dropdown-content">
                             <a href="#">User Statistics</a>
@@ -272,92 +273,92 @@
                         </div>
                     </div>
                     <a href="/Home/EventLog">Event Logs</a>
+                </div>*@
+
+
+
+
+
+
+
+    @*<div class="navbar-nav" style="padding-left: 800px;">         temporary solution perhaps
+            <a href="#">Right</a>
+        </div>*@
+
+
+    @*<div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto" href="#">Navbar 2</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>*@
+    @*<ul class="mynav_navbar justify-content-end">
+            <li class="navbar-brand mx-auto" href="#">Navbar 2</li>
+        </ul>*@
+
+
+    @*<div class="navbar-nav navbar-right">                   what i wish would work but doesnt
+            <i id="LoggedName" style="cursor: auto; color: black; font-size: 23px; ">Welcome, Admin</i>
+
+            <div class="mynav_dropdown">
+                <button class="mynav_dropbtn">
+                    Account
+                    <i class="glyphicon glyphicon-user" style="padding-left: 7px;"></i>
+                </button>
+                <div class="mynav_dropdown-content" style="padding-left: 800px;">
+                    <a asp-area="" asp-controller="View Profile" asp-action="View Profile">View Profile</a>
+                    <a asp-area="" asp-controller="Settings" asp-action="Settings">Settings</a>
+                    <a asp-area="" asp-controller="Sign Out" asp-action="Sign Out">Sign Out</a>
                 </div>
-
-
-
-
-
-
-
-                @*<div class="navbar-nav" style="padding-left: 800px;">         temporary solution perhaps
-                    <a href="#">Right</a>
-                </div>*@
-
-
-                @*<div class="mx-auto order-0">
-                    <a class="navbar-brand mx-auto" href="#">Navbar 2</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>*@
-                @*<ul class="mynav_navbar justify-content-end">
-                    <li class="navbar-brand mx-auto" href="#">Navbar 2</li>
-                </ul>*@
-
-
-                @*<div class="navbar-nav navbar-right">                   what i wish would work but doesnt
-                    <i id="LoggedName" style="cursor: auto; color: black; font-size: 23px; ">Welcome, Admin</i>
-
-                    <div class="mynav_dropdown">
-                        <button class="mynav_dropbtn">
-                            Account
-                            <i class="glyphicon glyphicon-user" style="padding-left: 7px;"></i>
-                        </button>
-                        <div class="mynav_dropdown-content" style="padding-left: 800px;">
-                            <a asp-area="" asp-controller="View Profile" asp-action="View Profile">View Profile</a>
-                            <a asp-area="" asp-controller="Settings" asp-action="Settings">Settings</a>
-                            <a asp-area="" asp-controller="Sign Out" asp-action="Sign Out">Sign Out</a>
-                        </div>
-                    </div>
-                </div>*@
-
-                @*a temporary solution but isn't efficient and doesn't really work on other screen sizes*@
-                @*<i id="LoggedName" style="cursor: auto; color: black; font-size: 23px; padding-left: 600px">Welcome, Admin</i>
-
-                <div class="mynav_dropdown">
-                    <button class="mynav_dropbtn">
-                        Account
-                        <i class="glyphicon glyphicon-user" style="padding-left: 7px;"></i>
-                    </button>
-                    <div class="mynav_dropdown-content" style="padding-left: 800px;">
-                        <a asp-area="" asp-controller="View Profile" asp-action="View Profile">View Profile</a>
-                        <a asp-area="" asp-controller="Settings" asp-action="Settings">Settings</a>
-                        <a asp-area="" asp-controller="Sign Out" asp-action="Sign Out">Sign Out</a>
-                    </div>
-                </div>*@
-
-
-                @*<i id="LoggedName" class="navbar-text" style="cursor: auto; padding-left: 600px; color: black; font-size: 23px; " >Welcome, Admin</i>*@
-                @*<a asp-area="" asp-controller="Sign Out" asp-action="Sign Out" style="padding-left: 30px;" href="/Account/Login">Sign Out</a>*@
-
-
-
-                @*<ul class="navbar-nav mr-auto mt-2 mt-lg-0" style="list-style-type: none;">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-
-                </ul>*@
-                @*<form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>*@
-                @*<a class="nav navbar-nav navbar-right">
-                    <span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span>
-                    @*<br />
-
-                        <a class="nav-link" href="/Account/Login">Sign Out</a>
-
-                </a>*@
-
-
             </div>
-        </div>
-        @*<div class="collapse navbar-collapse" id="navbarTogglerDemo01" style="float: right;">
+        </div>*@
+
+    @*a temporary solution but isn't efficient and doesn't really work on other screen sizes*@
+    @*<i id="LoggedName" style="cursor: auto; color: black; font-size: 23px; padding-left: 600px">Welcome, Admin</i>
+
+        <div class="mynav_dropdown">
+            <button class="mynav_dropbtn">
+                Account
+                <i class="glyphicon glyphicon-user" style="padding-left: 7px;"></i>
+            </button>
+            <div class="mynav_dropdown-content" style="padding-left: 800px;">
+                <a asp-area="" asp-controller="View Profile" asp-action="View Profile">View Profile</a>
+                <a asp-area="" asp-controller="Settings" asp-action="Settings">Settings</a>
+                <a asp-area="" asp-controller="Sign Out" asp-action="Sign Out">Sign Out</a>
+            </div>
+        </div>*@
+
+
+    @*<i id="LoggedName" class="navbar-text" style="cursor: auto; padding-left: 600px; color: black; font-size: 23px; " >Welcome, Admin</i>*@
+    @*<a asp-area="" asp-controller="Sign Out" asp-action="Sign Out" style="padding-left: 30px;" href="/Account/Login">Sign Out</a>*@
+
+
+
+    @*<ul class="navbar-nav mr-auto mt-2 mt-lg-0" style="list-style-type: none;">
+            <li class="nav-item active">
+                <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+
+        </ul>*@
+    @*<form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>*@
+    @*<a class="nav navbar-nav navbar-right">
+            <span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span>
+            @*<br />
+
+                <a class="nav-link" href="/Account/Login">Sign Out</a>
+
+        </a>*@
+
+
+    @*</div>
+        </div>*@
+    @*<div class="collapse navbar-collapse" id="navbarTogglerDemo01" style="float: right;">
             <ul class="navbar-nav navbar-right ">
                 <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
                 <br />
@@ -365,8 +366,8 @@
                     <a class="nav-link" href="/Account/Login">Sign Out</a>
                 </li>
             </ul>
-        </div>*@
-    </nav>
+        </div>
+    </nav>*@
     @*<div class="row">
             <div class="col-sm-6">
                 <div class="card">
@@ -393,7 +394,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class=" col-4-lg ml-3">
-                <div class="card shadow" style="width: 16rem; height: 53%;">
+                <div class="card shadow" style="width: 16rem; height: 85%;">
                     <div class="inner">
                         <img src="~/img/user-avatars.jpg" class="card-img-top" alt="...">
 
@@ -407,7 +408,7 @@
             </div>
 
             <div class=" col-4-lg ml-3">
-                <div class="card shadow" style="width: 16rem; height: 53%;">
+                <div class="card shadow" style="width: 16rem; height: 85%;">
                     <div class="inner">
                         <img src="~/img/chartofacc.jpg" class="card-img-top" alt="...">
 
@@ -415,12 +416,12 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Chart Of Accounts</h5>
                         <p class="card-text">Click below to see/edit the Chart of Accounts.</p>
-                        <a href="/Admin/ChartOfAccounts" class="btn btn-primary" style="margin-top: 60px;">Chart Of Accounts</a>
+                        <a href="/Admin/ChartOfAccounts" class="btn btn-primary" @*style="margin-top: 60px;"*@>Chart Of Accounts</a>
                     </div>
                 </div>
             </div>
             <div class=" col-4-lg ml-3">
-                <div class="card shadow" style="width: 16rem; height: 53%;">
+                <div class="card shadow" style="width: 16rem; height: 85%;">
                     <div class="inner">
                         <img src="~/img/user-log.jpg" class="card-img-top" alt="...">
 
@@ -433,7 +434,7 @@
                 </div>
             </div>
             <div class=" col-4-lg ml-3">
-                <div class="card shadow" style="width: 16rem; height: 53%;">
+                <div class="card shadow" style="width: 16rem; height: 85%;">
                     <div class="inner">
                         <img src="~/img/dashboard.png" class="card-img-top" alt="...">
 
@@ -446,8 +447,8 @@
                 </div>
             </div>
         </div>
-        <hr />
-        <p> &copy; @DateTime.Now.Year - Objective Accounting</p>
+        @*<hr />
+            <p> &copy; @DateTime.Now.Year - Objective Accounting</p>*@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -460,11 +461,11 @@
    
 </footer>
 
-<script type="text/javascript">
+@*<script type="text/javascript">
 
     window.onload = function () {
         var username = '@Session["FirstNameofUser"]';
         document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
     };
 
-</script>
+</script>*@

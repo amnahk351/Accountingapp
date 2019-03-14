@@ -6,6 +6,8 @@
     <title>@ViewBag.Title - Objective Accounting</title>
     @*@Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    @*link above is for user icon*@
     <style>
 
         body {
@@ -15,9 +17,13 @@
         }
 
         .navbar {
-            /*overflow: hidden;*/       /*important to keep this hidden or dropdown will be within/behind navbar*/
+            /*overflow: hidden;*/ /*important to keep this hidden or dropdown will be within/behind navbar*/
             background-color: silver;
             font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            /*padding: 14px 16px;*/
+            /*padding: 0rem 1rem;*/
+            /*padding: 0px;*/
         }
 
             .navbar a {
@@ -25,9 +31,10 @@
                 display: inline-block;
                 font-size: 20px;
                 color: black;
-                text-align: center;
-                /*padding: 14px 16px;*/
-                padding: 24px 25px; /*crucial for horizontal spacing*/
+                /*text-align: center;*/
+                /*padding: 0rem 1rem;*/
+                padding: 14px 16px;
+                /*padding: 24px 25px; crucial for horizontal spacing*/
                 text-decoration: none;
             }
 
@@ -43,8 +50,8 @@
                 border: none;
                 outline: none;
                 color: black;
-                /*padding: 14px 16px;*/
-                padding: 24px 25px; /*crucial for horizontal spacing*/
+                padding: 14px 16px;
+                /*padding: 24px 25px; crucial for horizontal spacing*/
                 background-color: inherit;
                 font-family: inherit;
                 margin: 0;
@@ -53,7 +60,8 @@
 
             .navbar a:hover, .nav_dropdown:hover .nav_dropbtn {
                 background-color: #0087ff; /*hover color for each heading*/
-                color: white
+                color: black;
+                cursor: pointer;
             }
 
 
@@ -76,107 +84,78 @@
             }
 
                 .nav_dropdown-content a:hover {
+                    text-decoration: none;
                     background-color: #ddd;
+                    /*color: white;*/
                 }
+
         .nav_dropdown:hover .nav_dropdown-content {
             display: block;
         }
-
-        </style>
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-fixed-top" style="padding: 0rem 1rem">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01"> @*padding inside of here will go around navbar*@
             @*< class="navbar-brand" href="#">*@
-                <img src="~/img/Accounting Logo.PNG" width="150" height="40" />
+            <img src="~/img/Accounting Logo.PNG" width="150" height="40" style="margin-right: 15px; margin-left: 10px;"/>
             @*</>*@
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li><a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav_dropdown">
-                        <a class="nav_dropbtn">Dropdown</a>
-                        <div class="nav_dropdown-content">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">asdfawefasdfawefasdf</a>
-                        </div>
-                    </li>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li><a class="nav-link" href="/Admin/AdminIndex" style="padding-left: 16px; padding-right: 16px">Home @*<span class="sr-only">(current)</span>*@</a></li>
+                <li class="nav_dropdown">
+                    <a class="nav_dropbtn">Users</a>
+                    <div class="nav_dropdown-content">
+                        <a href="/Home/ShowUserData">View Users</a>
+                        <a href="/Home/NewUser">Create New User</a>
+                    </div>
+                </li>
+                @*<li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>*@
+                <li class="nav_dropdown">
+                    <a class="nav_dropbtn">Chart of Accounts</a>
+                    <div class="nav_dropdown-content">
+                        <a href="/Admin/ChartOfAccounts">View Chart of Accounts</a>
+                        <a href="/Admin/NewAccount">Create New Account</a>
+                    </div>
+                </li>
+                <li class="nav_dropdown">
+                    <a class="nav_dropbtn">Statistics</a>
+                    <div class="nav_dropdown-content">
+                        <a href="#">User Statistics</a>
+                        <a href="#">System Statistics</a>
+                    </div>
+                </li>
+                <li><a class="nav-link" href="/Home/EventLog" style="padding-left: 16px; padding-right: 16px">Event Log</a></li>
 
-                    @*<li class="nav_dropdown">
-                        <li class="nav_dropbtn">
-                            Statistics
-                            <i class="fa fa-caret-down"></i>
-                        </li>
-                        <ul class="nav_dropdown-content">
-                            <li><a href="#">User Statistics</a></li>
-                            <li><a href="#">System Statistics</a></li>
-                        </ul>
-                    </li>*@
+                @*<li><a class="nav-item" href="#">Test</a></li> nav-item makes this display with an underline when hovered over*@
 
-                    @*<li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Separated link</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">One more separated link</a></li>
             </ul>
-        </li>*@
 
-                    @*<li class="nav_dropdown" style="z-index: 5">
-            <a class="nav_dropbtn">Chart of Accounts <i class="fa fa-caret-down"></i></a>
-            <div class="nav_dropdown-content" style="z-index: 5">
-                <a asp-area="" asp-controller="View Chart of Accounts" asp-action="View Chart of Accounts" href="/Admin/ChartOfAccounts">View Chart of Accounts</a>
-                <a asp-area="" asp-controller="Create New Account" asp-action="Create New Account" href="/Admin/NewAccount">Create New Account</a>
-                <a href="#">Link 1</a>
-                <a href="#">Link 2</a>
-                <a href="#">Link 3</a>
-            </div>
-        </li>*@
-
-                    @*<div class="nav_dropdown" style="z-index: 1">
-            <button class="nav_dropbtn">
-                Chart of Accounts
-                <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="nav_dropdown-content" style="z-index: 1">
-                <a asp-area="" asp-controller="View Chart of Accounts" asp-action="View Chart of Accounts" href="/Admin/ChartOfAccounts">View Chart of Accounts</a>
-                <a asp-area="" asp-controller="Create New Account" asp-action="Create New Account" href="/Admin/NewAccount">Create New Account</a>
-                <a href="#">Link 1</a>
-                <a href="#">Link 2</a>
-                <a href="#">Link 3</a>
-            </div>
-        </div>*@
-                    @*<li><a class="nav-item" href="#">Test</a></li> nav-item makes this display with an underline when hovered over*@
-
-                </ul>
             @*<form class="form-inline my-2 my-lg-0">       this is a search bar on the navbar, which we probably don't need
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>*@
-                <ul class="navbar-nav navbar-right">
-                    @*<li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
-        <br />
-        <li class="nav-item">
-            <a class="nav-link" href="/Account/Login">Sign Out</a>
-        </li>*@
-                    <li class="nav_dropdown">
-                        <a class="nav_dropbtn">Dropdown</a>
-                        <div class="nav_dropdown-content" style="left:auto; right:0; margin-right:16px;">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">asdfawefasdfawefasdf</a>
-                        </div>
-                    </li>
-                </ul>
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>*@
+
+            <ul class="navbar-nav navbar-right">
+                @*<li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user" style="font-size: 25px; padding-top: 16px"></span>Welcome, Admin</span></li>*@
+                <i id="LoggedName" class="nav-item" style="font-size: 20px; padding-top: 14px">Welcome, Admin</i>
+                @*<br />*@
+                @*<li class="nav-item">
+                        <a class="nav-link" href="/Account/Login">Sign Out</a>
+                    </li>*@
+                <li class="nav_dropdown">
+                    <a class="nav_dropbtn">Account <i class="fas fa-user"></i></a>
+                    <div class="nav_dropdown-content" style="left:auto; right:0; margin-right:16px;">
+                        <a href="#">View Profile</a>
+                        <a href="#">Settings</a>
+                        <a href="/Account/Login">Sign Out</a>
+                    </div>
+                </li>
+            </ul>
 
         </div>
     </nav>
@@ -184,10 +163,21 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Objective Accounting
-            Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer</p>
+            <p>
+                &copy; @DateTime.Now.Year - Objective Accounting
+                Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
+            </p>
         </footer>
     </div>
+
+    <script type="text/javascript">
+
+    window.onload = function () {
+        var username = '@Session["FirstNameofUser"]';
+        document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
+    };
+
+    </script>
 
     @*@Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")*@
