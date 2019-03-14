@@ -180,7 +180,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.Username, new { disabled = "disabled", @readonly = "readonly" })
+                        @Html.TextBoxFor(model => model.Username, new { disabled = "disabled", @readonly = "readonly", @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
                     </div>
                 </div>

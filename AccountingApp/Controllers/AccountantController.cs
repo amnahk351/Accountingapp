@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.IO;
 
 namespace AccountingApp.Controllers
 {
@@ -107,7 +108,7 @@ namespace AccountingApp.Controllers
                 for (int i = 1; i < transactions.Length; i++)
                 {
                     //query COA
-                    Trace.WriteLine("---------------------" + transactions[i].AccountName);
+                    //Trace.WriteLine("---------------------" + transactions[i].AccountName);
 
                     //var coa = coaDB.ChartOfAccs.Find(transactions[i].AccountName);  //needs primary key
 
@@ -179,6 +180,32 @@ namespace AccountingApp.Controllers
             }
         }
 
-               
+
+        [HttpPost]
+        public ActionResult UploadFiles()
+        {
+            Database1Entities7 entities = new Database1Entities7();
+            var mostRecentEntryID = entities.Transactions.ToList().Select(eID => eID.EntryId).LastOrDefault() + 1;  //add a 1 to match folder with EntryId
+            string foldername = mostRecentEntryID.ToString();
+
+            string folder = Server.MapPath(string.Format("~/User_Uploads/{0}/", foldername));
+
+            if (!Directory.Exists(folder)) {
+                Directory.CreateDirectory(folder);
+            }
+
+            string location = "~/User_Uploads/" + foldername + "/";
+
+            string path = Server.MapPath(location);
+            HttpFileCollectionBase files = Request.Files;
+            for (int i = 0; i < files.Count; i++)
+            {
+                HttpPostedFileBase file = files[i];
+                file.SaveAs(path + file.FileName);
+            }
+            return Json(files.Count + " Files Uploaded!");
+        }
+
+
     }
 }
