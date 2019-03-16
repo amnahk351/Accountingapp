@@ -199,6 +199,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateUser.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entries.cs" />
+    <Compile Include="Models\Entry.cs" />
     <Compile Include="Models\EventLog.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
