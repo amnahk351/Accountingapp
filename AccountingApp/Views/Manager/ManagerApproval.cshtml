@@ -122,6 +122,7 @@
                                 <th>Debit</th>
                                 <th>Credit</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -133,12 +134,16 @@
                             <td style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
                             <td style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
                             <td>@Model.entries[i].status</td>
-                            @*<td>
-
-        <a href="@Url.Action("EditAccount", new { id = Model[i].Id})">
-            Edit
-        </a>
-    </td>*@
+                            <td>
+                                @*<button id="ApproveButton[]" name="ApproveButton[]" class="btn btn-success">Approve</button>*@
+                                <a href="@Url.Action("ApproveEntry", new { id = Model.entries[i].entryID})">
+                                    Approve
+                                </a>
+                                @*<button id="DisapproveButton[]" name="DisapproveButton[]" class="btn btn-danger">Disapprove</button>*@
+                                <a href="@Url.Action("DisapproveEntry", new { id = Model.entries[i].entryID})">
+                                    Disapprove
+                                </a>
+                            </td>
                             </tr>
                             }
                         </tbody>
@@ -157,6 +162,10 @@
         $(document).ready(function () {
             $('#PendingTransactionsTable').DataTable();
         });
+    </script>
+
+    <script>
+        
     </script>
 
 </body>

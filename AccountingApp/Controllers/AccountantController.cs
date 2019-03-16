@@ -101,7 +101,7 @@ namespace AccountingApp.Controllers
 
                 var mostRecentEntryID = entities.Transactions.ToList().Select(eID => eID.EntryId).LastOrDefault();
 
-                var coaDB = new Database1Entities3();
+                
                 int insertedRecords = 0;
 
                 for (int i = 1; i < transactions.Length; i++)
@@ -113,28 +113,9 @@ namespace AccountingApp.Controllers
 
 
                     var AccName = transactions[i].AccountName;
-                    var coa = coaDB.ChartOfAccs.Where(x => x.AccountName == AccName).FirstOrDefault();
+                    
 
-                    if (coa == null)
-                        Trace.WriteLine("Could not find COA");
-
-                    if (transactions[i].Debit == null)
-                        transactions[i].Debit = 0;
-
-                    if (transactions[i].Credit == null)
-                        transactions[i].Credit = 0;
-
-                    if (coa.NormalSide.ToLower() == "debit")
-                    {
-                        coa.CurrentBalance += transactions[i].Debit.Value;
-                        coa.CurrentBalance -= transactions[i].Credit.Value;
-                    }
-                    else //normal side is credit
-                    {
-                        coa.CurrentBalance += transactions[i].Credit.Value;
-                        coa.CurrentBalance -= transactions[i].Debit.Value;
-                    }
-                    coaDB.SaveChanges();
+                    
 
                     Transaction tran = new Transaction();
                     tran.DateSubmitted = transactions[i].DateSubmitted;

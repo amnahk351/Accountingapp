@@ -14,6 +14,14 @@ namespace AccountingApp.Models
         public List<Decimal> debits { get; set; }
         public List<Decimal> credits { get; set; }
 
+        public Entry()
+        {
+            transactions = new List<Transaction>();
+            accountNames = new List<String>();
+            debits = new List<Decimal>();
+            credits = new List<Decimal>();
+        }
+
         public Entry(int entryID, string status)
         {
             this.entryID = entryID;
