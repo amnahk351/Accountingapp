@@ -400,6 +400,7 @@
     <Content Include="Views\Manager\GeneralJournal.cshtml" />
     <Content Include="Views\Manager\ManagerIndex.cshtml" />
     <Content Include="Views\Manager\ManagerApproval.cshtml" />
+    <Content Include="Views\Manager\DisapproveEntry.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Error\" />

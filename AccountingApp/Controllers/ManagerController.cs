@@ -96,10 +96,20 @@ namespace AccountingApp.Controllers
             Response.Write("<script language=javascript>alert('journal updated'); window.location.href = '../ManagerApproval';</script>");
         }
 
-        //public ActionResult DisapproveEntry(Entry entry)
-        //{
+        public ActionResult DisapproveEntry(int? id)
+        {
+            var allTransactionsWithEntryID = db.Transactions.Where(t => t.EntryId == id);
 
-        //}
+            foreach (Transaction t in allTransactionsWithEntryID)
+            {
+                t.Status = "disapproved";
+            }
+            db.SaveChanges();
+
+            return View();
+        }
+
+        //public ActionResult DisapproveEntry(List<Transaction>)
 
         public ActionResult GeneralJournal()
         {
