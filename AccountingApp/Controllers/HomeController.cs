@@ -30,7 +30,6 @@ namespace AccountingApp.Controllers
         public ActionResult NewUser()
         {
             NewUserModel user = new NewUserModel();
-            //CreateUser user = new CreateUser();
             user.Date_Created = DateTime.Now;
             return View(user);
         }
@@ -157,6 +156,7 @@ namespace AccountingApp.Controllers
             }
 
             EditUserModel EditView = new EditUserModel();
+            EditView.Date_Modified = DateTime.Now;
             EditView.FirstName = editUser[0].FirstName;
             EditView.LastName = editUser[0].LastName;
             EditView.Email = editUser[0].Email;
