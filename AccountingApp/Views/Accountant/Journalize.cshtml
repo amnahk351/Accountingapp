@@ -154,7 +154,7 @@
                 </div>
             </div>*@
 
-        <div class="container shadow" style="width:70%">
+        <div class="container shadow" style="width:80%">
 
             <h4>Journalize</h4>
 
@@ -258,8 +258,8 @@
                 </tbody>
 
             </table>
-
-            <table style="table-layout: fixed; width: 98%; text-align: right">
+            
+            <table style="table-layout: fixed; width: 98%; text-align: right; margin-top: 8px">
                 <colgroup>
                     <col style="width: 58%">
                     <col style="width: 19%">
@@ -280,24 +280,24 @@
 
             <div class="col-md-12">
                 @*<table class="table table-hover small-text" id="tb">
-                        <tr class="tr-header">
-                            <th>Account Name</th>
-                            <th>Debit</th>
-                            <th>Credit</th>
-                            <th>
-                                <a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person"><i class="fas fa-plus"></i>
+                <tr class="tr-header">
+                    <th>Account Name</th>
+                    <th>Debit</th>
+                    <th>Credit</th>
+                    <th>
+                        <a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person"><i class="fas fa-plus"></i>
 
-                            </th>
-                        </tr>
-                        <tr>
+                    </th>
+                </tr>
+                <tr>
 
 
-                            <td>
-                                <a href='javascript:void(0);' class='remove'><i class="fas fa-times"></i></a>
-                            </td>
+                    <td>
+                        <a href='javascript:void(0);' class='remove'><i class="fas fa-times"></i></a>
+                    </td>
 
-                        </tr>
-                    </table>*@
+                </tr>
+            </table>*@
 
 
                 <div class="form-group col-md-10">
@@ -559,6 +559,17 @@
         //Delete the Table row using it's Index.
         table.deleteRow(row[0].rowIndex);
 
+        var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+        //alert("rows: " + rowsAmount);
+        if (rowsAmount > 1) {
+            //There is data in the table
+            //Shift the date
+            var table = document.getElementById("EntryTable");
+            var date = document.getElementById("Date").value;
+            table.rows[2].cells[0].innerHTML = date;
+            //alert("test");
+        }
+
         AdjustTotals();
         SortAccountList();
     };
@@ -635,7 +646,6 @@
 
 <script>
     function AppendToList() {
-
 
         if ($("#Date").val() == "") {
             $.ajax({
@@ -799,7 +809,8 @@
             cell1.innerHTML = date;
         }
         else {
-            cell1.innerHTML = "";
+            //cell1.innerHTML = "";
+            table.rows[2].cells[0].innerHTML = date;
         }
         
 
