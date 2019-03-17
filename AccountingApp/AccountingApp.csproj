@@ -401,6 +401,7 @@
     <Content Include="Views\Manager\ManagerIndex.cshtml" />
     <Content Include="Views\Manager\ManagerApproval.cshtml" />
     <Content Include="Views\Manager\DisapproveEntry.cshtml" />
+    <Content Include="Views\Manager\TrialBalance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Error\" />

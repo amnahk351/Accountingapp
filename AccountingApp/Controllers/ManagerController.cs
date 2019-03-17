@@ -116,5 +116,11 @@ namespace AccountingApp.Controllers
             var allTransactions = db.Transactions.ToList();
             return View(allTransactions);
         }
+
+        public ActionResult TrialBalance()
+        {
+            var coa = coaDB.ChartOfAccs.ToList();
+            return View(coa);
+        }
     }
 }
