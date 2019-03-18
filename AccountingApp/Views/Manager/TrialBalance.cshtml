@@ -120,64 +120,67 @@
                     </h4>
 
                     <table id="trialTable" class="table-striped" style="width:500px;">
-                        
-                            <tr class="titleRow">
-                                <th></th>
-                                <th align="right">Debit</th>
-                                <th align="right">Credit</th>
-                            </tr>
-                        
-                        
-                            @for (int i = 0; i < Model.Count; i++)
-                            {
-                                <tr>
-                                    <td>@Model[i].AccountName</td>
-                                    @if (Model[i].NormalSide.ToLower() == "debit")
-                                    {
-                                        <td class="rowData" align="right">@Model[i].OriginalBalance</td>
-                                        <td align="right"></td>
-                                    }
-                                    else
-                                    {
-                                        <td align="right"></td>
-                                        <td class="rowData" align="right">@Model[i].OriginalBalance</td>
-                                    }
 
-                                </tr>
-                            }
-                            <tr class="totalColumn">
-                                <td align="right">Total:</td>
-                                <td class="totalCol" align="right"></td>
-                                <td class="totalCol" align="right"></td>
+                        <tr class="titleRow">
+                            <th></th>
+                            <th align="right">Debit</th>
+                            <th align="right">Credit</th>
+                        </tr>
+
+
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <tr>
+                                <td>@Model[i].AccountName</td>
+                                @if (Model[i].NormalSide.ToLower() == "debit")
+                                {
+                                    <td class="rowData" align="right">@Model[i].OriginalBalance</td>
+                                    <td class="rowData" align="right">0</td>
+                                }
+                                else
+                                {
+                                    <td class="rowData" align="right">0</td>
+                                    <td class="rowData" align="right">@Model[i].OriginalBalance</td>
+                                }
                             </tr>
-                        
+                        }
+                        <tr class="totalRow">
+                            <td align="right">Total:</td>
+                            <td class="total" align="right"></td>
+                            <td class="total" align="right"></td>
+                        </tr>
+
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
     <script>
         var totals = [0, 0];
         $(document).ready(function () {
-
-            var $dataRows = $("#trialTable tr:not('.totalColumn, .titleRow')");
+           
+            var $dataRows = $("#trialTable tr:not('.totalRow, .titleRow')");
 
             $dataRows.each(function () {
                 $(this).find('.rowData').each(function (i) {
-                    totals[i] += parseFloat($(this).html());
+                    
+                        totals[i] += parseFloat($(this).html());
+                    
                 });
             });
-            $("#trialTable td.totalCol").each(function (i) {
+            $("#trialTable td.total").each(function (i) {
                 $(this).html(totals[i]);
             });
 
         });
     </script>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
 
 </body>
 
