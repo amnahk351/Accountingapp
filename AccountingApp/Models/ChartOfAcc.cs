@@ -21,7 +21,7 @@ namespace AccountingApp.Models
         public Nullable<decimal> OriginalBalance { get; set; }
         public Nullable<decimal> CurrentBalance { get; set; }
         public string AccountDescription { get; set; }
-        public Nullable<bool> Active { get; set; }
+        public bool Active { get; set; }
         public string CreatedBy { get; set; }
     }
 }
