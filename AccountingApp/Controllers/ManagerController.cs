@@ -38,7 +38,7 @@ namespace AccountingApp.Controllers
                 List<Transaction> allTransactionsWithEntryID;
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    allTransactionsWithEntryID = db.Query<Transaction>($"Select * From dbo.Transactions Where EntryID = @EntryID", new { EntryID = id }).ToList();
+                    allTransactionsWithEntryID = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryID = @EntryID", new { EntryID = id }).ToList();
                 }
 
                 foreach (Transaction t in allTransactionsWithEntryID)
@@ -74,7 +74,7 @@ namespace AccountingApp.Controllers
 
                     using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                     {
-                        string sql = $"UPDATE dbo.Transactions SET Status = @status WHERE EntryID = @entryID";
+                        string sql = $"UPDATE dbo.TransactionTable SET Status = @status WHERE EntryID = @entryID";
                         db.Execute(sql, new { status = t.Status, entryID = t.EntryId });
                     }
 
@@ -96,7 +96,7 @@ namespace AccountingApp.Controllers
             List<Transaction> allTransactionsWithEntryID;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                allTransactionsWithEntryID = db.Query<Transaction>($"Select * From dbo.Transactions Where EntryID = @EntryID", new { EntryID = id }).ToList();
+                allTransactionsWithEntryID = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryID = @EntryID", new { EntryID = id }).ToList();
             }
 
             foreach (Transaction t in allTransactionsWithEntryID)
@@ -105,7 +105,7 @@ namespace AccountingApp.Controllers
 
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    string sql = $"UPDATE dbo.Transactions SET Status = @status WHERE EntryID = @entryID";
+                    string sql = $"UPDATE dbo.TransactionTable SET Status = @status WHERE EntryID = @entryID";
                     db.Execute(sql, new { status = t.Status, entryID = t.EntryId });
                 }
             }
@@ -122,7 +122,7 @@ namespace AccountingApp.Controllers
             List<Transaction> allTransactions;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                allTransactions = db.Query<Transaction>($"Select * From dbo.Transactions").ToList();
+                allTransactions = db.Query<Transaction>($"Select * From dbo.TransactionTable").ToList();
             }
             return View(allTransactions);
         }
@@ -145,8 +145,9 @@ namespace AccountingApp.Controllers
             List<Transaction> allPendingTransactions;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                allPendingTransactions = db.Query<Transaction>($"Select * From dbo.Transactions Where Status = @status", new { status = s }).ToList();
+                allPendingTransactions = db.Query<Transaction>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
             }
+
 
             Entries entries = new Entries();
             List<int> ids = new List<int>();
@@ -166,8 +167,8 @@ namespace AccountingApp.Controllers
                     if (t2.EntryId == id)
                     {
                         e.accountNames.Add(t2.AccountName);
-                        e.debits.Add(t2.Debit.Value);
-                        e.credits.Add(t2.Credit.Value);
+                        e.debits.Add(t2.Debit.GetValueOrDefault());
+                        e.credits.Add(t2.Credit.GetValueOrDefault());
                     }
                 }
                 entries.entries.Add(e);
