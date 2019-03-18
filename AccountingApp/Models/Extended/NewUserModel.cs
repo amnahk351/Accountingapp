@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
 using AccountingApp.DBAccess;
+using System.ComponentModel.DataAnnotations;
 
 namespace AccountingApp.Models
 {
@@ -25,15 +26,16 @@ namespace AccountingApp.Models
         public string Email { get; set; }
         
         public string Username { get; set; }
-       
+
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-        
+
+        [DataType(DataType.Password)]
         [DisplayName("Confirm Password")]
         public string ConfirmPassword { get; set; }
 
         public string Role { get; set; }
 
-        //[ValidField(ErrorMessageID = 7)]
         public string Phone { get; set; }
 
         [DisplayName("Date")]
@@ -72,6 +74,7 @@ namespace AccountingApp.Models
 
             RuleFor(x => x.Email).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(3));
             RuleFor(x => x.Email).EmailAddress().WithMessage(ErrorFinder.GetErrorMessage(29));
+            RuleFor(x => x.Email).Must(EmailIsFound).WithMessage(ErrorFinder.GetErrorMessage(47));  //works on server side
             RuleFor(x => x.Phone).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(7)).Length(10, 10).WithMessage(ErrorFinder.GetErrorMessage(17)).Matches("^[0-9]*$").WithMessage(ErrorFinder.GetErrorMessage(16));
             RuleFor(x => x.Address).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(9));
             RuleFor(x => x.City).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(10));
@@ -100,6 +103,31 @@ namespace AccountingApp.Models
                 found = false;
             }
             con.Close();
+            }
+            return !found;
+        }
+
+        private bool EmailIsFound(string Email)
+        {
+            bool found = false;
+            if (Email != null)
+            {
+                SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
+                SqlCommand cmd = new SqlCommand("Select count(*) from UserTable where Email= @Email", con);
+                //    SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+                //SqlCommand cmd = new SqlCommand("Select count(*) from CreateUsers where Username= @Username", con);
+                cmd.Parameters.AddWithValue("@Email", Email);
+                con.Open();
+                int result = (int)cmd.ExecuteScalar();
+                if (result != 0)
+                {
+                    found = true;
+                }
+                else
+                {
+                    found = false;
+                }
+                con.Close();
             }
             return !found;
         }
