@@ -15,45 +15,17 @@ namespace AccountingApp.Controllers
         // GET: Manager
         public ActionResult ManagerIndex()
         {
+            
+            ViewBag.pendingCount = getAllEntriesOfStatus("pending").entries.Count;
+            ViewBag.approvedCount = getAllEntriesOfStatus("approved").entries.Count;
+
             return View();
         }
 
         public ActionResult ManagerApproval()
-        {
-            var allPendingTransactions = db.Transactions.Where(t => t.Status == "pending").ToList();
-
-            Entries entries = new Entries();
-            List<int> ids = new List<int>();
-            foreach (Transaction t in allPendingTransactions)
-            {
-                int id = t.EntryId.Value;
-                string status = t.Status;
-
-                if (ids.Contains(id))
-                    continue;
-                else
-                    ids.Add(id);
-
-                Entry e = new Entry(id, status);
-                foreach (Transaction t2 in allPendingTransactions)
-                {
-                    if (t2.EntryId == id)
-                    {
-                        e.accountNames.Add(t2.AccountName);
-                        e.debits.Add(t2.Debit.Value);
-                        e.credits.Add(t2.Credit.Value);
-                    }
-                }
-                entries.entries.Add(e);
-            }
-
-            return View(entries);
+        { 
+            return View(getAllEntriesOfStatus("pending"));
         }
-
-        //public ActionResult ApproveEntry(int? id) {
-        //    var allTransactionsWithEntryID = db.Transactions.Where(t => t.EntryId == id);
-        //    return View(allTransactionsWithEntryID);
-        //}
 
         public void ApproveEntry(int? id)
         {
@@ -121,6 +93,38 @@ namespace AccountingApp.Controllers
         {
             var coa = coaDB.ChartOfAccs.ToList();
             return View(coa);
+        }
+
+        private Entries getAllEntriesOfStatus(string s)
+        {
+            var allPendingTransactions = db.Transactions.Where(t => t.Status == s).ToList();
+
+            Entries entries = new Entries();
+            List<int> ids = new List<int>();
+            foreach (Transaction t in allPendingTransactions)
+            {
+                int id = t.EntryId.Value;
+                string status = t.Status;
+
+                if (ids.Contains(id))
+                    continue;
+                else
+                    ids.Add(id);
+
+                Entry e = new Entry(id, status);
+                foreach (Transaction t2 in allPendingTransactions)
+                {
+                    if (t2.EntryId == id)
+                    {
+                        e.accountNames.Add(t2.AccountName);
+                        e.debits.Add(t2.Debit.Value);
+                        e.credits.Add(t2.Credit.Value);
+                    }
+                }
+                entries.entries.Add(e);
+            }
+
+            return entries;
         }
     }
 }
