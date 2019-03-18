@@ -108,7 +108,7 @@
     </nav>
 
     @*Amnah*@
-    <div class="shadow container" style="width:60%; background-color:gainsboro;">
+    <div class="shadow container" style="width:80%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
@@ -131,8 +131,8 @@
                             <tr>
                             <td>@Model.entries[i].entryID</td>
                             <td style="white-space: pre-wrap;">@Model.entries[i].FormattedAccountNames()</td>
-                            <td style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                            <td style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                            <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                            <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
                             <td>@Model.entries[i].status</td>
                             <td>
                                 <a href="@Url.Action("ApproveEntry", new { id = Model.entries[i].entryID})">

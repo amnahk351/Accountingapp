@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -35,12 +36,19 @@ namespace AccountingApp.Models
         public string FormattedAccountNames() {
 
             string formatted = "";
-
+            int i = findIndexOfCredit();
+            int j = 1;
             foreach (string account in accountNames)
             {
                 if (formatted != "")
                 {
-                    formatted += "\r\n";
+                    if (j != i)
+                    {
+                        formatted += "\r\n";
+                        j++;
+                    }
+                    else
+                        formatted += "\r\n\t";
                 }
                 formatted += account;
             }
@@ -52,7 +60,7 @@ namespace AccountingApp.Models
         {
 
             string formatted = "";
-
+            
             foreach (Decimal debit in debits)
             {
                 if (formatted != "")
@@ -69,7 +77,6 @@ namespace AccountingApp.Models
         {
 
             string formatted = "";
-
             foreach (Decimal credit in credits)
             {
                 if (formatted != "")
@@ -80,6 +87,23 @@ namespace AccountingApp.Models
             }
 
             return formatted;
+        }
+
+        private int findIndexOfCredit()
+        {
+            int index = 0;
+            foreach (Decimal amount in credits)
+            {
+                if (amount == 0)
+                {
+                    index++;
+                    continue;
+                }
+                else
+                    break;
+            }
+            Trace.WriteLine("------Index of " + entryID + ": " + index);
+            return index;
         }
     }
 }
