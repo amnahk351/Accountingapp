@@ -254,31 +254,44 @@ namespace AccountingApp.Controllers
             return Json(insertedRecords);
         }
 
+        //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html
 
         [HttpPost]
         public ActionResult UploadFiles()
         {
-            Database1Entities7 entities = new Database1Entities7();
-            var mostRecentEntryID = entities.Transactions.ToList().Select(eID => eID.EntryId).LastOrDefault() + 1;  //add a 1 to match folder with EntryId
-            string foldername = mostRecentEntryID.ToString();
+            //Database1Entities7 entities = new Database1Entities7();
+            //var mostRecentEntryID = entities.Transactions.ToList().Select(eID => eID.EntryId).LastOrDefault() + 1;  //add a 1 to match folder with EntryId
+            //string foldername = mostRecentEntryID.ToString();
 
-            string folder = Server.MapPath(string.Format("~/User_Uploads/{0}/", foldername));
+            //string folder = Server.MapPath(string.Format("~/User_Uploads/{0}/", foldername));
 
-            if (!Directory.Exists(folder)) {
-                Directory.CreateDirectory(folder);
-            }
+            //if (!Directory.Exists(folder)) {
+            //    Directory.CreateDirectory(folder);
+            //}
 
-            string location = "~/User_Uploads/" + foldername + "/";
+            //string location = "~/User_Uploads/" + foldername + "/";
 
-            string path = Server.MapPath(location);
+            //string path = Server.MapPath(location);
+
+            //HttpFileCollectionBase files = Request.Files;
+            //for (int i = 0; i < files.Count; i++)
+            //{
+            //    FileUploadService service = new FileUploadService();
+            //    HttpPostedFileBase file = files[i];
+            //    file.SaveAs(path + file.FileName);
+            //}
+            //return Json(files.Count + " Files Uploaded!");
+
             HttpFileCollectionBase files = Request.Files;
             for (int i = 0; i < files.Count; i++)
             {
+                FileUploadService service = new FileUploadService();
                 HttpPostedFileBase file = files[i];
-                file.SaveAs(path + file.FileName);
+                service.SaveFileDetails(file);
             }
             return Json(files.Count + " Files Uploaded!");
-        }
+
+        }        
 
         public ActionResult Journalize() {
 
@@ -305,6 +318,29 @@ namespace AccountingApp.Controllers
 
 
             return View();
+        }
+    }
+
+    public class FileUploadService
+    {
+        public void SaveFileDetails(HttpPostedFileBase file)
+        {
+            //UploadedFiles newFile = new UploadedFiles();
+            //newFile.ContentType = file.ContentType;
+            //newFile.ImageBytes = ConvertToBytes(file);
+            //using (FileUploadEntities dataContext = new FileUploadEntities())
+            //{
+            //    dataContext.UploadedFiles.AddObject(newFile);
+            //    dataContext.SaveChanges();
+            //}
+        }
+
+        public byte[] ConvertToBytes(HttpPostedFileBase file)
+        {
+            byte[] imageBytes = null;
+            BinaryReader reader = new BinaryReader(file.InputStream);
+            imageBytes = reader.ReadBytes((int)file.ContentLength);
+            return imageBytes;
         }
     }
 }
