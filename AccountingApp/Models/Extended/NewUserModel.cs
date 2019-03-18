@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
+using Dapper;
+using AccountingApp.DBAccess;
 
 namespace AccountingApp.Models
 {
@@ -14,28 +16,19 @@ namespace AccountingApp.Models
     {
         public int ID { get; set; }
 
-        //[ValidField(ErrorMessageID = 1)]
+        [DisplayName("First Name")]
         public string FirstName { get; set; }
 
-        //[ValidField(ErrorMessageID = 2)]
+        [DisplayName("Last Name")]
         public string LastName { get; set; }
-
-        //[DataType(DataType.EmailAddress)]
-        //[ValidField(ErrorMessageID = 3)]
+        
         public string Email { get; set; }
-
-
-        //[ValidField(ErrorMessageID = 4)]
-        //[ValidUsername]
+        
         public string Username { get; set; }
-
-
-        //[ValidPassword]
+       
         public string Password { get; set; }
-
-        //[NotMapped]
-        //[Compare(nameof(Password), ErrorMessage = "Confirm Password and Password do not match.")]
-        //[Compare("Password")]
+        
+        [DisplayName("Confirm Password")]
         public string ConfirmPassword { get; set; }
 
         public string Role { get; set; }
@@ -43,23 +36,21 @@ namespace AccountingApp.Models
         //[ValidField(ErrorMessageID = 7)]
         public string Phone { get; set; }
 
-        //[ValidField(ErrorMessageID = 8)]
+        [DisplayName("Date")]
         public Nullable<System.DateTime> Date_Created { get; set; }
 
-
+        [DisplayName("Allow Access")]
         public bool Active { get; set; }
 
         public string Old_Passwords { get; set; }
-
-        //[ValidField(ErrorMessageID = 9)]
+        
         public string Address { get; set; }
-
-        //[ValidField(ErrorMessageID = 10)]
+       
         public string City { get; set; }
         
         public string State { get; set; }
 
-        //[ValidField(ErrorMessageID = 12)]
+        [DisplayName("ZIP Code")]
         public string ZIP_Code { get; set; }
     }
 
@@ -75,7 +66,7 @@ namespace AccountingApp.Models
 
             RuleFor(x => x.Username).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(4));
             RuleFor(x => x.Username).Must(UsernameIsFound).WithMessage(ErrorFinder.GetErrorMessage(20));  //works on server side
-            RuleFor(x => x.Password).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(23)).MinimumLength(8).WithMessage(ErrorFinder.GetErrorMessage(13));
+            RuleFor(x => x.Password).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(23)).MinimumLength(8).WithMessage(ErrorFinder.GetErrorMessage(15));
             RuleFor(x => x.Password).Matches("^.*((?=.*[!@#$%^&*()\\-_=+{};:,<.>]){1})(?=.*\\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$").WithMessage(ErrorFinder.GetErrorMessage(28));
             RuleFor(x => x.ConfirmPassword).NotEmpty().WithMessage(ErrorFinder.GetErrorMessage(24)).Equal(x => x.Password).WithMessage(ErrorFinder.GetErrorMessage(24));
 
@@ -93,9 +84,11 @@ namespace AccountingApp.Models
             bool found = false;
             if (UsernameChoosen != null)
             {
-                SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
-            SqlCommand cmd = new SqlCommand("Select count(*) from CreateUsers where Username= @Username", con);
-            cmd.Parameters.AddWithValue("@Username", UsernameChoosen);
+                SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
+                SqlCommand cmd = new SqlCommand("Select count(*) from UserTable where Username= @Username", con);
+                //    SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+                //SqlCommand cmd = new SqlCommand("Select count(*) from CreateUsers where Username= @Username", con);
+                cmd.Parameters.AddWithValue("@Username", UsernameChoosen);
             con.Open();
             int result = (int)cmd.ExecuteScalar();
             if (result != 0)

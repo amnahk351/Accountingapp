@@ -4,9 +4,12 @@ using FluentValidation.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using Dapper;
+using AccountingApp.DBAccess;
 
 namespace AccountingApp.Models
 {
@@ -14,12 +17,15 @@ namespace AccountingApp.Models
     public class ChangePasswordModel
     {
         [DisplayName("Current Password")]
+        [DataType(DataType.Password)]
         public string CurrentPassword { get; set; }
 
         [DisplayName("New Password")]
+        [DataType(DataType.Password)]
         public string NewPassword { get; set; }
 
         [DisplayName("Confirm Password")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
     }
 
@@ -44,8 +50,11 @@ namespace AccountingApp.Models
         private bool CheckOldPassword(string Password)
         {
             bool found = false;
-            SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
-            SqlCommand cmd = new SqlCommand("Select Old_Passwords from CreateUsers where Username = @User", con);
+            SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
+            SqlCommand cmd = new SqlCommand("Select OldPasswords from UserTable where Username = @User", con);
+            
+            //SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+            //SqlCommand cmd = new SqlCommand("Select Old_Passwords from CreateUsers where Username = @User", con);
             cmd.Parameters.AddWithValue("@User", User);
             con.Open();
             var nullableValue = cmd.ExecuteScalar();
@@ -71,8 +80,10 @@ namespace AccountingApp.Models
         private bool CheckCurrentPassword(string Password)
         {
             bool matches = false;
-            SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
-            SqlCommand cmd = new SqlCommand("Select Password from CreateUsers where Username = @User", con);
+            SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
+            SqlCommand cmd = new SqlCommand("Select Password from UserTable where Username = @User", con);
+            //SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+            //SqlCommand cmd = new SqlCommand("Select Password from CreateUsers where Username = @User", con);
             cmd.Parameters.AddWithValue("@User", User);
             con.Open();
             var nullableValue = cmd.ExecuteScalar();
@@ -83,7 +94,6 @@ namespace AccountingApp.Models
             else
             {
                 var SavedString = (string)cmd.ExecuteScalar();
-                System.Diagnostics.Debug.WriteLine("current pass value: " + SavedString);
                 if (SavedString == Password)
                 {
                     matches = true;
@@ -94,7 +104,6 @@ namespace AccountingApp.Models
                 }
                 con.Close();
             }
-            System.Diagnostics.Debug.WriteLine("matches value: " + matches);
             return matches;
         }
     }

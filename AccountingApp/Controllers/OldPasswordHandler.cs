@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Data;
+using Dapper;
+using AccountingApp.DBAccess;
 
 namespace AccountingApp.Controllers
 {
@@ -12,10 +15,15 @@ namespace AccountingApp.Controllers
 
             string FoundPasswords = "";
             string PasswordsToInsert = "";
-            SqlConnection sqlCon = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+            //SqlConnection sqlCon = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+            //SqlConnection sqlCon = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+            SqlConnection sqlCon = new SqlConnection(SqlAccess.GetConnectionString());
+
             sqlCon.Open();
 
-            string query = "SELECT Old_Passwords FROM CreateUsers WHERE ID = '" + UserId + "'";
+            //string query = "SELECT Old_Passwords FROM CreateUsers WHERE ID = '" + UserId + "'";
+            string query = "SELECT OldPasswords FROM Usertable WHERE ID = '" + UserId + "'";
+
             SqlCommand conData = new SqlCommand(query, sqlCon);
             SqlDataReader myReader;
 
@@ -23,13 +31,16 @@ namespace AccountingApp.Controllers
 
             while (myReader.Read())
             {
-                FoundPasswords = myReader.GetString(0);
+                //FoundPasswords = myReader.GetString(0);
+                int x = myReader.GetOrdinal("Old_Passwords");
+
+                FoundPasswords = myReader.IsDBNull(x) ? string.Empty : myReader.GetString(0);
             }
 
             myReader.Close();
             sqlCon.Close();
 
-            if (FoundPasswords == null)
+            if (FoundPasswords == null || FoundPasswords == "")
             {
                 //no passwords found, store the 1 password
                 PasswordsToInsert = Password;
@@ -56,7 +67,9 @@ namespace AccountingApp.Controllers
                 }
             }
 
-            string Upd = "UPDATE CreateUsers SET Old_Passwords=@Passwords WHERE ID='" + UserId + "';";
+            //string Upd = "UPDATE CreateUsers SET Old_Passwords=@Passwords WHERE ID='" + UserId + "';";
+            string Upd = "UPDATE UserTable SET OldPasswords=@Passwords WHERE ID='" + UserId + "';";
+
             sqlCon.Open();
             SqlCommand sqlUpdate = new SqlCommand(Upd, sqlCon);
             sqlUpdate.Parameters.AddWithValue("@Passwords", PasswordsToInsert);
