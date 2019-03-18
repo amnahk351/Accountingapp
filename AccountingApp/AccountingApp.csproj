@@ -34,6 +34,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.60.1\lib\net451\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -160,6 +164,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Controllers\OldPasswordHandler.cs" />
+    <Compile Include="DBAccess\SqlAccess.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -201,6 +206,7 @@
     </Compile>
     <Compile Include="Models\Entries.cs" />
     <Compile Include="Models\Entry.cs" />
+    <Compile Include="Models\ErrorMessageModel.cs" />
     <Compile Include="Models\EventLog.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -246,6 +252,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TransactionModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\ValidField.cs" />
     <Compile Include="Models\ValidPassword.cs" />
     <Compile Include="Models\ValidUsername.cs" />
@@ -322,13 +329,6 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.css" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\ChartOfAcc.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ChartOfAcc.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\ChartOfAcc.edmx.diagram">
-      <DependentUpon>ChartOfAcc.edmx</DependentUpon>
-    </Content>
     <EntityDeploy Include="Models\CreateUser.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>CreateUser.Designer.cs</LastGenOutput>
@@ -350,6 +350,13 @@
     <Content Include="Models\TransactionModel.edmx.diagram">
       <DependentUpon>TransactionModel.edmx</DependentUpon>
     </Content>
+    <EntityDeploy Include="Models\ChartOfAcc.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ChartOfAcc.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\ChartOfAcc.edmx.diagram">
+      <DependentUpon>ChartOfAcc.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -366,12 +373,15 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -402,8 +412,10 @@
     <Content Include="Views\Manager\ManagerApproval.cshtml" />
     <Content Include="Views\Manager\DisapproveEntry.cshtml" />
     <Content Include="Views\Manager\TrialBalance.cshtml" />
+    <Content Include="Views\Accountant\Journalize.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="User_Uploads\" />
     <Folder Include="Views\Error\" />
   </ItemGroup>
   <ItemGroup>

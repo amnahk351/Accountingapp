@@ -1,4 +1,5 @@
 using AccountingApp.Models;
+using AccountingApp.DBAccess;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -10,6 +11,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Configuration;
 using System.Data;
+using Dapper;
 
 namespace AccountingApp.Controllers
 {
@@ -28,53 +30,95 @@ namespace AccountingApp.Controllers
             string denied = GetErr.GetErrorMessage(21);
             string locked = GetErr.GetErrorMessage(30);
             string attempts = GetErr.GetErrorMessage(31);
-            var db = new Database1Entities5();
+            //var db = new Database1Entities5();
             
             //checks username and password both exists for an account, left for reference
             //var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username && validUser.Password == userLoggingIn.Password).FirstOrDefault();
                         
-            var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username).FirstOrDefault();  //get the account for the typed username
+            //var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username).FirstOrDefault();  //get the account for the typed username
+            //List<CreateUser> validateLogin;
+            List<UserModel> validateLogin;
+
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                validateLogin = db.Query<UserModel>("Select * from dbo.Usertable Where Username = @Username AND Password = @Password", new { Username = userLoggingIn.Username, Password = userLoggingIn.Password }).ToList();
+
+                //validateLogin = db.Query<CreateUser>("Select * from dbo.Usertable Where Username = @Username AND Password = @Password", new { Username = userLoggingIn.Username, Password = userLoggingIn.Password }).ToList();
+            }
 
             try
             {
-                if (userDetails == null)
-                {
-                    throw new Exception(inv);  //the username does not exist                    
-                }
+                //if (userDetails == null)
+                //{
+                //    throw new Exception(inv);  //the username does not exist                    
+                //}
 
-                else if (userLoggingIn.Password != userDetails.Password)
+                if (validateLogin.Count == 0)
+                    throw new Exception(inv);
+                else if (userLoggingIn.Password != validateLogin[0].Password)
                 {
                     //usernames exists, but password is wrong                    
-                    if (userDetails.Login_Attempts == 1)
-                    {
-                        userDetails.Account_Locked = true;
-                        db.SaveChanges();
+                    //if (validateLogin[0].Login_Attempts == 1)
+                        if (validateLogin[0].LoginAttempts == 1)
+                        {
+                        using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                        {
 
-                        Logger.LogAccountLocked(userDetails.ID, userDetails.Username);
-                        Database1Entities6 db2 = new Database1Entities6();
-                        var events = db2.EventLogs.ToList();
-                        throw new Exception(locked);
+                            string sql = "Update dbo.UserTable set AccountLocked = true Where Username = @Username";
+
+                            db.Execute(sql, new
+                            {
+                                Username = validateLogin[0].Username
+
+                            });
+                        }
+                    }
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                    {
+
+                        string sql = "Update dbo.UserTable set LoginFails = LoginFails + 1, LoginAttempts = LoginAttempts - 1 Where Username = @Username";
+
+                        db.Execute(sql, new
+                        {
+                            Username = validateLogin[0].Username
+
+                        });
                     }
 
-                    userDetails.Login_Fails++;
-                    userDetails.Login_Attempts--;
-                    db.SaveChanges();
 
-                    throw new Exception(attempts + " " + userDetails.Login_Attempts.ToString());
+                    throw new Exception(attempts + " " + validateLogin[0].LoginAttempts.ToString());
+
+                    //throw new Exception(attempts + " " + validateLogin[0].Login_Attempts.ToString());
                 }
 
-                else if (userDetails.Active == false)
+                else if (validateLogin[0].Active == false)
                     throw new Exception(denied);
-                else if (userDetails.Account_Locked == true)
-                    throw new Exception(locked);
-                else if (userDetails.Security_Question1 == null) {
-                    //Not answered security questions
-                    System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
-                    System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
-                    System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;
-                                        
-                    userDetails.Login_Amount++;
-                    db.SaveChanges();
+                else if (validateLogin[0].AccountLocked == true)
+
+                    //else if (validateLogin[0].Account_Locked == true)
+                    throw new Exception(denied);
+                else if (validateLogin[0].SecurityQuestion1 == null)
+
+                //else if (validateLogin[0].Security_Question1 == null)
+                {
+                    System.Web.HttpContext.Current.Session["FirstNameofUser"] = validateLogin[0].FirstName;
+                    System.Web.HttpContext.Current.Session["Username"] = validateLogin[0].Username;
+                    System.Web.HttpContext.Current.Session["UserRole"] = validateLogin[0].Role;
+
+                    
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                    {
+
+                        string sql = "Update dbo.UserTable set LoginAmount = LoginAmount+1 Where Username = @Username";
+
+                        db.Execute(sql, new
+                        {
+                            Username = validateLogin[0].Username
+
+                        });
+                    }
+                    
 
                     System.Diagnostics.Debug.WriteLine("Went to security questions.");
                     return Redirect("~/Account/SecurityQuestions");
@@ -82,31 +126,114 @@ namespace AccountingApp.Controllers
                 else
                 {
                     //The account is allowed
-                    System.Web.HttpContext.Current.Session["UserID"] = userDetails.ID;
-                    System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
-                    System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
-                    System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
+                    System.Web.HttpContext.Current.Session["FirstNameofUser"] = validateLogin[0].FirstName;
+                    System.Web.HttpContext.Current.Session["Username"] = validateLogin[0].Username;
+                    System.Web.HttpContext.Current.Session["UserRole"] = validateLogin[0].Role;
+                    //System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
+                    //System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
+                    //System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                    {
 
-                    userDetails.Login_Attempts = 10;
-                    userDetails.Login_Amount++;
-                    db.SaveChanges();
+                        string sql = "Update dbo.UserTable set LoginAmount = LoginAmount + 1, LoginAttempts = 10 Where Username = @Username";
 
-                    if (userDetails.Role == "Admin")
+                        db.Execute(sql, new
+                        {
+                            Username = validateLogin[0].Username
+
+                        });
+                    }
+
+
+                    if (validateLogin[0].Role == "Admin")
                     {
                         return Redirect("~/Admin/AdminIndex"); //takes user to admin page
-                        //return View("~/Views/Admin/AdminIndex.cshtml"); //takes user to admin page
                     }
-                    else if (userDetails.Role == "Manager")
+                    else if (validateLogin[0].Role == "Accountant")
+                    {
+                        return Redirect("~/Accountant/AccountantIndex");  //takes user to accountant page, probably should make this one go to a manager page
+                    }
+                    else if (validateLogin[0].Role == "Manager")
                     {
                         return Redirect("~/Manager/ManagerIndex");
                     }
-                    else if (userDetails.Role == "Accountant")
-                    {
-                        return Redirect("~/Accountant/AccountantIndex");  //takes user to accountant page, probably should make this one go to a manager page
-                        //return View("~/Views/Home/Index.cshtml"); //takes user to accountant page, probably should make this one go to a manager page
-                    }
+
+
                 }
             }
+            
+            //try
+            //{
+            //    if (userDetails == null)
+            //    {
+            //        throw new Exception(inv);  //the username does not exist                    
+            //    }
+
+            //    else if (userLoggingIn.Password != userDetails.Password)
+            //    {
+            //        //usernames exists, but password is wrong                    
+            //        if (userDetails.Login_Attempts == 1)
+            //        {
+            //            userDetails.Account_Locked = true;
+            //            db.SaveChanges();
+
+            //            Logger.LogAccountLocked(userDetails.ID, userDetails.Username);
+            //            Database1Entities6 db2 = new Database1Entities6();
+            //            var events = db2.EventLogs.ToList();
+            //            throw new Exception(locked);
+            //        }
+
+            //        userDetails.Login_Fails++;
+            //        userDetails.Login_Attempts--;
+            //        db.SaveChanges();
+
+            //        throw new Exception(attempts + " " + userDetails.Login_Attempts.ToString());
+            //    }
+
+            //    else if (userDetails.Active == false)
+            //        throw new Exception(denied);
+            //    else if (userDetails.Account_Locked == true)
+            //        throw new Exception(locked);
+            //    else if (userDetails.Security_Question1 == null) {
+            //        //Not answered security questions
+            //        System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
+            //        System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
+            //        System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;
+
+            //        userDetails.Login_Amount++;
+            //        db.SaveChanges();
+
+            //        System.Diagnostics.Debug.WriteLine("Went to security questions.");
+            //        return Redirect("~/Account/SecurityQuestions");
+            //    }
+            //    else
+            //    {
+            //        //The account is allowed
+            //        System.Web.HttpContext.Current.Session["UserID"] = userDetails.ID;
+            //        System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
+            //        System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
+            //        System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
+
+            //        userDetails.Login_Attempts = 10;
+            //        userDetails.Login_Amount++;
+            //        db.SaveChanges();
+
+            //        if (userDetails.Role == "Admin")
+            //        {
+            //            return Redirect("~/Admin/AdminIndex"); //takes user to admin page
+            //            //return View("~/Views/Admin/AdminIndex.cshtml"); //takes user to admin page
+            //        }
+            //        else if (userDetails.Role == "Manager")
+            //        {
+            //            return Redirect("~/Manager/ManagerIndex");
+            //        }
+            //        else if (userDetails.Role == "Accountant")
+            //        {
+            //            return Redirect("~/Accountant/AccountantIndex");  //takes user to accountant page, probably should make this one go to a manager page
+            //            //return View("~/Views/Home/Index.cshtml"); //takes user to accountant page, probably should make this one go to a manager page
+            //        }
+            //    }
+            //}
             catch (Exception exception)
             {
                 Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'Login';</script>");
@@ -130,27 +257,57 @@ namespace AccountingApp.Controllers
             string Em = Email;
             EventLogHandler Logger = new EventLogHandler();
             
-            using (Database1Entities5 dc = new Database1Entities5())
-            {                
-                var account = dc.CreateUsers.Where(a => a.Email == Em).FirstOrDefault();
+            List<CreateUser> validateEmail;
 
-                if (account != null)
-                {
-                    //send email
-                    string resetCode = Guid.NewGuid().ToString();
-                    SendEmail(Em, resetCode);
-                    account.ResetPasswordCode = resetCode;
-                    dc.SaveChanges();
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
 
-                    Logger.LogForgotPassword(Em);
-                    Database1Entities6 db2 = new Database1Entities6();
-                    var events = db2.EventLogs.ToList();
-                    System.Diagnostics.Debug.WriteLine("Email was sent");
-                }
-                else {
-                    System.Diagnostics.Debug.WriteLine("Fail, no email sent");
-                }
+                validateEmail = db.Query<CreateUser>("Select * from dbo.Usertable Where Email = @Email", new { Email = Em }).ToList();
             }
+
+            if (validateEmail.Count > 0)
+            {
+                //send email
+                string resetCode = Guid.NewGuid().ToString();
+                SendEmail(Em, resetCode);
+                validateEmail[0].ResetPasswordCode = resetCode;
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+
+                    string sql = "Update dbo.UserTable set ResetPasswordCode = @resetCode  where Username = @Username";
+                    db.Execute(sql, new { resetCode = resetCode, Username = validateEmail[0].Username });
+                }
+                Logger.LogForgotPassword(Em);
+                System.Diagnostics.Debug.WriteLine("Email was sent");
+
+            }
+
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Fail, no email sent");
+            }
+            //using (Database1Entities5 dc = new Database1Entities5())
+            //{                
+            //    var account = dc.CreateUsers.Where(a => a.Email == Em).FirstOrDefault();
+
+            //    if (account != null)
+            //    {
+            //        //send email
+            //        string resetCode = Guid.NewGuid().ToString();
+            //        SendEmail(Em, resetCode);
+            //        account.ResetPasswordCode = resetCode;
+            //        dc.SaveChanges();
+
+            //        Logger.LogForgotPassword(Em);
+            //        Database1Entities6 db2 = new Database1Entities6();
+            //        var events = db2.EventLogs.ToList();
+            //        System.Diagnostics.Debug.WriteLine("Email was sent");
+            //    }
+            //    else {
+            //        System.Diagnostics.Debug.WriteLine("Fail, no email sent");
+            //    }
+            //}
         }
 
         [NonAction]
@@ -192,21 +349,38 @@ namespace AccountingApp.Controllers
 
         public ActionResult ResetPassword(string id)
         {
+            List<CreateUser> validatePasswordCode;
 
-            using (Database1Entities5 dc = new Database1Entities5())
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                var user = dc.CreateUsers.Where(a => a.ResetPasswordCode == id).FirstOrDefault();
-                if (user != null)
-                {
-                    ResetPasswordModel model = new ResetPasswordModel();
-                    model.ResetCode = id;
-                    return View(model);
-                }
-                else
-                {
-                    return HttpNotFound();
-                }
+
+                validatePasswordCode = db.Query<CreateUser>($"Select * from dbo.Usertable Where ResetPasswordCode = @ResetCode", new { ResetCode = id }).ToList();
+
             }
+            if (validatePasswordCode.Count() > 0)
+            {
+                ResetPasswordModel model = new ResetPasswordModel();
+                model.ResetCode = id;
+                return View(model);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+            //using (Database1Entities5 dc = new Database1Entities5())
+            //{
+            //    var user = dc.CreateUsers.Where(a => a.ResetPasswordCode == id).FirstOrDefault();
+            //    if (user != null)
+            //    {
+            //        ResetPasswordModel model = new ResetPasswordModel();
+            //        model.ResetCode = id;
+            //        return View(model);
+            //    }
+            //    else
+            //    {
+            //        return HttpNotFound();
+            //    }
+            //}
 
             //var ResetPass = new ResetPasswordModel();
             //return PartialView(ResetPass);
@@ -218,51 +392,90 @@ namespace AccountingApp.Controllers
         {
             EventLogHandler Logger = new EventLogHandler();
 
+            var message = "";
             if (ModelState.IsValid)
             {
-                using (Database1Entities5 dc = new Database1Entities5())
+
+                List<CreateUser> validatePasswordCode;
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    var user = dc.CreateUsers.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
-                    if (user != null)
+
+                    validatePasswordCode = db.Query<CreateUser>($"Select * from dbo.Usertable Where ResetPasswordCode = @ResetCode", new { ResetCode = model.ResetCode }).ToList();
+
+                }
+
+                if (validatePasswordCode.Count > 0)
+                {
+                    OldPasswordHandler PassHand = new OldPasswordHandler();
+                    PassHand.AdjustOldPasswords(validatePasswordCode[0].Password, validatePasswordCode[0].ID);
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                     {
-                        OldPasswordHandler PassHand = new OldPasswordHandler();
-                        PassHand.AdjustOldPasswords(user.Password, user.ID);
 
-                        user.Password = model.Password;
-                        user.ResetPasswordCode = "";
-
-                        dc.SaveChanges();
-                        Logger.LogPasswordReset(user.ID, user.Username);
-                        Database1Entities6 db2 = new Database1Entities6();
-                        var events = db2.EventLogs.ToList();
-                        var message = "Password updated successfully.";
+                        string sql = $"Update dbo.UserTable set Password = @Password, ResetPasswordCode = NULL where Username = @Username";
+                        db.Execute(sql, new { Password = validatePasswordCode[0].Password, Username = validatePasswordCode[0].Username });
+                        message = "Password updated successfully.";
+                        Logger.LogPasswordReset(validatePasswordCode[0].ID, validatePasswordCode[0].Username);
                         ViewBag.Message = message;
                     }
                 }
             }
-            return View(model);
+                return View(model);
+                //if (ModelState.IsValid)
+                //{
+                //    using (Database1Entities5 dc = new Database1Entities5())
+                //    {
+                //        var user = dc.CreateUsers.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
+                //        if (user != null)
+                //        {
+                //            OldPasswordHandler PassHand = new OldPasswordHandler();
+                //            PassHand.AdjustOldPasswords(user.Password, user.ID);
+
+                //            user.Password = model.Password;
+                //            user.ResetPasswordCode = "";
+
+                //            dc.SaveChanges();
+                //            Logger.LogPasswordReset(user.ID, user.Username);
+                //            Database1Entities6 db2 = new Database1Entities6();
+                //            var events = db2.EventLogs.ToList();
+                //            var message = "Password updated successfully.";
+                //            ViewBag.Message = message;
+                //        }
+                //    }
+                //}
+                //return View(model);
         }
 
         public void GetErrors()
         {
             List<String> Errors = new List<String>();
 
-            using (SqlConnection connection = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True"))
+            
+            List<ErrorMessageModel> messages;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                connection.Open();
-                string query = "SELECT Description FROM ErrorMessages";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Errors.Add(reader.GetString(0));
-                        }
-                    }
-                }
-            }
 
+                messages = db.Query<ErrorMessageModel>("Select * from dbo.ErrorMessages").ToList();
+            }
+            //using (SqlConnection connection = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True"))
+            //{
+            //    connection.Open();
+            //    string query = "SELECT Description FROM ErrorMessages";
+            //    using (SqlCommand command = new SqlCommand(query, connection))
+            //    {
+            //        using (SqlDataReader reader = command.ExecuteReader())
+            //        {
+            //            while (reader.Read())
+            //            {
+            //                Errors.Add(reader.GetString(0));
+            //            }
+            //        }
+            //    }
+            //}
+            foreach (var message in messages)
+            {
+                Errors.Add(message.Description);
+            }
             JavaScriptSerializer js = new JavaScriptSerializer();
             Response.Write(js.Serialize(Errors));
         }
@@ -278,54 +491,52 @@ namespace AccountingApp.Controllers
         {
             //have to add code to replace password still
             //use old passsword handler
+            EventLogHandler Logger = new EventLogHandler();
 
-            using (Database1Entities5 dc = new Database1Entities5())
+            List<CreateUser> user;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                EventLogHandler Logger = new EventLogHandler();
                 var sessionUser = Session["Username"] as string;
 
-                var user = dc.CreateUsers.Where(a => a.Username == sessionUser).FirstOrDefault();
-                if (user != null)
+                user = db.Query<CreateUser>("Select * from dbo.UserTable where Username = @Username;", new { Username = sessionUser }).ToList();
+            }
+            if (user.Count() > 0)
+            {
+                OldPasswordHandler PassHand = new OldPasswordHandler();
+                PassHand.AdjustOldPasswords(model.CurrentPassword, user[0].ID);
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    string s = user.Old_Passwords;
-                    //if(s.Contains(model.NewPassword))
 
-                    bool value = CheckNullableString(s, model.NewPassword);
-
-                    if (user.Password == model.CurrentPassword && model.CurrentPassword != model.NewPassword && value) {
-                    
-                        OldPasswordHandler PassHand = new OldPasswordHandler();
-                        PassHand.AdjustOldPasswords(model.CurrentPassword, user.ID);
-
-                        user.Password = model.NewPassword;
-                        dc.SaveChanges();
-
-                        Logger.LogPasswordChange();
-                        Database1Entities6 db2 = new Database1Entities6();
-                        var events = db2.EventLogs.ToList();
-                        var message = "Password updated successfully.";
-                        ViewBag.Message = message;
-                    }
-
-                    
+                    string sql = $"Update dbo.UserTable set Password = @Password where Username = @Username;";
+                    db.Execute(sql, new { Password = user[0].Password, Username = user[0].Username });
                 }
+                Logger.LogPasswordChange();
+                var message = "Password updated successfully.";
+                ViewBag.Message = message;
             }
-            
+            // using (Database1Entities5 dc = new Database1Entities5())
+            //{
+            //    EventLogHandler Logger = new EventLogHandler();
+            //    var sessionUser = Session["Username"] as string;
+
+            //    var user = dc.CreateUsers.Where(a => a.Username == sessionUser).FirstOrDefault();
+            //    if (user != null)
+            //    {
+            //        OldPasswordHandler PassHand = new OldPasswordHandler();
+            //        PassHand.AdjustOldPasswords(model.CurrentPassword, user.ID);
+
+            //        user.Password = model.NewPassword;
+            //        dc.SaveChanges();
+
+            //        Logger.LogPasswordChange();
+            //        Database1Entities6 db2 = new Database1Entities6();
+            //        var events = db2.EventLogs.ToList();
+            //        var message = "Password updated successfully.";
+            //        ViewBag.Message = message;
+            //    }
+            //}
+
             return View(model);
-        }
-
-        private bool CheckNullableString(string s, string model) {
-            
-            if (s == null) {
-                return true;
-            }
-
-            else if (!s.Contains(model)) {
-                return true;
-            }
-            else {
-                return false;
-            }
         }
 
         public ActionResult SecurityQuestions()
@@ -340,17 +551,34 @@ namespace AccountingApp.Controllers
             var sessionUser = Session["Username"] as string;
             var sessionRole = Session["UserRole"] as string;
 
-            using (Database1Entities5 dc = new Database1Entities5())
+            List<CreateUser> user;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                var account = dc.CreateUsers.Where(a => a.Username == sessionUser).FirstOrDefault();
 
-                account.Security_Question1 = model.Security_Question1;
-                account.Answer_1 = model.Answer_1;
-                account.Security_Question2 = model.Security_Question2;
-                account.Answer_2 = model.Answer_2;
-                dc.SaveChanges();                               
-                
+
+                user = db.Query<CreateUser>("Select * from dbo.UserTable where Username = @Username", new { Username = sessionUser }).ToList();
+                string sql = $"Update dbo.UserTable set SecurityQuestion1 = @SecurityQuestion1, Answer1 = @Answer1," +
+                             $"SecurityQuestion = @SecurityQuestion2, Answer2 = @Answer2 where Username = @Username";
+                db.Execute(sql, new
+                {
+                    SecurityQuestion1 = model.Security_Question1,
+                    Answer1 = model.Answer_1,
+                    SecurityQuestion2 = model.Security_Question2,
+                    Answer2 = model.Answer_2,
+                    Username = user[0].Username
+                });
             }
+            //using (Database1Entities5 dc = new Database1Entities5())
+            //{
+            //    var account = dc.CreateUsers.Where(a => a.Username == sessionUser).FirstOrDefault();
+
+            //    account.Security_Question1 = model.Security_Question1;
+            //    account.Answer_1 = model.Answer_1;
+            //    account.Security_Question2 = model.Security_Question2;
+            //    account.Answer_2 = model.Answer_2;
+            //    dc.SaveChanges();                               
+
+            //}
 
             if (sessionRole == "Admin")
             {
@@ -373,29 +601,51 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult AccountRecovery(AccountRecoveryModel model) {
             ErrorController ErrorFinder = new ErrorController();
-
-            Database1Entities5 db = new Database1Entities5();
-            var userDetails = db.CreateUsers.Where(validUser => validUser.Username == model.Username && validUser.Email == model.Email).FirstOrDefault();
-
-            if (userDetails == null)
+            List<CreateUser> user;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
+               
 
+                user = db.Query<CreateUser>("Select * from dbo.UserTable where Username = @Username AND Email = @Email;", 
+                    new { Username = model.Username, Email = model.Email }).ToList();
+            }
+            if (user.Count() > 0)
                 ViewBag.Message = ErrorFinder.GetErrorMessage(35);
-            }
-            else if (userDetails.Account_Locked == false)
-            {
+            else if(user[0].Account_Locked == false)
                 ViewBag.Message = ErrorFinder.GetErrorMessage(36);
-            }
             else
             {
                 //store in session variables the username and email
-                System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
-                System.Web.HttpContext.Current.Session["Email"] = userDetails.Email;
+                System.Web.HttpContext.Current.Session["Username"] = user[0].Username;
+                System.Web.HttpContext.Current.Session["Email"] = user[0].Email;
 
-                //go to security questions page for answerings and unlocking
+                //    //go to security questions page for answerings and unlocking
 
                 return Redirect("~/Account/AnswerQuestions");
             }
+
+            //Database1Entities5 db = new Database1Entities5();
+            //var userDetails = db.CreateUsers.Where(validUser => validUser.Username == model.Username && validUser.Email == model.Email).FirstOrDefault();
+
+            //if (userDetails == null)
+            //{
+
+            //    ViewBag.Message = ErrorFinder.GetErrorMessage(35);
+            //}
+            //else if (userDetails.Account_Locked == false)
+            //{
+            //    ViewBag.Message = ErrorFinder.GetErrorMessage(36);
+            //}
+            //else
+            //{
+            //    //store in session variables the username and email
+            //    System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
+            //    System.Web.HttpContext.Current.Session["Email"] = userDetails.Email;
+
+            //    //go to security questions page for answerings and unlocking
+
+            //    return Redirect("~/Account/AnswerQuestions");
+            //}
 
             return View();
         }
@@ -406,11 +656,19 @@ namespace AccountingApp.Controllers
             var sessionUser = Session["Username"] as string;
             var sessionEmail = Session["Email"] as string;
 
-            Database1Entities5 db = new Database1Entities5();
-            var userDetails = db.CreateUsers.Where(validUser => validUser.Username == sessionUser && validUser.Email == sessionEmail).FirstOrDefault();
+            List<CreateUser> user;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
 
-            ViewBag.Question_1 = userDetails.Security_Question1;
-            ViewBag.Question_2 = userDetails.Security_Question2;
+
+                user = db.Query<CreateUser>("Select * from dbo.UserTable where Username = @Username AND Email = @Email;",
+                    new { Username = sessionUser, Email = sessionEmail }).ToList();
+            }
+            //Database1Entities5 db = new Database1Entities5();
+            //var userDetails = db.CreateUsers.Where(validUser => validUser.Username == sessionUser && validUser.Email == sessionEmail).FirstOrDefault();
+
+            //ViewBag.Question_1 = userDetails.Security_Question1;
+            //ViewBag.Question_2 = userDetails.Security_Question2;
 
             return View(CustomView);
         }
@@ -424,25 +682,56 @@ namespace AccountingApp.Controllers
             var sessionUser = Session["Username"] as string;
             var sessionEmail = Session["Email"] as string;
 
-            Database1Entities5 db = new Database1Entities5();
-            var userDetails = db.CreateUsers.Where(validUser => validUser.Username == sessionUser && validUser.Email == sessionEmail).FirstOrDefault();
+            List<CreateUser> user;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
 
-            ViewBag.Question_1 = userDetails.Security_Question1;
-            ViewBag.Question_2 = userDetails.Security_Question2;
 
-            if (model.Answer_1 == userDetails.Answer_1 && model.Answer_2 == userDetails.Answer_2) {
-                userDetails.Account_Locked = false;
-                db.SaveChanges();
+                user = db.Query<CreateUser>("Select * from dbo.UserTable where Username = @Username AND Email = @Email;",
+                    new { Username = sessionUser, Email = sessionEmail }).ToList();
+            }
+            ViewBag.Question_1 = user[0].Security_Question1;
+            ViewBag.Question_2 = user[0].Security_Question2;
+            //Database1Entities5 db = new Database1Entities5();
+            //var userDetails = db.CreateUsers.Where(validUser => validUser.Username == sessionUser && validUser.Email == sessionEmail).FirstOrDefault();
 
-                Logger.LogAccountRecovered(userDetails.ID, userDetails.Username);
-                Database1Entities6 db2 = new Database1Entities6();
-                var events = db2.EventLogs.ToList();
+            //ViewBag.Question_1 = userDetails.Security_Question1;
+            //ViewBag.Question_2 = userDetails.Security_Question2;
+            if (model.Answer_1 == user[0].Answer_1 && model.Answer_2 == user[0].Answer_2)
+            {
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+
+                    string sql = $"Update dbo.UserTable set AccountLocked = @AccountLocked where Username = @Username;";
+                    db.Execute(sql, new { AccountLocked = false, Username = user[0].Username });
+                }
+                //user[0].Account_Locked = false;
+                //db.SaveChanges();
+
+                Logger.LogAccountRecovered(user[0].ID, user[0].Username);
+                //Database1Entities6 db2 = new Database1Entities6();
+                //var events = db2.EventLogs.ToList();
                 ViewBag.Message = "Account Unlocked Successfully.";
             }
             else
             {
                 ViewBag.Error = ErrorFinder.GetErrorMessage(37);
             }
+
+            //if (model.Answer_1 == userDetails.Answer_1 && model.Answer_2 == userDetails.Answer_2) {
+            //    userDetails.Account_Locked = false;
+            //    db.SaveChanges();
+
+            //    Logger.LogAccountRecovered(userDetails.ID, userDetails.Username);
+            //    Database1Entities6 db2 = new Database1Entities6();
+            //    var events = db2.EventLogs.ToList();
+            //    ViewBag.Message = "Account Unlocked Successfully.";
+            //}
+            //else
+            //{
+            //    ViewBag.Error = ErrorFinder.GetErrorMessage(37);
+            //}
+
 
 
             return View();

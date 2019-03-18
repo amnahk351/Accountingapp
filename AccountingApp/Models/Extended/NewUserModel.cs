@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
+using Dapper;
+using AccountingApp.DBAccess;
 
 namespace AccountingApp.Models
 {
@@ -82,9 +84,11 @@ namespace AccountingApp.Models
             bool found = false;
             if (UsernameChoosen != null)
             {
-                SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
-            SqlCommand cmd = new SqlCommand("Select count(*) from CreateUsers where Username= @Username", con);
-            cmd.Parameters.AddWithValue("@Username", UsernameChoosen);
+                SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
+                SqlCommand cmd = new SqlCommand("Select count(*) from UserTable where Username= @Username", con);
+                //    SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Database1.mdf;Integrated Security=True");
+                //SqlCommand cmd = new SqlCommand("Select count(*) from CreateUsers where Username= @Username", con);
+                cmd.Parameters.AddWithValue("@Username", UsernameChoosen);
             con.Open();
             int result = (int)cmd.ExecuteScalar();
             if (result != 0)

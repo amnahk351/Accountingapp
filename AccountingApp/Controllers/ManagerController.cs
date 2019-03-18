@@ -1,17 +1,21 @@
-﻿using AccountingApp.Models;
+﻿using AccountingApp.DBAccess;
+using AccountingApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Dapper;
 
 namespace AccountingApp.Controllers
 {
     public class ManagerController : Controller
     {
-        private Database1Entities7 db = new Database1Entities7();
-        private Database1Entities3 coaDB = new Database1Entities3();
+        //private Database1Entities7 db = new Database1Entities7();
+        //private Database1Entities3 coaDB = new Database1Entities3();
         // GET: Manager
         public ActionResult ManagerIndex()
         {
@@ -31,13 +35,22 @@ namespace AccountingApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var allTransactionsWithEntryID = db.Transactions.Where(t => t.EntryId == id);
+                List<Transaction> allTransactionsWithEntryID;
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    allTransactionsWithEntryID = db.Query<Transaction>($"Select * From dbo.Transactions Where EntryID = @EntryID", new { EntryID = id }).ToList();
+                }
 
                 foreach (Transaction t in allTransactionsWithEntryID)
                 {
                     t.Status = "approved";
                     Trace.WriteLine("----------" + t.EntryId + ":" + t.Status);
-                    var coa = coaDB.ChartOfAccs.Where(a => a.AccountName == t.AccountName).FirstOrDefault();
+
+                    ChartOfAcc coa;
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                    {
+                        coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @AccountName", new { AccountName = t.AccountName }).FirstOrDefault();
+                    }
 
                     if (coa != null)
                         Trace.WriteLine("-------------" + coa.AccountName);
@@ -58,9 +71,19 @@ namespace AccountingApp.Controllers
                         coa.CurrentBalance += t.Credit.Value;
                         coa.CurrentBalance -= t.Debit.Value;
                     }
+
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                    {
+                        string sql = $"UPDATE dbo.Transactions SET Status = @status WHERE EntryID = @entryID";
+                        db.Execute(sql, new { status = t.Status, entryID = t.EntryId });
+                    }
+
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                    {
+                        string sql = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @currentBalance WHERE AccountName = @accountName";
+                        db.Execute(sql, new { currentBalance = coa.CurrentBalance, accountName = coa.AccountName });
+                    }
                 }
-                coaDB.SaveChanges();
-                db.SaveChanges();
             }
             else
                 Trace.WriteLine("no");
@@ -70,13 +93,23 @@ namespace AccountingApp.Controllers
 
         public ActionResult DisapproveEntry(int? id)
         {
-            var allTransactionsWithEntryID = db.Transactions.Where(t => t.EntryId == id);
+            List<Transaction> allTransactionsWithEntryID;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                allTransactionsWithEntryID = db.Query<Transaction>($"Select * From dbo.Transactions Where EntryID = @EntryID", new { EntryID = id }).ToList();
+            }
 
             foreach (Transaction t in allTransactionsWithEntryID)
             {
                 t.Status = "disapproved";
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    string sql = $"UPDATE dbo.Transactions SET Status = @status WHERE EntryID = @entryID";
+                    db.Execute(sql, new { status = t.Status, entryID = t.EntryId });
+                }
             }
-            db.SaveChanges();
+            
 
             return View();
         }
@@ -85,19 +118,35 @@ namespace AccountingApp.Controllers
 
         public ActionResult GeneralJournal()
         {
-            var allTransactions = db.Transactions.ToList();
+
+            List<Transaction> allTransactions;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                allTransactions = db.Query<Transaction>($"Select * From dbo.Transactions").ToList();
+            }
             return View(allTransactions);
         }
 
         public ActionResult TrialBalance()
         {
-            var coa = coaDB.ChartOfAccs.ToList();
+
+            List<ChartOfAcc> coa;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts").ToList();
+            }
+
             return View(coa);
         }
 
         private Entries getAllEntriesOfStatus(string s)
         {
-            var allPendingTransactions = db.Transactions.Where(t => t.Status == s).ToList();
+
+            List<Transaction> allPendingTransactions;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                allPendingTransactions = db.Query<Transaction>($"Select * From dbo.Transactions Where Status = @status", new { status = s }).ToList();
+            }
 
             Entries entries = new Entries();
             List<int> ids = new List<int>();
