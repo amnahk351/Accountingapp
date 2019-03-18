@@ -321,6 +321,8 @@ namespace AccountingApp.Controllers
         }
     }
 
+    //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html
+
     public class FileUploadService
     {
         public void SaveFileDetails(HttpPostedFileBase file)
