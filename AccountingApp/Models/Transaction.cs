@@ -23,8 +23,8 @@ namespace AccountingApp.Models
         public Nullable<System.DateTime> DateModified { get; set; }
         public Nullable<int> EntryId { get; set; }
         public Nullable<int> FileId { get; set; }
-        public string Comment { get; set; }
-        public string AccountantUser { get; set; }
+        public string AccountantComment { get; set; }
+        public string AccountantUsername { get; set; }
         public string ManagerUser { get; set; }
         public string AccountName { get; set; }
     }
