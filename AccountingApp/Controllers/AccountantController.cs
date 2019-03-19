@@ -24,12 +24,12 @@ namespace AccountingApp.Controllers
         {
             // Database1Entities3 db = new Database1Entities3();
             //List<ChartOfAcc> getaccountslist = db.ChartOfAccs.ToList();
-            List<ChartOfAcc> listAccounts;
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
-            }
-            List<SelectListItem> sliAccountList = new List<SelectListItem>();
+            //List<ChartOfAcc> listAccounts;
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+            //}
+            //List<SelectListItem> sliAccountList = new List<SelectListItem>();
 
             //IEnumerable<ChartOfAcc> accounts = new List<ChartOfAcc> { new ChartOfAcc { AccountNumber = 1234, AccountName = "Test" } };
 
@@ -42,21 +42,21 @@ namespace AccountingApp.Controllers
             //    };
             //    sliAccountList.Add(item);
             //}
-            foreach (ChartOfAcc coa in listAccounts)
-            {
-                SelectListItem item = new SelectListItem
-                {
-                    Text = coa.AccountName,
-                    Value = coa.AccountNumber.ToString()
-                };
-                sliAccountList.Add(item);
-            }
+            //foreach (ChartOfAcc coa in listAccounts)
+            //{
+            //    SelectListItem item = new SelectListItem
+            //    {
+            //        Text = coa.AccountName,
+            //        Value = coa.AccountNumber.ToString()
+            //    };
+            //    sliAccountList.Add(item);
+            //}
 
-            //SelectList list = new SelectList(sliAccountList, "Value", "Text");
-            ViewBag.accountlist = sliAccountList;
+            ////SelectList list = new SelectList(sliAccountList, "Value", "Text");
+            //ViewBag.accountlist = sliAccountList;
             //Database1Entities7 entities = new Database1Entities7();
-
-            return View();
+            return View(getAllEntriesOfStatus("approved"));
+            //return View();
         }
 
         [HttpPost]
@@ -320,6 +320,45 @@ namespace AccountingApp.Controllers
 
 
             return View();
+        }
+
+        private Entries getAllEntriesOfStatus(string s)
+        {
+
+            List<Transaction> allPendingTransactions;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                allPendingTransactions = db.Query<Transaction>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
+            }
+
+
+            Entries entries = new Entries();
+            List<int> ids = new List<int>();
+            foreach (Transaction t in allPendingTransactions)
+            {
+                int id = t.EntryId.Value;
+                string status = t.Status;
+                DateTime date = t.DateSubmitted.GetValueOrDefault();
+
+                if (ids.Contains(id))
+                    continue;
+                else
+                    ids.Add(id);
+
+                Entry e = new Entry(id, status, date);
+                foreach (Transaction t2 in allPendingTransactions)
+                {
+                    if (t2.EntryId == id)
+                    {
+                        e.accountNames.Add(t2.AccountName);
+                        e.debits.Add(t2.Debit.GetValueOrDefault());
+                        e.credits.Add(t2.Credit.GetValueOrDefault());
+                    }
+                }
+                entries.entries.Add(e);
+            }
+
+            return entries;
         }
     }
 
