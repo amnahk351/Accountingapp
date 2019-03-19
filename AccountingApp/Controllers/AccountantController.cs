@@ -22,66 +22,9 @@ namespace AccountingApp.Controllers
         //}
         public ActionResult AccountantIndex()
         {
-            // Database1Entities3 db = new Database1Entities3();
-            //List<ChartOfAcc> getaccountslist = db.ChartOfAccs.ToList();
-            //List<ChartOfAcc> listAccounts;
-            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            //{
-            //    listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
-            //}
-            //List<SelectListItem> sliAccountList = new List<SelectListItem>();
+           
 
-            //IEnumerable<ChartOfAcc> accounts = new List<ChartOfAcc> { new ChartOfAcc { AccountNumber = 1234, AccountName = "Test" } };
-
-            //foreach (ChartOfAcc coa in getaccountslist)
-            //{
-            //    SelectListItem item = new SelectListItem
-            //    {
-            //        Text = coa.AccountName,
-            //        Value = coa.AccountNumber.ToString()
-            //    };
-            //    sliAccountList.Add(item);
-            //}
-            //foreach (ChartOfAcc coa in listAccounts)
-            //{
-            //    SelectListItem item = new SelectListItem
-            //    {
-            //        Text = coa.AccountName,
-            //        Value = coa.AccountNumber.ToString()
-            //    };
-            //    sliAccountList.Add(item);
-            //}
-
-            ////SelectList list = new SelectList(sliAccountList, "Value", "Text");
-            //ViewBag.accountlist = sliAccountList;
-            //Database1Entities7 entities = new Database1Entities7();
-            //return View(getAllEntriesOfStatus("approved"));
-            //return View();
-            
-            List<Transaction> TransactionsList;
-
-            var sessionUser = Session["Username"] as string;
-
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-
-                //TransactionsList = db.Query<Transaction>($"Select * from dbo.TransactionTable WHERE AccountantUsername = @Username").ToList();
-
-
-                TransactionsList = db.Query<Transaction>($"Select * from dbo.TransactionTable Where AccountantUsername = @Username AND DateSubmitted IS NOT NULL", new { Username = sessionUser }).ToList();
-
-            
-                //string sql = "Select * from dbo.TransactionTable Where AccountantUsername = @Username;";
-
-                //db.Execute(sql, new
-                //{
-
-                //    Username = sessionUser
-
-                //});
-            }
-
-            return View(TransactionsList);
+            return View(getAllEntriesOfStatus("approved"));
         }
 
         [HttpPost]
@@ -386,6 +329,7 @@ namespace AccountingApp.Controllers
 
             return entries;
         }
+
     }
 
     //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html

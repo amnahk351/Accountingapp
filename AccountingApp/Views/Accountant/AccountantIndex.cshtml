@@ -1,6 +1,5 @@
-@*@model AccountingApp.Models.Transaction*@
-@model IEnumerable<AccountingApp.Models.Transaction>
-    
+﻿@model AccountingApp.Models.Entries
+
 @{
     ViewBag.Title = "AccountantIndex";
     Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
@@ -369,46 +368,29 @@
         <h5>General Journal</h5>
         <hr />
         <div>
-            <table id="JournalEntries" class="table table-responsive table-striped">
+            <table id="GeneralJournalTable" class="table table-responsive table-striped" style="width:100%">
                 <thead>
                     <tr>
-                        <th style="width:80px">Date</th>
-                        <th style="width:80px">Journal ID</th>
-                        <th style="width:200px">Accounts Affected</th>
-                        <th style="width:80px">Created By</th>
-                        <th style="width:80px">Comment</th>
-                        <th style="width:80px">Status</th>
-
+                        <th>Date</th>
+                        <th>EntryID</th>
+                        <th>Accounts Affected</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
-
-                <tbody>                                      
-
-                    @foreach (var item in Model)
+                <tbody>
+                    @for (int i = 0; i < Model.entries.Count; i++)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateSubmitted)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EntryId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AccountName)
-                        </td>                        
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AccountantUsername)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AccountantComment)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
-
-                    </tr>
+                        <tr>
+                            <td>@Model.entries[i].submitDate</td>
+                            <td>@Model.entries[i].entryID</td>
+                            <td style="white-space: pre-wrap;">@Model.entries[i].FormattedAccountNames()</td>
+                            <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                            <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                            <td>@Model.entries[i].status</td>
+                        </tr>
                     }
-
                 </tbody>
             </table>
         </div>
@@ -464,12 +446,12 @@
 
     <hr />
     @*<div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-success">All</button>
-        <button type="button" class="btn btn-success">Approved</button>
-        <button type="button" class="btn btn-success">Declined</button>
-        <button type="button" class="btn btn-success">Pending</button>
+            <button type="button" class="btn btn-success">All</button>
+            <button type="button" class="btn btn-success">Approved</button>
+            <button type="button" class="btn btn-success">Declined</button>
+            <button type="button" class="btn btn-success">Pending</button>
 
-    </div>*@
+        </div>*@
     @*</div>*@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
