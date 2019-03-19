@@ -163,6 +163,7 @@ namespace AccountingApp.Controllers
         {
             int insertedRecords = 0;
             int NewEntryId = GetLatestEntryId();
+            var sessionUser = Session["Username"] as string;
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -179,7 +180,7 @@ namespace AccountingApp.Controllers
 
                     db.Execute(sql, new
                     {
-                        AccountantUsername = "abc",
+                        AccountantUsername = sessionUser,
                         AccountantComment = transactions[i].Comment,
                         DateSubmitted = transactions[i].DateSubmitted,
                         Status = transactions[i].Status,
