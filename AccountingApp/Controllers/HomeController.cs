@@ -336,7 +336,7 @@ namespace AccountingApp.Controllers
                     City = CurrentUser[0].City,
                     State = CurrentUser[0].State,
                     ZIP_Code = CurrentUser[0].ZIP_Code,
-                    ID = CurrentUser[0].ID,
+                    ID = CurrentUser[0].ID
 
                 });
             }
@@ -348,11 +348,11 @@ namespace AccountingApp.Controllers
 
         public ActionResult EventLog()
         {
-            List<CreateUser> events;
+            List<EventLog> events;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
 
-                events = db.Query<CreateUser>($"Select * from dbo.ErrorMessages").ToList();
+                events = db.Query<EventLog>($"Select * from dbo.EventLogTable").ToList();
             }
 
             return View(events);
