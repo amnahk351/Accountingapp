@@ -407,6 +407,8 @@
     <Content Include="Views\Shared\_Layout - Admin.cshtml" />
     <Content Include="Views\Manager\GeneralJournal.cshtml" />
     <Content Include="Views\Manager\ManagerIndex.cshtml" />
+    <Content Include="Views\Shared\_Layout_Accountant.cshtml" />
+    <Content Include="Views\Shared\_Layout_Admin.cshtml" />
     <Content Include="Views\Accountant\Journalize.cshtml" />
   </ItemGroup>
   <ItemGroup>

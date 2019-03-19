@@ -2,7 +2,8 @@
 
 @{
     ViewBag.Title = "ChartOfAccounts";
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    //Layout = null;
 }
 <html>
 <head>
@@ -53,6 +54,13 @@
             .inner:hover img {
                 transform: scale(1.5);
             }
+
+        @@media (min-width: 1200px) {
+            .container {
+                max-width: 1660px; /*this px doesn't do much it just has to be a somewhat large number to override the 1400px*/
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -81,7 +89,7 @@
         </div>*@
 
 
-    <nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver">
+    @*<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -98,22 +106,22 @@
                 </li>
 
             </ul>
-            @*<form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>*@
-            <ul class="nav navbar-nav navbar-right">
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav navbar-right">
                 <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
-                @*<br />*@
+                <br />
                 <li class="nav-item">
                     <a class="nav-link" href="/Account/Login">Sign Out</a>
                 </li>
             </ul>
         </div>
-    </nav>
+    </nav>*@
 
-    <br />
-    <div style="width:85%; margin:0 auto">
+
+    <div class="container body-content" style="width:85%; margin:0 auto">
         <h4>Chart Of Accounts</h4>
         <hr class="my-4" />
         @if (TempData["Message"] != null)
@@ -271,7 +279,7 @@
                             <td>@Model[i].OriginalBalance</td>
                             <td>@Model[i].CurrentBalance</td>
                             <td>@Model[i].AccountDescription</td>
-                            <td>@(Model[i].Active ? "Yes" : "No")</td>
+                            <td>@(Model[i].Active ? "Y" : "N")</td>
                             <td>@Model[i].CreatedBy</td>
                             <td>
 
@@ -293,7 +301,7 @@
             </table>
         </div>
         <hr />
-        <p> &copy; @DateTime.Now.Year - Objective Accounting</p>
+        @*<p> &copy; @DateTime.Now.Year - Objective Accounting</p>*@
 
     </div>
 
@@ -326,13 +334,13 @@
         })
 
     </script>
-    <script type="text/javascript">
+    @*<script type="text/javascript">
 
-    window.onload = function () {
-        var username = '@Session["FirstNameofUser"]';
-        document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
-    };
+        window.onload = function () {
+            var username = '@Session["FirstNameofUser"]';
+            document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
+        };
 
-    </script>
+        </script>*@
 </body>
 </html>
