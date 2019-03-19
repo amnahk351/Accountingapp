@@ -57,7 +57,7 @@
             <a class="navbar-brand" href="#">Objective Accounting</a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="@Url.Action("ManagerIndex")">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
@@ -83,10 +83,10 @@
 
                 </li>
                 <li>
-                    <a class="nav-link active" href="#">Transactions</a>
+                    <a class="nav-link active" href="@Url.Action("../Accountant/Journalize")">Journalize</a>
                 </li>
                 <li>
-                    <a class="nav-link active" href="#">Chart Of Accounts</a>
+                    <a class="nav-link active" href="@Url.Action("../Admin/ChartOfAccounts")">Chart Of Accounts</a>
                 </li>
                 <li>
                     <a class="nav-link active" href="#">Dashboard</a>
@@ -101,7 +101,7 @@
 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Sign Out</a>
+                    <a class="nav-link active" href="@Url.Action("../Account/Login")">Sign Out</a>
                 </li>
             </ul>
         </div>
@@ -128,21 +128,21 @@
                         <tbody>
                             @for (int i = 0; i < Model.entries.Count; i++)
                             {
-                            <tr>
-                            <td>@Model.entries[i].entryID</td>
-                            <td style="white-space: pre-wrap;">@Model.entries[i].FormattedAccountNames()</td>
-                            <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                            <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                            <td>@Model.entries[i].status</td>
-                            <td>
-                                <a href="@Url.Action("ApproveEntry", new { id = Model.entries[i].entryID})">
-                                    Approve
-                                </a>
-                                <a href="@Url.Action("DisapproveEntry", new { id = Model.entries[i].entryID})">
-                                    Disapprove
-                                </a>
-                            </td>
-                            </tr>
+                                <tr>
+                                    <td>@Model.entries[i].entryID</td>
+                                    <td style="white-space: pre-wrap;">@Model.entries[i].FormattedAccountNames()</td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                                    <td>@Model.entries[i].status</td>
+                                    <td>
+                                        <a href="@Url.Action("ApproveEntry", new { id = Model.entries[i].entryID})">
+                                            Approve
+                                        </a>
+                                        <a href="@Url.Action("DisapproveEntry", new { id = Model.entries[i].entryID})">
+                                            Disapprove
+                                        </a>
+                                    </td>
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -161,7 +161,7 @@
     </script>
 
     <script>
-        
+
     </script>
 
 </body>

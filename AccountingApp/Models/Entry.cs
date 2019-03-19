@@ -11,6 +11,7 @@ namespace AccountingApp.Models
         public List<Transaction> transactions { get; set; }
         public int entryID { get; set; }
         public string status { get; set; }
+        public DateTime submitDate;
         public List<String> accountNames { get; set; }
         public List<Decimal> debits { get; set; }
         public List<Decimal> credits { get; set; }
@@ -23,10 +24,11 @@ namespace AccountingApp.Models
             credits = new List<Decimal>();
         }
 
-        public Entry(int entryID, string status)
+        public Entry(int entryID, string status, DateTime submitDate)
         {
             this.entryID = entryID;
             this.status = status;
+            this.submitDate = submitDate;
             transactions = new List<Transaction>();
             accountNames = new List<String>();
             debits = new List<Decimal>();

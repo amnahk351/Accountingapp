@@ -57,7 +57,7 @@
             <a class="navbar-brand" href="#">Objective Accounting</a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="@Url.Action("ManagerIndex")">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
@@ -83,10 +83,10 @@
 
                 </li>
                 <li>
-                    <a class="nav-link active" href="#">Transactions</a>
+                    <a class="nav-link active" href="@Url.Action("../Accountant/Journalize")">Journalize</a>
                 </li>
                 <li>
-                    <a class="nav-link active" href="#">Chart Of Accounts</a>
+                    <a class="nav-link active" href="@Url.Action("../Admin/ChartOfAccounts")">Chart Of Accounts</a>
                 </li>
                 <li>
                     <a class="nav-link active" href="#">Dashboard</a>
@@ -101,7 +101,7 @@
 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Sign Out</a>
+                    <a class="nav-link active" href="@Url.Action("../Account/Login")">Sign Out</a>
                 </li>
             </ul>
         </div>
@@ -114,7 +114,9 @@
                 <div class="card-body" style="display:inline-block;">
                     <h3 class="card-title">Reason For Disapproval</h3>
                     <hr />
-                    <textarea rows="4" cols="50" autofocus placeholder="Why did you disapprove of this entry?"></textarea>
+                    <textarea rows="4" cols="50" autofocus placeholder="Why did you disapprove this entry?"></textarea>
+                    <br />
+                    <br />
                     <a href="@Url.Action("ManagerApproval")" class="btn btn-success">Submit</a>
                 </div>
             </div>

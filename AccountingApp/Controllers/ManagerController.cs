@@ -119,12 +119,12 @@ namespace AccountingApp.Controllers
         public ActionResult GeneralJournal()
         {
 
-            List<Transaction> allTransactions;
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                allTransactions = db.Query<Transaction>($"Select * From dbo.TransactionTable").ToList();
-            }
-            return View(allTransactions);
+            //List<Transaction> allTransactions;
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    allTransactions = db.Query<Transaction>($"Select * From dbo.TransactionTable").ToList();
+            //}
+            return View(getAllEntriesOfStatus("approved"));
         }
 
         public ActionResult TrialBalance()
@@ -167,13 +167,14 @@ namespace AccountingApp.Controllers
             {
                 int id = t.EntryId.Value;
                 string status = t.Status;
+                DateTime date = t.DateSubmitted.GetValueOrDefault();
 
                 if (ids.Contains(id))
                     continue;
                 else
                     ids.Add(id);
 
-                Entry e = new Entry(id, status);
+                Entry e = new Entry(id, status, date);
                 foreach (Transaction t2 in allPendingTransactions)
                 {
                     if (t2.EntryId == id)

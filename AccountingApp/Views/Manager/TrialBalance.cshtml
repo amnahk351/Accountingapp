@@ -56,7 +56,7 @@
             <a class="navbar-brand" href="#">Objective Accounting</a>
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="@Url.Action("ManagerIndex")">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
@@ -82,10 +82,10 @@
 
                 </li>
                 <li>
-                    <a class="nav-link active" href="#">Transactions</a>
+                    <a class="nav-link active" href="@Url.Action("../Accountant/Journalize")">Journalize</a>
                 </li>
                 <li>
-                    <a class="nav-link active" href="#">Chart Of Accounts</a>
+                    <a class="nav-link active" href="@Url.Action("../Admin/ChartOfAccounts")">Chart Of Accounts</a>
                 </li>
                 <li>
                     <a class="nav-link active" href="#">Dashboard</a>
@@ -100,7 +100,7 @@
 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Sign Out</a>
+                    <a class="nav-link active" href="@Url.Action("../Account/Login")">Sign Out</a>
                 </li>
             </ul>
         </div>
@@ -162,24 +162,24 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
     @*<script>
-        var totals = [0, 0];
-        $(document).ready(function () {
-           
-            var $dataRows = $("#trialTable tr:not('.totalRow, .titleRow')");
+            var totals = [0, 0];
+            $(document).ready(function () {
 
-            $dataRows.each(function () {
-                $(this).find('.rowData').each(function (i) {
-                    
-                        totals[i] += parseFloat($(this).html());
-                    
+                var $dataRows = $("#trialTable tr:not('.totalRow, .titleRow')");
+
+                $dataRows.each(function () {
+                    $(this).find('.rowData').each(function (i) {
+
+                            totals[i] += parseFloat($(this).html());
+
+                    });
                 });
-            });
-            $("#trialTable td.total").each(function (i) {
-                $(this).html(totals[i]);
-            });
+                $("#trialTable td.total").each(function (i) {
+                    $(this).html(totals[i]);
+                });
 
-        });
-    </script>*@
+            });
+        </script>*@
 
 
 
