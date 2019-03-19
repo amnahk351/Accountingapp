@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title - Objective Accounting</title>
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    @*link above is for user icon*@
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
+    @*added the 3 links above to see if collapse would work*@
+
+    <style>
+
+        body {
+            padding-top: 0px; /*Do not delete this line, it's an override*/
+            display: block;
+            margin: 0px;
+        }
+
+        .navbar {
+            /*overflow: hidden;*/ /*important to keep this hidden or dropdown will be within/behind navbar*/
+            background-color: silver;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            /*padding: 14px 16px;*/
+            /*padding: 0rem 1rem;*/
+            /*padding: 0px;*/
+        }
+
+            .navbar a {
+                /*float: left;*/
+                display: inline-block;
+                font-size: 20px;
+                color: black; /*text color for non-dropdown headings*/
+                /*text-align: center;*/
+                /*padding: 0rem 1rem;*/
+                padding: 14px 16px;
+                /*padding: 24px 25px; crucial for horizontal spacing*/
+                text-decoration: none;
+            }
+
+
+        .nav_dropdown {
+            float: left; /*don't think it does anything*/
+            overflow: hidden;
+            color: black; /*color for dropdown headings*/
+        }
+
+
+            .nav_dropdown .nav_dropbtn {
+                font-size: 20px;
+                border: none;
+                outline: none;
+                /*color: black; dont think this does anything*/
+                padding: 14px 16px;
+                /*padding: 24px 25px; crucial for horizontal spacing*/
+                background-color: inherit;
+                font-family: inherit;
+                margin: 0;
+            }
+
+
+            .navbar a:hover, .nav_dropdown:hover .nav_dropbtn {
+                background-color: #0087ff; /*hover color for each heading*/
+                color: black; /*color for individual links within dropdown*/
+                cursor: pointer;
+            }
+
+
+        .nav_dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .nav_dropdown-content a {
+                float: none;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+            }
+
+                .nav_dropdown-content a:hover {
+                    text-decoration: none;
+                    background-color: #ddd;
+                    /*color: white;*/
+                }
+
+        .nav_dropdown:hover .nav_dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-fixed-top" style="padding: 0rem 1rem">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" @*id="navbarTogglerDemo01"*@> @*padding inside of here will go around navbar*@
+            @*< class="navbar-brand" href="#">*@
+            <img src="~/img/Accounting Logo.PNG" width="150" height="40" style="margin-right: 15px; margin-left: 10px;"/>
+            @*</>*@
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0" id="navbarTogglerDemo01">
+                <li><a class="nav-link" href="/Accountant/Journalize" style="padding-left: 16px; padding-right: 16px">Journalize @*<span class="sr-only">(current)</span>*@</a></li>
+                <li class="nav_dropdown">
+                    <a class="nav_dropbtn">Reports</a>
+                    <div class="nav_dropdown-content">
+                        <a href="#">Trial Balance</a>
+                        <a href="#">Income Statement</a>
+                        <a href="#">Balance Sheet</a>
+                        <a href="#">Statement of Returned Earnings</a>
+
+                    </div>
+                </li>
+                <li class="nav_dropdown">
+                    <a class="nav_dropbtn">Transactions</a>
+                    <div class="nav_dropdown-content">
+                        <a href="#">Pending Transactions</a>
+                        <a href="#">Posted Transactions</a>
+                        <a href="#">Rejected Transactions</a>
+                        <a href="#">Suspended Transactions</a>
+
+                    </div>
+                </li>
+                <li><a class="nav-link" href="#" style="padding-left: 16px; padding-right: 16px">Ledger</a></li>
+                <li class="nav_dropdown">
+                    <a class="nav_dropbtn">Analysis</a>
+                    <div class="nav_dropdown-content">
+                        <a href="#">Ratio Analysis</a>
+                        <a href="#">Dashboards</a>
+                    </div>
+                </li>
+                <li><a class="nav-link" href="/Admin/ChartOfAccounts" style="padding-left: 16px; padding-right: 16px">Chart of Accounts</a></li>
+                <li><a class="nav-link" href="/Home/EventLog" style="padding-left: 16px; padding-right: 16px">Event Log</a></li>
+
+                @*<li><a class="nav-item" href="#">Test</a></li> nav-item makes this display with an underline when hovered over*@
+
+            </ul>
+
+            @*<form class="form-inline my-2 my-lg-0">       this is a search bar on the navbar, which we probably don't need
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>*@
+
+            <ul class="navbar-nav navbar-right">
+                @*<li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user" style="font-size: 25px; padding-top: 16px"></span>Welcome, Admin</span></li>*@
+                <i id="LoggedName" class="nav-item" style="font-size: 20px; padding-top: 14px">Welcome, Accountant</i>
+                @*<br />*@
+                @*<li class="nav-item">
+                        <a class="nav-link" href="/Account/Login">Sign Out</a>
+                    </li>*@
+                <li class="nav_dropdown">
+                    <a class="nav_dropbtn">Account <i class="fas fa-user"></i></a>
+                    <div class="nav_dropdown-content" style="left:auto; right:0; margin-right:16px;">
+                        <a href="#">View Profile</a>
+                        <a href="#">Settings</a>
+                        <a href="/Account/Login">Sign Out</a>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer align="center">
+            <p>
+                &copy; @DateTime.Now.Year - Objective Accounting
+                Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
+            </p>
+        </footer>
+    </div>
+
+    <script type="text/javascript">
+
+    window.onload = function () {
+        var username = '@Session["FirstNameofUser"]';
+        document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
+    };
+
+    </script>
+
+    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>*@
+    @*added the 2 scripts above to see if the collapse would work*@
+
+    @*@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")*@
+    @RenderSection("scripts", required: false)
+</body>
+</html>

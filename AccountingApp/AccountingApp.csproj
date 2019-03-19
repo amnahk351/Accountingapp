@@ -412,6 +412,8 @@
     <Content Include="Views\Manager\ManagerApproval.cshtml" />
     <Content Include="Views\Manager\DisapproveEntry.cshtml" />
     <Content Include="Views\Manager\TrialBalance.cshtml" />
+    <Content Include="Views\Shared\_Layout_Accountant.cshtml" />
+    <Content Include="Views\Shared\_Layout_Admin.cshtml" />
     <Content Include="Views\Accountant\Journalize.cshtml" />
   </ItemGroup>
   <ItemGroup>
