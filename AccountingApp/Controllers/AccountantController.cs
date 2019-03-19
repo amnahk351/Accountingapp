@@ -181,7 +181,7 @@ namespace AccountingApp.Controllers
                     db.Execute(sql, new
                     {
                         AccountantUsername = sessionUser,
-                        AccountantComment = transactions[i].Comment,
+                        AccountantComment = transactions[i].AccountantComment,
                         DateSubmitted = transactions[i].DateSubmitted,
                         Status = transactions[i].Status,
                         AccountName = transactions[i].AccountName,
