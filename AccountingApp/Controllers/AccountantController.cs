@@ -55,8 +55,33 @@ namespace AccountingApp.Controllers
             ////SelectList list = new SelectList(sliAccountList, "Value", "Text");
             //ViewBag.accountlist = sliAccountList;
             //Database1Entities7 entities = new Database1Entities7();
-            return View(getAllEntriesOfStatus("approved"));
+            //return View(getAllEntriesOfStatus("approved"));
             //return View();
+            
+            List<Transaction> TransactionsList;
+
+            var sessionUser = Session["Username"] as string;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                //TransactionsList = db.Query<Transaction>($"Select * from dbo.TransactionTable WHERE AccountantUsername = @Username").ToList();
+
+
+                TransactionsList = db.Query<Transaction>($"Select * from dbo.TransactionTable Where AccountantUsername = @Username AND DateSubmitted IS NOT NULL", new { Username = sessionUser }).ToList();
+
+            
+                //string sql = "Select * from dbo.TransactionTable Where AccountantUsername = @Username;";
+
+                //db.Execute(sql, new
+                //{
+
+                //    Username = sessionUser
+
+                //});
+            }
+
+            return View(TransactionsList);
         }
 
         [HttpPost]
