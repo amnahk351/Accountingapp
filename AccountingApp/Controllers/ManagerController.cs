@@ -131,9 +131,21 @@ namespace AccountingApp.Controllers
         {
 
             List<ChartOfAcc> coa;
+            decimal debTotal = 0;
+            decimal credTotal = 0;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts").ToList();
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                foreach (ChartOfAcc c in coa)
+                {
+                    if (c.NormalSide.ToLower() == "debit")
+                        debTotal += c.CurrentBalance.Value;
+                    else
+                        credTotal += c.CurrentBalance.Value;
+                }
+
+                ViewBag.DebitTotal = debTotal;
+                ViewBag.CreditTotal = credTotal;
             }
 
             return View(coa);
