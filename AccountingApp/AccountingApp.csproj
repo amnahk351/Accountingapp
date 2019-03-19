@@ -204,6 +204,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateUser.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Entries.cs" />
+    <Compile Include="Models\Entry.cs" />
     <Compile Include="Models\ErrorMessageModel.cs" />
     <Compile Include="Models\EventLog.Context.cs">
       <AutoGen>True</AutoGen>
@@ -407,6 +409,9 @@
     <Content Include="Views\Shared\_Layout - Admin.cshtml" />
     <Content Include="Views\Manager\GeneralJournal.cshtml" />
     <Content Include="Views\Manager\ManagerIndex.cshtml" />
+    <Content Include="Views\Manager\ManagerApproval.cshtml" />
+    <Content Include="Views\Manager\DisapproveEntry.cshtml" />
+    <Content Include="Views\Manager\TrialBalance.cshtml" />
     <Content Include="Views\Shared\_Layout_Accountant.cshtml" />
     <Content Include="Views\Shared\_Layout_Admin.cshtml" />
     <Content Include="Views\Accountant\Journalize.cshtml" />
