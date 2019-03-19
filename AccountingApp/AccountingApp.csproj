@@ -341,7 +341,7 @@
     <Content Include="Models\EventLog.edmx.diagram">
       <DependentUpon>EventLog.edmx</DependentUpon>
     </Content>
-	    <EntityDeploy Include="Models\TransactionModel.edmx">
+    <EntityDeploy Include="Models\TransactionModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TransactionModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
@@ -407,6 +407,8 @@
     <Content Include="Views\Shared\_Layout - Admin.cshtml" />
     <Content Include="Views\Manager\GeneralJournal.cshtml" />
     <Content Include="Views\Manager\ManagerIndex.cshtml" />
+    <Content Include="Views\Shared\_Layout_Accountant.cshtml" />
+    <Content Include="Views\Shared\_Layout_Admin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />

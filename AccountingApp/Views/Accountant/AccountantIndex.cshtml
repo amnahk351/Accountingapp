@@ -1,7 +1,8 @@
 ﻿@model AccountingApp.Models.Transaction
 @{
     ViewBag.Title = "AccountantIndex";
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
+    //Layout = null;
 
 }
 
@@ -141,7 +142,7 @@
 <body>
 
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top ">
+    @*<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top ">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -156,14 +157,14 @@
                 </li>
 
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right">*@
 
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+                @*<button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
                     Journalize
-                </button>
+                </button>*@
                 <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+                @*<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
                     <div class="modal-dialog modal-lg" style="width:100%" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -174,11 +175,11 @@
                             </div>
                             @using (Html.BeginForm("Journalize", "Accountant", new { id = "rowForm" }))
                             {
-                                <div class="modal-body">
+                                <div class="modal-body">*@
 
                                     @*<div class="form-group col-md-4">*@
 
-                                    <table id="InputTable" style="width:100%">
+                                    @*<table id="InputTable" style="width:100%">
                                         <colgroup>
                                             <col style="width: 16%">
                                             <col style="width: 46%">
@@ -241,10 +242,10 @@
                                                 <th></th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody>*@
 
                                             @* Extra row in table to show brown strip *@
-                                            <tr>
+                                            @*<tr>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -276,7 +277,7 @@
                                     <br />
 
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-12">*@
                                         @*<table class="table table-hover small-text" id="tb">
                                                 <tr class="tr-header">
                                                     <th>Account Name</th>
@@ -298,7 +299,7 @@
                                             </table>*@
 
 
-                                        <div class="form-group col-md-10">
+                                        @*<div class="form-group col-md-10">
                                             <label for="Comment" class="control-label">Comment</label>
                                             <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="Optional"></textarea>
 
@@ -320,9 +321,9 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>*@
                                     @*<button type="submit" id="btnSubmit" class="btn btn-success">Submit</button>*@
-                                    <button type="button" id="btnSubmit" class="btn btn-success">Submit</button>
+                                    @*<button type="button" id="btnSubmit" class="btn btn-success">Submit</button>
 
                                     <button type="button" onclick="ResetFunction()" class="btn btn-info">Reset</button>
                                     <button type="button" id="btnSave" class="btn btn-warning">Suspend</button>
@@ -333,8 +334,8 @@
 
                     </div>
 
-                </div>
-                <li>
+                </div>*@
+                @*<li>
                     <a class="nav-link active" href="#">General Ledger</a>
                 </li>
                 <li>
@@ -353,10 +354,10 @@
                 <h3 style="color:white">|</h3>
                 <li class="nav-item">
                     <a class="nav-link active" href="#">Sign Out</a>
-                </li>
-            </ul>
+                </li>*@
+            @*</ul>
         </div>
-    </nav>
+    </nav>*@
     <br />
     <br />
     <div style="width:55%; margin:0 auto">
