@@ -625,10 +625,13 @@
                 } else return o.selectionStart
             }
 
-        </script>
+        </script>        
 
         <script>
-            window.onload = function () {
+
+            $(document).ready(function () {
+
+                //Populate date field with today
                 var today = new Date();
                 var dd = today.getDate();
                 var mm = today.getMonth() + 1; //January is 0!
@@ -644,7 +647,7 @@
                 d.value = today;
 
 
-                //Setup Account Selector Order and default option
+                //Sort Account list
                 $("#AccountNumber").html($('#AccountNumber option').sort(function (x, y) {
                     return $(x).text() < $(y).text() ? -1 : 1;
                 }))
@@ -658,7 +661,8 @@
 
                 //Select first item
                 $("#AccountNumber").get(0).selectedIndex = 0;
-            };
+
+            });
 
         </script>
 
@@ -1105,6 +1109,5 @@
             };
 
         </script>
-    </div>
 </body>
 </html>
