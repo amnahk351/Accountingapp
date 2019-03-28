@@ -94,6 +94,23 @@
             max-width: none;
         }
 
+        .EntryType {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            max-width: none;
+        }
+
         table.EntryTable {
             border: 1px solid #1C6EA4;
             background-color: #EEEEEE;
@@ -190,6 +207,37 @@
                         <col style="width: 1%">
                     </colgroup>
                     <tr>
+                        <td>Entry Type</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            
+                                <select name="EntryType" class="EntryType" id="EntryType" value="@Request["EntryType"]">
+                                    <option value="Normal">Normal</option>
+                                    <option value="Adjusting">Adjusting</option>
+                                    <option value="Reversing">Reversing</option>
+                                    <option value="Closing">Closing</option>
+                                    
+                                </select>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
                         <td>Date</td>
                         <td></td>
                         <td>Account</td>
@@ -237,7 +285,7 @@
                     </tr>
 
                 </table>
-                <br />
+               
                 <hr>
                 <br />
 
@@ -625,10 +673,13 @@
                 } else return o.selectionStart
             }
 
-        </script>
+        </script>        
 
         <script>
-            window.onload = function () {
+
+            $(document).ready(function () {
+
+                //Populate date field with today
                 var today = new Date();
                 var dd = today.getDate();
                 var mm = today.getMonth() + 1; //January is 0!
@@ -644,7 +695,7 @@
                 d.value = today;
 
 
-                //Setup Account Selector Order and default option
+                //Sort Account list
                 $("#AccountNumber").html($('#AccountNumber option').sort(function (x, y) {
                     return $(x).text() < $(y).text() ? -1 : 1;
                 }))
@@ -658,7 +709,8 @@
 
                 //Select first item
                 $("#AccountNumber").get(0).selectedIndex = 0;
-            };
+
+            });
 
         </script>
 
@@ -1105,6 +1157,5 @@
             };
 
         </script>
-    </div>
 </body>
 </html>
