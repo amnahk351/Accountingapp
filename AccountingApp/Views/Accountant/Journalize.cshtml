@@ -890,13 +890,17 @@
                     cell2.innerHTML = "<span style='padding-left: 5%'>" + acc + "</span>";
 
                     var CreMoney = formatMoney(cre);
-                    cell4.innerHTML = CreMoney;
+
+                    cell4.innerHTML = "<span contenteditable='true'>" + CreMoney + "</span>";
+                    //cell4.innerHTML = CreMoney;
                 } else {
                     //debit is entered, no padding needed
                     cell2.innerHTML = acc;
 
                     var DebMoney = formatMoney(deb);
-                    cell3.innerHTML = DebMoney;
+
+                    cell3.innerHTML = "<span contenteditable='true'>" + DebMoney + "</span>";
+                    //cell3.innerHTML = DebMoney;
                 }
 
 
@@ -985,6 +989,10 @@
                     var Comm = document.getElementById("Comment")
 
                     transaction.Comment = Comm.value;
+
+                    var EnType = document.getElementById("EntryType").value;
+
+                    transaction.Entry_Type = EnType;
 
                     transaction.Status = "suspended";
 
@@ -1080,6 +1088,10 @@
                     var Comm = document.getElementById("Comment")
 
                     transaction.Comment = Comm.value;
+
+                    var EnType = document.getElementById("EntryType").value;
+
+                    transaction.Entry_Type = EnType;
 
                     transaction.Status = "pending";
 

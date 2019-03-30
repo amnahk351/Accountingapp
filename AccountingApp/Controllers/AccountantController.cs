@@ -117,9 +117,9 @@ namespace AccountingApp.Controllers
 
 
                     string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
-                    "DateSubmitted, Status, AccountName, Debit, Credit, EntryId)" +
+                    "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)" +
                     "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," +
-                    "@Debit,@Credit,@EntryId)";
+                    "@Debit,@Credit,@EntryId,EntryType)";
 
                     db.Execute(sql, new
                     {
@@ -130,7 +130,8 @@ namespace AccountingApp.Controllers
                         AccountName = transactions[i].AccountName,
                         Debit = transactions[i].Debit,
                         Credit = transactions[i].Credit,
-                        EntryId = NewEntryId + 1
+                        EntryId = NewEntryId + 1,
+                        EntryType = transactions[i].Entry_Type
                     });
 
                     insertedRecords++;
