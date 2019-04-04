@@ -303,7 +303,7 @@
                 </table>
 
                 <hr>
-        
+
 
                 <table id="EntryErrorTable" style="table-layout: fixed; width: 100%; margin-bottom: 5px">
                     <colgroup>
@@ -807,6 +807,7 @@
 
     </script>
 
+
     <script>
 
         function selectElementContents(el) {
@@ -861,7 +862,7 @@
 
         var throttle = false;
 
-        function EditAccountEnter(x) {            
+        function EditAccountEnter(x) {
 
             (x).addEventListener('click', function (evt) {
 
@@ -872,7 +873,7 @@
                         throttle = false;
                     }, 1000);
 
-                    
+
                     if (x.innerHTML.indexOf("TempAccountList") !== -1) {
                         //X is a drop down list, prevent creating another list
                         return;
@@ -891,34 +892,87 @@
                     var option = document.createElement("option");
                     option.text = CurrrentAccount;
                     ListClone.add(option, 0);
-                                       
+
 
                     ListClone.setAttribute('id', 'TempAccountList');
-                    var newDiv = document.createElement("TempAccountList");  //Create a new div element           
+                    ListClone.setAttribute("onchange", "EditAccountExit()"); 
+                    var newDiv = document.createElement("TempAccountList");  //Create a new div element
 
                     newDiv.appendChild(ListClone);  //Add the list to the newly created div
-                                        
+
                     x.innerHTML = newDiv.innerHTML;
 
-                    $("#TempAccountList").get(0).selectedIndex = 0;  //Select first item
-
+                    //$("#TempAccountList").get(0).selectedIndex = 0;  //Select first item
+                    
+                    //document.getElementById("TempAccountList").addEventListener("onchange", EditAccountExit());
                 }
             });
 
         }
 
-        function EditAccountExit(x) {
 
-            //var AccountSelect = document.getElementById("TempAccountList");
-            //var acc = AccountSelect.options[AccountSelect.selectedIndex].textContent;
+        function FindTempListRow() {
+
+            var table = document.getElementById("EntryTable");
+
+            for (var i = 2; i < table.rows.length; i++) {
+                var item = table.rows[i].cells[1];
+
+                if (item.innerHTML.indexOf("TempAccountList") !== -1) {
+                    return i;
+                }
+
+            }
+
+        }
 
 
-            alert("Done");
+        function EditAccountExit() {
 
-            //if debit
+            var table = document.getElementById("EntryTable");
+
+            var AccountSelect = document.getElementById("TempAccountList");
+            var acc = AccountSelect.options[AccountSelect.selectedIndex].textContent;
+            var index = AccountSelect.selectedIndex;
+
+            var RowNum = FindTempListRow();
+            
+            var DebitCell = table.rows[RowNum].cells[2].innerText;
+            var CreditCell = table.rows[RowNum].cells[3].innerText;
 
 
-            //if credit, add back styling
+            if (index != 0) {
+
+                //Add old selection back into original list
+                var OldSelection = AccountSelect.options[0].textContent;
+
+                var x = document.getElementById("AccountNumber");
+                var option = document.createElement("option");
+                option.text = OldSelection;
+                x.add(option);
+
+                //Remove new selection from original list
+                for (var i = 0; i < x.length; i++) {
+                    if (x.options[i].textContent == acc)
+                        x.remove(i);
+                }
+
+                SortAccountList();
+            }
+
+            
+            if (DebitCell != "") {
+                //It is a debit
+                table.rows[RowNum].cells[1].innerHTML = "<span onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
+
+            }
+
+            if (CreditCell != "") {
+                //It is a credit
+                table.rows[RowNum].cells[1].innerHTML = "<span onclick=\"EditAccountEnter(this)\" style='padding-left: 5%'>" + acc + "</span>";
+
+            }
+
         }
 
         function EditTableValueEnter(x) {
@@ -940,9 +994,9 @@
 
             var newVal = formatMoney(x.innerText);
             x.innerText = newVal;
-            
 
-            if (x.innerText == "0.00") {                
+
+            if (x.innerText == "0.00") {
 
                 var columnNum = GetZeroColumn();
 
@@ -983,11 +1037,11 @@
                 document.getElementById('CreditEntryError').innerText = "";
 
                 x.style.background = "#EEEEEE";
-                
+
                 PlaceDollarSign();
                 AdjustTotals();
 
-            }           
+            }
         }
     </script>
 
@@ -996,7 +1050,7 @@
         function GetZeroColumn() {
 
             var table = document.getElementById("EntryTable");
-            
+
             for (var i = 2; i < table.rows.length; i++) {
                 var Dhtml = table.rows[i].cells[2].innerText;
 
@@ -1014,7 +1068,7 @@
                 }
             }
 
-            //No 0 found, hide error messages            
+            //No 0 found, hide error messages
             document.getElementById("DebitEntryError").innerText = "";
             document.getElementById("CreditEntryError").innerText = "";
         }
@@ -1027,7 +1081,7 @@
 
             //Place dollar sign for debit
             for (var i = 2; i < table.rows.length; i++) {
-                var Dhtml = table.rows[i].cells[2].innerText;            
+                var Dhtml = table.rows[i].cells[2].innerText;
 
                 if (Dhtml != "") {
 
@@ -1035,11 +1089,11 @@
                         //already has a $ sign
 
                     } else {
-                        table.rows[i].cells[2].innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Dhtml + "</span>";                      
-                    }                    
+                        table.rows[i].cells[2].innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Dhtml + "</span>";
+                    }
 
                     break;
-                }                
+                }
 
             }
 
@@ -1238,16 +1292,16 @@
 
             if (cre != "") {
                 //credit is entered, add padding to tab over the account name
-                cell2.innerHTML = "<span onclick=\"EditAccountEnter(this)\" onblur=\"EditAccountExit(this)\" style='padding-left: 5%'>" + acc + "</span>";
+                cell2.innerHTML = "<span onclick=\"EditAccountEnter(this)\" style='padding-left: 5%'>" + acc + "</span>";
 
                 var CreMoney = formatMoney(cre);
-                
+
                 cell4.innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + CreMoney + "</span>";
 
                 //cell4.innerHTML = CreMoney;
             } else {
                 //debit is entered, no padding needed
-                cell2.innerHTML = "<span onclick=\"EditAccountEnter(this)\" onblur=\"EditAccountExit(this)\" >" + acc + "</span>";
+                cell2.innerHTML = "<span onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
 
                 var DebMoney = formatMoney(deb);
 
@@ -1331,7 +1385,7 @@
                 });
                 return;
             }
-                
+
 
             var AccountError = document.getElementById("AccountEntryError").innerText;
             var DebError = document.getElementById("DebitEntryError").innerText;
@@ -1371,12 +1425,12 @@
                 var AccFix = row.find("TD").eq(1).innerText;
                 transaction.AccountName = AccFix;
 
-                var DebitFix = row.find("TD").eq(2).innerText;                
+                var DebitFix = row.find("TD").eq(2).innerText;
                 var DebitFix2 = StripMoneyFormatting(DebitFix);
                 transaction.Debit = DebitFix2;
 
 
-                var CreditFix = row.find("TD").eq(3).innerText;                
+                var CreditFix = row.find("TD").eq(3).innerText;
                 var CreditFix2 = StripMoneyFormatting(CreditFix);
                 transaction.Credit = CreditFix2;
 
