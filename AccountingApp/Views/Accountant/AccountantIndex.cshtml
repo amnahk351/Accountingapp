@@ -143,223 +143,6 @@
 </head>
 <body>
 
-
-    @*<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top ">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">Objective Accounting</a>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-
-            </ul>
-            <ul class="nav navbar-nav navbar-right">*@
-
-    <!-- Button trigger modal -->
-    @*<button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
-            Journalize
-        </button>*@
-    <!-- Modal -->
-    @*<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-lg" style="width:100%" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Journal Entry</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                @using (Html.BeginForm("Journalize", "Accountant", new { id = "rowForm" }))
-                {
-                    <div class="modal-body">*@
-
-    @*<div class="form-group col-md-4">*@
-
-    @*<table id="InputTable" style="width:100%">
-            <colgroup>
-                <col style="width: 16%">
-                <col style="width: 46%">
-                <col style="width: 19%">
-                <col style="width: 19%">
-            </colgroup>
-            <tr>
-                <td>Date</td>
-                <td>Account</td>
-                <td>Debit</td>
-                <td>Credit</td>
-
-            </tr>
-
-            <tr>
-
-                <td><input type="text" id="Date" onkeydown="return false;" class="form_datetime" style="text-align:right" value="" placeholder="mm/dd/yyyy"></td>
-
-
-
-                <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
-                    <div>
-                        @Html.DropDownList("AccountNumber", (List<SelectListItem>)ViewBag.accountList, new { @class = "form-control ", @name = "AccountNumber[]", required = "required" })
-                    </div>
-                </td>
-                <td><input type="text" id="Debit" class="form-control" autocomplete="off" style="text-align:right" onkeyup="AdjustTextboxes();" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
-
-                <td><input type="text" id="Credit" class="form-control" autocomplete="off" style="text-align:right" onkeyup="AdjustTextboxes();" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
-
-                <td><button type="button" id="AddEntry" class="btn btn-info" onclick="AppendToList()">Add</button></td>
-            </tr>
-
-            <tr>
-                <td><span id="DateError" class="ErrorMessage"></span></td>
-                <td><span id="AccountError" class="ErrorMessage"></span></td>
-                <td><span id="DebitError" class="ErrorMessage"></span></td>
-                <td><span id="CreditError" class="ErrorMessage"></span></td>
-
-            </tr>
-
-        </table>
-        <br />
-        <hr>
-        <br />
-
-        <table id="EntryTable" class="EntryTable" style="table-layout: fixed; width: 98%">
-            <colgroup>
-                <col style="width: 15%">
-                <col style="width: 43%">
-                <col style="width: 17%">
-                <col style="width: 17%">
-                <col style="width: 6%">
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Account</th>
-                    <th>Debit</th>
-                    <th>Credit</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>*@
-
-    @* Extra row in table to show brown strip *@
-    @*<tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-        <table style="table-layout: fixed; width: 98%; text-align: right">
-            <colgroup>
-                <col style="width: 58%">
-                <col style="width: 17%">
-                <col style="width: 17%">
-                <col style="width: 8%">
-            </colgroup>
-            <tr id="totals">
-                <td><span id="TotalLabel" class="">Totals:</span></td>
-                <td><span id="DebitTotal" class="">$ 0.00</span></td>
-                <td><span id="CreditTotal" class="">$ 0.00</span></td>
-                <td></td>
-            </tr>
-
-        </table>
-
-        <br />
-
-
-        <div class="col-md-12">*@
-    @*<table class="table table-hover small-text" id="tb">
-            <tr class="tr-header">
-                <th>Account Name</th>
-                <th>Debit</th>
-                <th>Credit</th>
-                <th>
-                    <a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person"><i class="fas fa-plus"></i>
-
-                </th>
-            </tr>
-            <tr>
-
-
-                <td>
-                    <a href='javascript:void(0);' class='remove'><i class="fas fa-times"></i></a>
-                </td>
-
-            </tr>
-        </table>*@
-
-
-    @*<div class="form-group col-md-10">
-                    <label for="Comment" class="control-label">Comment</label>
-                    <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="Optional"></textarea>
-
-                </div>
-                <div class="form-group col-md-12">
-                    <input type="file" class="form-control-file" id="fileInput" name="file" multiple>
-                </div>
-
-
-                <div class="form-group col-md-10">
-
-                    <span id="SubmitError" style="font-size: 18px;" class="ErrorMessage"></span>
-
-                </div>
-
-            </div>
-
-
-
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>*@
-    @*<button type="submit" id="btnSubmit" class="btn btn-success">Submit</button>*@
-    @*<button type="button" id="btnSubmit" class="btn btn-success">Submit</button>
-
-                            <button type="button" onclick="ResetFunction()" class="btn btn-info">Reset</button>
-                            <button type="button" id="btnSave" class="btn btn-warning">Suspend</button>
-
-                        </div>
-                    }
-                </div>
-
-            </div>
-
-        </div>*@
-    @*<li>
-            <a class="nav-link active" href="#">General Ledger</a>
-        </li>
-        <li>
-            <a class="nav-link active" href="#">Reports</a>
-        </li>
-        <li>
-            <a class="nav-link active" href="#">Transactions</a>
-        </li>
-        <li>
-            <a class="nav-link active" href="#">Chart Of Accounts</a>
-        </li>
-        <li>
-            <a class="nav-link active" href="#">Dashboard</a>
-        </li>
-        <br />
-        <h3 style="color:white">|</h3>
-        <li class="nav-item">
-            <a class="nav-link active" href="#">Sign Out</a>
-        </li>*@
-    @*</ul>
-            </div>
-        </nav>*@
     <br />
     <br />
     <div style="width:80%; margin:0 auto">
@@ -395,16 +178,21 @@
             </table>
         </div>
 
-
-
         <hr />
-        @*<div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-success">All</button>
-                <button type="button" class="btn btn-success">Approved</button>
-                <button type="button" class="btn btn-success">Declined</button>
-                <button type="button" class="btn btn-success">Pending</button>
-
-            </div>*@
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a href="@Url.Action("AccountantIndex", new { status = "all"})" class="btn btn-success" role="button" aria-pressed="true">
+                All
+            </a>
+            <a href="@Url.Action("AccountantIndex", new { status = "approved"})" class="btn btn-success" role="button" aria-pressed="true">
+                Approved
+            </a>
+                <a href="@Url.Action("AccountantIndex", new { status = "disapproved"})" class="btn btn-success" role="button" aria-pressed="true">
+                    Disapproved
+                </a>
+                <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-success" role="button" aria-pressed="true">
+                    Pending
+                </a>
+        </div>
 
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
