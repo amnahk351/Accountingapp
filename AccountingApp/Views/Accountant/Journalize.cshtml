@@ -303,7 +303,26 @@
                 </table>
 
                 <hr>
-                <br />
+        
+
+                <table id="EntryErrorTable" style="table-layout: fixed; width: 100%; margin-bottom: 5px">
+                    <colgroup>
+                        <col style="width: 15%">
+                        <col style="width: 43%">
+                        <col style="width: 18%">
+                        <col style="width: 18%">
+                        <col style="width: 6%">
+                    </colgroup>
+                    <tr>
+                        <td></td>
+                        <td><span id="AccountEntryError" style="font-size: 13px; color:red;"></span></td>
+                        <td><span id="DebitEntryError" style="font-size: 13px; color:red;"></span></td>
+                        <td><span id="CreditEntryError" style="font-size: 13px; color:red;"></span></td>
+                        <td></td>
+
+                    </tr>
+
+                </table>
 
                 <table id="EntryTable" class="EntryTable" style="table-layout: fixed; width: 100%">
                     <colgroup>
@@ -358,26 +377,6 @@
 
 
                 <div class="col-md-12">
-                    @*<table class="table table-hover small-text" id="tb">
-                            <tr class="tr-header">
-                                <th>Account Name</th>
-                                <th>Debit</th>
-                                <th>Credit</th>
-                                <th>
-                                    <a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person"><i class="fas fa-plus"></i>
-
-                                </th>
-                            </tr>
-                            <tr>
-
-
-                                <td>
-                                    <a href='javascript:void(0);' class='remove'><i class="fas fa-times"></i></a>
-                                </td>
-
-                            </tr>
-                        </table>*@
-                  
 
                     <div class="form-group col-md-10">
                         <label for="Comment" class="control-label">Comment</label>
@@ -434,7 +433,7 @@
                 i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
                 j = (j = i.length) > 3 ? j % 3 : 0;
 
-            return "$ " + s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
         };
 
         function StripMoneyFormatting(NumValue) {
@@ -478,8 +477,8 @@
                 sumCredit = 0;
             }
 
-            document.getElementById('DebitTotal').innerHTML = formatMoney(sumDebit);
-            document.getElementById('CreditTotal').innerHTML = formatMoney(sumCredit);
+            document.getElementById('DebitTotal').innerHTML = "$ " + formatMoney(sumDebit);
+            document.getElementById('CreditTotal').innerHTML = "$ " + formatMoney(sumCredit);
         }
 
     </script>
@@ -488,89 +487,92 @@
 
         function ResetFunction() {
 
-            //clear all errors
-            document.getElementById('DateError').innerText = "";
-            document.getElementById('AccountError').innerText = "";
-            document.getElementById('DebitError').innerText = "";  //innerHTML works too
-            document.getElementById('CreditError').innerText = "";  //innerHTML works too
-            document.getElementById('SubmitError').innerText = "";
+            //Refresh the page
+            location.reload();
 
-            //reset date
-            var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth() + 1; //January is 0!
-            var yyyy = today.getFullYear();
+            ////clear all errors
+            //document.getElementById('DateError').innerText = "";
+            //document.getElementById('AccountError').innerText = "";
+            //document.getElementById('DebitError').innerText = "";  //innerHTML works too
+            //document.getElementById('CreditError').innerText = "";  //innerHTML works too
+            //document.getElementById('SubmitError').innerText = "";
 
-            if (dd < 10) {
-                dd = '0' + dd;
-            }
+            ////reset date
+            //var today = new Date();
+            //var dd = today.getDate();
+            //var mm = today.getMonth() + 1; //January is 0!
+            //var yyyy = today.getFullYear();
 
-            today = mm + '/' + dd + '/' + yyyy;
+            //if (dd < 10) {
+            //    dd = '0' + dd;
+            //}
 
-            var d = document.getElementById("Date");
-            d.value = today;
+            //today = mm + '/' + dd + '/' + yyyy;
 
-            //change input row back to normal
-            //Move selection back to 'Please select an account'
-            document.getElementById("AccountNumber").selectedIndex = "0";
+            //var d = document.getElementById("Date");
+            //d.value = today;
 
-            //Clear debit and credit textboxes
-            var deb2 = document.getElementById("Debit");
-            var cre2 = document.getElementById("Credit");
+            ////change input row back to normal
+            ////Move selection back to 'Please select an account'
+            //document.getElementById("AccountNumber").selectedIndex = "0";
 
-            deb2.disabled = false;
-            cre2.disabled = false;
-            deb2.value = "";
-            cre2.value = "";
+            ////Clear debit and credit textboxes
+            //var deb2 = document.getElementById("Debit");
+            //var cre2 = document.getElementById("Credit");
 
-            //change total values
-            document.getElementById('DebitTotal').innerText = "$ 0.00";
-            document.getElementById('CreditTotal').innerText = "$ 0.00";
+            //deb2.disabled = false;
+            //cre2.disabled = false;
+            //deb2.value = "";
+            //cre2.value = "";
 
-
-            //clear table
-            var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
-            var table = document.getElementById("EntryTable");
-
-            var i;
-            for (i = 2; i <= rowsAmount; i++) {
-
-                //Get Account Listed In Table
-                var ActualAccount = table.rows[i].cells[1].innerText;
-
-                //var Fix1 = Account.replace("<span style=\"padding-left: 5%\">", "");
-                //var ActualAccount = Fix1.replace("</span>", "");
-
-                //Add account back to drop down list
-                var x = document.getElementById("AccountNumber");
-                var option = document.createElement("option");
-                option.text = ActualAccount;
-                x.add(option, 1);
+            ////change total values
+            //document.getElementById('DebitTotal').innerText = "$ 0.00";
+            //document.getElementById('CreditTotal').innerText = "$ 0.00";
 
 
-            }
+            ////clear table
+            //var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+            //var table = document.getElementById("EntryTable");
+
+            //var i;
+            //for (i = 2; i <= rowsAmount; i++) {
+
+            //    //Get Account Listed In Table
+            //    var ActualAccount = table.rows[i].cells[1].innerText;
+
+            //    //var Fix1 = Account.replace("<span style=\"padding-left: 5%\">", "");
+            //    //var ActualAccount = Fix1.replace("</span>", "");
+
+            //    //Add account back to drop down list
+            //    var x = document.getElementById("AccountNumber");
+            //    var option = document.createElement("option");
+            //    option.text = ActualAccount;
+            //    x.add(option, 1);
 
 
-            //removes all rows
-            $("#EntryTable tbody tr").remove();
+            //}
 
-            //get table body element
-            var tableRef = document.getElementById('EntryTable').getElementsByTagName('tbody')[0];
 
-            // Insert a row in the table at the last row
-            var newRow = tableRef.insertRow(tableRef.rows.length);
+            ////removes all rows
+            //$("#EntryTable tbody tr").remove();
 
-            // Insert a cell in the row at index 0
-            newRow.insertCell(0);
-            newRow.insertCell(1);
-            newRow.insertCell(2);
-            newRow.insertCell(3);
-            newRow.insertCell(4);
+            ////get table body element
+            //var tableRef = document.getElementById('EntryTable').getElementsByTagName('tbody')[0];
 
-            SortAccountList();
+            //// Insert a row in the table at the last row
+            //var newRow = tableRef.insertRow(tableRef.rows.length);
 
-            //Clear Uploaded Files Selection
-            $("#fileInput").val(null);
+            //// Insert a cell in the row at index 0
+            //newRow.insertCell(0);
+            //newRow.insertCell(1);
+            //newRow.insertCell(2);
+            //newRow.insertCell(3);
+            //newRow.insertCell(4);
+
+            //SortAccountList();
+
+            ////Clear Uploaded Files Selection
+            //$("#fileInput").val(null);
 
         }
 
@@ -662,7 +664,7 @@
         function RemoveLine(button) {
             //Determine the reference of the Row using the Button.
             var row = $(button).closest("TR");
-            //alert(row[0].rowIndex);
+
             //Get the reference of the Table.
             var table = $("#EntryTable")[0];
 
@@ -689,9 +691,10 @@
                 var table = document.getElementById("EntryTable");
                 var date = document.getElementById("Date").value;
                 table.rows[2].cells[0].innerHTML = date;
-                //alert("test");
             }
 
+            GetZeroColumn();
+            PlaceDollarSign();
             AdjustTotals();
             SortAccountList();
         };
@@ -753,15 +756,15 @@
             } else return o.selectionStart
         }
 
-        function getContentSelectionStart(o) {
-            if (o.createTextRange) {
-                var r = window.getSelection;
-                //var r = document.selection.createRange().duplicate()
-                r.moveEnd('character', o.length)
-                if (r.text == '') return o.length
-                return o.lastIndexOf(r.text)
-            } else return o.selectionStart
-        }
+        //function getContentSelectionStart(o) {
+        //    if (o.createTextRange) {
+        //        var r = window.getSelection;
+        //        //var r = document.selection.createRange().duplicate()
+        //        r.moveEnd('character', o.length)
+        //        if (r.text == '') return o.length
+        //        return o.lastIndexOf(r.text)
+        //    } else return o.selectionStart
+        //}
 
     </script>
 
@@ -805,95 +808,261 @@
     </script>
 
     <script>
+
+        function selectElementContents(el) {
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+
+        function setCaretPosition(ctrl, pos) {
+            // Modern browsers
+            if (ctrl.setSelectionRange) {
+                ctrl.focus();
+                ctrl.setSelectionRange(pos, pos);
+
+                // IE8 and below
+            } else if (ctrl.createTextRange) {
+                var range = ctrl.createTextRange();
+                range.collapse(true);
+                range.moveEnd('character', pos);
+                range.moveStart('character', pos);
+                range.select();
+            }
+        }
+
+        function saveRangePosition() {
+            var range = window.getSelection().getRangeAt(0);
+            var sC = range.startContainer, eC = range.endContainer;
+
+            A = []; while (sC !== bE) { A.push(getNodeIndex(sC)); sC = sC.parentNode }
+            B = []; while (eC !== bE) { B.push(getNodeIndex(eC)); eC = eC.parentNode }
+
+            window.rp = { "sC": A, "sO": range.startOffset, "eC": B, "eO": range.endOffset };
+        }
+
+        function restoreRangePosition(bE) {
+            bE.focus();
+            var sel = window.getSelection(), range = sel.getRangeAt(0);
+            var x, C, sC = bE, eC = bE;
+
+            C = rp.sC; x = C.length; while (x--) sC = sC.childNodes[C[x]];
+            C = rp.eC; x = C.length; while (x--) eC = eC.childNodes[C[x]];
+
+            range.setStart(sC, rp.sO);
+            range.setEnd(eC, rp.eO);
+            sel.removeAllRanges();
+            sel.addRange(range)
+        }
+        function getNodeIndex(n) { var i = 0; while (n = n.previousSibling) i++; return i }
+
+
+        var throttle = false;
+
+        function EditAccountEnter(x) {            
+
+            (x).addEventListener('click', function (evt) {
+
+                if (!throttle && evt.detail === 2) {
+                    //X was just double clicked
+                    throttle = true;
+                    setTimeout(function () {
+                        throttle = false;
+                    }, 1000);
+
+                    
+                    if (x.innerHTML.indexOf("TempAccountList") !== -1) {
+                        //X is a drop down list, prevent creating another list
+                        return;
+                    }
+
+                    //Create the drop down list in the table in place of the clicked current account
+                    var CurrrentAccount = x.innerText;
+                    var AccountList = document.getElementById("AccountNumber");
+
+                    var ListClone = AccountList.cloneNode(true);
+
+
+                    ListClone.remove(0);  //Remove the please select
+
+                    //Add current account to top of list
+                    var option = document.createElement("option");
+                    option.text = CurrrentAccount;
+                    ListClone.add(option, 0);
+                                       
+
+                    ListClone.setAttribute('id', 'TempAccountList');
+                    var newDiv = document.createElement("TempAccountList");  //Create a new div element           
+
+                    newDiv.appendChild(ListClone);  //Add the list to the newly created div
+                                        
+                    x.innerHTML = newDiv.innerHTML;
+
+                    $("#TempAccountList").get(0).selectedIndex = 0;  //Select first item
+
+                }
+            });
+
+        }
+
+        function EditAccountExit(x) {
+
+            //var AccountSelect = document.getElementById("TempAccountList");
+            //var acc = AccountSelect.options[AccountSelect.selectedIndex].textContent;
+
+
+            alert("Done");
+
+            //if debit
+
+
+            //if credit, add back styling
+        }
+
         function EditTableValueEnter(x) {
+
             x.style.background = "#9ac4ea";
             var tempVal = StripMoneyFormatting(x.innerText);
             x.innerText = tempVal;
 
-            //alert(x.innerText);
-
             $(x).keypress(function (e) {
-            //    var charCode = (x.event.which) ? x.event.which : event.keyCode;
-            //    var number = x.value.split('.');
-
-            //    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-            //        return false;
-            //    }
-            //    //just one dot
-            //    if (number.length > 1 && charCode == 46) {
-            //        return false;
-            //    }
-            //    //get the carat position
-            //    var caratPos = getSelectionStart(el);
-            //    var dotPos = x.value.indexOf(".");
-            //    if (caratPos > dotPos && dotPos > -1 && (number[1].length > 1)) {
-            //        return false;
-            //    }
-            //    return true;
                 return validateContentEditable(x, event);
 
             });
-            
-            
-            
-            //x.addEventListener('input', function () {
-            //alert('Hey, somebody changed something in my text!');
 
-            //var charCode = (x.event.which) ? x.event.which : event.keyCode;
-            //var number = x.value.split('.');
-
-            //if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-            //    return false;
-            //}
-            ////just one dot
-            //if (number.length > 1 && charCode == 46) {
-            //    return false;
-            //}
-            ////get the carat position
-            //var caratPos = getSelectionStart(el);
-            //var dotPos = x.value.indexOf(".");
-            //if (caratPos > dotPos && dotPos > -1 && (number[1].length > 1)) {
-            //    return false;
-            //}
-            //return true;
-            //    return validateFloatKeyPress(x,event);
-
-            //});
-
-            //x.querySelector("input").addEventListener("keypress", function (evt) {
-            //    if (evt.which < 48 || evt.which > 57) {
-            //        evt.preventDefault();
-            //    }
-            //});
-
-            //$(x).keypress(function (e) {   //this works
-            //    if (!(e.which >= 48 && e.which <= 57)) {
-            //        return false;
-            //    }
-            //});
-
-            //$(x)[0].addEventListener("keydown", function (e) {
-            //    var start = this.selectionStart,
-            //        end = this.selectionEnd,
-            //        value = this.value,
-            //        key = e.keyCode;
-
-            //    if (key == 8 && value[start - 1] == '.') e.preventDefault();
-            //    if (key == 46 && value[start] == '.') e.preventDefault();
-            //    if ((key == 8 || key == 46) && value.substring(start, end).indexOf('.') != -1) e.preventDefault();
-
-            //}, false);
-
-
-
+            saveRangePosition();
         }
 
         function EditTableValueExit(x) {
-            x.style.background = "#EEEEEE";
+
+
             var newVal = formatMoney(x.innerText);
             x.innerText = newVal;
-            AdjustTotals();
+            
+
+            if (x.innerText == "0.00") {                
+
+                var columnNum = GetZeroColumn();
+
+                if (columnNum == 2) {
+                    $.ajax({
+                        //0 entered for Debit
+                        url: "/Account/GetErrors",
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            //Index starts from 0 so number is 1 off from database
+                            //Populate error message from database
+                            document.getElementById('DebitEntryError').innerText = data[41];  //innerHTML works too
+                        }
+                    });
+
+                }
+
+                if (columnNum == 3) {
+                    //0 entered for Credit
+                    $.ajax({
+                        url: "/Account/GetErrors",
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            //Index starts from 0 so number is 1 off from database
+                            //Populate error message from database
+                            document.getElementById('CreditEntryError').innerText = data[42];  //innerHTML works too
+                        }
+                    });
+
+                }
+                restoreRangePosition(x);
+
+            } else {
+
+                document.getElementById('DebitEntryError').innerText = "";
+                document.getElementById('CreditEntryError').innerText = "";
+
+                x.style.background = "#EEEEEE";
+                
+                PlaceDollarSign();
+                AdjustTotals();
+
+            }           
         }
+    </script>
+
+    <script>
+
+        function GetZeroColumn() {
+
+            var table = document.getElementById("EntryTable");
+            
+            for (var i = 2; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[2].innerText;
+
+                if (Dhtml == "0.00") {
+                    return 2;
+                }
+
+            }
+
+            for (var i = 2; i < table.rows.length; i++) {
+                var Chtml = table.rows[i].cells[3].innerText;
+
+                if (Chtml == "0.00") {
+                    return 3;
+                }
+            }
+
+            //No 0 found, hide error messages            
+            document.getElementById("DebitEntryError").innerText = "";
+            document.getElementById("CreditEntryError").innerText = "";
+        }
+
+    </script>
+
+    <script>
+        function PlaceDollarSign() {
+            var table = document.getElementById("EntryTable");
+
+            //Place dollar sign for debit
+            for (var i = 2; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[2].innerText;            
+
+                if (Dhtml != "") {
+
+                    if (Dhtml.indexOf("$ ") !== -1) {
+                        //already has a $ sign
+
+                    } else {
+                        table.rows[i].cells[2].innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Dhtml + "</span>";                      
+                    }                    
+
+                    break;
+                }                
+
+            }
+
+            //Place dollar sign for credit
+            for (var i = 2; i < table.rows.length; i++) {
+                var Chtml = table.rows[i].cells[3].innerText;
+
+
+                if (Chtml != "") {
+
+                    if (Chtml.indexOf("$ ") !== -1) {
+                        //already has a $ sign
+
+                    } else {
+                        //table.rows[i].cells[3].innerText = "$ " + Chtml;
+                        table.rows[i].cells[3].innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Chtml + "</span>";
+                    }
+
+                    break;
+                }
+            }
+        }
+
     </script>
 
     <script>
@@ -1069,33 +1238,28 @@
 
             if (cre != "") {
                 //credit is entered, add padding to tab over the account name
-                cell2.innerHTML = "<span style='padding-left: 5%'>" + acc + "</span>";
+                cell2.innerHTML = "<span onclick=\"EditAccountEnter(this)\" onblur=\"EditAccountExit(this)\" style='padding-left: 5%'>" + acc + "</span>";
 
                 var CreMoney = formatMoney(cre);
-
-                //cell4.innerHTML = "<span onkeypress=\"return validateFloatKeyPress(this, event);\" contenteditable='true'>" + CreMoney + "</span>";
-
-                //cell4.innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" onkeypress=\"return validateFloatKeyPress(this, event);\" contenteditable='true'>" + CreMoney + "</span>";
-
+                
                 cell4.innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + CreMoney + "</span>";
 
                 //cell4.innerHTML = CreMoney;
             } else {
                 //debit is entered, no padding needed
-                cell2.innerHTML = acc;
+                cell2.innerHTML = "<span onclick=\"EditAccountEnter(this)\" onblur=\"EditAccountExit(this)\" >" + acc + "</span>";
 
                 var DebMoney = formatMoney(deb);
 
                 cell3.innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + DebMoney + "</span>";
 
-                //cell3.innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" onkeypress=\"return validateFloatKeyPress(this, event);\" contenteditable='true'>" + DebMoney + "</span>";
-                //cell3.innerHTML = DebMoney;
             }
 
 
             //Add delete button to last column
             cell5.innerHTML = '<input type="button" class="deletebutton" onclick="RemoveLine(this)"/>';
 
+            PlaceDollarSign();
             AdjustTotals();
 
             //Delete account from drop down
@@ -1167,6 +1331,27 @@
                 });
                 return;
             }
+                
+
+            var AccountError = document.getElementById("AccountEntryError").innerText;
+            var DebError = document.getElementById("DebitEntryError").innerText;
+            var CreError = document.getElementById("CreditEntryError").innerText;
+
+            //Check if there are any errors in the table
+            if (AccountError != "" || DebError != "" || CreError != "") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById("SubmitError").innerText = data[48];  //innerHTML works too
+                    }
+                });
+                return;
+            }
 
             //Loop through the Table rows and build a JSON array.
             var transactions = new Array();
@@ -1176,34 +1361,23 @@
                 transaction.DateSubmitted = row.find("TD").eq(0).html();
 
                 var Comm = document.getElementById("Comment")
-
                 transaction.Comment = Comm.value;
 
                 var EnType = document.getElementById("EntryType").value;
-
                 transaction.Entry_Type = EnType;
 
                 transaction.Status = "suspended";
 
                 var AccFix = row.find("TD").eq(1).innerText;
-                //var AccFix1 = AccFix.replace("<span style=\"padding-left: 5%\">", "");
-                //var AccFix2 = AccFix1.replace("</span>", "");
-
                 transaction.AccountName = AccFix;
 
-                var DebitFix = row.find("TD").eq(2).innerText;
-                //var NewDebitHtml = DebitFix.replace("<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>", "");
-                //var NewDebitHtml2 = NewDebitHtml.replace("</span>", "");
+                var DebitFix = row.find("TD").eq(2).innerText;                
                 var DebitFix2 = StripMoneyFormatting(DebitFix);
-
                 transaction.Debit = DebitFix2;
 
 
-                var CreditFix = row.find("TD").eq(3).innerText;
-                //var NewCreditHtml = CreditFix.replace("<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>", "");
-                //var NewCreditHtml2 = NewCreditHtml.replace("</span>", "");
+                var CreditFix = row.find("TD").eq(3).innerText;                
                 var CreditFix2 = StripMoneyFormatting(CreditFix);
-
                 transaction.Credit = CreditFix2;
 
                 transactions.push(transaction);
@@ -1257,6 +1431,26 @@
                 return;
             }
 
+            var AccountError = document.getElementById("AccountEntryError").innerText;
+            var DebError = document.getElementById("DebitEntryError").innerText;
+            var CreError = document.getElementById("CreditEntryError").innerText;
+
+            //Check if there are any errors in the table
+            if (AccountError != "" || DebError != "" || CreError != "") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById("SubmitError").innerText = data[47];  //innerHTML works too
+                    }
+                });
+                return;
+            }
+
             //Check if total of debits is the same as credits
             if (debTot != creTot) {
                 $.ajax({
@@ -1297,16 +1491,12 @@
                 transaction.AccountName = AccFix;
 
                 var DebitFix = row.find("TD").eq(2).innerText;
-                //var NewDebitHtml = DebitFix.replace("<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>", "");
-                //var NewDebitHtml2 = NewDebitHtml.replace("</span>", "");
                 var DebitFix2 = StripMoneyFormatting(DebitFix);
 
                 transaction.Debit = DebitFix2;
 
 
                 var CreditFix = row.find("TD").eq(3).innerText;
-                //var NewCreditHtml = CreditFix.replace("<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>", "");
-                //var NewCreditHtml2 = NewCreditHtml.replace("</span>", "");
                 var CreditFix2 = StripMoneyFormatting(CreditFix);
 
                 transaction.Credit = CreditFix2;
