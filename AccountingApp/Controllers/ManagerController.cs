@@ -14,9 +14,6 @@ namespace AccountingApp.Controllers
 {
     public class ManagerController : Controller
     {
-        //private Database1Entities7 db = new Database1Entities7();
-        //private Database1Entities3 coaDB = new Database1Entities3();
-        // GET: Manager
         public ActionResult ManagerIndex()
         {
             
@@ -114,17 +111,13 @@ namespace AccountingApp.Controllers
             return View();
         }
 
-        //public ActionResult DisapproveEntry(List<Transaction>)
-
-        public ActionResult GeneralJournal()
+        [HttpGet]
+        public ActionResult GeneralJournal(string status)
         {
-
-            //List<Transaction> allTransactions;
-            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            //{
-            //    allTransactions = db.Query<Transaction>($"Select * From dbo.TransactionTable").ToList();
-            //}
-            return View(getAllEntriesOfStatus("approved"));
+            if (status == null || status == "")
+                return View(getAllEntriesOfStatus("approved"));
+            else
+                return View(getAllEntriesOfStatus(status));
         }
 
         public ActionResult TrialBalance()
@@ -154,16 +147,27 @@ namespace AccountingApp.Controllers
         private Entries getAllEntriesOfStatus(string s)
         {
 
-            List<Transaction> allPendingTransactions;
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            List<Transaction> transactionList;
+
+            if (s == "all")
             {
-                allPendingTransactions = db.Query<Transaction>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable").ToList();
+                }
+            }
+            else
+            {
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
+                }
             }
 
 
             Entries entries = new Entries();
             List<int> ids = new List<int>();
-            foreach (Transaction t in allPendingTransactions)
+            foreach (Transaction t in transactionList)
             {
                 int id = t.EntryId.Value;
                 string status = t.Status;
@@ -175,7 +179,7 @@ namespace AccountingApp.Controllers
                     ids.Add(id);
 
                 Entry e = new Entry(id, status, date);
-                foreach (Transaction t2 in allPendingTransactions)
+                foreach (Transaction t2 in transactionList)
                 {
                     if (t2.EntryId == id)
                     {
