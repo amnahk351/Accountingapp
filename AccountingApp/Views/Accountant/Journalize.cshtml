@@ -402,7 +402,52 @@
 
                 </div>
 
+                <br />
 
+                <!-- The file upload form used as target for the file upload widget -->
+                <form id="fileupload" action="https://jquery-file-upload.appspot.com/" method="POST" enctype="multipart/form-data">
+                    <!-- Redirect browsers with JavaScript disabled to the origin page -->
+                    <noscript><input type="hidden" name="redirect" value="https://blueimp.github.io/jQuery-File-Upload/"></noscript>
+                    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                    <div class="row fileupload-buttonbar">
+                        <div class="col-lg-7">
+                            <!-- The fileinput-button span is used to style the file input field as button -->
+                            <span class="btn btn-success fileinput-button">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <span>Add files...</span>
+                                <input type="file" name="files[]" multiple>
+                            </span>
+                            <button type="submit" class="btn btn-primary start">
+                                <i class="glyphicon glyphicon-upload"></i>
+                                <span>Start upload</span>
+                            </button>
+                            <button type="reset" class="btn btn-warning cancel">
+                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                <span>Cancel upload</span>
+                            </button>
+                            <button type="button" class="btn btn-danger delete">
+                                <i class="glyphicon glyphicon-trash"></i>
+                                <span>Delete</span>
+                            </button>
+                            <input type="checkbox" class="toggle">
+                            <!-- The global file processing state -->
+                            <span class="fileupload-process"></span>
+                        </div>
+                        <!-- The global progress state -->
+                        <div class="col-lg-5 fileupload-progress fade">
+                            <!-- The global progress bar -->
+                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                            </div>
+                            <!-- The extended global progress state -->
+                            <div class="progress-extended">&nbsp;</div>
+                        </div>
+                    </div>
+                    <!-- The table listing the files available for upload/download -->
+                    <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+                </form>
+
+                <br />
 
                 <div class="journalize-footer" style="text-align:right">
                     <button type="button" onclick="ResetFunction()" class="btn btn-info">Reset</button>
@@ -683,16 +728,8 @@
             //Delete the Table row using it's Index.
             table.deleteRow(row[0].rowIndex);
 
-            var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
-            //alert("rows: " + rowsAmount);
-            if (rowsAmount > 1) {
-                //There is data in the table
-                //Shift the date
-                var table = document.getElementById("EntryTable");
-                var date = document.getElementById("Date").value;
-                table.rows[2].cells[0].innerHTML = date;
-            }
 
+            AddDateToTable();
             GetZeroColumn();
             PlaceDollarSign();
             AdjustTotals();
@@ -872,10 +909,30 @@
                     setTimeout(function () {
                         throttle = false;
                     }, 1000);
-
-
+                    
+                    
                     if (x.innerHTML.indexOf("TempAccountList") !== -1) {
                         //X is a drop down list, prevent creating another list
+                        return;
+                    }
+
+
+                    $.ajax({
+                        url: "/Account/GetErrors",
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            //Index starts from 0 so number is 1 off from database
+                            //Populate error message from database
+                            document.getElementById('AccountEntryError').innerText = data[49];  //innerHTML works too
+                        }
+                    });
+
+
+                    var Check = FindTempListRow();
+
+                    if (Check != -1) {
+                        //There is a row that already has drop down list in it
                         return;
                     }
 
@@ -886,14 +943,16 @@
                     var ListClone = AccountList.cloneNode(true);
 
 
-                    ListClone.remove(0);  //Remove the please select
+                    //ListClone.remove(0);  //Remove the please select
 
                     //Add current account to top of list
                     var option = document.createElement("option");
                     option.text = CurrrentAccount;
-                    ListClone.add(option, 0);
+                    ListClone.add(option, 1);
 
+                    //style = 'padding-left: 5%'
 
+                    x.setAttribute('style', 'padding-left: 0%');
                     ListClone.setAttribute('id', 'TempAccountList');
                     ListClone.setAttribute("onchange", "EditAccountExit()"); 
                     var newDiv = document.createElement("TempAccountList");  //Create a new div element
@@ -924,6 +983,8 @@
 
             }
 
+            return -1;
+
         }
 
 
@@ -940,11 +1001,12 @@
             var DebitCell = table.rows[RowNum].cells[2].innerText;
             var CreditCell = table.rows[RowNum].cells[3].innerText;
 
+            document.getElementById('AccountEntryError').innerText = "";
 
             if (index != 0) {
 
                 //Add old selection back into original list
-                var OldSelection = AccountSelect.options[0].textContent;
+                var OldSelection = AccountSelect.options[1].textContent;
 
                 var x = document.getElementById("AccountNumber");
                 var option = document.createElement("option");
@@ -1121,6 +1183,12 @@
 
     <script>
         function AppendToList() {
+                        
+            var Elem = document.getElementById('AccountEntryError');
+
+            if (Elem.innerText != "") {
+                return;
+            }
 
             if ($("#Date").val() == "") {
                 $.ajax({
@@ -1174,7 +1242,7 @@
 
 
             var table = document.getElementById("EntryTable");
-            var date = document.getElementById("Date").value;
+            
 
             //Get text value of drop down
             var AccountSelect = document.getElementById("AccountNumber");
@@ -1277,17 +1345,19 @@
 
 
             //Check if table has first row added
-            var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+            //var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
 
-            if (rowsAmount == 2) {
-                //No data in the table, first row needs a date
-                cell1.innerHTML = date;
-            }
-            else {
-                //cell1.innerHTML = "";
-                table.rows[2].cells[0].innerHTML = date;
-            }
+            //if (rowsAmount == 2) {
+            //    //No data in the table, first row needs a date
+            //    cell1.innerHTML = date;
+            //}
+            //else {
+                
+            //    table.rows[2].cells[0].innerHTML = date;
+            //}
 
+
+            
 
 
             if (cre != "") {
@@ -1315,6 +1385,8 @@
 
             PlaceDollarSign();
             AdjustTotals();
+            AddDateToTable();
+
 
             //Delete account from drop down
             var x = document.getElementById("AccountNumber");
@@ -1335,6 +1407,33 @@
     </script>
 
     <script>
+
+        function AddDateToTable() {
+
+            var table = document.getElementById("EntryTable");
+
+            //Get Date element value
+            var date = document.getElementById("Date").value;
+
+            //Get number of rows
+            var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+
+
+            //loop through date column from bottom to top, find the first cell
+            for (var j = rowsAmount; j >= 1; j--) {
+
+                if (j == 2) {
+                    //The top cell
+                    table.rows[2].cells[0].innerText = date;
+
+                } else {
+
+                    table.rows[j].cells[0].innerText = "";
+                }
+
+                
+            }
+        }
 
         function SortAccountList() {
 
