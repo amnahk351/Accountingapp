@@ -63,7 +63,7 @@
       globalProgressUpdated: empty,
       speedUpdated: empty
       },
-      errors = ["BrowserNotSupported", "TooManyFiles", "FileTooLarge", "FileTypeNotAllowed", "NotFound", "NotReadable", "AbortError", "ReadError", "FileExtensionNotAllowed"];
+      errors = ["Browser Not Supported", "Too Many Files", "File Too Large", "File Type Not Allowed", "Not Found", "Not Readable", "Abort Error", "Read Error", "File Extension Not Allowed"];
 
   $.fn.filedrop = function(options) {
     var opts = $.extend({}, default_opts, options),

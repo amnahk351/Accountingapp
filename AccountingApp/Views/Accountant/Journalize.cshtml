@@ -406,10 +406,7 @@
                         <label for="Comment" class="control-label">Comment</label>
                         <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="Optional"></textarea>
 
-                    </div>
-                    @*<div class="form-group col-md-12">
-            <input type="file" class="form-control-file" id="fileInput" name="file" multiple>
-        </div>*@
+                    </div>                    
 
                     <div class="form-group col-md-12">
                         <input type="file" class="form-control-file" id="input" name="file" multiple />
@@ -526,7 +523,37 @@
 
     <script>
 
+        function DeleteAllTableFiles() {
+
+            var table = document.getElementById("uploadList");
+            for (var i = 0, row; row = table.rows[i]; i++) {
+                //iterate through rows
+                var file = table.rows[i].cells[0].innerText;              
+
+                $.ajax({
+                    url: "/Accountant/DeleteFile",
+                    contentType: "application/json; charset=utf-8",
+                    data: "{'file': '" + file + "'}",
+                    type: 'POST',
+                    cache: false,
+                    success: function (result) {
+                        //alert(result);
+                    }
+                });
+
+            }
+
+        }
+
         function ResetFunction() {
+
+            var Amount = document.getElementById("uploadList").rows.length;
+
+            if (Amount > 0) {
+                //There is documents that need removed that the user does not want to saved
+                DeleteAllTableFiles();
+
+            }
 
             //Refresh the page
             location.reload();
@@ -627,8 +654,8 @@
         $(function () {
             $('#dropArea').filedrop({
                 url: '@Url.Action("UploadFiles")',
-                allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif'],
-                allowedfileextensions: ['.jpg', '.jpeg', '.png', '.gif'],
+                allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+                allowedfileextensions: ['.JPG', '.jpg', '.JPEG', '.jpeg', '.PNG', '.png', '.GIF', '.gif', '.txt', '.TXT', '.doc', '.DOC', '.docx', '.DOCX', '.pdf', '.PDF', '.xls', '.XLS', '.xlsx', '.XLSX'],
                 fallback_id: 'input',
                 paramname: 'files',
                 dragOver: function () {
@@ -669,25 +696,8 @@
             var row = $(button).closest('tr');
             var table = document.getElementById("uploadList");
 
-            var RowFile = table.rows[row[0].rowIndex].cells[0].innerText;
-            //var RowFile = table.rows[row].cells[0].innerText;
-
-            //alert(RowFile);
-
-            var file = RowFile;
-
-
-            //$.ajax({
-            //    url: "/Accountant/DeleteFile",
-            //    contentType: "application/json; charset=utf-8",
-            //    data: { 'file': JSON.stringify(RowFile) },
-            //    type: 'POST',
-            //    cache: false,
-            //    success: function (result) {
-            //        r = result;
-            //    }
-            //});
-
+            var file = table.rows[row[0].rowIndex].cells[0].innerText;
+            
             $.ajax({
                 url: "/Accountant/DeleteFile",
                 contentType: "application/json; charset=utf-8",
@@ -698,45 +708,6 @@
                     alert(result);
                 }
             });
-
-            //$.ajax({
-            //    type: "POST",
-            //    url: "/Accountant/DeleteFile",
-            //    data: JSON.stringify(file),
-            //    contentType: "application/json; charset=utf-8",
-            //    dataType: "json",
-            //    success: function (r) {
-            //        alert(r);
-            //    }
-            //});
-
-            //$.ajax({
-            //    url: "/Accountant/DeleteFile",
-            //    contentType: "application/json; charset=utf-8",
-            //    data: { 'file': RowFile },
-            //    type: 'POST',
-            //    cache: false,
-            //    success: function (result) {
-            //        alert(result);
-            //    }
-            //});
-
-           
-            //$.ajax({
-            //    type: "POST",
-            //    url: "/Accountant/DeleteFile",
-            //    dataType: "json",
-            //    contentType: false, // Not to set any content header
-            //    //processData: false, // Not to process data
-            //    data: JSON.stringify(RowFile),
-            //    success: function (result, status, xhr) {
-            //        alert(result);
-            //    },
-            //    error: function (xhr, status, error) {
-            //        alert(status);
-            //    }
-
-            //});
 
             table.deleteRow(row[0].rowIndex);
         }
@@ -1633,8 +1604,6 @@
                 }
             });
 
-            UploadFiles();
-
             ResetFunction();
 
         });
@@ -1752,9 +1721,7 @@
                 success: function (r) {
                     alert(r + " record(s) inserted.");
                 }
-            });
-
-            UploadFiles();
+            });            
 
             ResetFunction();
 
@@ -1763,7 +1730,7 @@
     </script>
 
 
-    <script>
+    @*<script>
         function UploadFiles() {
             var files = $("#fileInput").get(0).files;
 
@@ -1797,6 +1764,6 @@
             });
         };
 
-    </script>
+    </script>*@
 </body>
 </html>
