@@ -232,9 +232,29 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult DeleteFile(string file) {
 
+            int EntryID = GetLatestEntryId() + 1;
+            System.Diagnostics.Debug.WriteLine("New entry id: " + EntryID);
+            System.Diagnostics.Debug.WriteLine("File: " + file);
 
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                string sql = $"DELETE FROM dbo.DocumentsTable WHERE FileName=@File AND FK_EntryId=@ID";
 
-            return Json("File Deleted!");
+                //string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
+                //    "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)" +
+                //    "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," +
+                //    "@Debit,@Credit,@EntryId,EntryType)";
+
+                db.Execute(sql, new
+                {
+                    File = file,
+                    ID = EntryID
+                });
+                
+
+            }
+
+            return Json("File, " + file + ", Deleted!");
         }
 
         //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html
@@ -361,20 +381,20 @@ namespace AccountingApp.Controllers
 
 
             //Temporarily Disabled
-            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            //{
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
 
-            //    string sql = $"Insert into dbo.DocumentsTable (FileBytes, ContentType, " +
-            //        "FileName, FK_EntryId)" +
-            //        "values(@FileBytes,@ContentType,@FileName,@FK_EntryId)";
-            //    db.Execute(sql, new
-            //    {
-            //        FileBytes = ConvertToBytes(file),
-            //        ContentType = file.ContentType,
-            //        FileName = file.FileName,
-            //        FK_EntryId = newID + 1
-            //    });
-            //}
+                string sql = $"Insert into dbo.DocumentsTable (FileBytes, ContentType, " +
+                    "FileName, FK_EntryId)" +
+                    "values(@FileBytes,@ContentType,@FileName,@FK_EntryId)";
+                db.Execute(sql, new
+                {
+                    FileBytes = ConvertToBytes(file),
+                    ContentType = file.ContentType,
+                    FileName = file.FileName,
+                    FK_EntryId = newID + 1
+                });
+            }
 
 
 

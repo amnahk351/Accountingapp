@@ -20,13 +20,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+        
     <style>
-
-
-
+        
         .form_datetime {
             display: block;
             width: 100%;
@@ -42,10 +38,14 @@
         }
 
         .btnDeleteFile {
+            background-image: url('../../img/trash icon.png');
             background-color: DodgerBlue;
+            background-size: 100%;
+            width: 18px;
+            height: 18px;
             border: none;
             color: white;
-            padding: 0px 6px;
+            padding: 4px 6px;
             font-size: 20px;
             cursor: pointer;
         }
@@ -124,6 +124,7 @@
             text-align: center;
             color: #fff;
             padding-top: 12px;
+            cursor: pointer;
         }
 
         .active-drop {
@@ -660,29 +661,84 @@
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             cell1.innerHTML = fileName;
-            cell2.innerHTML = "<button id=\"DeleteFile\" class=\"btnDeleteFile\" onclick=\"DeleteFile(this);\"><i class=\"fa fa-trash\"></i></button>";
+            cell2.innerHTML = '<input type="button" class="btnDeleteFile" onclick="DeleteFile(this)" />';
+            //cell2.innerHTML = "<button id=\"DeleteFile\" class=\"btnDeleteFile\" onclick=\"DeleteFile(this);\"><i class=\"fa fa-trash\"></i></button>";
         }
 
-        function DeleteFile(ele) {
-            var row = $(ele).closest('tr');
+        function DeleteFile(button) {
+            var row = $(button).closest('tr');
             var table = document.getElementById("uploadList");
-            var RowFile = table.rows[row].cells[0].innerText;
+
+            var RowFile = table.rows[row[0].rowIndex].cells[0].innerText;
+            //var RowFile = table.rows[row].cells[0].innerText;
+
+            //alert(RowFile);
+
+            var file = RowFile;
+
+
+            //$.ajax({
+            //    url: "/Accountant/DeleteFile",
+            //    contentType: "application/json; charset=utf-8",
+            //    data: { 'file': JSON.stringify(RowFile) },
+            //    type: 'POST',
+            //    cache: false,
+            //    success: function (result) {
+            //        r = result;
+            //    }
+            //});
 
             $.ajax({
-                type: "POST",
                 url: "/Accountant/DeleteFile",
-                dataType: "json",
-                contentType: false, // Not to set any content header
-                //processData: false, // Not to process data
-                data: fileData,
-                success: function (result, status, xhr) {
+                contentType: "application/json; charset=utf-8",
+                data: "{'file': '" + file + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
                     alert(result);
-                },
-                error: function (xhr, status, error) {
-                    alert(status);
                 }
-
             });
+
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/Accountant/DeleteFile",
+            //    data: JSON.stringify(file),
+            //    contentType: "application/json; charset=utf-8",
+            //    dataType: "json",
+            //    success: function (r) {
+            //        alert(r);
+            //    }
+            //});
+
+            //$.ajax({
+            //    url: "/Accountant/DeleteFile",
+            //    contentType: "application/json; charset=utf-8",
+            //    data: { 'file': RowFile },
+            //    type: 'POST',
+            //    cache: false,
+            //    success: function (result) {
+            //        alert(result);
+            //    }
+            //});
+
+           
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/Accountant/DeleteFile",
+            //    dataType: "json",
+            //    contentType: false, // Not to set any content header
+            //    //processData: false, // Not to process data
+            //    data: JSON.stringify(RowFile),
+            //    success: function (result, status, xhr) {
+            //        alert(result);
+            //    },
+            //    error: function (xhr, status, error) {
+            //        alert(status);
+            //    }
+
+            //});
+
+            table.deleteRow(row[0].rowIndex);
         }
 
         function AdjustTextboxes() {

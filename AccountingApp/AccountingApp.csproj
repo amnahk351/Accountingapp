@@ -278,6 +278,7 @@
     <Content Include="img\chartofacc.jpg" />
     <Content Include="img\dashboard.png" />
     <Content Include="img\dimensional-chart-of-accounts.jpg" />
+    <Content Include="img\trash icon.png" />
     <Content Include="img\trashcan-delete.png" />
     <Content Include="img\user-avatars.jpg" />
     <Content Include="img\user-log.jpg" />
