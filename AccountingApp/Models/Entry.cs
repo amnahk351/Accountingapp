@@ -104,7 +104,6 @@ namespace AccountingApp.Models
                 else
                     break;
             }
-            Trace.WriteLine("------Index of " + entryID + ": " + index);
             return index;
         }
     }
