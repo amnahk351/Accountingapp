@@ -21,22 +21,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
 
 
 
         .form_datetime {
-            /*display: block;
-        width: 100%;
-        padding: 0.375rem 0.75rem;
-        font-size: 1rem;
-        line-height: 1.5;
-        color: #495057;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid #ced4da;
-        border-radius: 0.25rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;*/
             display: block;
             width: 100%;
             height: 34px;
@@ -49,6 +40,20 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
+        .btnDeleteFile {
+            background-color: DodgerBlue;
+            border: none;
+            color: white;
+            padding: 0px 6px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+            /* Darker background on mouse-over */
+            .btnDeleteFile:hover {
+                background-color: RoyalBlue;
+            }
 
         .deletebutton {
             background-image: url('../../img/trashcan-delete.png');
@@ -76,6 +81,24 @@
             color: red;
             font-size: 14px;
         }
+
+        table.uploadList {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #97E0EF;
+            text-align: left;
+        }
+
+            table.uploadList td, table.uploadList th {
+                padding: 3px 10px;
+            }
+
+            table.uploadList tbody td {
+                font-size: 15px;
+            }
+
+            table.uploadList tr:nth-child(even) {
+                background: #A3F5CE;
+            }
 
         .Account-Select {
             display: block;
@@ -383,15 +406,31 @@
                         <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="Optional"></textarea>
 
                     </div>
+                    @*<div class="form-group col-md-12">
+            <input type="file" class="form-control-file" id="fileInput" name="file" multiple>
+        </div>*@
+
                     <div class="form-group col-md-12">
-                        <input type="file" class="form-control-file" id="fileInput" name="file" multiple>
+                        <input type="file" class="form-control-file" id="input" name="file" multiple />
                     </div>
 
                     <div id="dropArea">
-                        Drop your files here
+                        Drop your files here or Click to Upload
                     </div>
-                    <h5>Uploaded files : </h5>
-                    <ul class="list-group" id="uploadList"></ul>
+                    <br />
+                    <h6>Uploaded files : </h6>
+                    @*<ul class="list-group" id="uploadList"></ul>*@
+
+                    <table id="uploadList" class="uploadList" style="width: 43%">
+                        <colgroup>
+                            <col style="width: 40%">
+                            <col style="width: 3%">
+                        </colgroup>
+                        @*<tr>
+                            <td>cell1_1</td>
+                            <td>cell2_1</td>
+                        </tr>*@
+                    </table>
 
 
                     <div class="form-group col-md-10">
@@ -401,51 +440,7 @@
                     </div>
 
                 </div>
-
-                <br />
-
-                <!-- The file upload form used as target for the file upload widget -->
-                <form id="fileupload" action="https://jquery-file-upload.appspot.com/" method="POST" enctype="multipart/form-data">
-                    <!-- Redirect browsers with JavaScript disabled to the origin page -->
-                    <noscript><input type="hidden" name="redirect" value="https://blueimp.github.io/jQuery-File-Upload/"></noscript>
-                    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-                    <div class="row fileupload-buttonbar">
-                        <div class="col-lg-7">
-                            <!-- The fileinput-button span is used to style the file input field as button -->
-                            <span class="btn btn-success fileinput-button">
-                                <i class="glyphicon glyphicon-plus"></i>
-                                <span>Add files...</span>
-                                <input type="file" name="files[]" multiple>
-                            </span>
-                            <button type="submit" class="btn btn-primary start">
-                                <i class="glyphicon glyphicon-upload"></i>
-                                <span>Start upload</span>
-                            </button>
-                            <button type="reset" class="btn btn-warning cancel">
-                                <i class="glyphicon glyphicon-ban-circle"></i>
-                                <span>Cancel upload</span>
-                            </button>
-                            <button type="button" class="btn btn-danger delete">
-                                <i class="glyphicon glyphicon-trash"></i>
-                                <span>Delete</span>
-                            </button>
-                            <input type="checkbox" class="toggle">
-                            <!-- The global file processing state -->
-                            <span class="fileupload-process"></span>
-                        </div>
-                        <!-- The global progress state -->
-                        <div class="col-lg-5 fileupload-progress fade">
-                            <!-- The global progress bar -->
-                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
-                            </div>
-                            <!-- The extended global progress state -->
-                            <div class="progress-extended">&nbsp;</div>
-                        </div>
-                    </div>
-                    <!-- The table listing the files available for upload/download -->
-                    <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
-                </form>
+                               
 
                 <br />
 
@@ -633,6 +628,7 @@
                 url: '@Url.Action("UploadFiles")',
                 allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif'],
                 allowedfileextensions: ['.jpg', '.jpeg', '.png', '.gif'],
+                fallback_id: 'input',
                 paramname: 'files',
                 dragOver: function () {
                     $('#dropArea').addClass('active-drop');
@@ -647,7 +643,8 @@
                 //    $('#dropArea').html('file(s) uploaded successfully');
                 //},
                 uploadFinished: function (i, file, response, time) {
-                    $('#uploadList').append('<li class="list-group-item">'+file.name+'</li>')
+                    AppendToUploadList(file.name);
+                    //$('#uploadList').append('<li class="list-group-item">'+file.name+'</li>')
                 }
             })
         })
@@ -655,6 +652,38 @@
     }
 
     <script>
+
+        function AppendToUploadList(fileName) {
+
+            var table = document.getElementById("uploadList");
+            var row = table.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = fileName;
+            cell2.innerHTML = "<button id=\"DeleteFile\" class=\"btnDeleteFile\" onclick=\"DeleteFile(this);\"><i class=\"fa fa-trash\"></i></button>";
+        }
+
+        function DeleteFile(ele) {
+            var row = $(ele).closest('tr');
+            var table = document.getElementById("uploadList");
+            var RowFile = table.rows[row].cells[0].innerText;
+
+            $.ajax({
+                type: "POST",
+                url: "/Accountant/DeleteFile",
+                dataType: "json",
+                contentType: false, // Not to set any content header
+                //processData: false, // Not to process data
+                data: fileData,
+                success: function (result, status, xhr) {
+                    alert(result);
+                },
+                error: function (xhr, status, error) {
+                    alert(status);
+                }
+
+            });
+        }
 
         function AdjustTextboxes() {
             var deb = document.getElementById("Debit");

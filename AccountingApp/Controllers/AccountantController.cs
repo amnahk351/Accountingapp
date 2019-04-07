@@ -229,6 +229,14 @@ namespace AccountingApp.Controllers
             return Json(insertedRecords);
         }
 
+        [HttpPost]
+        public ActionResult DeleteFile(string file) {
+
+
+
+            return Json("File Deleted!");
+        }
+
         //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html
 
         [HttpPost]
@@ -352,21 +360,23 @@ namespace AccountingApp.Controllers
             //newFile.FK_EntryId = newID + 1;
 
 
+            //Temporarily Disabled
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
 
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
+            //    string sql = $"Insert into dbo.DocumentsTable (FileBytes, ContentType, " +
+            //        "FileName, FK_EntryId)" +
+            //        "values(@FileBytes,@ContentType,@FileName,@FK_EntryId)";
+            //    db.Execute(sql, new
+            //    {
+            //        FileBytes = ConvertToBytes(file),
+            //        ContentType = file.ContentType,
+            //        FileName = file.FileName,
+            //        FK_EntryId = newID + 1
+            //    });
+            //}
 
-                string sql = $"Insert into dbo.DocumentsTable (FileBytes, ContentType, " +
-                    "FileName, FK_EntryId)" +
-                    "values(@FileBytes,@ContentType,@FileName,@FK_EntryId)";
-                db.Execute(sql, new
-                {
-                    FileBytes = ConvertToBytes(file),
-                    ContentType = file.ContentType,
-                    FileName = file.FileName,
-                    FK_EntryId = newID + 1
-                });
-            }
+
 
             //using (FileUploadEntities dataContext = new FileUploadEntities())
             //{
