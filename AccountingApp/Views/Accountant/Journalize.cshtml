@@ -548,105 +548,29 @@
 
         function ResetFunction() {
 
+            var EntryAmount = document.getElementById("EntryTable").rows.length;
             var Amount = document.getElementById("uploadList").rows.length;
 
-            if (Amount > 0) {
-                //There is documents that need removed that the user does not want to saved
-                DeleteAllTableFiles();
+            if (EntryAmount > 2 || Amount > 0) {
+
+                if (confirm('Warning, you are about to remove unsaved changes! Are you sure?')) {
+
+                    if (Amount > 0) {
+                        //There is documents that need removed that the user does not want to saved
+                        DeleteAllTableFiles();
+                    }
+
+                    //Refresh the page
+                    location.reload();
+                } else {
+                    // Do nothing!
+                }
 
             }
-
-            //Refresh the page
-            location.reload();
-
-            ////clear all errors
-            //document.getElementById('DateError').innerText = "";
-            //document.getElementById('AccountError').innerText = "";
-            //document.getElementById('DebitError').innerText = "";  //innerHTML works too
-            //document.getElementById('CreditError').innerText = "";  //innerHTML works too
-            //document.getElementById('SubmitError').innerText = "";
-
-            ////reset date
-            //var today = new Date();
-            //var dd = today.getDate();
-            //var mm = today.getMonth() + 1; //January is 0!
-            //var yyyy = today.getFullYear();
-
-            //if (dd < 10) {
-            //    dd = '0' + dd;
-            //}
-
-            //today = mm + '/' + dd + '/' + yyyy;
-
-            //var d = document.getElementById("Date");
-            //d.value = today;
-
-            ////change input row back to normal
-            ////Move selection back to 'Please select an account'
-            //document.getElementById("AccountNumber").selectedIndex = "0";
-
-            ////Clear debit and credit textboxes
-            //var deb2 = document.getElementById("Debit");
-            //var cre2 = document.getElementById("Credit");
-
-            //deb2.disabled = false;
-            //cre2.disabled = false;
-            //deb2.value = "";
-            //cre2.value = "";
-
-            ////change total values
-            //document.getElementById('DebitTotal').innerText = "$ 0.00";
-            //document.getElementById('CreditTotal').innerText = "$ 0.00";
-
-
-            ////clear table
-            //var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
-            //var table = document.getElementById("EntryTable");
-
-            //var i;
-            //for (i = 2; i <= rowsAmount; i++) {
-
-            //    //Get Account Listed In Table
-            //    var ActualAccount = table.rows[i].cells[1].innerText;
-
-            //    //var Fix1 = Account.replace("<span style=\"padding-left: 5%\">", "");
-            //    //var ActualAccount = Fix1.replace("</span>", "");
-
-            //    //Add account back to drop down list
-            //    var x = document.getElementById("AccountNumber");
-            //    var option = document.createElement("option");
-            //    option.text = ActualAccount;
-            //    x.add(option, 1);
-
-
-            //}
-
-
-            ////removes all rows
-            //$("#EntryTable tbody tr").remove();
-
-            ////get table body element
-            //var tableRef = document.getElementById('EntryTable').getElementsByTagName('tbody')[0];
-
-            //// Insert a row in the table at the last row
-            //var newRow = tableRef.insertRow(tableRef.rows.length);
-
-            //// Insert a cell in the row at index 0
-            //newRow.insertCell(0);
-            //newRow.insertCell(1);
-            //newRow.insertCell(2);
-            //newRow.insertCell(3);
-            //newRow.insertCell(4);
-
-            //SortAccountList();
-
-            ////Clear Uploaded Files Selection
-            //$("#fileInput").val(null);
 
         }
 
     </script>
-
 
 
     @section Scripts{
@@ -668,9 +592,6 @@
                 drop: function () {
                     $('#dropArea').removeClass('active-drop');
                 },
-                //afterAll: function (e) {
-                //    $('#dropArea').html('file(s) uploaded successfully');
-                //},
                 uploadFinished: function (i, file, response, time) {
                     AppendToUploadList(file.name);
                 }
@@ -689,7 +610,7 @@
             var cell2 = row.insertCell(1);
             // the ../ goes back one directory, needed to prevent calling Accountant twice
             cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "\" target=\"_blank\">" + fileName + "</a>";            
-            cell2.innerHTML = '<input type="button" class="btnDeleteFile" onclick="DeleteFile(this)" />';
+            cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
             
         }
 
@@ -706,7 +627,7 @@
                 type: 'POST',
                 cache: false,
                 success: function (result) {
-                    alert(result);
+                    //alert(result);
                 }
             });
 
@@ -998,16 +919,13 @@
                     var AccountList = document.getElementById("AccountNumber");
 
                     var ListClone = AccountList.cloneNode(true);
-
-
-                    //ListClone.remove(0);  //Remove the please select
+                                                            
 
                     //Add current account to top of list
                     var option = document.createElement("option");
                     option.text = CurrrentAccount;
                     ListClone.add(option, 1);
 
-                    //style = 'padding-left: 5%'
 
                     x.setAttribute('style', 'padding-left: 0%');
                     ListClone.setAttribute('id', 'TempAccountList');
@@ -1018,9 +936,6 @@
 
                     x.innerHTML = newDiv.innerHTML;
 
-                    //$("#TempAccountList").get(0).selectedIndex = 0;  //Select first item
-                    
-                    //document.getElementById("TempAccountList").addEventListener("onchange", EditAccountExit());
                 }
             });
 
@@ -1082,13 +997,13 @@
             
             if (DebitCell != "") {
                 //It is a debit
-                table.rows[RowNum].cells[1].innerHTML = "<span onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
+                table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
 
             }
 
             if (CreditCell != "") {
                 //It is a credit
-                table.rows[RowNum].cells[1].innerHTML = "<span onclick=\"EditAccountEnter(this)\" style='padding-left: 5%'>" + acc + "</span>";
+                table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\" style='padding-left: 5%'>" + acc + "</span>";
 
             }
 
@@ -1097,6 +1012,7 @@
         function EditTableValueEnter(x) {
 
             x.style.background = "#9ac4ea";
+            x.style.cursor = "text";
             var tempVal = StripMoneyFormatting(x.innerText);
             x.innerText = tempVal;
 
@@ -1208,7 +1124,7 @@
                         //already has a $ sign
 
                     } else {
-                        table.rows[i].cells[2].innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Dhtml + "</span>";
+                        table.rows[i].cells[2].innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Dhtml + "</span>";
                     }
 
                     break;
@@ -1227,8 +1143,7 @@
                         //already has a $ sign
 
                     } else {
-                        //table.rows[i].cells[3].innerText = "$ " + Chtml;
-                        table.rows[i].cells[3].innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Chtml + "</span>";
+                        table.rows[i].cells[3].innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Chtml + "</span>";
                     }
 
                     break;
@@ -1399,46 +1314,31 @@
             var cell3 = row.insertCell(2);
             var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4);
-
-
-            //Check if table has first row added
-            //var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
-
-            //if (rowsAmount == 2) {
-            //    //No data in the table, first row needs a date
-            //    cell1.innerHTML = date;
-            //}
-            //else {
-                
-            //    table.rows[2].cells[0].innerHTML = date;
-            //}
-
-
             
 
 
             if (cre != "") {
                 //credit is entered, add padding to tab over the account name
-                cell2.innerHTML = "<span onclick=\"EditAccountEnter(this)\" style='padding-left: 5%'>" + acc + "</span>";
+                cell2.innerHTML = "<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\" style='padding-left: 5%'>" + acc + "</span>";
 
                 var CreMoney = formatMoney(cre);
 
-                cell4.innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + CreMoney + "</span>";
+                cell4.innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + CreMoney + "</span>";
 
                 //cell4.innerHTML = CreMoney;
             } else {
                 //debit is entered, no padding needed
-                cell2.innerHTML = "<span onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
+                cell2.innerHTML = "<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
 
                 var DebMoney = formatMoney(deb);
 
-                cell3.innerHTML = "<span onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + DebMoney + "</span>";
+                cell3.innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + DebMoney + "</span>";
 
             }
 
 
             //Add delete button to last column
-            cell5.innerHTML = '<input type="button" class="deletebutton" onclick="RemoveLine(this)"/>';
+            cell5.innerHTML = '<input type="button" title=\"Click to Remove Row\" class="deletebutton" onclick="RemoveLine(this)"/>';
 
             PlaceDollarSign();
             AdjustTotals();
@@ -1693,8 +1593,6 @@
                 transaction.Status = "pending";
 
                 var AccFix = row.find("TD").eq(1).innerText;
-                //var AccFix1 = AccFix.replace("<span style=\"padding-left: 5%\">", "");
-                //var AccFix2 = AccFix1.replace("</span>", "");
 
                 transaction.AccountName = AccFix;
 
@@ -1731,6 +1629,7 @@
     </script>
 
 
+    @* Old Upload file script *@
     @*<script>
         function UploadFiles() {
             var files = $("#fileInput").get(0).files;
