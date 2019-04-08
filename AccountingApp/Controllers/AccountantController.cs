@@ -229,28 +229,43 @@ namespace AccountingApp.Controllers
             return Json(insertedRecords);
         }
 
+        private static byte[] getBytes(string file)
+        {
+            using (SqlConnection cn = new SqlConnection(SqlAccess.GetConnectionString()))
+            using (SqlCommand cm = cn.CreateCommand())
+            {
+                cm.CommandText = @"
+            SELECT FileBytes
+            FROM   dbo.DocumentsTable
+            WHERE  FileName = @Name";
+                cm.Parameters.AddWithValue("@Name", file);
+                cn.Open();
+                return cm.ExecuteScalar() as byte[];
+            }
+        }
+
+        public FileResult Download(string file)
+        {
+            byte[] fileBytes = getBytes(file);
+            var response = new FileContentResult(fileBytes, "application/octet-stream");
+            response.FileDownloadName = file;
+            return response;
+        }
+
         [HttpPost]
         public ActionResult DeleteFile(string file) {
 
             int EntryID = GetLatestEntryId() + 1;
-            System.Diagnostics.Debug.WriteLine("New entry id: " + EntryID);
-            System.Diagnostics.Debug.WriteLine("File: " + file);
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 string sql = $"DELETE FROM dbo.DocumentsTable WHERE FileName=@File AND FK_EntryId=@ID";
-
-                //string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
-                //    "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)" +
-                //    "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," +
-                //    "@Debit,@Credit,@EntryId,EntryType)";
-
+                
                 db.Execute(sql, new
                 {
                     File = file,
                     ID = EntryID
-                });
-                
+                });                
 
             }
 
@@ -380,7 +395,6 @@ namespace AccountingApp.Controllers
             //newFile.FK_EntryId = newID + 1;
 
 
-            //Temporarily Disabled
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
 

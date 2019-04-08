@@ -204,7 +204,7 @@
 <body>
 
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm(new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         <br />
@@ -672,7 +672,6 @@
                 //},
                 uploadFinished: function (i, file, response, time) {
                     AppendToUploadList(file.name);
-                    //$('#uploadList').append('<li class="list-group-item">'+file.name+'</li>')
                 }
             })
         })
@@ -687,9 +686,10 @@
             var row = table.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
-            cell1.innerHTML = fileName;
+            // the ../ goes back one directory, needed to prevent calling Accountant twice
+            cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "\" target=\"_blank\">" + fileName + "</a>";            
             cell2.innerHTML = '<input type="button" class="btnDeleteFile" onclick="DeleteFile(this)" />';
-            //cell2.innerHTML = "<button id=\"DeleteFile\" class=\"btnDeleteFile\" onclick=\"DeleteFile(this);\"><i class=\"fa fa-trash\"></i></button>";
+            
         }
 
         function DeleteFile(button) {
