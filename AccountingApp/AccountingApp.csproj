@@ -415,7 +415,6 @@
     <Content Include="Views\Shared\_Layout_Accountant.cshtml" />
     <Content Include="Views\Shared\_Layout_Admin.cshtml" />
     <Content Include="Views\Accountant\Journalize.cshtml" />
-    <Content Include="Views\Manager\EntryDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />
