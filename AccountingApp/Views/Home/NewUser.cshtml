@@ -20,7 +20,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-
     @*<link href="~/Scripts/bootstrap-datetimepicker.css" rel="stylesheet" />
         <link href="~/Scripts/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 
@@ -54,214 +53,234 @@
 <br />
 <br />
 <br />
+@*@using (Html.BeginForm())
+{*@
 
-@using (Html.BeginForm())
-{
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
 
-        
+
         @*@Html.ValidationSummary(true, "The following errors were found:", new { @class = "alert alert-danger" })*@
 
-        <form method="post" id="accountform">
+        <form method="post" id="accountform" class="needs-validation" novalidate>
             <div class="container" style="width: 43%">
                 @Html.ValidationSummary(true, "The following errors were found:", new { @class = "alert alert-danger" })
             </div>
 
-            <div class="container shadow" style="width:40%">
-                <h2 style="text-decoration: underline">Create New User</h2>
+            <div class="container shadow" style="width:60%">
+                <h2>Create New User</h2>
                 <br />
                 @*<hr />*@
+                <div class="form-row">
+                    <div class="col-md-4">
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Date_Created, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Date_Created, new { htmlAttributes = new { @class = "form_datetime" } })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Date_Created, htmlAttributes: new { @class = "control-label " })
+                            @Html.EditorFor(model => model.Date_Created, new { htmlAttributes = new { @class = "form_datetime form-control" } })
 
-                        @*<input size="16" type="text" value="2012-06-15 14:45" readonly class="form_datetime">*@
+                            @*<input size="16" type="text" value="2012-06-15 14:45" readonly class="form_datetime">*@
 
-                        @Html.ValidationMessageFor(model => model.Date_Created, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.Date_Created, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            @*@Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                            <label>First Name</label>
+                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            @*@Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                            <label>Last Name</label>
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="col-md-6">
 
-                <div class="form-group">
-                    @*@Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                    <label style="padding-left: 1rem">First Name</label>
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @required = "required", @type = "email" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
+                    <div class="col-md-6">
 
-                <div class="form-group">
-                    @*@Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                    <label style="padding-left: 1rem">Last Name</label>
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @*@Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                    <label style="padding-left: 1rem">Confirm Password</label>
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Role, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @*@Html.DropDownList(model => model.Role, new { htmlAttributes = new { @class = "form-control" } })*@
-                        <select name="Role" class="form-control" id="Role">
-                            <option value="Admin">Admin</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Accountant">Accountant</option>
-                        </select>
-                        @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @*@Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                    <label style="padding-left: 1rem">Allow Access</label>
-                    <div class="col-md-10">
-                        <div class="checkbox">
-                            @Html.EditorFor(model => model.Active)
-                            @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
                         </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    @*@Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                    <label style="padding-left: 1rem">Phone Number</label>
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                <div class="form-row">
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @required = "required", @pattern = ".{8,}" } })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            @*@Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                            <label>Confirm Password</label>
+                            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @required = "required", @pattern = ".{8,}" } })
+                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="col-md-6">
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Role, htmlAttributes: new { @class = "control-label" })
+                            @*@Html.DropDownList(model => model.Role, new { htmlAttributes = new { @class = "form-control" } })*@
+                            <select name="Role" class="form-control" id="Role" required>
+                                <option value="">Select Role</option>
+
+                                <option value="Admin">Admin</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Accountant">Accountant</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            @*@Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                            <label>Phone Number</label>
+                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", @required = "required", @type = "tel" } })
+                            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label" })
+
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-row">
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                            @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label" })
+                            <select name="State" class="form-control" id="State" value="@Request["State"]" required>
+                                <option value="">State</option>
+
+                                <option value="AL">Alabama</option>
+                                <option value="AK">Alaska</option>
+                                <option value="AZ">Arizona</option>
+                                <option value="AR">Arkansas</option>
+                                <option value="CA">California</option>
+                                <option value="CO">Colorado</option>
+                                <option value="CT">Connecticut</option>
+                                <option value="DE">Delaware</option>
+                                <option value="FL">Florida</option>
+                                <option value="GA">Georgia</option>
+                                <option value="HI">Hawaii</option>
+                                <option value="ID">Idaho</option>
+                                <option value="IL">Illinois</option>
+                                <option value="IN">Indiana</option>
+                                <option value="IA">Iowa</option>
+                                <option value="KS">Kansas</option>
+                                <option value="KY">Kentucky</option>
+                                <option value="LA">Louisiana</option>
+                                <option value="ME">Maine</option>
+                                <option value="MD">Maryland</option>
+                                <option value="MA">Massachusetts</option>
+                                <option value="MI">Michigan</option>
+                                <option value="MN">Minnesota</option>
+                                <option value="MS">Mississippi</option>
+                                <option value="MO">Missouri</option>
+                                <option value="MT">Montana</option>
+                                <option value="NE">Nebraska</option>
+                                <option value="NV">Nevada</option>
+                                <option value="NH">New Hampshire</option>
+                                <option value="NJ">New Jersey</option>
+                                <option value="NM">New Mexico</option>
+                                <option value="NY">New York</option>
+                                <option value="NC">North Carolina</option>
+                                <option value="ND">North Dakota</option>
+                                <option value="OH">Ohio</option>
+                                <option value="OK">Oklahoma</option>
+                                <option value="OR">Oregon</option>
+                                <option value="PA">Pennsylvania</option>
+                                <option value="RI">Rhode Island</option>
+                                <option value="SC">South Carolina</option>
+                                <option value="SD">South Dakota</option>
+                                <option value="TN">Tennessee</option>
+                                <option value="TX">Texas</option>
+                                <option value="UT">Utah</option>
+                                <option value="VT">Vermont</option>
+                                <option value="VA">Virginia</option>
+                                <option value="WA">Washington</option>
+                                <option value="WV">West Virginia</option>
+                                <option value="WI">Wisconsin</option>
+                                <option value="WY">Wyoming</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            @*@Html.LabelFor(model => model.ZIP_Code, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                            <label>ZIP Code</label>
+                            @Html.EditorFor(model => model.ZIP_Code, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                            @Html.ValidationMessageFor(model => model.ZIP_Code, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                 </div>
+                @*<div class="form-group">
+                    <div class="checkbox" style="font-size:large">
+                        @Html.EditorFor(model => model.Active)
+                        @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+                        <label>Allow Access</label>
+                    </div>
 
+                </div>*@
                 <div class="form-group">
-                    @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        <select name="State" class="form-control" id="State" value="@Request["State"]">
-                            <option value="AL">Alabama</option>
-                            <option value="AK">Alaska</option>
-                            <option value="AZ">Arizona</option>
-                            <option value="AR">Arkansas</option>
-                            <option value="CA">California</option>
-                            <option value="CO">Colorado</option>
-                            <option value="CT">Connecticut</option>
-                            <option value="DE">Delaware</option>
-                            <option value="FL">Florida</option>
-                            <option value="GA">Georgia</option>
-                            <option value="HI">Hawaii</option>
-                            <option value="ID">Idaho</option>
-                            <option value="IL">Illinois</option>
-                            <option value="IN">Indiana</option>
-                            <option value="IA">Iowa</option>
-                            <option value="KS">Kansas</option>
-                            <option value="KY">Kentucky</option>
-                            <option value="LA">Louisiana</option>
-                            <option value="ME">Maine</option>
-                            <option value="MD">Maryland</option>
-                            <option value="MA">Massachusetts</option>
-                            <option value="MI">Michigan</option>
-                            <option value="MN">Minnesota</option>
-                            <option value="MS">Mississippi</option>
-                            <option value="MO">Missouri</option>
-                            <option value="MT">Montana</option>
-                            <option value="NE">Nebraska</option>
-                            <option value="NV">Nevada</option>
-                            <option value="NH">New Hampshire</option>
-                            <option value="NJ">New Jersey</option>
-                            <option value="NM">New Mexico</option>
-                            <option value="NY">New York</option>
-                            <option value="NC">North Carolina</option>
-                            <option value="ND">North Dakota</option>
-                            <option value="OH">Ohio</option>
-                            <option value="OK">Oklahoma</option>
-                            <option value="OR">Oregon</option>
-                            <option value="PA">Pennsylvania</option>
-                            <option value="RI">Rhode Island</option>
-                            <option value="SC">South Carolina</option>
-                            <option value="SD">South Dakota</option>
-                            <option value="TN">Tennessee</option>
-                            <option value="TX">Texas</option>
-                            <option value="UT">Utah</option>
-                            <option value="VT">Vermont</option>
-                            <option value="VA">Virginia</option>
-                            <option value="WA">Washington</option>
-                            <option value="WV">West Virginia</option>
-                            <option value="WI">Wisconsin</option>
-                            <option value="WY">Wyoming</option>
-                        </select>
-                        @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="Active" name="Active" required>
+                        <label class="form-check-label" for="Active" style="font-size:large; padding-left:0">
+                            Allow Access
+                        </label>
+
                     </div>
                 </div>
-
-                <div class="form-group">
-                    @*@Html.LabelFor(model => model.ZIP_Code, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                    <label style="padding-left: 1rem">ZIP Code</label>
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ZIP_Code, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ZIP_Code, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
                 <hr />
 
                 @*<div class="form-group">*@
-                    @*<div class="col-md-offset-2 col-md-10">*@
-                        <button type="submit" class="btn btn-success" href="@Url.Action("ShowUserData")" id="btnsubmit" @*class="btn btn-success btn-lg margin-right"*@>Save</button>
-                        <a href="@Url.Action("Index")" class="btn btn-warning"@*class="btn btn-warning btn-lg"*@>
-                            Cancel
-                        </a>
-                    @*</div>*@
+                @*<div class="col-md-offset-2 col-md-10">*@
+                <button type="submit" class="btn btn-success" href="@Url.Action("ShowUserData")" id="btnsubmit" @*class="btn btn-success btn-lg margin-right"*@>Save</button>
+                <a href="@Url.Action("ShowUserData")" class="btn btn-warning" @*class="btn btn-warning btn-lg"*@>
+                    Cancel
+                </a>
+                @*</div>*@
                 <br />
                 <br />
                 @*</div>*@
@@ -270,30 +289,48 @@
     </div>
     <br />
     <br />
-}
-
-<hr />
 
 
-@Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
-@Scripts.Render("~/Scripts/bootstrap.min.js")
-@Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
+    @*}*@
 
 
-<script type="text/javascript">
-    $('.form_datetime').datetimepicker({
-        format: "m/d/yyyy H:ii:ss P",
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        showMeridian: 1
-    });
-</script>
 
-@section Scripts {
-    <script src="~/Scripts/jquery.validate.min.js"></script>
-    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-}
+    @Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
+
+
+    <script type="text/javascript">
+        $('.form_datetime').datetimepicker({
+            format: "m/d/yyyy H:ii:ss P",
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+    </script>
+    <script>
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+    </script>
+    @section Scripts {
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    }

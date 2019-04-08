@@ -11,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
@@ -83,72 +85,78 @@
 
 
     @*<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">
-                <img src="~/img/Accounting Logo.PNG" width="150" height="40" />
-            </a>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <a class="navbar-brand" href="#">
+                    <img src="~/img/Accounting Logo.PNG" width="150" height="40" />
+                </a>
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
 
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
-                <br />
-                <li class="nav-item">
-                    <a class="nav-link" href="/Account/Login">Sign Out</a>
-                </li>
-            </ul>
-        </div>
-    </nav>*@
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
+                    <br />
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Account/Login">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>*@
 
     <br />
 
-    @using (Html.BeginForm())
-    {
+    @*@using (Html.BeginForm())
+    {*@
 
-        <form method="post" id="accountform">
+        <form method="post" id="accountform" class="needs-validation" novalidate>
             <div class="container" style="width: 43%">
                 @Html.ValidationSummary(true, "The following errors were found:", new { @class = "alert alert-danger" })
             </div>
 
-            <div class="container shadow" style="width: 40%">
-                <h2 style="text-decoration: underline"> Create New Account</h2>
+            <div class="container shadow" style="width: 60%">
+                <h2> Create New Account</h2>
                 <br />
                 @*<hr />*@
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
 
-                        <label for="AccountNumber" class="control-label">Account Number</label>
-                        <input type="text" class="form-control" id="AccountNumber" name="AccountNumber">
-                        @Html.ValidationMessageFor(m => m.AccountNumber, "", new { @class = "text-danger" })
-
+                        <label for="AccountNumber validationTooltip01" class="control-label">Account Number</label>
+                        <input type="number" class="form-control" id="AccountNumber validationTooltip01" name="AccountNumber" required>
+                        @*@Html.ValidationMessageFor(m => m.AccountNumber, "", new { @class = "text-danger" })*@
+                        <div class="invalid-feedback">
+                            Please enter account number.
+                        </div>
                     </div>
                     <div class="form-group col-md-6">
 
                         <label for="AccountName" class="control-label">Account Name</label>
-                        <input type="text" class="form-control" id="AccountName" name="AccountName">
-                        @Html.ValidationMessageFor(m => m.AccountName, "", new { @class = "text-danger" })
-
+                        <input type="text" class="form-control" id="AccountName" name="AccountName" required>
+                        @*@Html.ValidationMessageFor(m => m.AccountName, "", new { @class = "text-danger" })*@
+                        <div class="invalid-feedback">
+                            Please enter account name.
+                        </div>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <div class="form-group">
                             <label for="AccountType" class="control-label">Account Type</label>
-                            <select name="AccountType" class="form-control" id="AccountType">
+                            <select name="AccountType" class="form-control" id="AccountType" required>
+                                <option value="">Select..</option>
+
                                 <option value="Assets">Assets</option>
                                 <option value="Liabilities">Liabilities</option>
                                 <option value="Equity">Equity</option>
@@ -156,19 +164,26 @@
                                 <option value="Expense">Expense</option>
 
                             </select>
-                            @Html.ValidationMessageFor(m => m.AccountType, "", new { @class = "text-danger" })
-
+                            @*@Html.ValidationMessageFor(m => m.AccountType, "", new { @class = "text-danger" })*@
+                            <div class="invalid-feedback">
+                                Please select account type.
+                            </div>
                         </div>
                     </div>
                     <div class="form-group col-md-6">
 
                         <div class="form-group">
                             <label for="NormalSide">Normal Side</label>
-                            <select class="cutom-select form-control" id="NormalSide" name="NormalSide">
+                            <select class="cutom-select form-control" id="NormalSide" name="NormalSide" required>
+                                <option value="">Select..</option>
+
                                 <option value="Debit">Debit</option>
                                 <option value="Credit">Credit</option>
 
                             </select>
+                            <div class="invalid-feedback">
+                                Please select normal side.
+                            </div>
                         </div>
                     </div>
 
@@ -177,42 +192,56 @@
                     <div class="form-group col-md-6">
                         <div class="form-group">
                             <label for="OriginalBalance">Original Balance</label>
-                            <input type="text" class="form-control text-right right-justified" id="OriginalBalance" placeholder="0.00" name="OriginalBalance">
-                            @Html.ValidationMessageFor(m => m.OriginalBalance, "", new { @class = "text-danger" })
-
+                            <input type="number" step="0.01" class="form-control text-right right-justified" id="OriginalBalance" placeholder="0.00" name="OriginalBalance" required>
+                            @*@Html.ValidationMessageFor(m => m.OriginalBalance, "", new { @class = "text-danger" })*@
+                            <div class="invalid-feedback">
+                                This field is required (No more than two decimal places)
+                            </div>
                         </div>
                     </div>
                     <div class="form-group col-md-6">
                         <div class="form-group">
                             <label for="CurrentBalance">Current Balance</label>
-                            <input type="text" class="form-control text-right" id="CurrentBalance" placeholder="0.00" name="CurrentBalance">
-                            @Html.ValidationMessageFor(m => m.CurrentBalance, "", new { @class = "text-danger" })
-
+                            <input type="number" step="0.01" class="form-control text-right" id="CurrentBalance" placeholder="0.00" name="CurrentBalance" required>
+                            @*@Html.ValidationMessageFor(m => m.CurrentBalance, "", new { @class = "text-danger" })*@
+                            <div class="invalid-feedback">
+                                This field is required (No more than two decimal places)
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="AccountDescription">Account Description</label>
-                    <textarea class="form-control" id="AccountDescription" rows="5" name="AccountDescription"></textarea>
+                    <textarea class="form-control" id="AccountDescription" rows="5" name="AccountDescription" placeholder="(optional)"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="CreatedBy">Created By</label>
-                    <input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy">
-                    @Html.ValidationMessageFor(m => m.CreatedBy, "", new { @class = "text-danger" })
-
+                    <input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy" required>
+                    @*@Html.ValidationMessageFor(m => m.CreatedBy, "", new { @class = "text-danger" })*@
+                    <div class="invalid-feedback">
+                        This field is required
+                    </div>
                 </div>
 
-                <div class="form-group">
+                @*<div class="form-group">
                     <label for="Active" class="control-label">Active</label>
-                    <input data-val="true" id="Active" name="Active" type="checkbox" value="true" />
+                    <input data-val="true" id="Active" name="Active" type="checkbox" value="true" required />
                     <input name="Active" type="hidden" value="false" />
 
-                    @*@Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })*@
+                    @Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })*@
+                            @*</div>*@
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="Active" name="Active" required >
+                        <label class="form-check-label" for="Active"style="font-size:large; padding-left:0">
+                            Active
+                        </label>
+                        
+                    </div>
                 </div>
-
                 <hr />
-                
+
                 <button type="submit" class="btn btn-success" href="@Url.Action("ChartOfAccounts")" id="btnsubmit">Save</button>
                 <a href="@Url.Action("ChartOfAccounts")" class="btn btn-warning">
                     <span class="glyphicon glyphicon-remove"></span> Cancel
@@ -222,9 +251,16 @@
             <br />
             <br />
         </form>
-    }
+    @*}*@
+
+
+
+
+    
     @*<hr />
-    <p> &copy; @DateTime.Now.Year - Objective Accounting</p>*@
+        <p> &copy; @DateTime.Now.Year - Objective Accounting</p>*@
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -240,6 +276,24 @@
 
     </script>
 
+    <script>
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+    </script>
 
 </body>
 </html>

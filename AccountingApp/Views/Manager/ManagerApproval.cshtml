@@ -135,10 +135,10 @@
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
                                     <td>@Model.entries[i].status</td>
                                     <td>
-                                        <a href="@Url.Action("ApproveEntry", new { id = Model.entries[i].entryID})">
+                                        <a href="@Url.Action("ApproveEntry", new { id = Model.entries[i].entryID})" style="color:#33C444">
                                             Approve
                                         </a>
-                                        <a href="@Url.Action("DisapproveEntry", new { id = Model.entries[i].entryID})">
+                                        <a href="@Url.Action("DisapproveEntry", new { id = Model.entries[i].entryID})" style="color: red">
                                             Disapprove
                                         </a>
                                     </td>
