@@ -148,13 +148,16 @@
                 <tbody>
                     @for (int i = 0; i < Model.entries.Count; i++)
                     {
-                        <tr data-toggle="modal" data-id=@Model.entries[i].entryID data-target="#entryModal">
+                        <tr data-toggle="modal"
+                            data-id=@Model.entries[i].entryID
+                            data-accounts="@Model.entries[i].FormattedAccountNames()"
+                            data-debits="@Model.entries[i].FormattedDebits()"
+                            data-credits="@Model.entries[i].FormattedCredits()"
+                            data-comment="@Model.entries[i].comment"
+                            data-target="#entryModal">
+                            
                             <td>@Model.entries[i].submitDate</td>
-                            <td>
-                                @*<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">*@
-                                @Model.entries[i].entryID
-                                @*</button>*@
-                            </td>
+                            <td>@Model.entries[i].entryID</td>
                             <td style="white-space: pre-wrap;">@Model.entries[i].FormattedAccountNames()</td>
                             <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
                             <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
@@ -170,10 +173,28 @@
         <div id="entryModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header" id="EntryIdModalTitle">
-                        
+                    <div class="modal-header" id="EntryIdModalTitle"></div>
+                    <div class="modal-body">
+                        <table id="ModalTable" class="table table-responsive table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <td>Accounts Affected</td>
+                                    <td>Debits</td>
+                                    <td>Credits</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="AccountsModal" style="white-space: pre-wrap;"></td>
+                                    <td id="DebitsModal" style="white-space: pre-wrap;"></td>
+                                    <td id="CreditsModal" style="white-space: pre-wrap;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="modal-body" id="Entries"></div>
+                    <div class="modal-header">Comments</div>
+                    <div class="modal-body" id="CommentModal"></div>
+                    <div class="modal-body" id="FilesModal"></div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
@@ -202,9 +223,17 @@
                 show: false,
 
             }).on('show.bs.modal', function () { //subscribe to show method
-                var getIdFromRow = $(event.target).closest('tr').data('id'); //get the id from tr
+                var getIdFromRow = $(event.target).closest('tr').data('id'); 
+                var getEntriesFromRow = $(event.target).closest('tr').data('accounts');
+                var getDebitsFromRow = $(event.target).closest('tr').data('debits');
+                var getCreditsFromRow = $(event.target).closest('tr').data('credits');
+                var getComment = $(event.target).closest('tr').data('comment');
                 //make your ajax call populate items or what even you need
                 $(this).find('#EntryIdModalTitle').html($('<b> Entry Id selected: ' + getIdFromRow + '</b>'))
+                $(this).find('#AccountsModal').html($('<p>' + getEntriesFromRow + '</p>'))
+                $(this).find('#DebitsModal').html($('<p>' + getDebitsFromRow + '</p>'))
+                $(this).find('#CreditsModal').html($('<p>' + getCreditsFromRow + '</p>'))
+                $(this).find('#CommentModal').html($('<p>' + getComment + '</p>'))
             });
         });
     </script>
