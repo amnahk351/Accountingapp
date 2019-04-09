@@ -114,7 +114,7 @@ namespace AccountingApp.Controllers
             return View();
         }
 
-        //public ActionResult DisapproveEntry(List<Transaction>)
+        
 
         public ActionResult GeneralJournal()
         {
@@ -146,6 +146,62 @@ namespace AccountingApp.Controllers
 
                 ViewBag.DebitTotal = debTotal;
                 ViewBag.CreditTotal = credTotal;
+            }
+
+            return View(coa);
+        }
+
+        public ActionResult IncomeStatement()
+        {
+
+            List<ChartOfAcc> coa;
+            decimal revenueTotal = 0;
+            decimal expenseTotal = 0;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                foreach (ChartOfAcc c in coa)
+                {
+                    if (c.AccountType.ToLower() == "revenue")
+                        revenueTotal += c.CurrentBalance.Value;
+                    if (c.AccountType.ToLower() == "expense")
+                        expenseTotal += c.CurrentBalance.Value;
+
+
+                }
+
+                ViewBag.RevenueTotal = revenueTotal;
+                ViewBag.ExpenseTotal = expenseTotal;
+                ViewBag.NetIncome_Loss = revenueTotal - expenseTotal;
+            }
+
+            return View(coa);
+        }
+
+        public ActionResult BalanceSheet()
+        {
+
+            List<ChartOfAcc> coa;
+            decimal revenueTotal = 0;
+            decimal expenseTotal = 0;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                //foreach (ChartOfAcc c in coa)
+                //{
+                //    if (c.AccountType.ToLower() == "revenue")
+                //        revenueTotal += c.CurrentBalance.Value;
+                //    if (c.AccountType.ToLower() == "expense")
+                //        expenseTotal += c.CurrentBalance.Value;
+
+
+                //}
+
+                //ViewBag.RevenueTotal = revenueTotal;
+                //ViewBag.ExpenseTotal = expenseTotal;
+                //ViewBag.NetIncome_Loss = revenueTotal - expenseTotal;
             }
 
             return View(coa);

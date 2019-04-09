@@ -117,8 +117,6 @@ namespace AccountingApp.Controllers
             return Json(insertedRecords);
         }
 
-<<<<<<< HEAD
-=======
         private static byte[] getBytes(string file)
         {
             using (SqlConnection cn = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -164,7 +162,6 @@ namespace AccountingApp.Controllers
 
         //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html
 
->>>>>>> 79fb5cd88e6199e1ca0caad4e61804081205545b
         [HttpPost]
         public ActionResult UploadFiles()
         {
