@@ -1,7 +1,7 @@
 ﻿@model List<AccountingApp.Models.ChartOfAcc>
 
 @{
-    ViewBag.Title = "TrialBalance";
+    ViewBag.Title = "IncomeStatement";
     Layout = null;
 }
 
@@ -111,7 +111,8 @@
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
-                    <h3 class="card-title">Trial Balance</h3>
+                    <h3 class="card-title">Addams & Family Inc.</h3>
+                    <h3 class="card-title">Income Statement</h3>
                     <hr />
                     <h4>
                         <script>
@@ -119,38 +120,59 @@
                         </script>
                     </h4>
 
-                    <table id="trialTable" class="table-striped" style="width:500px;">
+                    <table id="revenueTable" class="table-striped" style="width:500px;">
 
                         <tr class="titleRow">
-                            <th align="right">Account</th>
-                            <th align="right">Debit</th>
-                            <th align="right">Credit</th>
+                            <th>Revenues</th>
+                            <th> </th>
                         </tr>
-
 
                         @for (int i = 0; i < Model.Count; i++)
-                        {
-
-                            <tr>
-                                <td>@Model[i].AccountName</td>
-                                @if (Model[i].NormalSide.ToLower() == "debit")
-                                {
-                                    <td class="rowData" align="right">@Model[i].CurrentBalance</td>
-                                    <td class="rowData" align="right"></td>
-                                }
-                                else
-                                {
-                                    <td class="rowData" align="right"></td>
-                                    <td class="rowData" align="right">@Model[i].CurrentBalance</td>
-                                }
-                            </tr>
-                        }
-                        <tr class="totalRow">
-                            <td align="right">Total:</td>
-                            <td class="total" align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.DebitTotal</td>
-                            <td class="total" align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.CreditTotal</td>
+        {
+            if (Model[i].AccountType.ToLower() == "revenue")
+            {
+                <tr>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                    <td align="right">@Model[i].CurrentBalance</td>
+                </tr>
+}
+}
+                        <tr>
+                            <td>Total Revenues</td>
+                            <td align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: solid; border-bottom-width: .2rem;">@ViewBag.RevenueTotal</td>
                         </tr>
 
+                    </table>
+
+                    <br />
+
+                    <table id="expenseTable" class="table-striped" style="width:500px;">
+
+                        <tr class="titleRow">
+                            <th>Expenses</th>
+                            <th> </th>
+                        </tr>
+
+                        @for (int i = 0; i < Model.Count; i++)
+    {
+        if (Model[i].AccountType.ToLower() == "expense")
+        {
+                    <tr>
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                        <td align="right">@Model[i].CurrentBalance</td>
+                    </tr>
+}
+}
+
+                        <tr>
+                            <td>Total Expense</td>
+                            <td align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: solid; border-bottom-width: .2rem;">@ViewBag.ExpenseTotal</td>
+                        </tr>
+                        <tr height=20px></tr>
+                        <tr>
+                            <td>Net Income (Loss)</td>
+                            <td align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">@ViewBag.NetIncome_Loss</td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -163,3 +185,4 @@
 </body>
 
 </html>
+
