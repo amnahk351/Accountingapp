@@ -167,6 +167,7 @@ namespace AccountingApp.Controllers
             {
                 int id = t.EntryId.Value;
                 string status = t.Status;
+                string comment = t.AccountantComment;
                 DateTime date = t.DateSubmitted.GetValueOrDefault();
 
                 if (ids.Contains(id))
@@ -174,7 +175,7 @@ namespace AccountingApp.Controllers
                 else
                     ids.Add(id);
 
-                Entry e = new Entry(id, status, date);
+                Entry e = new Entry(id, status, date, comment);
                 foreach (Transaction t2 in allPendingTransactions)
                 {
                     if (t2.EntryId == id)

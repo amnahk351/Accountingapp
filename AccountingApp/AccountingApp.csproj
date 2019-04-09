@@ -417,6 +417,7 @@
     <Content Include="Views\Accountant\Journalize.cshtml" />
     <Content Include="Views\Manager\IncomeStatement.cshtml" />
     <Content Include="Views\Manager\BalanceSheet.cshtml" />
+    <Content Include="Views\Manager\RetainedEarnings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />

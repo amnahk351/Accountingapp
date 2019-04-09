@@ -55,13 +55,11 @@ namespace AccountingApp.Controllers
 
         public int GetLatestEntryId()
         {
-
             int EntryId;
 
             SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
             SqlCommand cmd = new SqlCommand($"SELECT TOP 1 EntryId FROM dbo.TransactionTable ORDER BY TransactionID DESC", con);
-
-
+            
             con.Open();
             string s = cmd.ExecuteScalar().ToString();  //Stores the latest EntryId in the table
 
@@ -86,11 +84,17 @@ namespace AccountingApp.Controllers
                 for (int i = 1; i < transactions.Length; i++)
                 {
 
+                    //var x = DateTime.Now;
+
+                    //if was submitted today added the current time to the database
+
+                    //if submitted on another day, default the time to 12
+
 
                     string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
-                    "DateSubmitted, Status, AccountName, Debit, Credit, EntryId)" +
+                    "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)" +
                     "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," +
-                    "@Debit,@Credit,@EntryId)";
+                    "@Debit,@Credit,@EntryId,EntryType)";
 
                     db.Execute(sql, new
                     {
@@ -101,7 +105,8 @@ namespace AccountingApp.Controllers
                         AccountName = transactions[i].AccountName,
                         Debit = transactions[i].Debit,
                         Credit = transactions[i].Credit,
-                        EntryId = NewEntryId + 1
+                        EntryId = NewEntryId + 1,
+                        EntryType = transactions[i].Entry_Type
                     });
 
                     insertedRecords++;
@@ -112,6 +117,54 @@ namespace AccountingApp.Controllers
             return Json(insertedRecords);
         }
 
+<<<<<<< HEAD
+=======
+        private static byte[] getBytes(string file)
+        {
+            using (SqlConnection cn = new SqlConnection(SqlAccess.GetConnectionString()))
+            using (SqlCommand cm = cn.CreateCommand())
+            {
+                cm.CommandText = @"
+            SELECT FileBytes
+            FROM   dbo.DocumentsTable
+            WHERE  FileName = @Name";
+                cm.Parameters.AddWithValue("@Name", file);
+                cn.Open();
+                return cm.ExecuteScalar() as byte[];
+            }
+        }
+
+        public FileResult Download(string file)
+        {
+            byte[] fileBytes = getBytes(file);
+            var response = new FileContentResult(fileBytes, "application/octet-stream");
+            response.FileDownloadName = file;
+            return response;
+        }
+
+        [HttpPost]
+        public ActionResult DeleteFile(string file) {
+
+            int EntryID = GetLatestEntryId() + 1;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                string sql = $"DELETE FROM dbo.DocumentsTable WHERE FileName=@File AND FK_EntryId=@ID";
+                
+                db.Execute(sql, new
+                {
+                    File = file,
+                    ID = EntryID
+                });                
+
+            }
+
+            return Json("File, " + file + ", Deleted!");
+        }
+
+        //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html
+
+>>>>>>> 79fb5cd88e6199e1ca0caad4e61804081205545b
         [HttpPost]
         public ActionResult UploadFiles()
         {
@@ -237,9 +290,32 @@ namespace AccountingApp.Controllers
     {
         public void SaveFileDetails(HttpPostedFileBase file)
         {
+            int newID = GetLatestEntryId();
+            //DocumentsTable newFile = new DocumentsTable();
             //UploadedFiles newFile = new UploadedFiles();
             //newFile.ContentType = file.ContentType;
-            //newFile.ImageBytes = ConvertToBytes(file);
+            //newFile.FileBytes = ConvertToBytes(file);
+            //newFile.FileName = file.FileName;
+            //newFile.FK_EntryId = newID + 1;
+
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.DocumentsTable (FileBytes, ContentType, " +
+                    "FileName, FK_EntryId)" +
+                    "values(@FileBytes,@ContentType,@FileName,@FK_EntryId)";
+                db.Execute(sql, new
+                {
+                    FileBytes = ConvertToBytes(file),
+                    ContentType = file.ContentType,
+                    FileName = file.FileName,
+                    FK_EntryId = newID + 1
+                });
+            }
+
+
+
             //using (FileUploadEntities dataContext = new FileUploadEntities())
             //{
             //    dataContext.UploadedFiles.AddObject(newFile);
@@ -253,6 +329,23 @@ namespace AccountingApp.Controllers
             BinaryReader reader = new BinaryReader(file.InputStream);
             imageBytes = reader.ReadBytes((int)file.ContentLength);
             return imageBytes;
+        }
+
+
+        public int GetLatestEntryId()
+        {
+            int EntryId;
+
+            SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
+            SqlCommand cmd = new SqlCommand($"SELECT TOP 1 EntryId FROM dbo.TransactionTable ORDER BY TransactionID DESC", con);
+
+            con.Open();
+            string s = cmd.ExecuteScalar().ToString();  //Stores the latest EntryId in the table
+
+            con.Close();
+            EntryId = Int32.Parse(s);
+
+            return EntryId;
         }
     }
 }

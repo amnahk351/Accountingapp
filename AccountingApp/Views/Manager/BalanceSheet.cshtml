@@ -214,19 +214,19 @@
 
 
                         @for (int i = 0; i < Model.Count; i++)
-    {
-        if (Model[i].AccountType.ToLower() == "liabilities")
-        {
-                    <tr>
+                        {
+                            if (Model[i].AccountType.ToLower() == "liabilities")
+                            {
+                                <tr>
 
-                        <td align="left">@Model[i].AccountName</td>
-                        <td>@Model[i].CurrentBalance</td>
-                        <td> </td>
+                                    <td align="left">@Model[i].AccountName</td>
+                                    <td>@Model[i].CurrentBalance</td>
+                                    <td> </td>
 
 
-                    </tr>
-}
-}
+                                </tr>
+                            }
+                        }
                         <tr>
                             <td align="left">Total Current Liabilities</td>
                             <td> </td>
@@ -245,19 +245,19 @@
                         </tr>
 
                         @for (int i = 0; i < Model.Count; i++)
-    {
-        if (Model[i].AccountName.ToLower() == "equity")
-        {
-                    <tr>
+                        {
+                            if (Model[i].AccountName.ToLower() == "equity")
+                            {
+                                <tr>
 
-                        <td align="left">@Model[i].AccountName</td>
-                        <td></td>
-                        <td>@Model[i].CurrentBalance</td>
+                                    <td align="left">@Model[i].AccountName</td>
+                                    <td></td>
+                                    <td>@Model[i].CurrentBalance</td>
 
 
-                    </tr>
-}
-}
+                                </tr>
+                            }
+                        }
 
                         <tr>
                             <td align="left">Retained Earnings</td>

@@ -27,5 +27,6 @@ namespace AccountingApp.Models
         public string AccountantUsername { get; set; }
         public string ManagerUser { get; set; }
         public string AccountName { get; set; }
+        public string Entry_Type { get; set; }
     }
 }
