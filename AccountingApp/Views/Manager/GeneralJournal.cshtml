@@ -119,6 +119,20 @@
 
         <hr />
         <h5>General Journal</h5>
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a href="@Url.Action("GeneralJournal", new { status = "all"})" class="btn btn-success" role="button" aria-pressed="true">
+                All
+            </a>
+            <a href="@Url.Action("GeneralJournal", new { status = "approved"})" class="btn btn-success" role="button" aria-pressed="true">
+                Approved
+            </a>
+            <a href="@Url.Action("GeneralJournal", new { status = "disapproved"})" class="btn btn-success" role="button" aria-pressed="true">
+                Disapproved
+            </a>
+            <a href="@Url.Action("GeneralJournal", new { status = "pending"})" class="btn btn-success" role="button" aria-pressed="true">
+                Pending
+            </a>
+        </div>
         <hr />
         <div>
             <table id="GeneralJournalTable" class="table table-responsive table-striped" style="width:100%">
@@ -134,72 +148,96 @@
                 </thead>
                 <tbody>
                     @for (int i = 0; i < Model.entries.Count; i++)
-        {
-            <tr>
-                <td>@Model.entries[i].submitDate</td>
-                <td>@Model.entries[i].entryID</td>
-                <td style="white-space: pre-wrap;">@Model.entries[i].FormattedAccountNames()</td>
-                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                <td>@Model.entries[i].status</td>
-            </tr>
-}
+                    {
+                        <tr data-toggle="modal"
+                            data-id=@Model.entries[i].entryID
+                            data-accounts="@Model.entries[i].FormattedAccountNames()"
+                            data-debits="@Model.entries[i].FormattedDebits()"
+                            data-credits="@Model.entries[i].FormattedCredits()"
+                            data-comment="@Model.entries[i].comment"
+                            data-target="#entryModal">
+                            
+                            <td>@Model.entries[i].submitDate</td>
+                            <td>@Model.entries[i].entryID</td>
+                            <td style="white-space: pre-wrap;">@Model.entries[i].FormattedAccountNames()</td>
+                            <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                            <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                            <td>@Model.entries[i].status</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
 
-
-
         <hr />
-        @*<div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-success">All</button>
-            <button type="button" class="btn btn-success">Approved</button>
-            <button type="button" class="btn btn-success">Declined</button>
-            <button type="button" class="btn btn-success">Pending</button>
 
-        </div>*@
+        <div id="entryModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" id="EntryIdModalTitle"></div>
+                    <div class="modal-body">
+                        <table id="ModalTable" class="table table-responsive table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <td>Accounts Affected</td>
+                                    <td>Debits</td>
+                                    <td>Credits</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="AccountsModal" style="white-space: pre-wrap;"></td>
+                                    <td id="DebitsModal" style="white-space: pre-wrap;"></td>
+                                    <td id="CreditsModal" style="white-space: pre-wrap;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-header">Comments</div>
+                    <div class="modal-body" id="CommentModal"></div>
+                    <div class="modal-body" id="FilesModal"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
-
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    
     <script>
-        $(document).ready(function () {
-            $('#JournalEntries').DataTable();
+        $(function () {
+            $('#entryModal').modal({
+                keyboard: true,
+                backdrop: "static",
+                show: false,
+
+            }).on('show.bs.modal', function () { //subscribe to show method
+                var getIdFromRow = $(event.target).closest('tr').data('id'); 
+                var getEntriesFromRow = $(event.target).closest('tr').data('accounts');
+                var getDebitsFromRow = $(event.target).closest('tr').data('debits');
+                var getCreditsFromRow = $(event.target).closest('tr').data('credits');
+                var getComment = $(event.target).closest('tr').data('comment');
+                //make your ajax call populate items or what even you need
+                $(this).find('#EntryIdModalTitle').html($('<b> Entry Id selected: ' + getIdFromRow + '</b>'))
+                $(this).find('#AccountsModal').html($('<p>' + getEntriesFromRow + '</p>'))
+                $(this).find('#DebitsModal').html($('<p>' + getDebitsFromRow + '</p>'))
+                $(this).find('#CreditsModal').html($('<p>' + getCreditsFromRow + '</p>'))
+                $(this).find('#CommentModal').html($('<p>' + getComment + '</p>'))
+            });
         });
     </script>
-    <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function () {
-            'use strict';
-            window.addEventListener('load', function () {
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.getElementsByClassName('needs-validation');
-                // Loop over them and prevent submission
-                var validation = Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-    </script>
-    <script>
 
-
-    </script>
-    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>*@
 </body>
 </html>

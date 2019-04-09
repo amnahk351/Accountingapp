@@ -1,12 +1,13 @@
-﻿
+﻿@model List<AccountingApp.Models.ChartOfAcc>
+
 @{
-    Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
-    //Layout = null;
+    ViewBag.Title = "RetainedEarnings";
+    Layout = null;
+
 }
 
-<!DOCTYPE html>
-
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -18,11 +19,9 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
-
-
     <style>
-        body{
-            background-color:white;
+        body {
+            background-color: white;
         }
 
         .navbar-text {
@@ -45,12 +44,12 @@
             .inner:hover img {
                 transform: scale(1.5);
             }
-        
-        
     </style>
 </head>
+
 <body>
-    @*<nav style="padding:20px; font-size: 20px;   font-weight: 70;" class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top ">
+    @*Amnah*@
+    <nav style="padding:20px; font-size: 20px;   font-weight: 70;" class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top ">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -90,7 +89,7 @@
                     <a class="nav-link active" href="@Url.Action("../Admin/ChartOfAccounts")">Chart Of Accounts</a>
                 </li>
                 <li>
-                    <a class="nav-link active" href="@Url.Action("ManagerIndex")">Dashboard</a>
+                    <a class="nav-link active" href="#">Dashboard</a>
                 </li>
                 <br />
                 <h3 style="color:darkgray">|</h3>
@@ -106,57 +105,68 @@
                 </li>
             </ul>
         </div>
-    </nav>*@
+    </nav>
 
-    <div class="shadow container" style="width:80%; background-color:gainsboro;">
-        <div class="card-columns" style="width:100%; column-count:2; padding-top:20px;">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Notifications</h3>
+    @*Amnah*@
+    <div class="shadow container" style="width:60%; background-color:gainsboro;">
+        <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
+            <div class="card" style="text-align:center;">
+                <div class="card-body" style="display:inline-block;">
+                    <h3 class="card-title">Objective Accounting</h3>
+                    <br />
+                    <h3 class="card-title">Statement Of Retained Earnings</h3>
                     <hr />
-                    <p class="card-text">You have @ViewBag.pendingCount pending transactions.</p>
-                    <a href="@Url.Action("ManagerApproval")" class="btn btn-success">View Pending Transactions</a>
+                    <h4>
+                        For the Year Ended,
+                        <script>
+                            document.write(new Date().toDateString());
+                        </script>
+                    </h4>
+
+                    <table id="trialTable" class="table-striped" style="width:800px">
+                        <br />
+                        <tr class="titleRow" style="font-size:x-large">
+                            <th align="right">
+                                Retained Earnings,
+                                <script>
+                                    var date = new Date();
+                                    date.setFullYear(date.getFullYear() - 1);
+                                    document.write(date.toDateString());
+
+                                </script>
+                            </th>
+                            <th align="right" style="float:right">$0.00</th>
+                        </tr>
+                        <tr class="titleRow" style="font-size:x-large">
+                            <th align="right" >Plus: Net Income </th>
+                            <th align="right" style="float:right">0.00</th>
+                        </tr>
+                        <tr class="titleRow" style="font-size:x-large">
+                            <th align="right">Minus: Dividents Paid</th>
+                            <th align="right" style="float:right;border-bottom: 3px solid;">0.00</th>
+                        </tr>
+                        <tr class="titleRow" style="font-size:x-large">
+                            <th align="right">Retained Earnings,
+                                <script>
+                                    document.write(new Date().toDateString());
+                                </script></th>
+                            <th align="right" style="float:right; border-bottom: 8px double;">$0.00</th>
+                        </tr>
+
+                    </table>
                 </div>
             </div>
-
-
-
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">General Journal</h3>
-                    <hr />
-                    <p class="card-text">Click Below to see all the Journal Entries.</p>
-
-                    <a href="@Url.Action("GeneralJournal")" class="btn btn-success">View All</a>
-                </div>
-            </div>
-
-            <div class="card p-3">
-                <blockquote class="blockquote mb-0">
-                    <div class="card-header" style="background-color:white">
-                        <h3>Reports</h3>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <a href="@Url.Action("TrialBalance")">  <li class="list-group-item">Trial Balance</li></a>
-                        @*<a href="#"><li class="list-group-item">Adjusted Trial Balance</li></a>*@
-                        <a href="@Url.Action("IncomeStatement")"><li class="list-group-item">Income Statement</li></a>
-                        <a href="@Url.Action("BalanceSheet")"><li class="list-group-item">Balance Sheet</li></a>
-                        <a href="@Url.Action("RetainedEarnings")"><li class="list-group-item">Statement of Retained Earnings</li></a>
-                        <a href="@Url.Action("PostClosingTrialBalance")"><li class="list-group-item">Post ClosingTrial Balance</li></a>
-                    </ul>
-                </blockquote>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Number Of Transactions</h3>
-                    <hr />
-                    <p>@ViewBag.approvedCount transactions this month.</p>
-
-                </div>
-            </div>
-            
         </div>
     </div>
-    <br />
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+
 </body>
+
 </html>
+

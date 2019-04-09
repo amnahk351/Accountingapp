@@ -64,7 +64,21 @@
 
     
         <h5>General Journal</h5>
-      
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a href="@Url.Action("AccountantIndex", new { status = "all"})" class="btn btn-success" role="button" aria-pressed="true">
+                All
+            </a>
+            <a href="@Url.Action("AccountantIndex", new { status = "approved"})" class="btn btn-success" role="button" aria-pressed="true">
+                Approved
+            </a>
+            <a href="@Url.Action("AccountantIndex", new { status = "disapproved"})" class="btn btn-success" role="button" aria-pressed="true">
+                Disapproved
+            </a>
+            <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-success" role="button" aria-pressed="true">
+                Pending
+            </a>
+        </div>
+        <hr />
         <div>
             <table id="GeneralJournalTable" class="table table-responsive table-striped" style="width:100%">
                 <thead>
@@ -79,25 +93,19 @@
                 </thead>
                 <tbody>
                     @for (int i = 0; i < Model.entries.Count; i++)
-                    {
-                        <tr>
-                            <td>@Model.entries[i].submitDate</td>
-                            <td>@Model.entries[i].entryID</td>
-                            <td style="white-space: pre-wrap;">@Model.entries[i].FormattedAccountNames()</td>
-                            <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                            <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                            <td>@Model.entries[i].status</td>
-                        </tr>
-                    }
+                {
+                    <tr>
+                        <td>@Model.entries[i].submitDate</td>
+                        <td>@Model.entries[i].entryID</td>
+                        <td style="white-space: pre-wrap;">@Model.entries[i].FormattedAccountNames()</td>
+                        <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                        <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                        <td>@Model.entries[i].status</td>
+                    </tr>
+            }
                 </tbody>
             </table>
         </div>
-
-
-
-    
-      
-
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>

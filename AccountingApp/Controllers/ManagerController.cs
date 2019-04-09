@@ -114,7 +114,7 @@ namespace AccountingApp.Controllers
             return View();
         }
 
-        //public ActionResult DisapproveEntry(List<Transaction>)
+        
 
         public ActionResult GeneralJournal()
         {
@@ -151,6 +151,103 @@ namespace AccountingApp.Controllers
             return View(coa);
         }
 
+        public ActionResult IncomeStatement()
+        {
+
+            List<ChartOfAcc> coa;
+            decimal revenueTotal = 0;
+            decimal expenseTotal = 0;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                foreach (ChartOfAcc c in coa)
+                {
+                    if (c.AccountType.ToLower() == "revenue")
+                        revenueTotal += c.CurrentBalance.Value;
+                    if (c.AccountType.ToLower() == "expense")
+                        expenseTotal += c.CurrentBalance.Value;
+
+
+                }
+
+                ViewBag.RevenueTotal = revenueTotal;
+                ViewBag.ExpenseTotal = expenseTotal;
+                ViewBag.NetIncome_Loss = revenueTotal - expenseTotal;
+            }
+
+            return View(coa);
+        }
+
+        public ActionResult BalanceSheet()
+        {
+
+            List<ChartOfAcc> coa;
+            decimal totalCurrentAssets = 0;
+            decimal totalAssets = 0;
+            decimal propPlanEquipNet = 0;
+            decimal totalCurrentLiabilities = 0;
+            decimal totalLiabilities = 0;
+            decimal retainedEarnings = 0;
+            decimal totalStockHolderEquity = 0;
+            decimal totalLiabilitesStockEquity = 0;
+            decimal unearnedRevenue = 0;
+            decimal contributedCapital = 0;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                
+                for(int i = 0; i < coa.Count; i++)
+                {
+                    if (coa[i].AccountName.ToLower() == "cash" || coa[i].AccountName.ToLower() == "accounts receivable" || coa[i].AccountName.ToLower() == "supplies" || coa[i].AccountName.ToLower() == "prepaid insurance" || coa[i].AccountName.ToLower() == "prepaid rent")
+                    {
+                        totalCurrentAssets += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "office supplies")
+                    {
+                        propPlanEquipNet += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "accumulated depreciation equipment")
+                    {
+                        propPlanEquipNet -= coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "accounts payable" || coa[i].AccountName.ToLower() == "salaries payable")
+                    {
+                        totalCurrentLiabilities += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "unearned revenue")
+                    {
+                        unearnedRevenue += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "contributed capital")
+                    {
+                        contributedCapital += coa[i].CurrentBalance.Value;
+                    }
+                }
+                
+            }
+
+            totalAssets = totalCurrentAssets + propPlanEquipNet;
+            totalLiabilities = unearnedRevenue + totalCurrentLiabilities;
+
+            retainedEarnings = totalAssets - totalLiabilities - contributedCapital;
+
+            totalStockHolderEquity = retainedEarnings + contributedCapital;
+            totalLiabilitesStockEquity = totalStockHolderEquity + totalLiabilities;
+
+            ViewBag.totalCurrentAssets = totalCurrentAssets;
+            ViewBag.totalAssets = totalAssets;
+            ViewBag.propPlanEquipNet = propPlanEquipNet;
+            ViewBag.totalCurrentLiabilities = totalCurrentLiabilities;
+            ViewBag.totalLiabilities = totalLiabilities;
+            ViewBag.retainedEarnings = retainedEarnings;
+            ViewBag.totalStockHolderEquity = totalStockHolderEquity;
+            ViewBag.totalLiabilitesStockEquity = totalLiabilitesStockEquity;
+
+            return View(coa);
+        }
+
         private Entries getAllEntriesOfStatus(string s)
         {
 
@@ -167,6 +264,7 @@ namespace AccountingApp.Controllers
             {
                 int id = t.EntryId.Value;
                 string status = t.Status;
+                string comment = t.AccountantComment;
                 DateTime date = t.DateSubmitted.GetValueOrDefault();
 
                 if (ids.Contains(id))
@@ -174,7 +272,7 @@ namespace AccountingApp.Controllers
                 else
                     ids.Add(id);
 
-                Entry e = new Entry(id, status, date);
+                Entry e = new Entry(id, status, date, comment);
                 foreach (Transaction t2 in allPendingTransactions)
                 {
                     if (t2.EntryId == id)
@@ -188,6 +286,18 @@ namespace AccountingApp.Controllers
             }
 
             return entries;
+        }
+
+
+
+        public ActionResult RetainedEarnings()
+        {
+            return View();
+        }
+
+        public ActionResult PostClosingTrialBalance()
+        {
+            return View();
         }
     }
 }

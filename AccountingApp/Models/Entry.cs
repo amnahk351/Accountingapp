@@ -11,6 +11,7 @@ namespace AccountingApp.Models
         public List<Transaction> transactions { get; set; }
         public int entryID { get; set; }
         public string status { get; set; }
+        public string comment { get; set; }
         public DateTime submitDate;
         public List<String> accountNames { get; set; }
         public List<Decimal> debits { get; set; }
@@ -24,11 +25,12 @@ namespace AccountingApp.Models
             credits = new List<Decimal>();
         }
 
-        public Entry(int entryID, string status, DateTime submitDate)
+        public Entry(int entryID, string status, DateTime submitDate, string comment)
         {
             this.entryID = entryID;
             this.status = status;
             this.submitDate = submitDate;
+            this.comment = comment;
             transactions = new List<Transaction>();
             accountNames = new List<String>();
             debits = new List<Decimal>();
@@ -104,7 +106,6 @@ namespace AccountingApp.Models
                 else
                     break;
             }
-            Trace.WriteLine("------Index of " + entryID + ": " + index);
             return index;
         }
     }
