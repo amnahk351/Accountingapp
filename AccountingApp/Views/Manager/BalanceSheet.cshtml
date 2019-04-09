@@ -1,0 +1,290 @@
+﻿@model List<AccountingApp.Models.ChartOfAcc>
+@{
+    ViewBag.Title = "BalanceSheet";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <style>
+        body {
+            background-color: white;
+        }
+
+        .navbar-text {
+            padding-right: 20px;
+        }
+
+        .container {
+            width: 100%;
+            margin-top: 2%;
+        }
+
+        .inner {
+            overflow: hidden;
+        }
+
+            .inner img {
+                transition: all 1.5s ease;
+            }
+
+            .inner:hover img {
+                transform: scale(1.5);
+            }
+    </style>
+</head>
+
+<body>
+    @*Amnah*@
+    <nav style="padding:20px; font-size: 20px;   font-weight: 70;" class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top ">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <a class="navbar-brand" href="#">Objective Accounting</a>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="@Url.Action("ManagerIndex")">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="nav-link active" href="#">User List</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="#">User Log</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="@Url.Action("GeneralJournal")">General Journal</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="#">General Ledger</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="#">Reports</a>
+
+                </li>
+                <li>
+                    <a class="nav-link active" href="@Url.Action("../Accountant/Journalize")">Journalize</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="@Url.Action("../Admin/ChartOfAccounts")">Chart Of Accounts</a>
+                </li>
+                <li>
+                    <a class="nav-link active" href="#">Dashboard</a>
+                </li>
+                <br />
+                <h3 style="color:darkgray">|</h3>
+                <li>
+                    <a class="nav-link active" href="#" style="width:50px;">
+                        <i class="far fa-bell"></i>
+
+                    </a>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="@Url.Action("../Account/Login")">Sign Out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    @*Amnah*@
+    <div class="shadow container" style="width:60%; background-color:gainsboro;">
+        <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
+            <div class="card" style="text-align:center;">
+                <div class="card-body" style="display:inline-block;">
+                    <h3 class="card-title">Addams & Family Inc.</h3>
+                    <h3 class="card-title">Balance Sheet</h3>
+                    <hr />
+                    <h4>
+                        <script>
+                            document.write(new Date().toDateString());
+                        </script>
+                    </h4>
+
+                    <table id="assetsTable" class="table-striped" style="width:500px;">
+
+                        <tr class="titleRow">
+                            <th align="left">Assets</th>
+                            <th> </th>
+                            <th> </th>
+                        </tr>
+
+                        <tr>
+                            <th align="left">Current Assets</th>
+                            <th> </th>
+                            <th> </th>
+                        </tr>
+
+
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            if (Model[i].AccountType.ToLower() == "assets")
+                            {
+                                <tr>
+
+                                    @if (Model[i].AccountName.ToLower() != "office supplies")
+                                    {
+                                        <td align="left">@Model[i].AccountName</td>
+                                        <td>@Model[i].CurrentBalance</td>
+                                        <td> </td>
+                                    }
+
+                                </tr>
+                            }
+                        }
+                        <tr>
+                            <td align="left">Total Current Assets</td>
+                            <td> </td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <th align="left">Property Plant & Equipment</th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+
+                            <tr>
+                                @if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
+                                {
+                                    <td align="left">@Model[i].AccountName</td>
+                                    if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
+                                    {
+                                        <td>@Model[i].CurrentBalance</td>
+                                    }
+                                    else
+                                    {
+                                        <td>(@Model[i].CurrentBalance)</td>
+                                    }
+                                    <td> </td>
+                                }
+
+                            </tr>
+                        }
+
+                        <tr>
+                            <td align="left">Property Plant & Equipment, Net</td>
+                            <td> </td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td align="left">Total Asset</td>
+                            <td> </td>
+                            <td></td>
+                        </tr>
+                    </table>
+
+                    <table id="liabilitiesTable" class="table-striped" style="width:500px;">
+
+                        <tr class="titleRow">
+                            <th align="left">Liabilities & Stockholder's Equity</th>
+                            <th> </th>
+                            <th> </th>
+                        </tr>
+
+                        <tr>
+                            <th align="left">Liabilities</th>
+                            <th> </th>
+                            <th> </th>
+                        </tr>
+
+
+                        @for (int i = 0; i < Model.Count; i++)
+    {
+        if (Model[i].AccountType.ToLower() == "liabilities")
+        {
+                    <tr>
+
+                        <td align="left">@Model[i].AccountName</td>
+                        <td>@Model[i].CurrentBalance</td>
+                        <td> </td>
+
+
+                    </tr>
+}
+}
+                        <tr>
+                            <td align="left">Total Current Liabilities</td>
+                            <td> </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td align="left">Total Liabilities</td>
+                            <td> </td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <th align="left">Stockholders' Equity</th>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        @for (int i = 0; i < Model.Count; i++)
+    {
+        if (Model[i].AccountName.ToLower() == "equity")
+        {
+                    <tr>
+
+                        <td align="left">@Model[i].AccountName</td>
+                        <td></td>
+                        <td>@Model[i].CurrentBalance</td>
+
+
+                    </tr>
+}
+}
+
+                        <tr>
+                            <td align="left">Retained Earnings</td>
+                            <td> </td>
+                            <td></td>
+                        </tr>
+
+                        <tr>
+                            <td align="left">Total Stockholders' Equity</td>
+                            <td> </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td align="left">Total Liabilities & Stockholders' Equity</td>
+                            <td> </td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+</body>
+
+</html>
+
