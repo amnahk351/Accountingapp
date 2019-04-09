@@ -1,7 +1,7 @@
 ﻿@model List<AccountingApp.Models.ChartOfAcc>
 
 @{
-    ViewBag.Title = "TrialBalance";
+    ViewBag.Title = "Trial Balance";
     Layout = null;
 }
 
@@ -111,14 +111,15 @@
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
+                    <h3 class="card-title">Addams & Family</h3>
                     <h3 class="card-title">Trial Balance</h3>
-                    <hr />
-                    <h4>
+                    <h4 class="card-title">
+                        As of
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
-
+                    <hr style="border-width: 2px; border-color: black" />
                     <table id="trialTable" class="table-striped" style="width:500px;">
 
                         <tr class="titleRow">
@@ -161,7 +162,42 @@
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
+
+
     <script>
+        $(document).ready(function () {
+            
+            FormatTableAmounts();
+
+            PlaceDollarSigns();
+        });
+    </script>
+
+    <script>
+
+        function FormatTableAmounts() {
+            var table = document.getElementById("trialTable");
+
+
+            for (var i = 1; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[1].innerText;
+                var Chtml = table.rows[i].cells[2].innerText;
+
+                var newDhtml = Dhtml.replace("$", "");
+                var newChtml = Chtml.replace("$", "");
+
+                if (newDhtml != "") {
+                    table.rows[i].cells[1].innerText = formatMoney(newDhtml);
+                }
+
+                if (newChtml != "") {
+                    table.rows[i].cells[2].innerText = formatMoney(newChtml);
+                }
+
+            }
+
+        }
+
         function formatMoney(n, c, d, t) {
             var c = isNaN(c = Math.abs(c)) ? 2 : c,
                 d = d == undefined ? "." : d,
@@ -173,12 +209,47 @@
             return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
         };
 
-        $(document).ready(function () {
-            $(".rowData").each(function () {
-                formatMoney($(this).text())
-            });
-        });
-        
+        function PlaceDollarSigns() {
+            var table = document.getElementById("trialTable");
+            var rowsNum = table.rows.length;
+
+            //Place dollar sign for debit
+            for (var i = 1; i < rowsNum; i++) {
+                var Dhtml = table.rows[i].cells[1].innerText;
+
+                if (Dhtml != "") {
+
+                    table.rows[i].cells[1].innerText = "$ " + Dhtml;
+
+
+                    break;
+                }
+
+            }
+
+            //Place dollar sign for credit
+            for (var i = 1; i < rowsNum; i++) {
+                var Chtml = table.rows[i].cells[2].innerText;
+
+
+                if (Chtml != "") {
+
+                    table.rows[i].cells[2].innerText = "$ " + Chtml;
+
+
+                    break;
+                }
+            }
+
+            var TotalDebit = table.rows[rowsNum - 1].cells[1].innerText;
+            var TotalCredit = table.rows[rowsNum - 1].cells[2].innerText;
+
+            table.rows[rowsNum - 1].cells[1].innerText = "$ " + TotalDebit;
+            table.rows[rowsNum - 1].cells[2].innerText = "$ " + TotalCredit;
+
+        }
+
+    </script>
 
     </script>
 </body>
