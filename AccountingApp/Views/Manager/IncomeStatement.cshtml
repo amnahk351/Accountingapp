@@ -112,15 +112,17 @@
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
-                    <h3 class="card-title">Addams & Family Inc.</h3>
-                    <h3 class="card-title">Income Statement</h3>
-                    <hr />
-                    <h4>
+                    <h3 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h3>
+                    <h3 class="card-title" style="padding: 0px; margin: 0px;">Income Statement</h3>
+                    <hr style="padding: 0px; margin: 0px;" />
+                    <h4 style="padding: 0px; margin: 0px;">
+                        For the Period Ending:
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
-
+                    <br />
+                    <hr style="border-width: 2px; border-color: black" />
                     <table id="revenueTable" class="table-striped" style="width:500px;">
 
                         <tr class="titleRow">
@@ -129,15 +131,15 @@
                         </tr>
 
                         @for (int i = 0; i < Model.Count; i++)
-        {
-            if (Model[i].AccountType.ToLower() == "revenue")
-            {
-                <tr>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                    <td align="right">@Model[i].CurrentBalance</td>
-                </tr>
-}
-}
+                        {
+                            if (Model[i].AccountType.ToLower() == "revenue")
+                            {
+                                <tr>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                    <td align="right">@Model[i].CurrentBalance</td>
+                                </tr>
+                            }
+                        }
                         <tr>
                             <td>Total Revenues</td>
                             <td align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: solid; border-bottom-width: .2rem;">@ViewBag.RevenueTotal</td>
@@ -155,15 +157,15 @@
                         </tr>
 
                         @for (int i = 0; i < Model.Count; i++)
-    {
-        if (Model[i].AccountType.ToLower() == "expense")
-        {
-                    <tr>
-                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                        <td align="right">@Model[i].CurrentBalance</td>
-                    </tr>
-}
-}
+                        {
+                            if (Model[i].AccountType.ToLower() == "expense")
+                            {
+                                <tr>
+                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                    <td align="right">@Model[i].CurrentBalance</td>
+                                </tr>
+                            }
+                        }
 
                         <tr>
                             <td>Total Expense</td>
