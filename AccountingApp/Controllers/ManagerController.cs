@@ -197,5 +197,9 @@ namespace AccountingApp.Controllers
             return View();
         }
 
+        public ActionResult PostClosingTrialBalance()
+        {
+            return View();
+        }
     }
 }
