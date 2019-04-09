@@ -1,7 +1,7 @@
 ﻿@model List<AccountingApp.Models.ChartOfAcc>
 
 @{
-    ViewBag.Title = "TrialBalance";
+    ViewBag.Title = "Trial Balance";
     Layout = null;
 }
 
@@ -182,7 +182,92 @@
             });
         </script>*@
 
+    <script>
+        $(document).ready(function () {
+            
+            FormatTableAmounts();
 
+            PlaceDollarSigns();
+        });
+    </script>
+
+    <script>
+
+        function FormatTableAmounts() {
+            var table = document.getElementById("trialTable");
+
+
+            for (var i = 1; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[1].innerText;
+                var Chtml = table.rows[i].cells[2].innerText;
+
+                var newDhtml = Dhtml.replace("$", "");
+                var newChtml = Chtml.replace("$", "");
+
+                if (newDhtml != "") {
+                    table.rows[i].cells[1].innerText = formatMoney(newDhtml);
+                }
+
+                if (newChtml != "") {
+                    table.rows[i].cells[2].innerText = formatMoney(newChtml);
+                }
+
+            }
+
+        }
+
+        function formatMoney(n, c, d, t) {
+            var c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
+        function PlaceDollarSigns() {
+            var table = document.getElementById("trialTable");
+            var rowsNum = table.rows.length;
+
+            //Place dollar sign for debit
+            for (var i = 1; i < rowsNum; i++) {
+                var Dhtml = table.rows[i].cells[1].innerText;
+
+                if (Dhtml != "") {
+
+                    table.rows[i].cells[1].innerText = "$ " + Dhtml;
+
+
+                    break;
+                }
+
+            }
+
+            //Place dollar sign for credit
+            for (var i = 1; i < rowsNum; i++) {
+                var Chtml = table.rows[i].cells[2].innerText;
+
+
+                if (Chtml != "") {
+
+                    table.rows[i].cells[2].innerText = "$ " + Chtml;
+
+
+                    break;
+                }
+            }
+
+            var TotalDebit = table.rows[rowsNum - 1].cells[1].innerText;
+            var TotalCredit = table.rows[rowsNum - 1].cells[2].innerText;
+
+            table.rows[rowsNum - 1].cells[1].innerText = "$ " + TotalDebit;
+            table.rows[rowsNum - 1].cells[2].innerText = "$ " + TotalCredit;
+
+        }
+
+    </script>
 
 </body>
 
