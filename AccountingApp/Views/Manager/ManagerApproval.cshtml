@@ -44,6 +44,25 @@
             .inner:hover img {
                 transform: scale(1.5);
             }
+
+        .button {
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        .button:hover {
+            color: black; /*color for individual links within dropdown*/
+            text-decoration: none;
+            opacity: .8;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 
@@ -135,11 +154,11 @@
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
                                     <td>@Model.entries[i].status</td>
                                     <td>
-                                        <a href="@Url.Action("ApproveEntry", new { id = Model.entries[i].entryID})">
+                                        <a class="button" style="background-color: #4CAF50;" href="@Url.Action("ApproveEntry", new { id = Model.entries[i].entryID})">
                                             Approve
                                         </a>
-                                        <a href="@Url.Action("DisapproveEntry", new { id = Model.entries[i].entryID})">
-                                            Disapprove
+                                        <a class="button" style="background-color: red;" href="@Url.Action("DisapproveEntry", new { id = Model.entries[i].entryID})">
+                                            Reject
                                         </a>
                                     </td>
                                 </tr>
