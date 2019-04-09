@@ -14,6 +14,9 @@ namespace AccountingApp.Controllers
 {
     public class ManagerController : Controller
     {
+        //private Database1Entities7 db = new Database1Entities7();
+        //private Database1Entities3 coaDB = new Database1Entities3();
+        // GET: Manager
         public ActionResult ManagerIndex()
         {
             
@@ -111,13 +114,17 @@ namespace AccountingApp.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult GeneralJournal(string status)
+        //public ActionResult DisapproveEntry(List<Transaction>)
+
+        public ActionResult GeneralJournal()
         {
-            if (status == null || status == "")
-                return View(getAllEntriesOfStatus("approved"));
-            else
-                return View(getAllEntriesOfStatus(status));
+
+            //List<Transaction> allTransactions;
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    allTransactions = db.Query<Transaction>($"Select * From dbo.TransactionTable").ToList();
+            //}
+            return View(getAllEntriesOfStatus("approved"));
         }
 
         public ActionResult TrialBalance()
@@ -144,100 +151,31 @@ namespace AccountingApp.Controllers
             return View(coa);
         }
 
-        public ActionResult IncomeStatement()
-        {
-
-            List<ChartOfAcc> coa;
-            decimal revenueTotal = 0;
-            decimal expenseTotal = 0;
-
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
-                foreach (ChartOfAcc c in coa)
-                {
-                    if (c.AccountType.ToLower() == "revenue")
-                        revenueTotal += c.CurrentBalance.Value;
-                    if (c.AccountType.ToLower() == "expense")
-                        expenseTotal += c.CurrentBalance.Value;
-
-                        
-                }
-
-                ViewBag.RevenueTotal = revenueTotal;
-                ViewBag.ExpenseTotal = expenseTotal;
-                ViewBag.NetIncome_Loss = revenueTotal - expenseTotal;
-            }
-
-            return View(coa);
-        }
-
-        public ActionResult BalanceSheet()
-        {
-
-            List<ChartOfAcc> coa;
-            decimal revenueTotal = 0;
-            decimal expenseTotal = 0;
-
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
-                //foreach (ChartOfAcc c in coa)
-                //{
-                //    if (c.AccountType.ToLower() == "revenue")
-                //        revenueTotal += c.CurrentBalance.Value;
-                //    if (c.AccountType.ToLower() == "expense")
-                //        expenseTotal += c.CurrentBalance.Value;
-
-
-                //}
-
-                //ViewBag.RevenueTotal = revenueTotal;
-                //ViewBag.ExpenseTotal = expenseTotal;
-                //ViewBag.NetIncome_Loss = revenueTotal - expenseTotal;
-            }
-
-            return View(coa);
-        }
-
         private Entries getAllEntriesOfStatus(string s)
         {
 
-            List<Transaction> transactionList;
-
-            if (s == "all")
+            List<Transaction> allPendingTransactions;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-                {
-                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable").ToList();
-                }
-            }
-            else
-            {
-                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-                {
-                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
-                }
+                allPendingTransactions = db.Query<Transaction>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
             }
 
 
             Entries entries = new Entries();
             List<int> ids = new List<int>();
-            foreach (Transaction t in transactionList)
+            foreach (Transaction t in allPendingTransactions)
             {
                 int id = t.EntryId.Value;
                 string status = t.Status;
                 DateTime date = t.DateSubmitted.GetValueOrDefault();
-                string comment = t.AccountantComment;
 
                 if (ids.Contains(id))
                     continue;
                 else
                     ids.Add(id);
 
-                Entry e = new Entry(id, status, date, comment);
-
-                foreach (Transaction t2 in transactionList)
+                Entry e = new Entry(id, status, date);
+                foreach (Transaction t2 in allPendingTransactions)
                 {
                     if (t2.EntryId == id)
                     {
@@ -251,5 +189,13 @@ namespace AccountingApp.Controllers
 
             return entries;
         }
+
+
+
+        public ActionResult RetainedEarnings()
+        {
+            return View();
+        }
+
     }
 }
