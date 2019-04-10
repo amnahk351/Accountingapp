@@ -134,6 +134,17 @@
             color: black !important;
         }
 
+        .AccountDebit {
+            cursor: pointer;
+            color: #007bff;
+        }
+
+        .AccountCredit {
+            cursor: pointer;
+            color: #007bff;
+            padding-left: 5%;
+        }
+
         .EntryType {
             display: block;
             width: 100%;
@@ -703,10 +714,8 @@
             var table = $("#EntryTable")[0];
 
             //Get Account Listed In Table
-            var ActualAccount = table.rows[row[0].rowIndex].cells[1].innerText;
-
-            //var Fix1 = Account.replace("<span style=\"padding-left: 5%\">", "");
-            //var ActualAccount = Fix1.replace("</span>", "");
+            var ActualAccount = table.rows[row[0].rowIndex].cells[1].innerText;        
+            
 
             //Add account back to drop down list
             var x = document.getElementById("AccountNumber");
@@ -1008,13 +1017,13 @@
             
             if (DebitCell != "") {
                 //It is a debit
-                table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
+                table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
 
             }
 
             if (CreditCell != "") {
                 //It is a credit
-                table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\" style='padding-left: 5%'>" + acc + "</span>";
+                table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
 
             }
 
@@ -1330,7 +1339,7 @@
 
             if (cre != "") {
                 //credit is entered, add padding to tab over the account name
-                cell2.innerHTML = "<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\" style='padding-left: 5%'>" + acc + "</span>";
+                cell2.innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">" + acc + "</span>";
 
                 var CreMoney = formatMoney(cre);
 
@@ -1339,7 +1348,7 @@
                 //cell4.innerHTML = CreMoney;
             } else {
                 //debit is entered, no padding needed
-                cell2.innerHTML = "<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
+                cell2.innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">" + acc + "</span>";
 
                 var DebMoney = formatMoney(deb);
 
@@ -1491,8 +1500,11 @@
 
 
                 var Acc2 = row.find("TD").eq(1).html();
-                var Acc3 = Acc2.replace("<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\">", "");
-                var Acc4 = Acc3.replace("</span>","")
+                //var Acc3 = Acc2.replace("<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\">", "");
+
+                var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
+                var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
+                var Acc4 = Acc3.replace("</span>", "");
                 var AccFix = Acc4;
                 
                 transaction.AccountName = AccFix;
@@ -1616,8 +1628,10 @@
                 transaction.Status = "pending";
 
                 var Acc2 = row.find("TD").eq(1).html();
-                var Acc3 = Acc2.replace("<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\">", "");
-                var Acc4 = Acc3.replace("</span>", "")
+                var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
+                var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
+                var Acc4 = Acc3.replace("</span>", "");
+                
                 var AccFix = Acc4;
 
                 transaction.AccountName = AccFix;
