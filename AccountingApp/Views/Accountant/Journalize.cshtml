@@ -1491,7 +1491,7 @@
                 transaction.DateSubmitted = row.find("TD").eq(0).html();
 
                 var Comm = document.getElementById("Comment")
-                transaction.Comment = Comm.value;
+                transaction.AccountantComment = Comm.value;
 
                 var EnType = document.getElementById("EntryType").value;
                 transaction.Entry_Type = EnType;
@@ -1619,7 +1619,7 @@
 
                 var Comm = document.getElementById("Comment")
 
-                transaction.Comment = Comm.value;
+                transaction.AccountantComment = Comm.value;
 
                 var EnType = document.getElementById("EntryType").value;
 
