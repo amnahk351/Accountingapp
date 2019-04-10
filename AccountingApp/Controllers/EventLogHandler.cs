@@ -51,6 +51,17 @@ namespace AccountingApp.Controllers
         //    //db.SaveChanges();
         //}
 
+        private int FindUserId(string Username) {
+            List<CreateUser> user;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                user = db.Query<CreateUser>("Select * from dbo.UserTable where Username = @username;",
+                    new { username = Username }).ToList();
+            }
+
+            return user[0].ID;
+        }
+
         public void LogEditUser(int UserId, string Username, string Original, string Updated)
         {
             var sessionUserID = HttpContext.Current.Session["UserID"] as string;
@@ -260,6 +271,43 @@ namespace AccountingApp.Controllers
             model.To = "Account Unlocked for: " + Username;
             model.IP_Address = ip;
             model.Screen = "AnswerQuestions";
+            model.Access_Level = "All";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
+                    "[From], [To], IPAddress, Screen, AccessLevel) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
+                db.Execute(sql, new
+                {
+
+                    Date = model.Date,
+                    UserID = model.User_ID,
+                    From = model.From,
+                    To = model.To,
+                    IPAddress = model.IP_Address,
+                    Screen = model.Screen,
+                    AccessLevel = model.Access_Level
+
+                });
+            }
+
+            //db.EventLogs.Add(model);
+            //db.SaveChanges();
+        }
+
+        public void LogJournalEntrySubmitted(string Username, string EntryID)
+        {
+            string ip = HttpContext.Current.Request.UserHostAddress;
+
+            EventLog model = new EventLog();
+            model.Date = DateTime.Now;
+            model.User_ID = FindUserId(Username);
+            model.From = "";
+            model.To = Username + " Submitted Journal Entry, " + EntryID;
+            model.IP_Address = ip;
+            model.Screen = "Journalize";
             model.Access_Level = "All";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
