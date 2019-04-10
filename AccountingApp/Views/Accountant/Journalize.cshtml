@@ -477,6 +477,8 @@
 
         function StripMoneyFormatting(NumValue) {
             //remove commas
+            //var newchar = '';
+            //var res = NumValue.split(',').join(newchar);
             var res = NumValue.replace(/,/g, "");
 
             //remove '$ '
@@ -548,25 +550,34 @@
 
         function ResetFunction() {
 
+            
             var EntryAmount = document.getElementById("EntryTable").rows.length;
             var Amount = document.getElementById("uploadList").rows.length;
-
-            if (EntryAmount > 2 || Amount > 0) {
-
-                if (confirm('Warning, you are about to remove unsaved changes! Are you sure?')) {
-
-                    if (Amount > 0) {
-                        //There is documents that need removed that the user does not want to saved
-                        DeleteAllTableFiles();
-                    }
-
-                    //Refresh the page
-                    location.reload();
-                } else {
-                    // Do nothing!
-                }
-
+            if (Amount > 0) {
+                //There is documents that need removed that the user does not want to saved
+                DeleteAllTableFiles();
             }
+
+            //Refresh the page
+            location.reload();
+
+
+            //if (EntryAmount > 2 || Amount > 0) {
+
+            //    if (confirm('Warning, you are about to remove unsaved changes! Are you sure?')) {
+
+            //        if (Amount > 0) {
+            //            //There is documents that need removed that the user does not want to saved
+            //            DeleteAllTableFiles();
+            //        }
+
+            //        //Refresh the page
+            //        location.reload();
+            //    } else {
+            //        // Do nothing!
+            //    }
+
+            //}
 
         }
 
@@ -1478,17 +1489,29 @@
 
                 transaction.Status = "suspended";
 
-                var AccFix = row.find("TD").eq(1).innerText;
+
+                var Acc2 = row.find("TD").eq(1).html();
+                var Acc3 = Acc2.replace("<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\">", "");
+                var Acc4 = Acc3.replace("</span>","")
+                var AccFix = Acc4;
+                
                 transaction.AccountName = AccFix;
 
-                var DebitFix = row.find("TD").eq(2).innerText;
-                var DebitFix2 = StripMoneyFormatting(DebitFix);
+                
+                var DebitFix = row.find("TD").eq(2).html();
+                var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+                var DebitFx2 = DebitFx.replace("</span>", "")
+                var DebitFix2 = StripMoneyFormatting(DebitFx2);
+
                 transaction.Debit = DebitFix2;
 
 
-                var CreditFix = row.find("TD").eq(3).innerText;
-                var CreditFix2 = StripMoneyFormatting(CreditFix);
-                transaction.Credit = CreditFix2;
+                var CreditFix = row.find("TD").eq(3).html();
+                var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+                var CreditFix3 = CreditFix2.replace("</span>", "")
+                var CreditFix3 = StripMoneyFormatting(CreditFix3);
+
+                transaction.Credit = CreditFix3;
 
                 transactions.push(transaction);
             });
@@ -1592,20 +1615,29 @@
 
                 transaction.Status = "pending";
 
-                var AccFix = row.find("TD").eq(1).innerText;
+                var Acc2 = row.find("TD").eq(1).html();
+                var Acc3 = Acc2.replace("<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\">", "");
+                var Acc4 = Acc3.replace("</span>", "")
+                var AccFix = Acc4;
 
                 transaction.AccountName = AccFix;
 
-                var DebitFix = row.find("TD").eq(2).innerText;
-                var DebitFix2 = StripMoneyFormatting(DebitFix);
+
+
+                var DebitFix = row.find("TD").eq(2).html();
+                var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+                var DebitFx2 = DebitFx.replace("</span>", "")
+                var DebitFix2 = StripMoneyFormatting(DebitFx2);
 
                 transaction.Debit = DebitFix2;
 
 
-                var CreditFix = row.find("TD").eq(3).innerText;
-                var CreditFix2 = StripMoneyFormatting(CreditFix);
+                var CreditFix = row.find("TD").eq(3).html();
+                var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+                var CreditFix3 = CreditFix2.replace("</span>", "")                
+                var CreditFix3 = StripMoneyFormatting(CreditFix3);
 
-                transaction.Credit = CreditFix2;
+                transaction.Credit = CreditFix3;
 
                 transactions.push(transaction);
             });
