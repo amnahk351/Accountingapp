@@ -14,12 +14,12 @@ namespace AccountingApp.Models
     
     public partial class EventLog
     {
-        public int Event_ID { get; set; }
+        public int EventID { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> User_ID { get; set; }
+        public Nullable<int> UserID { get; set; }
         public string From { get; set; }
         public string To { get; set; }
-        public string IP_Address { get; set; }
+        public string IPAddress { get; set; }
         public string Screen { get; set; }
         public string Access_Level { get; set; }
     }

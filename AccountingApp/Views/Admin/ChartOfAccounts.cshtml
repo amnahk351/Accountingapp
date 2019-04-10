@@ -133,12 +133,11 @@
                 @TempData["Message"]
             </div>
         }
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+        
+        
             <a href="@Url.Action("NewAccount")" class="btn btn-success icon" role="button" aria-pressed="true">
                 Create Account
-            </a>
-        </button>
+            </a>       
 
         <br />
         <br />
@@ -286,11 +285,7 @@
                                 <a href="@Url.Action("EditAccount", new { id = Model[i].AccountNumber})">
                                     Edit
                                 </a>
-
-                                @*<a href="@Url.Action("Delete", new { id = Model[i].AccountNumber})">
-                                        <i class="fas fa-user-edit"></i>
-                                        Delete
-                                    </a>*@
+                                
                             </td>
 
 

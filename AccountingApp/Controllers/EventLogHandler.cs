@@ -69,11 +69,11 @@ namespace AccountingApp.Controllers
 
             EventLog model = new EventLog();
             model.Date = DateTime.Now;
-            model.User_ID = UserId;
+            model.UserID = UserId;
             model.From = Original;
             model.To = Updated;
-            model.IP_Address = ip;
-            model.Screen = "Edit";
+            model.IPAddress = ip;
+            model.Screen = "EditUser";
             model.Access_Level = "All";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -86,10 +86,10 @@ namespace AccountingApp.Controllers
                 {
 
                     Date = model.Date,
-                    UserID = model.User_ID,
+                    UserID = model.UserID,
                     From = model.From,
                     To = model.To,
-                    IPAddress = model.IP_Address,
+                    IPAddress = model.IPAddress,
                     Screen = model.Screen,
                     AccessLevel = model.Access_Level
 
@@ -118,12 +118,12 @@ namespace AccountingApp.Controllers
 
             EventLog model = new EventLog();
             model.Date = DateTime.Now;
-            model.User_ID = Convert.ToInt32(user[0].ID);
+            model.UserID = Convert.ToInt32(user[0].ID);
 
             //model.User_ID = Convert.ToInt32(user.ID);
             model.From = "";
             model.To = "Requested Password Reset Link to: " + Email;
-            model.IP_Address = ip;
+            model.IPAddress = ip;
             model.Screen = "ForgotPassword";
             model.Access_Level = "All";
 
@@ -137,10 +137,10 @@ namespace AccountingApp.Controllers
                 {
 
                     Date = model.Date,
-                    UserID = model.User_ID,
+                    UserID = model.UserID,
                     From = model.From,
                     To = model.To,
-                    IPAddress = model.IP_Address,
+                    IPAddress = model.IPAddress,
                     Screen = model.Screen,
                     AccessLevel = model.Access_Level
 
@@ -156,10 +156,10 @@ namespace AccountingApp.Controllers
 
             EventLog model = new EventLog();
             model.Date = DateTime.Now;
-            model.User_ID = UserID;
+            model.UserID = UserID;
             model.From = null;
             model.To = "Password Reset for: " + Username;
-            model.IP_Address = ip;
+            model.IPAddress = ip;
             model.Screen = "ResetPassword";
             model.Access_Level = "All";
 
@@ -173,10 +173,10 @@ namespace AccountingApp.Controllers
                 {
 
                     Date = model.Date,
-                    UserID = model.User_ID,
+                    UserID = model.UserID,
                     From = model.From,
                     To = model.To,
-                    IPAddress = model.IP_Address,
+                    IPAddress = model.IPAddress,
                     Screen = model.Screen,
                     AccessLevel = model.Access_Level
 
@@ -194,10 +194,10 @@ namespace AccountingApp.Controllers
 
             EventLog model = new EventLog();
             model.Date = DateTime.Now;
-            model.User_ID = Convert.ToInt32(sessionUserID);
+            model.UserID = Convert.ToInt32(sessionUserID);
             model.From = null;
             model.To = "Password Changed for: " + sessionUsername;
-            model.IP_Address = ip;
+            model.IPAddress = ip;
             model.Screen = "ChangePassword";
             model.Access_Level = "All";
 
@@ -211,10 +211,10 @@ namespace AccountingApp.Controllers
                 {
 
                     Date = model.Date,
-                    UserID = model.User_ID,
+                    UserID = model.UserID,
                     From = model.From,
                     To = model.To,
-                    IPAddress = model.IP_Address,
+                    IPAddress = model.IPAddress,
                     Screen = model.Screen,
                     AccessLevel = model.Access_Level
 
@@ -230,10 +230,10 @@ namespace AccountingApp.Controllers
 
             EventLog model = new EventLog();
             model.Date = DateTime.Now;
-            model.User_ID = UserID;
+            model.UserID = UserID;
             model.From = "Account Unlocked for: " + Username;
             model.To = "Account Locked for: " + Username;
-            model.IP_Address = ip;
+            model.IPAddress = ip;
             model.Screen = "Login";
             model.Access_Level = "All";
 
@@ -247,10 +247,10 @@ namespace AccountingApp.Controllers
                 {
 
                     Date = model.Date,
-                    UserID = model.User_ID,
+                    UserID = model.UserID,
                     From = model.From,
                     To = model.To,
-                    IPAddress = model.IP_Address,
+                    IPAddress = model.IPAddress,
                     Screen = model.Screen,
                     AccessLevel = model.Access_Level
 
@@ -266,10 +266,10 @@ namespace AccountingApp.Controllers
 
             EventLog model = new EventLog();
             model.Date = DateTime.Now;
-            model.User_ID = UserId;
+            model.UserID = UserId;
             model.From = "Account Locked for: " + Username;
             model.To = "Account Unlocked for: " + Username;
-            model.IP_Address = ip;
+            model.IPAddress = ip;
             model.Screen = "AnswerQuestions";
             model.Access_Level = "All";
 
@@ -283,10 +283,10 @@ namespace AccountingApp.Controllers
                 {
 
                     Date = model.Date,
-                    UserID = model.User_ID,
+                    UserID = model.UserID,
                     From = model.From,
                     To = model.To,
-                    IPAddress = model.IP_Address,
+                    IPAddress = model.IPAddress,
                     Screen = model.Screen,
                     AccessLevel = model.Access_Level
 
@@ -303,10 +303,10 @@ namespace AccountingApp.Controllers
 
             EventLog model = new EventLog();
             model.Date = DateTime.Now;
-            model.User_ID = FindUserId(Username);
+            model.UserID = FindUserId(Username);
             model.From = "";
             model.To = Username + " Submitted Journal Entry, " + EntryID;
-            model.IP_Address = ip;
+            model.IPAddress = ip;
             model.Screen = "Journalize";
             model.Access_Level = "All";
 
@@ -320,10 +320,10 @@ namespace AccountingApp.Controllers
                 {
 
                     Date = model.Date,
-                    UserID = model.User_ID,
+                    UserID = model.UserID,
                     From = model.From,
                     To = model.To,
-                    IPAddress = model.IP_Address,
+                    IPAddress = model.IPAddress,
                     Screen = model.Screen,
                     AccessLevel = model.Access_Level
 

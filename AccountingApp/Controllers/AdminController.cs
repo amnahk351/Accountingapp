@@ -123,6 +123,9 @@ namespace AccountingApp.Controllers
                     CurrentAccount = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountNumber = @ID", new { ID = model.AccountNumber }).ToList();
                 }
 
+                System.Diagnostics.Debug.WriteLine("Number: " + model.AccountNumber);
+                System.Diagnostics.Debug.WriteLine("CurrentAccount Number: " + CurrentAccount[0].AccountNumber);
+
                 CurrentAccount[0].AccountNumber = model.AccountNumber;
                 CurrentAccount[0].AccountName = model.AccountName;
                 CurrentAccount[0].AccountType = model.AccountType;
@@ -137,8 +140,8 @@ namespace AccountingApp.Controllers
                 {
 
                     string sql = "Update dbo.ChartOfAccounts set AccountName = @AccountName, " +
-                        "AccountType = @AccountType, NormalSide = @NormalSide, OriginalBalance = @OriginalBalance, AccountDescription = @AccountDescription," +
-                        "Active = @Active, CurrentBalance = @CurrentBalance where AccountNumber = @AccountNumber";
+                        "AccountType = @AccountType, AccountDescription = @AccountDescription," +
+                        "Active = @Active, where AccountNumber = @AccountNumber";
 
 
                     db.Execute(sql, new
@@ -146,11 +149,8 @@ namespace AccountingApp.Controllers
                         AccountNumber = CurrentAccount[0].AccountNumber,
                         AccountName = CurrentAccount[0].AccountName,
                         AccountType = CurrentAccount[0].AccountType,
-                        NormalSide = CurrentAccount[0].NormalSide,
-                        OriginalBalance = CurrentAccount[0].OriginalBalance,
                         AccountDescription = CurrentAccount[0].AccountDescription,
-                        Active = CurrentAccount[0].Active,                        
-                        CurrentBalance = CurrentAccount[0].CurrentBalance,
+                        Active = CurrentAccount[0].Active
 
 
                     });

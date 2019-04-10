@@ -1,4 +1,4 @@
-@model IEnumerable<AccountingApp.Models.EventLog>
+﻿@model IEnumerable<AccountingApp.Models.EventLog>
 
 @{
     ViewBag.Title = "Event Log";
@@ -58,13 +58,13 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Event_ID)
+                @Html.DisplayFor(modelItem => item.EventID)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User_ID)
+                @Html.DisplayFor(modelItem => item.UserID)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.From)
@@ -73,7 +73,7 @@
                 @Html.DisplayFor(modelItem => item.To)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IP_Address)
+                @Html.DisplayFor(modelItem => item.IPAddress)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Screen)
