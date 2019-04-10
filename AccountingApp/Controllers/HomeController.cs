@@ -146,7 +146,7 @@ namespace AccountingApp.Controllers
         //    return View("ShowUserData",item2);
         //}
 
-        public ActionResult Edit(int id)
+        public ActionResult EditUser(int id)
         {
             List<CreateUser> editUser;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -187,7 +187,7 @@ namespace AccountingApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(EditUserModel value)
+        public ActionResult EditUser(EditUserModel value)
         {
             EventLogHandler Logger = new EventLogHandler();
             List<CreateUser> CurrentUser;
