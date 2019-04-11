@@ -168,8 +168,6 @@ namespace AccountingApp.Controllers
 
             }
 
-
-
             return Json(insertedRecords);
         }
 
