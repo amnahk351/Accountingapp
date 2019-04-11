@@ -297,15 +297,16 @@ namespace AccountingApp.Controllers
             //db.SaveChanges();
         }
 
-        public void LogJournalEntrySubmitted(string Username, string EntryID)
+        public void LogJournalEntrySubmitted(string Username, string EntryID, string type)
         {
             string ip = HttpContext.Current.Request.UserHostAddress;
-
             EventLog model = new EventLog();
+            
+
             model.Date = DateTime.Now;
             model.UserID = FindUserId(Username);
             model.From = "";
-            model.To = Username + " Submitted Journal Entry, " + EntryID;
+            model.To = Username + " " + type + " Journal Entry, " + EntryID;
             model.IPAddress = ip;
             model.Screen = "Journalize";
             model.Access_Level = "All";
@@ -328,10 +329,8 @@ namespace AccountingApp.Controllers
                     AccessLevel = model.Access_Level
 
                 });
-            }
-
-            //db.EventLogs.Add(model);
-            //db.SaveChanges();
+            }            
         }
+        
     }
 }
