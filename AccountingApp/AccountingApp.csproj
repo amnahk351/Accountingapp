@@ -391,7 +391,7 @@
     <Content Include="Views\Home\NewUser.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\ShowUserData.cshtml" />
-    <Content Include="Views\Home\Edit.cshtml" />
+    <Content Include="Views\Home\EditUser.cshtml" />
     <Content Include="Views\Account\LogIn.cshtml" />
     <Content Include="Views\Admin\AdminIndex.cshtml" />
     <Content Include="Views\Admin\ChartOfAccounts.cshtml" />

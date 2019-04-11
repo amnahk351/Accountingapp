@@ -27,6 +27,8 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult NewAccount(ChartOfAcc model)
         {
+            var sessionUser = Session["Username"] as string;
+
             ChartOfAcc tb2 = new ChartOfAcc();
             tb2.AccountNumber = model.AccountNumber;
             tb2.AccountName = model.AccountName;
@@ -35,7 +37,7 @@ namespace AccountingApp.Controllers
             tb2.OriginalBalance = model.OriginalBalance;
             tb2.CurrentBalance = model.CurrentBalance;
             tb2.AccountDescription = model.AccountDescription;
-            tb2.CreatedBy = model.CreatedBy;
+            tb2.CreatedBy = sessionUser;
             tb2.Active = model.Active;
 
             if (ModelState.IsValid)
@@ -57,7 +59,7 @@ namespace AccountingApp.Controllers
                         OriginalBalance = model.OriginalBalance,
                         CurrentBalance = model.CurrentBalance,
                         AccountDescription = model.AccountDescription,
-                        CreatedBy = model.CreatedBy,
+                        CreatedBy = sessionUser,
                         Active = model.Active
                     });
                 }
@@ -119,7 +121,7 @@ namespace AccountingApp.Controllers
                 {
 
                     CurrentAccount = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountNumber = @ID", new { ID = model.AccountNumber }).ToList();
-                }
+                }             
 
                 CurrentAccount[0].AccountNumber = model.AccountNumber;
                 CurrentAccount[0].AccountName = model.AccountName;
@@ -135,8 +137,8 @@ namespace AccountingApp.Controllers
                 {
 
                     string sql = "Update dbo.ChartOfAccounts set AccountName = @AccountName, " +
-                        "AccountType = @AccountType, NormalSide = @NormalSide, OriginalBalance = @OriginalBalance, AccountDescription = @AccountDescription," +
-                        "Active = @Active, CreatedBy = @CreatedBy, CurrentBalance = @CurrentBalance where AccountNumber = @AccountNumber";
+                        "AccountType = @AccountType, AccountDescription = @AccountDescription," +
+                        "Active = @Active Where AccountNumber = @AccountNumber";
 
 
                     db.Execute(sql, new
@@ -144,12 +146,8 @@ namespace AccountingApp.Controllers
                         AccountNumber = CurrentAccount[0].AccountNumber,
                         AccountName = CurrentAccount[0].AccountName,
                         AccountType = CurrentAccount[0].AccountType,
-                        NormalSide = CurrentAccount[0].NormalSide,
-                        OriginalBalance = CurrentAccount[0].OriginalBalance,
                         AccountDescription = CurrentAccount[0].AccountDescription,
-                        Active = CurrentAccount[0].Active,
-                        CreatedBy = CurrentAccount[0].CreatedBy,
-                        CurrentBalance = CurrentAccount[0].CurrentBalance,
+                        Active = CurrentAccount[0].Active
 
 
                     });

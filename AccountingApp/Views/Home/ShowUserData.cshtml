@@ -123,13 +123,9 @@
             @*<a href="@Url.Action("NewUser")" class="btn btn-success icon" role="button">Create User</a>*@
 
             <a href="@Url.Action("NewUser")" class="btn btn-success icon" role="button" aria-pressed="true">
-
-                <button type="button" class="btn btn-success icon">
-
                     <i class="far fa-user"></i>
                     Create User
 
-                </button>
             </a>
 
         </div>
@@ -176,7 +172,7 @@
                     @*<td>@Model[i].Date</td>
                     <td>@Model[i].Date_Modified</td>*@
                     <td>
-                        <a href="@Url.Action("Edit", new { id = Model[i].ID})">
+                        <a href="@Url.Action("EditUser", new { id = Model[i].ID})">
                             <i class="fas fa-user-edit"></i>
 
 

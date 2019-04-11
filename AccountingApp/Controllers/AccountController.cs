@@ -120,7 +120,6 @@ namespace AccountingApp.Controllers
                     }
                     
 
-                    System.Diagnostics.Debug.WriteLine("Went to security questions.");
                     return Redirect("~/Account/SecurityQuestions");
                 }
                 else

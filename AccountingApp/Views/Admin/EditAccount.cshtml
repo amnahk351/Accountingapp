@@ -1,7 +1,7 @@
 ﻿@model AccountingApp.Models.ChartOfAcc
 
 @{
-    ViewBag.Title = "EditAccount";
+    ViewBag.Title = "Edit Account";
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
     //Layout = null;
     var selectListItems = new[]
@@ -144,6 +144,7 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
         </div>
 
         <div class="container shadow" style="width: 60%">
+
             <h2>Edit Account</h2>
             <hr />
             <div class="form-row">
@@ -151,7 +152,7 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
 
                     <label for="AccountNumber" class="control-label">Account Number</label>
                     @* <input type="text" class="form-control" id="AccountNumber" name="AccountNumber">*@
-                    @Html.TextBoxFor(x => x.AccountNumber, new { @class = "form-control", @required = "required" })
+                    @Html.TextBoxFor(x => x.AccountNumber, new { @class = "form-control", @required = "required", @readonly = "readonly" })
 
 
                 </div>
@@ -164,73 +165,77 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
 
                 </div>
             </div>
+
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <div class="form-group">
                         <label for="AccountType" class="control-label">Account Type</label>
                         @*<select name="AccountType" class="form-control" id="AccountType">
-                                <option value="Assets">Assets</option>
-                                <option value="Liabilities">Liabilities</option>
-                                <option value="Equity">Equity</option>
-                                <option value="Revenue">Revenue</option>
-                                <option value="Expense">Expense</option>
+                        <option value="Assets">Assets</option>
+                        <option value="Liabilities">Liabilities</option>
+                        <option value="Equity">Equity</option>
+                        <option value="Revenue">Revenue</option>
+                        <option value="Expense">Expense</option>
 
-                            </select>*@
+                    </select>*@
                         @Html.DropDownListFor(x => x.AccountType, selectListItems, new { @class = "form-control", @required = "required" })
 
                     </div>
                 </div>
-                <div class="form-group col-md-6">
+                @*<div class="form-group col-md-6">
 
                     <div class="form-group">
                         <label for="NormalSide">Normal Side</label>
                         <select class="cutom-select form-control" id="NormalSide" name="NormalSide" required>
-                                <option value="Debit">Debit</option>
-                                <option value="Credit">Credit</option>
+                            <option value="Debit">Debit</option>
+                            <option value="Credit">Credit</option>
 
-                            </select>
+                        </select>*@
                         @*@Html.DropDownListFor(x => x.NormalSide, selectListItems, new { @class = "form-control", @required = "required" })*@
 
-                    </div>
-                </div>
+                    @*</div>
+                </div>*@
 
             </div>
-            <div class="form-row">
+
+            @*<div class="form-row">
                 <div class="form-group col-md-6">
                     <div class="form-group">
-                        <label for="OriginalBalance">Original Balance</label>
+                        <label for="OriginalBalance">Original Balance</label>*@
                         @* <input type="text" class="form-control text-right" id="OriginalBalance" placeholder="0.00" name="OriginalBalance">*@
-                        @Html.TextBoxFor(x => x.OriginalBalance, new { @class = "form-control", @required = "required" })
+                        @*@Html.TextBoxFor(x => x.OriginalBalance, new { @class = "form-control", @required = "required" })
 
                     </div>
                 </div>
                 <div class="form-group col-md-6">
                     <div class="form-group">
-                        <label for="CurrentBalance">Current Balance</label>
+                        <label for="CurrentBalance">Current Balance</label>*@
                         @* <input type="text" class="form-control text-right" id="CurrentBalance" placeholder="0.00" name="CurrentBalance">*@
-                        @Html.TextBoxFor(x => x.CurrentBalance, new { @class = "form-control", @required = "required" })
+                        @*@Html.TextBoxFor(x => x.CurrentBalance, new { @class = "form-control", @required = "required" })
 
                     </div>
                 </div>
-            </div>
+            </div>*@
 
             <div class="form-group ">
                 <label for="AccountDescription">Account Description</label>
                 @* <textarea class="form-control" id="AccountDescription" rows="5" name="AccountDescription"></textarea>*@
                 @Html.TextAreaFor(x => x.AccountDescription, new { @class = "form-control", @required = "required" })
-
-            </div>
-            <div class="form-group ">
-                <label for="CreatedBy">Created By</label>
-                @*<input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy">*@
-                @Html.TextBoxFor(x => x.CreatedBy, new { @class = "form-control", @required = "required" })
-
             </div>
 
+            @*</div>
+        <div class="form-group ">
+            <label for="CreatedBy">Created By</label>*@
+            @*<input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy">*@
+            @*@Html.TextBoxFor(x => x.CreatedBy, new { @class = "form-control", @required = "required" })
+
+        </div>*@
+
+          
             <div class="form-group ">
                 <label for="Active" class="control-label">Active</label>
                 @*<input data-val="true" id="Active" name="Active" type="checkbox" value="true" />
-                    <input name="Active" type="hidden" value="false" />*@
+            <input name="Active" type="hidden" value="false" />*@
                 @Html.EditorFor(model => model.Active)
 
                 @*@Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })*@
@@ -242,10 +247,10 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
                 <span class="glyphicon glyphicon-remove"></span> Cancel
             </a>
             <hr />
+
         </div>
-        <br />
-        <br />
-    </form>
+     
+</form>
     @*}*@
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

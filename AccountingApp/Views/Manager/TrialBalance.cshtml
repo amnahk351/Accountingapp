@@ -1,7 +1,7 @@
 ﻿@model List<AccountingApp.Models.ChartOfAcc>
 
 @{
-    ViewBag.Title = "TrialBalance";
+    ViewBag.Title = "Trial Balance";
     Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
     //Layout = null;
 }
@@ -134,7 +134,7 @@
                         {
 
                             <tr>
-                                <td>@Model[i].AccountName</td>
+                                <td style="text-align:left"> @Model[i].AccountName</td>
                                 @if (Model[i].NormalSide.ToLower() == "debit")
                                 {
                                     <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
