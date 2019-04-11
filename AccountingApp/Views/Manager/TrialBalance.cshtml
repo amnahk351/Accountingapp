@@ -1,7 +1,7 @@
 ﻿@model List<AccountingApp.Models.ChartOfAcc>
 
 @{
-    ViewBag.Title = "TrialBalance";
+    ViewBag.Title = "Trial Balance";
     Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
     //Layout = null;
 }
@@ -126,9 +126,9 @@
                     <table id="trialTable" class="table-striped" style="width:500px;">
 
                         <tr class="titleRow">
-                            <th align="right">Account</th>
-                            <th align="right">Debit</th>
-                            <th align="right">Credit</th>
+                            <th style="text-align:center">Account</th>
+                            <th style="text-align:center">Debit</th>
+                            <th style="text-align:center">Credit</th>
                         </tr>
 
 
@@ -136,23 +136,23 @@
                         {
 
                             <tr>
-                                <td>@Model[i].AccountName</td>
+                                <td style="text-align:left"> @Model[i].AccountName</td>
                                 @if (Model[i].NormalSide.ToLower() == "debit")
                                 {
-                                    <td class="rowData" align="right">@Model[i].CurrentBalance</td>
-                                    <td class="" align="right"></td>
+                                    <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
+                                    <td class="" style="text-align:right"></td>
                                 }
                                 else
                                 {
-                                    <td class="" align="right"></td>
-                                    <td class="rowData" align="right">@Model[i].CurrentBalance</td>
+                                    <td class="" style="text-align:right"></td>
+                                    <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
                                 }
                             </tr>
                         }
                         <tr class="totalRow">
-                            <td align="right">Total:</td>
-                            <td class="total" align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.DebitTotal</td>
-                            <td class="total" align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.CreditTotal</td>
+                            <td style="text-align:right; padding-right: 2%">Total:</td>
+                            <td class="total" style="text-align:right; border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.DebitTotal</td>
+                            <td class="total" style="text-align:right; border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.CreditTotal</td>
                         </tr>
 
                     </table>
@@ -254,7 +254,6 @@
 
     </script>
 
-    </script>
 </body>
 
 </html>

@@ -76,14 +76,13 @@ namespace AccountingApp.Controllers
             int insertedRecords = 0;
             int NewEntryId = GetLatestEntryId();
             var sessionUser = Session["Username"] as string;
+            EventLogHandler Logger = new EventLogHandler();
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
 
-
                 for (int i = 1; i < transactions.Length; i++)
                 {
-
                     //var x = DateTime.Now;
 
                     //if was submitted today added the current time to the database
@@ -94,7 +93,7 @@ namespace AccountingApp.Controllers
                     string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
                     "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)" +
                     "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," +
-                    "@Debit,@Credit,@EntryId,EntryType)";
+                    "@Debit,@Credit,@EntryId,@Entry_Type)";
 
                     db.Execute(sql, new
                     {
@@ -106,11 +105,11 @@ namespace AccountingApp.Controllers
                         Debit = transactions[i].Debit,
                         Credit = transactions[i].Credit,
                         EntryId = NewEntryId + 1,
-                        EntryType = transactions[i].Entry_Type
+                        Entry_Type = transactions[i].Entry_Type
                     });
 
                     insertedRecords++;
-
+                    //Logger.LogJournalEntrySubmitted(sessionUser, NewEntryId.ToString());
                 }
             }
 

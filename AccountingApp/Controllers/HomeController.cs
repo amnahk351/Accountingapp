@@ -146,7 +146,7 @@ namespace AccountingApp.Controllers
         //    return View("ShowUserData",item2);
         //}
 
-        public ActionResult Edit(int id)
+        public ActionResult EditUser(int id)
         {
             List<CreateUser> editUser;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -187,7 +187,7 @@ namespace AccountingApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(EditUserModel value)
+        public ActionResult EditUser(EditUserModel value)
         {
             EventLogHandler Logger = new EventLogHandler();
             List<CreateUser> CurrentUser;
@@ -319,7 +319,7 @@ namespace AccountingApp.Controllers
                 string sql = "Update dbo.UserTable set FirstName = @FirstName, LastName = @LastName, " +
                     "Username = @Username, Password = @Password, Role = @Role, Phone = @Phone, " +
                     "Email = @Email, DateModified = @Date_Modified, Active = @Active, Address = @Address, " +
-                    "City = @City, State = @State, ZIP_Code = @ZIP_Code  Where ID = @ID;";
+                    "City = @City, State = @State, ZIP_Code = @ZIP_Code Where ID = @ID;";
 
                 db.Execute(sql, new
                 {
