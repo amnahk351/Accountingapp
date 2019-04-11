@@ -78,40 +78,97 @@ namespace AccountingApp.Controllers
             var sessionUser = Session["Username"] as string;
             EventLogHandler Logger = new EventLogHandler();
 
+            string type = "";
+
+            if (transactions[0].Status == "pending")
+            {
+                type = "Submitted";
+            }
+            else {
+                type = "Suspended";
+            }
+
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
 
                 for (int i = 1; i < transactions.Length; i++)
                 {
-                    //var x = DateTime.Now;
-
                     //if was submitted today added the current time to the database
 
                     //if submitted on another day, default the time to 12
 
-
-                    string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
-                    "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)" +
-                    "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," +
-                    "@Debit,@Credit,@EntryId,@Entry_Type)";
-
-                    db.Execute(sql, new
+                    if (i == 1)
                     {
-                        AccountantUsername = sessionUser,
-                        AccountantComment = transactions[i].AccountantComment,
-                        DateSubmitted = transactions[i].DateSubmitted,
-                        Status = transactions[i].Status,
-                        AccountName = transactions[i].AccountName,
-                        Debit = transactions[i].Debit,
-                        Credit = transactions[i].Credit,
-                        EntryId = NewEntryId + 1,
-                        Entry_Type = transactions[i].Entry_Type
-                    });
+                        var DatetoUse = DateTime.Now;
+                        System.Diagnostics.Debug.WriteLine("Date Now: " + DatetoUse);
+                        System.Diagnostics.Debug.WriteLine("Date: " + transactions[i].DateSubmitted);
 
-                    insertedRecords++;
-                    //Logger.LogJournalEntrySubmitted(sessionUser, NewEntryId.ToString());
+                        var TodayString = DatetoUse.ToString();
+                        string[] Pieces = TodayString.Split(' ');
+                        string JustDate = Pieces[0];
+
+
+                        string SavedDate = transactions[i].DateSubmitted.ToString();
+                        string[] Pieces2 = SavedDate.Split(' ');
+                        string JustDate2 = Pieces2[0];
+
+                        if (JustDate != JustDate2)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Other date: " + (DateTime)transactions[i].DateSubmitted);
+                            DatetoUse = (DateTime)transactions[i].DateSubmitted;
+                        }
+
+                        string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
+                        "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)" +
+                        "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," +
+                        "@Debit,@Credit,@EntryId,@Entry_Type)";
+
+                        db.Execute(sql, new
+                        {
+                            AccountantUsername = sessionUser,
+                            AccountantComment = transactions[i].AccountantComment,
+                            DateSubmitted = DatetoUse,
+                            Status = transactions[i].Status,
+                            AccountName = transactions[i].AccountName,
+                            Debit = transactions[i].Debit,
+                            Credit = transactions[i].Credit,
+                            EntryId = NewEntryId + 1,
+                            Entry_Type = transactions[i].Entry_Type
+                        });
+
+                        insertedRecords++;
+
+                    }
+                    else
+                    {
+                        string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
+                        "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)" +
+                        "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," +
+                        "@Debit,@Credit,@EntryId,@Entry_Type)";
+
+                        db.Execute(sql, new
+                        {
+                            AccountantUsername = sessionUser,
+                            AccountantComment = transactions[i].AccountantComment,
+                            DateSubmitted = transactions[i].DateSubmitted,
+                            Status = transactions[i].Status,
+                            AccountName = transactions[i].AccountName,
+                            Debit = transactions[i].Debit,
+                            Credit = transactions[i].Credit,
+                            EntryId = NewEntryId + 1,
+                            Entry_Type = transactions[i].Entry_Type
+                        });
+
+                        insertedRecords++;
+
+                    }
                 }
+
+                Logger.LogJournalEntrySubmitted(sessionUser, NewEntryId.ToString(), type);
+
             }
+
+
 
             return Json(insertedRecords);
         }
