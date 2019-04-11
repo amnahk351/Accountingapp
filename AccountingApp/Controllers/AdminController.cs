@@ -121,10 +121,7 @@ namespace AccountingApp.Controllers
                 {
 
                     CurrentAccount = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountNumber = @ID", new { ID = model.AccountNumber }).ToList();
-                }
-
-                System.Diagnostics.Debug.WriteLine("Number: " + model.AccountNumber);
-                System.Diagnostics.Debug.WriteLine("CurrentAccount Number: " + CurrentAccount[0].AccountNumber);
+                }             
 
                 CurrentAccount[0].AccountNumber = model.AccountNumber;
                 CurrentAccount[0].AccountName = model.AccountName;
@@ -141,7 +138,7 @@ namespace AccountingApp.Controllers
 
                     string sql = "Update dbo.ChartOfAccounts set AccountName = @AccountName, " +
                         "AccountType = @AccountType, AccountDescription = @AccountDescription," +
-                        "Active = @Active, where AccountNumber = @AccountNumber";
+                        "Active = @Active Where AccountNumber = @AccountNumber";
 
 
                     db.Execute(sql, new

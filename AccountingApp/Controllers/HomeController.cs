@@ -319,7 +319,7 @@ namespace AccountingApp.Controllers
                 string sql = "Update dbo.UserTable set FirstName = @FirstName, LastName = @LastName, " +
                     "Username = @Username, Password = @Password, Role = @Role, Phone = @Phone, " +
                     "Email = @Email, DateModified = @Date_Modified, Active = @Active, Address = @Address, " +
-                    "City = @City, State = @State, ZIP_Code = @ZIP_Code  Where ID = @ID;";
+                    "City = @City, State = @State, ZIP_Code = @ZIP_Code Where ID = @ID;";
 
                 db.Execute(sql, new
                 {
