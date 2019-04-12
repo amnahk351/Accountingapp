@@ -77,7 +77,7 @@
             <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-success" role="button" aria-pressed="true">
                 Pending
             </a>
-            <a href="@Url.Action("GeneralJournal", new { status = "suspended"})" class="btn btn-success" role="button" aria-pressed="true">
+            <a href="@Url.Action("AccountantIndex", new { status = "suspended"})" class="btn btn-success" role="button" aria-pressed="true">
                 Suspended
             </a>
         </div>
@@ -92,6 +92,8 @@
                         <th>Debit</th>
                         <th>Credit</th>
                         <th>Status</th>
+                        <th>Action</th>
+                        @*<th>Files</th>*@
                     </tr>
                 </thead>
                 <tbody>
@@ -104,8 +106,30 @@
                         <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
                         <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
                         <td>@Model.entries[i].status</td>
+                        <td>
+                            @if (@Model.entries[i].status == "suspended")
+                                {
+                                @*<img height="3" width="3" alt="Image"
+                                         src="@Url.Content("~/content/images/icon_red_questions_returnedbyreviewer.gif")" />*@
+                                @*<span>Edit</span>*@
+
+                                <a href="@Url.Action("EditJournal", new { id = Model.entries[i].entryID})">
+                                    Edit
+                                </a>
+                            }
+                            
+
+                        </td>
+                        @*<td>@(@Model.entries[i].status ? "Y" : "N")</td>*@
+                        @*<td>@Model.entries[i].FormattedFileNames()</td>*@
+                        @*<td>
+                            <a href="@Url.Action("Download", new { file = Model.entries[i].FormattedFileNames()})">
+                                Edit
+                            </a>
+
+                        </td>*@
                     </tr>
-            }
+                }
                 </tbody>
             </table>
         </div>

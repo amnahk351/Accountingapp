@@ -10,11 +10,61 @@ using System.Data;
 using System.Data.SqlClient;
 using Dapper;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace AccountingApp.Controllers
 {
     public class AccountantController : Controller
     {
+
+        public ActionResult EditJournal(double id)
+        {
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+            }
+            List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+
+            foreach (ChartOfAcc coa in listAccounts)
+            {
+                SelectListItem item = new SelectListItem
+                {
+                    Text = coa.AccountName,
+                    Value = coa.AccountNumber.ToString()
+                };
+                sliAccountList.Add(item);
+            }
+
+            ViewBag.accountlist = sliAccountList;
+
+
+            return View();
+        }
+
+
+        [HttpGet]
+        public JsonResult GetAllTransactions(int id)
+        {
+            List<TransactionTable> transactions = new List<TransactionTable>();
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactions = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            System.Diagnostics.Debug.WriteLine("it got here");
+            var result = JsonConvert.SerializeObject(transactions);
+            System.Diagnostics.Debug.WriteLine("json: " + result);
+
+
+            //return Json(result);
+            return Json(result, JsonRequestBehavior.AllowGet);
+
+        }
+
         [HttpGet]
         public ActionResult AccountantIndex(string status)
         {
@@ -255,7 +305,6 @@ namespace AccountingApp.Controllers
 
         public ActionResult Journalize()
         {
-
             List<ChartOfAcc> listAccounts;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -281,10 +330,15 @@ namespace AccountingApp.Controllers
             return View();
         }
 
+
+
         private Entries getAllEntriesOfStatus(string s)
         {
 
             List<Transaction> transactionList;
+            List<DocumentsTable> fileList = new List<DocumentsTable>();
+
+            
 
             if (s == "all")
             {
@@ -299,6 +353,12 @@ namespace AccountingApp.Controllers
                 {
                     transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
                 }
+            }
+
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                fileList = db.Query<DocumentsTable>($"Select * From dbo.DocumentsTable").ToList();
             }
 
 
@@ -317,11 +377,21 @@ namespace AccountingApp.Controllers
                     ids.Add(id);
 
                 Entry e = new Entry(id, status, date, comment);
-
+                
+                
                 foreach (Transaction t2 in transactionList)
                 {
                     if (t2.EntryId == id)
                     {
+                        for (int i = 0; i < fileList.Count; i++)
+                        {
+
+                            if (fileList[i].FK_EntryId == t2.EntryId) {
+                                e.files.Add(fileList[i]);
+                            }
+                        }
+                        
+
                         e.accountNames.Add(t2.AccountName);
                         e.debits.Add(t2.Debit.GetValueOrDefault());
                         e.credits.Add(t2.Credit.GetValueOrDefault());
