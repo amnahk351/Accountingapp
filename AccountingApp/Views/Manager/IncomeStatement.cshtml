@@ -48,66 +48,6 @@
 </head>
 
 <body>
-    @*Amnah*@
-    @*<nav style="padding:20px; font-size: 20px;   font-weight: 70;" class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top ">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">Objective Accounting</a>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="@Url.Action("ManagerIndex")">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-
-            </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a class="nav-link active" href="#">User List</a>
-                </li>
-                <li>
-                    <a class="nav-link active" href="#">User Log</a>
-                </li>
-                <li>
-                    <a class="nav-link active" href="@Url.Action("GeneralJournal")">General Journal</a>
-                </li>
-                <li>
-                    <a class="nav-link active" href="#">General Ledger</a>
-                </li>
-                <li>
-                    <a class="nav-link active" href="#">Reports</a>
-
-                </li>
-                <li>
-                    <a class="nav-link active" href="@Url.Action("../Accountant/Journalize")">Journalize</a>
-                </li>
-                <li>
-                    <a class="nav-link active" href="@Url.Action("../Admin/ChartOfAccounts")">Chart Of Accounts</a>
-                </li>
-                <li>
-                    <a class="nav-link active" href="#">Dashboard</a>
-                </li>
-                <br />
-                <h3 style="color:darkgray">|</h3>
-                <li>
-                    <a class="nav-link active" href="#" style="width:50px;">
-                        <i class="far fa-bell"></i>
-
-                    </a>
-
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="@Url.Action("../Account/Login")">Sign Out</a>
-                </li>
-            </ul>
-        </div>
-    </nav>*@
-
-    @*Amnah*@
     <div class="shadow container" style="width:60%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
@@ -126,7 +66,7 @@
                     <table id="revenueTable" class="table-striped" style="width:500px;">
 
                         <tr class="titleRow">
-                            <th>Revenues</th>
+                            <th class="text-left">Revenues</th>
                             <th> </th>
                         </tr>
 
@@ -135,13 +75,13 @@
                             if (Model[i].AccountType.ToLower() == "revenue")
                             {
                                 <tr>
-                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                    <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
                                     <td align="right">@Model[i].CurrentBalance</td>
                                 </tr>
                             }
                         }
                         <tr>
-                            <td>Total Revenues</td>
+                            <td align="left">Total Revenues</td>
                             <td align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: solid; border-bottom-width: .2rem;">@ViewBag.RevenueTotal</td>
                         </tr>
 
@@ -152,7 +92,7 @@
                     <table id="expenseTable" class="table-striped" style="width:500px;">
 
                         <tr class="titleRow">
-                            <th>Expenses</th>
+                            <th class="text-left">Expenses</th>
                             <th> </th>
                         </tr>
 
@@ -161,19 +101,19 @@
                             if (Model[i].AccountType.ToLower() == "expense")
                             {
                                 <tr>
-                                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                    <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
                                     <td align="right">@Model[i].CurrentBalance</td>
                                 </tr>
                             }
                         }
 
                         <tr>
-                            <td>Total Expense</td>
+                            <td align="left">Total Expense</td>
                             <td align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: solid; border-bottom-width: .2rem;">@ViewBag.ExpenseTotal</td>
                         </tr>
-                        <tr height=20px></tr>
+                        @*<tr height=20px></tr>*@
                         <tr>
-                            <td>Net Income (Loss)</td>
+                            <td align="left">Net Income (Loss)</td>
                             <td align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">@ViewBag.NetIncome_Loss</td>
                         </tr>
                     </table>
@@ -185,6 +125,76 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            FormatTableAmounts("revenueTable");
+            PlaceDollarSigns("revenueTable");
+            FormatTableAmounts("expenseTable");
+            PlaceDollarSigns("expenseTable");
+
+        });
+    </script>
+
+    <script>
+
+        function FormatTableAmounts(tablename) {
+            var table = document.getElementById(tablename);
+
+
+            for (var i = 1; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[1].innerText;
+
+                var newDhtml = Dhtml.replace("$", "");
+
+                if (newDhtml != "") {
+                    table.rows[i].cells[1].innerText = formatMoney(newDhtml);
+                }
+
+            }
+
+        }
+
+        function formatMoney(n, c, d, t) {
+            var c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
+        function PlaceDollarSigns(tablename) {
+            var table = document.getElementById(tablename);
+            var rowsNum = table.rows.length;
+
+            //Place dollar sign for debit
+            for (var i = 1; i < rowsNum; i++) {
+                var Dhtml = table.rows[i].cells[1].innerText;
+
+                if (tablename == "expenseTable") {
+                    var total = table.rows[rowsNum - 1].cells[1].innerText;
+                    table.rows[rowsNum - 1].cells[1].innerText = "$ " + total;
+                    break;
+                }
+
+                if (Dhtml != "") {
+
+                    table.rows[i].cells[1].innerText = "$ " + Dhtml;
+
+
+                    break;
+                }
+
+            }
+
+        }
+
+    </script>
+
 </body>
 
 </html>
