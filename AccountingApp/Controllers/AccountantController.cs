@@ -54,15 +54,27 @@ namespace AccountingApp.Controllers
             {
                 transactions = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
             }
-
-            System.Diagnostics.Debug.WriteLine("it got here");
+                        
             var result = JsonConvert.SerializeObject(transactions);
             System.Diagnostics.Debug.WriteLine("json: " + result);
-
-
-            //return Json(result);
+            
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
+        [HttpGet]
+        public JsonResult GetAllFiles(int id)
+        {
+            List<DocumentsTable> files = new List<DocumentsTable>();
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                files = db.Query<DocumentsTable>($"Select FileName From dbo.DocumentsTable Where FK_EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            var result = JsonConvert.SerializeObject(files);
+            System.Diagnostics.Debug.WriteLine("json: " + result);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

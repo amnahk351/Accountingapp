@@ -842,10 +842,7 @@
 
             //alert(newstr);
             GetTransactions(newstr);
-
-
-
-
+            GetAllRelatedFiles(newstr);
 
         });
 
@@ -853,25 +850,69 @@
 
     <script>
 
-        @*function GetTransactions(x) {
+        function GetAllRelatedFiles(Id) {
 
-            $.ajax({
-                type: 'GET',
-                url: '@Url.Action("GetAllTransactions")',
-                data: {"id":x},
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    //$('#id').text(emp.employee.Id);
-                    //$('#firstName').text(emp.employee.FirstName);
-                    //$('#lastName').text(emp.employee.LastName);
-                },
-                error: function (emp) {
-                    alert('error');
+            var Query;
+
+            $.ajax(
+                {
+                    url: '/Accountant/GetAllFiles/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    data: { "id": Id },
+                    success: function (result) {
+                        alert(result);
+                        Query = result;
+
+                    },
+                    error: function (error) {
+                        alert(JSON.stringify(error));
+                    }
+                });
+
+            var File = Query.match(/FileName.*?,"F/);
+
+            //var Newm = QueryString.match(/AccountName.*?,"EntryId/);
+
+            if (File != null) {
+                //var f = File.toString();
+
+
+                var QueryCopy = Query;
+                var QueryString = QueryCopy.toString();
+                var found = 0;
+                while (found != -1) {
+
+                    var m = QueryString.match(/FileName.*?,"F/);
+                    var m2 = m.toString();
+
+                    var m3 = m2.replace("FileName\":\"", "");
+                    var file = m3.replace("\",\"F", "");
+
+
+
+                    //download needs fixed with id parameter
+
+                    QueryString = QueryString.replace(m2, "");
+                    var Newm = QueryString.match(/FileName.*?,"F/);
+
+                    if (Newm == null) {
+                        break;
+                    }
+                    var New = Newm.toString();
+                    found = New.indexOf(New);
+
                 }
-            });
-        }*@
+                
+            }
 
+            
+            var pos = C.indexOf("null");
+
+
+        }
 
         function GetTransactions(Id) {
 
@@ -942,7 +983,7 @@
 
                 var m7 = m6.replace(/"/g, "");
 
-                //alert(m7);
+                
                 var Result = m7.split(",");
 
 
