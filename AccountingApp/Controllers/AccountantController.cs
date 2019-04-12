@@ -233,7 +233,7 @@ namespace AccountingApp.Controllers
             return Json(insertedRecords);
         }
 
-        private static byte[] getBytes(string file)
+        private static byte[] getBytes(string file, int id)
         {
             using (SqlConnection cn = new SqlConnection(SqlAccess.GetConnectionString()))
             using (SqlCommand cm = cn.CreateCommand())
@@ -241,19 +241,41 @@ namespace AccountingApp.Controllers
                 cm.CommandText = @"
             SELECT FileBytes
             FROM   dbo.DocumentsTable
-            WHERE  FileName = @Name";
+            WHERE  FileName = @Name AND FK_EntryId = @ID";
                 cm.Parameters.AddWithValue("@Name", file);
+                cm.Parameters.AddWithValue("@ID", id);
                 cn.Open();
                 return cm.ExecuteScalar() as byte[];
             }
         }
 
-        public FileResult Download(string file)
+        public FileResult Download(string file, int id)
         {
-            byte[] fileBytes = getBytes(file);
+            byte[] fileBytes = getBytes(file, id);
             var response = new FileContentResult(fileBytes, "application/octet-stream");
             response.FileDownloadName = file;
             return response;
+        }
+
+        [HttpGet]
+        public JsonResult GetLatestEntryIdforFile() {
+
+            int EntryId;
+
+            SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
+            SqlCommand cmd = new SqlCommand($"SELECT TOP 1 EntryId FROM dbo.TransactionTable ORDER BY TransactionID DESC", con);
+
+            con.Open();
+            string s = cmd.ExecuteScalar().ToString();  //Stores the latest EntryId in the table
+
+            con.Close();
+            EntryId = Int32.Parse(s);
+
+            
+            var result = JsonConvert.SerializeObject(EntryId + 1);
+            System.Diagnostics.Debug.WriteLine("json latest entry id: " + result);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

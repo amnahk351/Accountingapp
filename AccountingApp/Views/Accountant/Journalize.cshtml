@@ -624,12 +624,36 @@
 
         function AppendToUploadList(fileName) {
 
+            var Number;
+
+            $.ajax(
+                {
+                    url: '/Accountant/GetLatestEntryIdforFile/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",                    
+                    success: function (result) {
+                        //alert(result);
+                        Number = result;
+
+                    },
+                    error: function (error) {
+                        alert(JSON.stringify(error));
+                    }
+                });
+
+            //var number = parseInt(Query);
+
+            //var NewNumber = number+1,
+            //alert(NewNumber);
+
             var table = document.getElementById("uploadList");
             var row = table.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             // the ../ goes back one directory, needed to prevent calling Accountant twice
-            cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "\" target=\"_blank\">" + fileName + "</a>";            
+            cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id="+ Number +"\" target=\"_blank\">" + fileName + "</a>";            
             cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
             
         }
