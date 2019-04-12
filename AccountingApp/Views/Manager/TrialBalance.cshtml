@@ -112,21 +112,21 @@
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
-                    <h3 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family</h3>
+                    <h3 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h3>
                     <h3 class="card-title" style="padding: 0px; margin: 0px;">Trial Balance</h3>
-                    <hr style="padding: 0px; margin: 0px;" />
+                    @*<hr style="padding: 0px; margin: 0px;" />*@
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">
                         As of
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
-                    <br />
+                    @*<br />*@
                     <hr style="border-width: 2px; border-color: black" />
-                    <table id="trialTable" class="table-striped" style="width:500px;">
+                    <table id="trialTable" class="table-striped" style="width:510px;">
 
                         <tr class="titleRow">
-                            <th style="text-align:center">Account</th>
+                            <th style="text-align:left">Account</th>
                             <th style="text-align:center">Debit</th>
                             <th style="text-align:center">Credit</th>
                         </tr>
@@ -150,9 +150,9 @@
                             </tr>
                         }
                         <tr class="totalRow">
-                            <td style="text-align:right; padding-right: 2%">Total:</td>
-                            <td class="total" style="text-align:right; border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.DebitTotal</td>
-                            <td class="total" style="text-align:right; border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.CreditTotal</td>
+                            <td style="text-align:left; padding-right: 2%"><b>Totals</b></td>
+                            <td class="total" style="text-align:right; border-top-style: solid; border-top-width: .15rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.DebitTotal</td>
+                            <td class="total" style="text-align:right; border-top-style: solid; border-top-width: .15rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.CreditTotal</td>
                         </tr>
 
                     </table>

@@ -115,16 +115,16 @@
                 <div class="card-body" style="display:inline-block;">
                     <h3 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h3>
                     <h3 class="card-title" style="padding: 0px; margin: 0px;">Balance Sheet</h3>
-                    <hr style="padding: 0px; margin: 0px;" />
+                    @*<hr style="padding: 0px; margin: 0px;" />*@
                     <h4 style="padding: 0px; margin: 0px;">
-                        For the Period Ending:
+                        As of
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
-                    <br />
+                    @*<br />*@
                     <hr style="border-width: 2px; border-color: black" />
-                    <table id="assetsTable" class="table-striped" style="width:500px;">
+                    <table id="assetsTable" class="table-striped" style="width:510px;">
 
                         <tr class="titleRow">
                             <th class="text-left" colspan="3">Assets</th>
@@ -174,7 +174,7 @@
                                     }
                                     else
                                     {
-                                        <td>(@Model[i].CurrentBalance)</td>
+                                        <td style="border-bottom-style: solid; border-bottom-width: .15rem">(@Model[i].CurrentBalance)</td>
                                     }
                                     <td> </td>
                                 }
@@ -191,13 +191,13 @@
                         <tr>
                             <th class="text-left">Total Asset</th>
                             <td> </td>
-                            <td>@ViewBag.totalAssets</td>
+                            <td style="border-top-style: solid; border-top-width: .15rem; border-bottom-style: double; border-bottom-width: .4rem">@ViewBag.totalAssets</td>
                         </tr>
                     </table>
 
                     <br />
 
-                    <table id="liabilitiesTable" class="table-striped" style="width:500px;">
+                    <table id="liabilitiesTable" class="table-striped" style="width:510px;">
 
                         <tr class="titleRow">
                             <th class="text-left">Liabilities & Stockholder's Equity</th>
