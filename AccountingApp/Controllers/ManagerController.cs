@@ -341,6 +341,7 @@ namespace AccountingApp.Controllers
 
 
         }
+        //Broderick's code
         public ActionResult EventLog()
         {
             List<Models.EventLog> events;

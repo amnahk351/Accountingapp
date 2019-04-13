@@ -292,6 +292,7 @@ namespace AccountingApp.Controllers
 
 
         }
+        //broderick's
         public ActionResult EventLog()
         {
             List<Models.EventLog> events;
@@ -307,7 +308,7 @@ namespace AccountingApp.Controllers
             //return View(events);
         }
 
-
+        //colt's code
         public ActionResult TrialBalance()
         {
 
@@ -430,7 +431,7 @@ namespace AccountingApp.Controllers
 
             return View(coa);
         }
-
+        //colt's code
 
 
         public ActionResult RetainedEarnings()
