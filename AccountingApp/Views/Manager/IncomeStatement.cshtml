@@ -112,8 +112,8 @@
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
-                    <h3 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h3>
-                    <h3 class="card-title" style="padding: 0px; margin: 0px;">Income Statement</h3>
+                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
+                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Income Statement</h4>
                     @*<hr style="padding: 0px; margin: 0px;" />*@
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">
                         For the Period Ending
@@ -142,7 +142,7 @@
                         }
                         <tr>
                             <td style="text-align:left">Total Revenues</td>
-                            <td align="right" style="border-top-style: solid; border-top-width: .15rem; border-bottom-style: solid; border-bottom-width: .15rem; width: 128px">@ViewBag.RevenueTotal</td>
+                            <td align="right" style="border-top: .15rem solid; border-bottom: .15rem solid; width: 128px">@ViewBag.RevenueTotal</td>
                         </tr>
 
                     </table>
@@ -169,12 +169,12 @@
 
                         <tr>
                             <td style="text-align:left">Total Expenses</td>
-                            <td align="right" style="border-top-style: solid; border-top-width: .15rem; border-bottom-style: solid; border-bottom-width: .15rem; width:128px">@ViewBag.ExpenseTotal</td>
+                            <td align="right" style="border-top: .15rem solid; border-bottom: .15rem solid; width:128px">@ViewBag.ExpenseTotal</td>
                         </tr>
                         <tr height=20px></tr>
                         <tr>
                             <td style="text-align:left"><b>Net Income (Loss)</b></td>
-                            <td align="right" style="border-bottom-style: double; border-bottom-width: .4rem">@ViewBag.NetIncome_Loss</td>
+                            <td align="right" style="border-bottom: .4rem double">@ViewBag.NetIncome_Loss</td>
                             @*should the top border be there? don't know if it's supposed to be removed or if the bottom double border was supposed to be removed*@
                         </tr>
                     </table>
@@ -191,36 +191,89 @@
         $(document).ready(function () {
 
             FormatTableAmounts();
+            //FormatTableAmounts2();
 
             PlaceDollarSigns();
         });
-
     </script>
 
     <script>
 
         function FormatTableAmounts() {
-            var table = document.getElementById("expenseTable");
+            var table = document.getElementById("revenueTable");
+            var table2 = document.getElementById("expenseTable");
 
-
+            //alert("Got here");
+            //alert("rows " + table.rows.length);
+            //alert("rows " + table2.rows.length);
             for (var i = 1; i < table.rows.length; i++) {
                 var Dhtml = table.rows[i].cells[1].innerText;
-                var Chtml = table.rows[i].cells[2].innerText;
+                //var Chtml = table.rows[i].cells[1].innerText;
 
                 var newDhtml = Dhtml.replace("$", "");
-                var newChtml = Chtml.replace("$", "");
+                //var newChtml = Chtml.replace("$", "");
 
                 if (newDhtml != "") {
                     table.rows[i].cells[1].innerText = formatMoney(newDhtml);
                 }
 
+                //if (newChtml != "") {
+                //    table.rows[i].cells[1].innerText = formatMoney(newChtml);
+                //}
+
+            }
+            //alert("Got here 2");
+            for (var j = 1; j < table2.rows.length-2; j++) {
+                                
+
+                //var Dhtml = table2.rows[j].cells[1].innerText;
+                var Chtml = table2.rows[j].cells[1].innerText;
+
+                //var newDhtml = Dhtml.replace("$", "");
+                var newChtml = Chtml.replace("$", "");
+
+                //if (newDhtml != "") {
+                //    table2.rows[j].cells[1].innerText = formatMoney(newDhtml);
+                //}
+
                 if (newChtml != "") {
-                    table.rows[i].cells[2].innerText = formatMoney(newChtml);
+                    table2.rows[j].cells[1].innerText = formatMoney(newChtml);
                 }
 
             }
 
+            var num = table2.rows.length - 1;
+            var x = table2.rows[num].cells[1].innerText;
+            
+            table2.rows[num].cells[1].innerText = formatMoney(x);
+
+            //x.innerText =
+            //= formatMoney(newChtml);
+            //alert("Got here 3");
         }
+
+        //function FormatTableAmounts2() {
+        //    var table2 = document.getElementById("expenseTable");
+
+
+        //    for (var i = 1; i < table2.rows.length; i++) {
+        //        //var Dhtml = table.rows[i].cells[1].innerText;
+        //        var Chtml = table2.rows[i].cells[1].innerText;
+
+        //        //var newDhtml = Dhtml.replace("$", "");
+        //        var newChtml = Chtml.replace("$", "");
+
+        //        //if (newDhtml != "") {
+        //        //    table.rows[i].cells[1].innerText = formatMoney(newDhtml);
+        //        //}
+
+        //        if (newChtml != "") {
+        //            table2.rows[i].cells[1].innerText = formatMoney(newChtml);
+        //        }
+
+        //    }
+
+        //}
 
         function formatMoney(n, c, d, t) {
             var c = isNaN(c = Math.abs(c)) ? 2 : c,
@@ -234,42 +287,49 @@
         };
 
         function PlaceDollarSigns() {
-            var table = document.getElementById("expenseTable");
+            var table = document.getElementById("revenueTable");
             var rowsNum = table.rows.length;
 
             //Place dollar sign for debit
-            for (var i = 1; i < rowsNum; i++) {
-                var Dhtml = table.rows[i].cells[1].innerText;
+            for (var k = 1; k < rowsNum; k++) {
+                var Dhtml = table.rows[k].cells[1].innerText;
 
                 if (Dhtml != "") {
 
-                    table.rows[i].cells[1].innerText = "$ " + Dhtml;
+                    table.rows[k].cells[1].innerText = "$ " + Dhtml;
 
 
                     break;
                 }
 
             }
+
+            var table2 = document.getElementById("expenseTable");
+
+            var num = table2.rows.length - 1;
+            var x = table2.rows[num].cells[1].innerText;
+
+            table2.rows[num].cells[1].innerText = "$ " + x;
 
             //Place dollar sign for credit
-            for (var i = 1; i < rowsNum; i++) {
-                var Chtml = table.rows[i].cells[2].innerText;
+            //for (var i = 1; i < rowsNum; i++) {
+            //    var Chtml = table.rows[i].cells[2].innerText;
 
 
-                if (Chtml != "") {
+            //    if (Chtml != "") {
 
-                    table.rows[i].cells[2].innerText = "$ " + Chtml;
+            //        table.rows[i].cells[2].innerText = "$ " + Chtml;
 
 
-                    break;
-                }
-            }
+            //        break;
+            //    }
+            //}
 
-            var TotalDebit = table.rows[rowsNum - 1].cells[1].innerText;
-            var TotalCredit = table.rows[rowsNum - 1].cells[2].innerText;
+            //var NetIncome = table.rows[rowsNum - 1].cells[1].innerText;
+            //var TotalCredit = table.rows[rowsNum - 1].cells[2].innerText;
 
-            table.rows[rowsNum - 1].cells[1].innerText = "$ " + TotalDebit;
-            table.rows[rowsNum - 1].cells[2].innerText = "$ " + TotalCredit;
+            //table.rows[rowsNum - 1].cells[1].innerText = "$ " + NetIncome;
+            //table.rows[rowsNum - 1].cells[2].innerText = "$ " + TotalCredit;
 
         }
 
