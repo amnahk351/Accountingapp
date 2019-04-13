@@ -113,22 +113,20 @@
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
-                    <h3 class="card-title">Objective Accounting</h3>
-                    <br />
-                    <h3 class="card-title">Statement Of Retained Earnings</h3>
-                    <hr />
-                    <h4>
-                        For the Year Ended,
+                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
+                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Statement of Retained Earnings</h4>
+
+                    <h4 style="padding: 0px; margin: 0px;"> @*style="padding-bottom: 20px" <- this was here if we wanted to increase vertical blank space*@
+                        For the Year Ended
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
-
-                    <table id="trialTable" class="table-striped" style="width:800px">
-                        <br />
-                        <tr class="titleRow" style="font-size:x-large">
-                            <th align="right">
-                                Retained Earnings,
+                    <hr style="border-width: 2px; border-color: black" />
+                    <table id="trialTable" class="table-striped" style="width:510px">
+                        <tr class="titleRow">
+                            <th style="text-align: left">
+                                Beg Retained Earnings,
                                 <script>
                                     var date = new Date();
                                     date.setFullYear(date.getFullYear() - 1);
@@ -136,22 +134,24 @@
 
                                 </script>
                             </th>
-                            <th align="right" style="float:right">$0.00</th>
+                            <th style="text-align: right">$0.00</th>
                         </tr>
-                        <tr class="titleRow" style="font-size:x-large">
-                            <th align="right" >Plus: Net Income </th>
-                            <th align="right" style="float:right">0.00</th>
+                        <tr class="titleRow" >
+                            <th style="text-align: left">Add: Net Income </th>
+                            <th style="float:right">0.00</th>
                         </tr>
-                        <tr class="titleRow" style="font-size:x-large">
-                            <th align="right">Minus: Dividents Paid</th>
-                            <th align="right" style="float:right;border-bottom: 3px solid;">0.00</th>
+                        <tr class="titleRow" >
+                            <th style="text-align: left">Less: Dividents Paid</th>
+                            <th style="text-align: right; border-bottom: .15rem solid">0.00</th>
                         </tr>
-                        <tr class="titleRow" style="font-size:x-large">
-                            <th align="right">Retained Earnings,
+                        <tr class="titleRow" >
+                            <th style="text-align: left">
+                                 End Retained Earnings,
                                 <script>
                                     document.write(new Date().toDateString());
-                                </script></th>
-                            <th align="right" style="float:right; border-bottom: 8px double;">$0.00</th>
+                                </script>
+                            </th>
+                            <th style="text-align: right; border-bottom: .4rem double;">$0.00</th>
                         </tr>
 
                     </table>
