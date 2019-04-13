@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Journalize";
+    ViewBag.Title = "Edit Journal";
     Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
 }
 
@@ -20,9 +20,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-        
+
     <style>
-        
+
         .form_datetime {
             display: block;
             width: 100%;
@@ -419,7 +419,7 @@
                         <label for="Comment" class="control-label">Comment</label>
                         <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="Optional"></textarea>
 
-                    </div>                    
+                    </div>
 
                     <div class="form-group col-md-12">
                         <input type="file" class="form-control-file" id="input" name="file" multiple />
@@ -438,11 +438,11 @@
                             <col style="width: 3%">
                         </colgroup>
                         @*<tr>
-                            <td>cell1_1</td>
-                            <td>cell2_1</td>
-                        </tr>*@
+                                <td>cell1_1</td>
+                                <td>cell2_1</td>
+                            </tr>*@
                     </table>
-                    
+
                     <br />
 
                     <div class="form-group col-md-10">
@@ -452,7 +452,7 @@
                     </div>
 
                 </div>
-                               
+
 
                 <br />
 
@@ -542,7 +542,7 @@
             var table = document.getElementById("uploadList");
             for (var i = 0, row; row = table.rows[i]; i++) {
                 //iterate through rows
-                var file = table.rows[i].cells[0].innerText;              
+                var file = table.rows[i].cells[0].innerText;
 
                 $.ajax({
                     url: "/Accountant/DeleteFile",
@@ -561,7 +561,7 @@
 
         function ResetFunction() {
 
-            
+
             var EntryAmount = document.getElementById("EntryTable").rows.length;
             var Amount = document.getElementById("uploadList").rows.length;
             if (Amount > 0) {
@@ -594,13 +594,35 @@
 
     </script>
 
+    <script>
+
+        function PageID() {
+
+            var str = window.location.pathname;
+            var newstr = str.replace("/Accountant/EditJournal/", "");
+            return newstr;
+        }
+
+    </script>
+
 
     @section Scripts{
         <script src="~/Scripts/jquery.filedrop.js"></script>
         <script type="text/javascript">
+
+            
         $(function () {
+
+            var TestParameter = "dd";
+
             $('#dropArea').filedrop({
-                url: '@Url.Action("UploadFiles")',
+                
+                //url: 'Account/UploadEditedFiles?id=' + window.location.pathname + '',
+
+                url: '@Url.Action("UploadEditedFiles", "Accountant")?id=' + window.location.pathname,
+
+                @*url: '@Url.Action("UploadEditedFiles", "Accountant", new { id = TestParameter })',*@
+                @*url: '@Url.Action("UploadEditedFiles")',*@
                 allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
                 allowedfileextensions: ['.JPG', '.jpg', '.JPEG', '.jpeg', '.PNG', '.png', '.GIF', '.gif', '.txt', '.TXT', '.doc', '.DOC', '.docx', '.DOCX', '.pdf', '.PDF', '.xls', '.XLS', '.xlsx', '.XLSX'],
                 fallback_id: 'input',
@@ -625,62 +647,32 @@
     <script>
 
         function AppendToUploadList(fileName) {
+                      
 
-            var Number;
-
-            $.ajax(
-                {
-                    url: '/Accountant/GetLatestEntryIdforFile/',
-                    type: "GET",
-                    async: false,
-                    dataType: "json",
-                    contentType: "application/json;",                    
-                    success: function (result) {
-                        //alert(result);
-                        Number = result;
-
-                    },
-                    error: function (error) {
-                        alert(JSON.stringify(error));
-                    }
-                });
+            var str = window.location.pathname;
+            var Number = str.replace("/Accountant/EditJournal/", "");
+            
 
             var table = document.getElementById("uploadList");
             var row = table.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             // the ../ goes back one directory, needed to prevent calling Accountant twice
-            cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id="+ Number +"\" target=\"_blank\">" + fileName + "</a>";            
-            cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';            
+            cell1.innerHTML = "<a href=\"../../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
+            cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
         }
 
         function DeleteFile(button) {
-            
-            var Number;
 
-            $.ajax(
-                {
-                    url: '/Accountant/GetLatestEntryIdforFile/',
-                    type: "GET",
-                    async: false,
-                    dataType: "json",
-                    contentType: "application/json;",
-                    success: function (result) {
-                        //alert(result);
-                        Number = result;
-
-                    },
-                    error: function (error) {
-                        alert(JSON.stringify(error));
-                    }
-                });
+            var str = window.location.pathname;
+            var Number = str.replace("/Accountant/EditJournal/", "");
 
 
             var row = $(button).closest('tr');
             var table = document.getElementById("uploadList");
 
             var file = table.rows[row[0].rowIndex].cells[0].innerText;
-            
+
             $.ajax({
                 url: "/Accountant/DeleteFile",
                 contentType: "application/json; charset=utf-8",
@@ -754,8 +746,8 @@
             var table = $("#EntryTable")[0];
 
             //Get Account Listed In Table
-            var ActualAccount = table.rows[row[0].rowIndex].cells[1].innerText;        
-            
+            var ActualAccount = table.rows[row[0].rowIndex].cells[1].innerText;
+
 
             //Add account back to drop down list
             var x = document.getElementById("AccountNumber");
@@ -864,6 +856,271 @@
 
 
             //Sort Account list
+            //$("#AccountNumber").html($('#AccountNumber option').sort(function (x, y) {
+            //    return $(x).text() < $(y).text() ? -1 : 1;
+            //}))
+
+
+            ////Add default option at top
+            //var x = document.getElementById("AccountNumber");
+            //var option = document.createElement("option");
+            //option.text = "Please select an account";
+            //x.add(option, 0);
+
+            ////Select first item
+            //$("#AccountNumber").get(0).selectedIndex = 0;
+
+
+            var str = window.location.pathname;
+            var newstr = str.replace("/Accountant/EditJournal/", "");
+
+            //alert(newstr);
+            GetTransactions(newstr);
+            GetAllRelatedFiles(newstr);
+
+        });
+
+    </script>
+
+    <script>
+
+        function GetAllRelatedFiles(Id) {
+
+            var Query;
+
+            $.ajax(
+                {
+                    url: '/Accountant/GetAllFiles/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    data: { "id": Id },
+                    success: function (result) {
+                        //alert(result);
+                        Query = result;
+
+                    },
+                    error: function (error) {
+                        alert(JSON.stringify(error));
+                    }
+                });
+
+            var File = Query.match(/FileName.*?,"F/);
+
+            //var Newm = QueryString.match(/AccountName.*?,"EntryId/);
+
+            if (File != null) {
+                //var f = File.toString();
+
+
+                var QueryCopy = Query;
+                var QueryString = QueryCopy.toString();
+                var found = 0;
+                while (found != -1) {
+
+                    var m = QueryString.match(/FileName.*?,"F/);
+                    var m2 = m.toString();
+
+                    var m3 = m2.replace("FileName\":\"", "");
+                    var fileName = m3.replace("\",\"F", "");
+
+
+                    var str = window.location.pathname;
+                    var Number = str.replace("/Accountant/EditJournal/", "");
+
+
+                    var table = document.getElementById("uploadList");
+                    var row = table.insertRow();
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    // the ../ goes back one directory, needed to prevent calling Accountant twice
+                    cell1.innerHTML = "<a href=\"../../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
+                    cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
+
+                    //download needs fixed with id parameter
+
+                    QueryString = QueryString.replace(m2, "");
+                    var Newm = QueryString.match(/FileName.*?,"F/);
+
+                    if (Newm == null) {
+                        break;
+                    }
+                    var New = Newm.toString();
+                    found = New.indexOf(New);
+
+                }
+                
+            }
+
+
+        }
+
+        function GetTransactions(Id) {
+
+            @*$.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetAllTransactions")',
+                data: { "id": Id },
+                dataType: 'json',
+                success: function (data) {
+                    alert(data);
+                    //$('#id').text(emp.employee.Id);
+                    //$('#firstName').text(emp.employee.FirstName);
+                    //$('#lastName').text(emp.employee.LastName);
+                },
+                error: function (emp) {
+                    alert('error');
+                }
+            });*@
+
+            var Query;
+
+            $.ajax(
+                {
+                    url: '/Accountant/GetAllTransactions/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    data: { "id": Id },
+                    success: function (result) {
+                        //alert(result);
+                        Query = result;
+
+                    },
+                    error: function (error) {
+                        alert(JSON.stringify(error));
+                    }
+                });
+
+
+            //Get the comment
+            var Comment = Query.match(/AccountantComment.*?,"/);
+            var C = Comment.toString();
+            var pos = C.indexOf("null");
+
+            if (pos == -1) {
+                //Pos equals = -1 so null was not found
+                //There is a comment
+                var CommentFix = C.replace("AccountantComment\":\"", "");
+                var CommentFix2 = CommentFix.replace("\",\"", "");
+                var Comm = document.getElementById("Comment")
+                Comm.value = CommentFix2;
+            }
+
+
+            //Get the entry type
+            var Entry = Query.match(/Entry_Type.*?}/);
+            var E = Entry.toString();
+            var E2 = E.replace("Entry_Type\":\"", "");
+            var textToFind = E2.replace("\"}", "");
+
+            //Set the drop down equal to the text
+            var dd = document.getElementById('EntryType');
+            for (var i = 0; i < dd.options.length; i++) {
+                if (dd.options[i].text === textToFind) {
+                    dd.selectedIndex = i;
+                    break;
+                }
+            }
+
+            var QueryCopy = Query;
+            var QueryString = QueryCopy.toString();
+            var found = 0;
+            while (found!=-1) {
+                // code block to be executed
+                var m = QueryString.match(/AccountName.*?,"EntryId/);
+                var m2 = m.toString();
+
+                var m3 = m2.replace("AccountName\":\"", "");
+                var m4 = m3.replace(",\"EntryId", "");
+                var m5 = m4.replace("\"Debit\":", "");
+                var m6 = m5.replace("\"Credit\":", "");
+
+                var m7 = m6.replace(/"/g, "");
+
+                
+                var Result = m7.split(",");
+
+
+                var table = document.getElementById("EntryTable");
+                var row = table.insertRow();
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                var cell5 = row.insertCell(4);
+
+
+                var acc = Result[0];
+                var deb = Result[1];
+                var cre = Result[2];
+
+
+                if (deb == "null") {
+                    //credit is entered, add padding to tab over the account name
+                    cell2.innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">" + acc + "</span>";
+
+                    var CreMoney = formatMoney(cre);
+
+                    cell4.innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + CreMoney + "</span>";
+
+                    //cell4.innerHTML = CreMoney;
+                } else {
+                    //debit is entered, no padding needed
+                    cell2.innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">" + acc + "</span>";
+
+                    var DebMoney = formatMoney(deb);
+
+                    cell3.innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + DebMoney + "</span>";
+
+                }
+
+
+                //Add delete button to last column
+                cell5.innerHTML = '<input type="button" title=\"Click to Remove Row\" class="deletebutton" onclick="RemoveLine(this)"/>';
+
+
+                //Add delete button to last column
+                cell5.innerHTML = '<input type="button" title=\"Click to Remove Row\" class="deletebutton" onclick="RemoveLine(this)"/>';
+                
+
+
+                QueryString = QueryString.replace(m2, "");
+                var Newm = QueryString.match(/AccountName.*?,"EntryId/);
+                
+                if (Newm == null) {
+                    break;
+                }
+                var New = Newm.toString();
+                found = New.indexOf(New);
+
+            }
+
+            PlaceDollarSign();
+            AdjustTotals();
+            AddDateToTable();
+            PrepareAccountDropDown();
+
+        }
+
+    </script>
+
+    <script>
+
+        function PrepareAccountDropDown() {
+
+            var table = document.getElementById("EntryTable");
+
+            for (var i = 2; i < table.rows.length; i++) {
+                var account = table.rows[i].cells[1].innerText;
+
+                RemoveAccountfromList(account);
+            }
+
+
+            //Sort Account list
             $("#AccountNumber").html($('#AccountNumber option').sort(function (x, y) {
                 return $(x).text() < $(y).text() ? -1 : 1;
             }))
@@ -877,8 +1134,19 @@
 
             //Select first item
             $("#AccountNumber").get(0).selectedIndex = 0;
+            
+        }
 
-        });
+        function RemoveAccountfromList(account) {
+            var select = document.getElementById("AccountNumber");
+
+            for (i = 0; i < select.length; i++) {
+                if (select.options[i].innerText == account) {
+                    select.remove(i);
+                }
+            }
+
+        }
 
     </script>
 
@@ -947,8 +1215,8 @@
                     setTimeout(function () {
                         throttle = false;
                     }, 1000);
-                    
-                    
+
+
                     if (x.innerHTML.indexOf("TempAccountList") !== -1) {
                         //X is a drop down list, prevent creating another list
                         return;
@@ -979,7 +1247,7 @@
                     var AccountList = document.getElementById("AccountNumber");
 
                     var ListClone = AccountList.cloneNode(true);
-                                                            
+
 
                     //Add current account to top of list
                     var option = document.createElement("option");
@@ -989,7 +1257,7 @@
 
                     x.setAttribute('style', 'padding-left: 0%');
                     ListClone.setAttribute('id', 'TempAccountList');
-                    ListClone.setAttribute("onchange", "EditAccountExit()"); 
+                    ListClone.setAttribute("onchange", "EditAccountExit()");
                     var newDiv = document.createElement("TempAccountList");  //Create a new div element
 
                     newDiv.appendChild(ListClone);  //Add the list to the newly created div
@@ -1029,7 +1297,7 @@
             var index = AccountSelect.selectedIndex;
 
             var RowNum = FindTempListRow();
-            
+
             var DebitCell = table.rows[RowNum].cells[2].innerText;
             var CreditCell = table.rows[RowNum].cells[3].innerText;
 
@@ -1054,7 +1322,7 @@
                 SortAccountList();
             }
 
-            
+
             if (DebitCell != "") {
                 //It is a debit
                 table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
@@ -1215,7 +1483,7 @@
 
     <script>
         function AppendToList() {
-                        
+
             var Elem = document.getElementById('AccountEntryError');
 
             if (Elem.innerText != "") {
@@ -1274,7 +1542,7 @@
 
 
             var table = document.getElementById("EntryTable");
-            
+
 
             //Get text value of drop down
             var AccountSelect = document.getElementById("AccountNumber");
@@ -1374,7 +1642,7 @@
             var cell3 = row.insertCell(2);
             var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4);
-            
+
 
 
             if (cre != "") {
@@ -1384,7 +1652,8 @@
                 var CreMoney = formatMoney(cre);
 
                 cell4.innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + CreMoney + "</span>";
-                
+
+                //cell4.innerHTML = CreMoney;
             } else {
                 //debit is entered, no padding needed
                 cell2.innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">" + acc + "</span>";
@@ -1447,7 +1716,7 @@
                     table.rows[j].cells[0].innerText = "";
                 }
 
-                
+
             }
         }
 
@@ -1543,10 +1812,10 @@
                 var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
                 var Acc4 = Acc3.replace("</span>", "");
                 var AccFix = Acc4;
-                
+
                 transaction.AccountName = AccFix;
 
-                
+
                 var DebitFix = row.find("TD").eq(2).html();
                 var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
                 var DebitFx2 = DebitFx.replace("</span>", "")
@@ -1565,20 +1834,41 @@
                 transactions.push(transaction);
             });
 
+            var str = window.location.pathname;
+            var Number = str.replace("/Accountant/EditJournal/", "");
+            
+
+            $.ajax({
+                url: "/Accountant/DeleteEntriesforEdit",
+                contentType: "application/json; charset=utf-8",
+                data: "{'id': '" + Number + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
+                }
+            });
+
+
             //Send the JSON array to Controller using AJAX.
             $.ajax({
                 type: "POST",
-                url: "/Accountant/InsertJournal",
-                data: JSON.stringify(transactions),
+                url: "/Accountant/InsertEditedJournal",
+                data: JSON.stringify({transactions, id: Number }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (r) {
                     //alert(r + " record(s) inserted.");
                     alert("Journal Saved!");
+                },
+                error: function (xhr, status, error) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
                 }
             });
-
-            ResetFunction();
+            window.location.href = '../../Accountant/AccountantIndex';
+            //location.reload;
+            //ResetFunction();
 
         });
 
@@ -1669,7 +1959,7 @@
                 var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
                 var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
                 var Acc4 = Acc3.replace("</span>", "");
-                
+
                 var AccFix = Acc4;
 
                 transaction.AccountName = AccFix;
@@ -1686,7 +1976,7 @@
 
                 var CreditFix = row.find("TD").eq(3).html();
                 var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-                var CreditFix3 = CreditFix2.replace("</span>", "")                
+                var CreditFix3 = CreditFix2.replace("</span>", "")
                 var CreditFix3 = StripMoneyFormatting(CreditFix3);
 
                 transaction.Credit = CreditFix3;
@@ -1695,19 +1985,53 @@
             });
 
             //Send the JSON array to Controller using AJAX.
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/Accountant/InsertJournal",
+            //    data: JSON.stringify(transactions),
+            //    contentType: "application/json; charset=utf-8",
+            //    dataType: "json",
+            //    success: function (r) {
+            //        alert(r + " record(s) inserted.");
+            //    }
+            //});
+
+            var str = window.location.pathname;
+            var Number = str.replace("/Accountant/EditJournal/", "");
+
+            $.ajax({
+                url: "/Accountant/DeleteEntriesforEdit",
+                contentType: "application/json; charset=utf-8",
+                data: "{'id': '" + Number + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
+                }
+            });
+
+
+            //Send the JSON array to Controller using AJAX.
             $.ajax({
                 type: "POST",
-                url: "/Accountant/InsertJournal",
-                data: JSON.stringify(transactions),
+                url: "/Accountant/InsertEditedJournal",
+                data: JSON.stringify({ transactions, id: Number }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (r) {
                     //alert(r + " record(s) inserted.");
                     alert("Journal Submitted!");
+                },
+                error: function (xhr, status, error) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
                 }
-            });            
+            });
 
-            ResetFunction();
+            window.location.href = '../../Accountant/AccountantIndex';
+            //ResetFunction();
+            //location.reload();
+            
 
         });
 
@@ -1716,39 +2040,39 @@
 
     @* Old Upload file script *@
     @*<script>
-        function UploadFiles() {
-            var files = $("#fileInput").get(0).files;
+            function UploadFiles() {
+                var files = $("#fileInput").get(0).files;
 
-            if (files.length == 0) {
-                //no files attached, do not upload
-                return;
-            }
-
-            var fileData = new FormData();
-
-
-            for (var i = 0; i < files.length; i++) {
-                fileData.append("fileInput", files[i]);
-            }
-
-
-            $.ajax({
-                type: "POST",
-                url: "/Accountant/UploadFiles",
-                dataType: "json",
-                contentType: false, // Not to set any content header
-                processData: false, // Not to process data
-                data: fileData,
-                success: function (result, status, xhr) {
-                    alert(result);
-                },
-                error: function (xhr, status, error) {
-                    alert(status);
+                if (files.length == 0) {
+                    //no files attached, do not upload
+                    return;
                 }
 
-            });
-        };
+                var fileData = new FormData();
 
-    </script>*@
+
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append("fileInput", files[i]);
+                }
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Accountant/UploadFiles",
+                    dataType: "json",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result, status, xhr) {
+                        alert(result);
+                    },
+                    error: function (xhr, status, error) {
+                        alert(status);
+                    }
+
+                });
+            };
+
+        </script>*@
 </body>
 </html>

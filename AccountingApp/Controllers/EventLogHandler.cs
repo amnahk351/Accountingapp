@@ -331,6 +331,42 @@ namespace AccountingApp.Controllers
                 });
             }            
         }
-        
+
+
+        public void LogEditedJournalEntry(string Username, string EntryID, string type)
+        {
+            string ip = HttpContext.Current.Request.UserHostAddress;
+            EventLog model = new EventLog();
+
+
+            model.Date = DateTime.Now;
+            model.UserID = FindUserId(Username);
+            model.From = "";
+            model.To = Username + " " + type + " Journal Entry, " + EntryID;
+            model.IPAddress = ip;
+            model.Screen = "EditJournal";
+            model.Access_Level = "All";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
+                    "[From], [To], IPAddress, Screen, AccessLevel) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
+                db.Execute(sql, new
+                {
+
+                    Date = model.Date,
+                    UserID = model.UserID,
+                    From = model.From,
+                    To = model.To,
+                    IPAddress = model.IPAddress,
+                    Screen = model.Screen,
+                    AccessLevel = model.Access_Level
+
+                });
+            }
+        }
+
     }
 }
