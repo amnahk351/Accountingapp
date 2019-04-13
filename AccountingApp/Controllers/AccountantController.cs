@@ -279,9 +279,9 @@ namespace AccountingApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteFile(string file) {
+        public ActionResult DeleteFile(string file, int id) {
 
-            int EntryID = GetLatestEntryId() + 1;
+            //int EntryID = GetLatestEntryId() + 1;
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -290,7 +290,7 @@ namespace AccountingApp.Controllers
                 db.Execute(sql, new
                 {
                     File = file,
-                    ID = EntryID
+                    ID = id
                 });                
 
             }
@@ -303,35 +303,30 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult UploadFiles()
         {
-            //Database1Entities7 entities = new Database1Entities7();
-            //var mostRecentEntryID = entities.Transactions.ToList().Select(eID => eID.EntryId).LastOrDefault() + 1;  //add a 1 to match folder with EntryId
-            //string foldername = mostRecentEntryID.ToString();
-
-            //string folder = Server.MapPath(string.Format("~/User_Uploads/{0}/", foldername));
-
-            //if (!Directory.Exists(folder)) {
-            //    Directory.CreateDirectory(folder);
-            //}
-
-            //string location = "~/User_Uploads/" + foldername + "/";
-
-            //string path = Server.MapPath(location);
-
-            //HttpFileCollectionBase files = Request.Files;
-            //for (int i = 0; i < files.Count; i++)
-            //{
-            //    FileUploadService service = new FileUploadService();
-            //    HttpPostedFileBase file = files[i];
-            //    file.SaveAs(path + file.FileName);
-            //}
-            //return Json(files.Count + " Files Uploaded!");
-
             HttpFileCollectionBase files = Request.Files;
             for (int i = 0; i < files.Count; i++)
             {
                 FileUploadService service = new FileUploadService();
                 HttpPostedFileBase file = files[i];
                 service.SaveFileDetails(file);
+            }
+            return Json(files.Count + " Files Uploaded!");
+
+        }        
+
+        [HttpPost]
+        public ActionResult UploadEditedFiles(string id)
+        {
+            string str = id.Replace("/Accountant/EditJournal/", "");
+            int x = Int32.Parse(str);
+
+
+            HttpFileCollectionBase files = Request.Files;
+            for (int i = 0; i < files.Count; i++)
+            {
+                FileUploadService service = new FileUploadService();
+                HttpPostedFileBase file = files[i];
+                service.SaveEditedFileDetails(file, x);
             }
             return Json(files.Count + " Files Uploaded!");
 
@@ -446,17 +441,9 @@ namespace AccountingApp.Controllers
         public void SaveFileDetails(HttpPostedFileBase file)
         {
             int newID = GetLatestEntryId();
-            //DocumentsTable newFile = new DocumentsTable();
-            //UploadedFiles newFile = new UploadedFiles();
-            //newFile.ContentType = file.ContentType;
-            //newFile.FileBytes = ConvertToBytes(file);
-            //newFile.FileName = file.FileName;
-            //newFile.FK_EntryId = newID + 1;
-
-
+            
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-
                 string sql = $"Insert into dbo.DocumentsTable (FileBytes, ContentType, " +
                     "FileName, FK_EntryId)" +
                     "values(@FileBytes,@ContentType,@FileName,@FK_EntryId)";
@@ -469,13 +456,24 @@ namespace AccountingApp.Controllers
                 });
             }
 
+        }
 
+        public void SaveEditedFileDetails(HttpPostedFileBase file, int id)
+        {
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                string sql = $"Insert into dbo.DocumentsTable (FileBytes, ContentType, " +
+                    "FileName, FK_EntryId)" +
+                    "values(@FileBytes,@ContentType,@FileName,@FK_EntryId)";
+                db.Execute(sql, new
+                {
+                    FileBytes = ConvertToBytes(file),
+                    ContentType = file.ContentType,
+                    FileName = file.FileName,
+                    FK_EntryId = id
+                });
+            }
 
-            //using (FileUploadEntities dataContext = new FileUploadEntities())
-            //{
-            //    dataContext.UploadedFiles.AddObject(newFile);
-            //    dataContext.SaveChanges();
-            //}
         }
 
         public byte[] ConvertToBytes(HttpPostedFileBase file)

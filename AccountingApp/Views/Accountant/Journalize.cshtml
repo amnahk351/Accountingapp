@@ -84,7 +84,7 @@
 
         table.uploadList {
             font-family: Arial, Helvetica, sans-serif;
-            background-color: #97E0EF;
+            background-color: #c0d0e5;
             text-align: left;
         }
 
@@ -94,10 +94,12 @@
 
             table.uploadList tbody td {
                 font-size: 15px;
+                padding: 8px;
+                border-bottom: 2px solid deepskyblue;
             }
 
             table.uploadList tr:nth-child(even) {
-                background: #A3F5CE;
+                background: #d1d4d6;
             }
 
         .Account-Select {
@@ -643,22 +645,37 @@
                     }
                 });
 
-            //var number = parseInt(Query);
-
-            //var NewNumber = number+1,
-            //alert(NewNumber);
-
             var table = document.getElementById("uploadList");
             var row = table.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             // the ../ goes back one directory, needed to prevent calling Accountant twice
             cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id="+ Number +"\" target=\"_blank\">" + fileName + "</a>";            
-            cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
-            
+            cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';            
         }
 
         function DeleteFile(button) {
+            
+            var Number;
+
+            $.ajax(
+                {
+                    url: '/Accountant/GetLatestEntryIdforFile/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    success: function (result) {
+                        //alert(result);
+                        Number = result;
+
+                    },
+                    error: function (error) {
+                        alert(JSON.stringify(error));
+                    }
+                });
+
+
             var row = $(button).closest('tr');
             var table = document.getElementById("uploadList");
 
@@ -668,6 +685,7 @@
                 url: "/Accountant/DeleteFile",
                 contentType: "application/json; charset=utf-8",
                 data: "{'file': '" + file + "'}",
+                data: "{'file':'" + file + "', 'id':'" + Number + "'}",
                 type: 'POST',
                 cache: false,
                 success: function (result) {

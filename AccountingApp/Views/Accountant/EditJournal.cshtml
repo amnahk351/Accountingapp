@@ -84,7 +84,7 @@
 
         table.uploadList {
             font-family: Arial, Helvetica, sans-serif;
-            background-color: #97E0EF;
+            background-color: #c0d0e5;
             text-align: left;
         }
 
@@ -94,10 +94,12 @@
 
             table.uploadList tbody td {
                 font-size: 15px;
+                padding: 8px;
+                border-bottom: 2px solid deepskyblue;
             }
 
             table.uploadList tr:nth-child(even) {
-                background: #A3F5CE;
+                background: #d1d4d6;
             }
 
         .Account-Select {
@@ -592,13 +594,35 @@
 
     </script>
 
+    <script>
+
+        function PageID() {
+
+            var str = window.location.pathname;
+            var newstr = str.replace("/Accountant/EditJournal/", "");
+            return newstr;
+        }
+
+    </script>
+
 
     @section Scripts{
         <script src="~/Scripts/jquery.filedrop.js"></script>
         <script type="text/javascript">
+
+            
         $(function () {
+
+            var TestParameter = "dd";
+
             $('#dropArea').filedrop({
-                url: '@Url.Action("UploadFiles")',
+                
+                //url: 'Account/UploadEditedFiles?id=' + window.location.pathname + '',
+
+                url: '@Url.Action("UploadEditedFiles", "Accountant")?id=' + window.location.pathname,
+
+                @*url: '@Url.Action("UploadEditedFiles", "Accountant", new { id = TestParameter })',*@
+                @*url: '@Url.Action("UploadEditedFiles")',*@
                 allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
                 allowedfileextensions: ['.JPG', '.jpg', '.JPEG', '.jpeg', '.PNG', '.png', '.GIF', '.gif', '.txt', '.TXT', '.doc', '.DOC', '.docx', '.DOCX', '.pdf', '.PDF', '.xls', '.XLS', '.xlsx', '.XLSX'],
                 fallback_id: 'input',
@@ -623,18 +647,27 @@
     <script>
 
         function AppendToUploadList(fileName) {
+                      
+
+            var str = window.location.pathname;
+            var Number = str.replace("/Accountant/EditJournal/", "");
+            
 
             var table = document.getElementById("uploadList");
             var row = table.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             // the ../ goes back one directory, needed to prevent calling Accountant twice
-            cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "\" target=\"_blank\">" + fileName + "</a>";
+            cell1.innerHTML = "<a href=\"../../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
             cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
-
         }
 
         function DeleteFile(button) {
+
+            var str = window.location.pathname;
+            var Number = str.replace("/Accountant/EditJournal/", "");
+
+
             var row = $(button).closest('tr');
             var table = document.getElementById("uploadList");
 
@@ -644,6 +677,7 @@
                 url: "/Accountant/DeleteFile",
                 contentType: "application/json; charset=utf-8",
                 data: "{'file': '" + file + "'}",
+                data: "{'file':'" + file + "', 'id':'" + Number + "'}",
                 type: 'POST',
                 cache: false,
                 success: function (result) {
@@ -863,7 +897,7 @@
                     contentType: "application/json;",
                     data: { "id": Id },
                     success: function (result) {
-                        alert(result);
+                        //alert(result);
                         Query = result;
 
                     },
@@ -889,9 +923,20 @@
                     var m2 = m.toString();
 
                     var m3 = m2.replace("FileName\":\"", "");
-                    var file = m3.replace("\",\"F", "");
+                    var fileName = m3.replace("\",\"F", "");
 
 
+                    var str = window.location.pathname;
+                    var Number = str.replace("/Accountant/EditJournal/", "");
+
+
+                    var table = document.getElementById("uploadList");
+                    var row = table.insertRow();
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    // the ../ goes back one directory, needed to prevent calling Accountant twice
+                    cell1.innerHTML = "<a href=\"../../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
+                    cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
 
                     //download needs fixed with id parameter
 
@@ -907,9 +952,6 @@
                 }
                 
             }
-
-            
-            var pos = C.indexOf("null");
 
 
         }
