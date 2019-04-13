@@ -56,7 +56,7 @@ namespace AccountingApp.Controllers
             }
                         
             var result = JsonConvert.SerializeObject(transactions);
-            System.Diagnostics.Debug.WriteLine("json: " + result);
+            //System.Diagnostics.Debug.WriteLine("json: " + result);
             
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -72,7 +72,7 @@ namespace AccountingApp.Controllers
             }
 
             var result = JsonConvert.SerializeObject(files);
-            System.Diagnostics.Debug.WriteLine("json: " + result);
+            //System.Diagnostics.Debug.WriteLine("json: " + result);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -233,6 +233,113 @@ namespace AccountingApp.Controllers
             return Json(insertedRecords);
         }
 
+
+        [HttpPost]
+        public JsonResult InsertEditedJournal(Transaction[] transactions, string id)
+        {
+            int insertedRecords = 0;
+            int EditedEntryID = Int32.Parse(id);
+            var sessionUser = Session["Username"] as string;
+            EventLogHandler Logger = new EventLogHandler();
+
+            System.Diagnostics.Debug.WriteLine("trans: " + transactions);
+            System.Diagnostics.Debug.WriteLine("id: " + id);
+
+            string type = "";
+
+            if (transactions[0].Status == "pending")
+            {
+                type = "Submitted";
+            }
+            else
+            {
+                type = "Suspended";
+            }
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                for (int i = 1; i < transactions.Length; i++)
+                {
+                    //if was submitted today added the current time to the database
+
+                    //if submitted on another day, default the time to 12
+
+                    if (i == 1)
+                    {
+                        var DatetoUse = DateTime.Now;
+                        System.Diagnostics.Debug.WriteLine("Date Now: " + DatetoUse);
+                        System.Diagnostics.Debug.WriteLine("Date: " + transactions[i].DateSubmitted);
+
+                        var TodayString = DatetoUse.ToString();
+                        string[] Pieces = TodayString.Split(' ');
+                        string JustDate = Pieces[0];
+
+
+                        string SavedDate = transactions[i].DateSubmitted.ToString();
+                        string[] Pieces2 = SavedDate.Split(' ');
+                        string JustDate2 = Pieces2[0];
+
+                        if (JustDate != JustDate2)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Other date: " + (DateTime)transactions[i].DateSubmitted);
+                            DatetoUse = (DateTime)transactions[i].DateSubmitted;
+                        }
+
+                        string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
+                        "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)" +
+                        "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," +
+                        "@Debit,@Credit,@EntryId,@Entry_Type)";
+
+                        db.Execute(sql, new
+                        {
+                            AccountantUsername = sessionUser,
+                            AccountantComment = transactions[i].AccountantComment,
+                            DateSubmitted = DatetoUse,
+                            Status = transactions[i].Status,
+                            AccountName = transactions[i].AccountName,
+                            Debit = transactions[i].Debit,
+                            Credit = transactions[i].Credit,
+                            EntryId = EditedEntryID,
+                            Entry_Type = transactions[i].Entry_Type
+                        });
+
+                        insertedRecords++;
+
+                    }
+                    else
+                    {
+                        string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
+                        "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)" +
+                        "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," +
+                        "@Debit,@Credit,@EntryId,@Entry_Type)";
+
+                        db.Execute(sql, new
+                        {
+                            AccountantUsername = sessionUser,
+                            AccountantComment = transactions[i].AccountantComment,
+                            DateSubmitted = transactions[i].DateSubmitted,
+                            Status = transactions[i].Status,
+                            AccountName = transactions[i].AccountName,
+                            Debit = transactions[i].Debit,
+                            Credit = transactions[i].Credit,
+                            EntryId = EditedEntryID,
+                            Entry_Type = transactions[i].Entry_Type
+                        });
+
+                        insertedRecords++;
+
+                    }
+                }
+
+                Logger.LogEditedJournalEntry(sessionUser, EditedEntryID.ToString(), type);
+
+            }
+
+            return Json(insertedRecords);
+        }
+
+
         private static byte[] getBytes(string file, int id)
         {
             using (SqlConnection cn = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -296,6 +403,24 @@ namespace AccountingApp.Controllers
             }
 
             return Json("File, " + file + ", Deleted!");
+        }
+
+        [HttpPost]
+        public ActionResult DeleteEntriesforEdit(string id)
+        {
+            int x = Int32.Parse(id);
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                string sql = $"DELETE FROM dbo.TransactionTable WHERE EntryId=@ID";
+
+                db.Execute(sql, new
+                {
+                    ID = x
+                });
+
+            }
+
+            return Json("Entries Deleted!");
         }
 
         //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html

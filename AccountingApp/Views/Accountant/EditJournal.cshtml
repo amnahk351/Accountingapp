@@ -676,7 +676,7 @@
             $.ajax({
                 url: "/Accountant/DeleteFile",
                 contentType: "application/json; charset=utf-8",
-                data: "{'file': '" + file + "'}",
+                //data: "{'file': '" + file + "'}",
                 data: "{'file':'" + file + "', 'id':'" + Number + "'}",
                 type: 'POST',
                 cache: false,
@@ -1009,6 +1009,21 @@
                 Comm.value = CommentFix2;
             }
 
+
+            //Get the entry type
+            var Entry = Query.match(/Entry_Type.*?}/);
+            var E = Entry.toString();
+            var E2 = E.replace("Entry_Type\":\"", "");
+            var textToFind = E2.replace("\"}", "");
+
+            //Set the drop down equal to the text
+            var dd = document.getElementById('EntryType');
+            for (var i = 0; i < dd.options.length; i++) {
+                if (dd.options[i].text === textToFind) {
+                    dd.selectedIndex = i;
+                    break;
+                }
+            }
 
             var QueryCopy = Query;
             var QueryString = QueryCopy.toString();
@@ -1793,8 +1808,6 @@
 
 
                 var Acc2 = row.find("TD").eq(1).html();
-                //var Acc3 = Acc2.replace("<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\">", "");
-
                 var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
                 var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
                 var Acc4 = Acc3.replace("</span>", "");
@@ -1821,19 +1834,41 @@
                 transactions.push(transaction);
             });
 
-            //Send the JSON array to Controller using AJAX.
+            var str = window.location.pathname;
+            var Number = str.replace("/Accountant/EditJournal/", "");
+            
+
             $.ajax({
-                type: "POST",
-                url: "/Accountant/InsertJournal",
-                data: JSON.stringify(transactions),
+                url: "/Accountant/DeleteEntriesforEdit",
                 contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (r) {
-                    alert(r + " record(s) inserted.");
+                data: "{'id': '" + Number + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
                 }
             });
 
-            ResetFunction();
+
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/Accountant/InsertEditedJournal",
+                data: JSON.stringify({transactions, id: Number }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    //alert(r + " record(s) inserted.");
+                    alert("Journal Saved!");
+                },
+                error: function (xhr, status, error) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
+                }
+            });
+            window.location.href = '../../Accountant/AccountantIndex';
+            //location.reload;
+            //ResetFunction();
 
         });
 
@@ -1950,18 +1985,53 @@
             });
 
             //Send the JSON array to Controller using AJAX.
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/Accountant/InsertJournal",
+            //    data: JSON.stringify(transactions),
+            //    contentType: "application/json; charset=utf-8",
+            //    dataType: "json",
+            //    success: function (r) {
+            //        alert(r + " record(s) inserted.");
+            //    }
+            //});
+
+            var str = window.location.pathname;
+            var Number = str.replace("/Accountant/EditJournal/", "");
+
             $.ajax({
-                type: "POST",
-                url: "/Accountant/InsertJournal",
-                data: JSON.stringify(transactions),
+                url: "/Accountant/DeleteEntriesforEdit",
                 contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (r) {
-                    alert(r + " record(s) inserted.");
+                data: "{'id': '" + Number + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
                 }
             });
 
-            ResetFunction();
+
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/Accountant/InsertEditedJournal",
+                data: JSON.stringify({ transactions, id: Number }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    //alert(r + " record(s) inserted.");
+                    alert("Journal Submitted!");
+                },
+                error: function (xhr, status, error) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    //alert(err.Message);
+                }
+            });
+
+            window.location.href = '../../Accountant/AccountantIndex';
+            //ResetFunction();
+            //location.reload();
+            
 
         });
 

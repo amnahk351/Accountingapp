@@ -684,7 +684,7 @@
             $.ajax({
                 url: "/Accountant/DeleteFile",
                 contentType: "application/json; charset=utf-8",
-                data: "{'file': '" + file + "'}",
+                //data: "{'file': '" + file + "'}",
                 data: "{'file':'" + file + "', 'id':'" + Number + "'}",
                 type: 'POST',
                 cache: false,
@@ -1384,8 +1384,7 @@
                 var CreMoney = formatMoney(cre);
 
                 cell4.innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + CreMoney + "</span>";
-
-                //cell4.innerHTML = CreMoney;
+                
             } else {
                 //debit is entered, no padding needed
                 cell2.innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">" + acc + "</span>";
@@ -1540,8 +1539,6 @@
 
 
                 var Acc2 = row.find("TD").eq(1).html();
-                //var Acc3 = Acc2.replace("<span title=\"Double Click to Edit\" style=\"cursor: pointer;\" onclick=\"EditAccountEnter(this)\">", "");
-
                 var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
                 var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
                 var Acc4 = Acc3.replace("</span>", "");
@@ -1576,7 +1573,8 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (r) {
-                    alert(r + " record(s) inserted.");
+                    //alert(r + " record(s) inserted.");
+                    alert("Journal Saved!");
                 }
             });
 
@@ -1704,7 +1702,8 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (r) {
-                    alert(r + " record(s) inserted.");
+                    //alert(r + " record(s) inserted.");
+                    alert("Journal Submitted!");
                 }
             });            
 
