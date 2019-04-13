@@ -26,73 +26,74 @@
 
 <body>
    
-
-    @*Amnah*@
     <div class="shadow container" style="width:60%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
-                    <h3 class="card-title">Addams & Family Inc.</h3>
-                    <h3 class="card-title">Income Statement</h3>
-                    <hr />
-                    <h4>
+                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
+                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Income Statement</h4>
+                    @*<hr style="padding: 0px; margin: 0px;" />*@
+                    <h4 class="card-title" style="padding: 0px; margin: 0px;">
+                        For the Period Ending
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
-
-                    <table id="revenueTable" class="table-striped" style="width:500px;">
+                    @*<br />*@
+                    <hr style="border-width: 2px; border-color: black" />
+                    <table id="revenueTable" class="table-striped" style="width:510px;">
 
                         <tr class="titleRow">
-                            <th>Revenues</th>
+                            <th style="text-align: left">Revenues</th>
                             <th> </th>
                         </tr>
 
                         @for (int i = 0; i < Model.Count; i++)
-        {
-            if (Model[i].AccountType.ToLower() == "revenue")
-            {
-                <tr>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                    <td align="right">@Model[i].CurrentBalance</td>
-                </tr>
-}
-}
+                        {
+                            if (Model[i].AccountType.ToLower() == "revenue")
+                            {
+                                <tr>
+                                    <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                    <td align="right">@Model[i].CurrentBalance</td>
+                                </tr>
+                            }
+                        }
                         <tr>
-                            <td>Total Revenues</td>
-                            <td align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: solid; border-bottom-width: .2rem;">@ViewBag.RevenueTotal</td>
+                            <td style="text-align:left">Total Revenues</td>
+                            <td align="right" style="border-top: .15rem solid; border-bottom: .15rem solid; width: 128px">@ViewBag.RevenueTotal</td>
                         </tr>
 
                     </table>
 
                     <br />
 
-                    <table id="expenseTable" class="table-striped" style="width:500px;">
+                    <table id="expenseTable" class="table-striped" style="width:510px;">
 
                         <tr class="titleRow">
-                            <th>Expenses</th>
+                            <th style="text-align:left">Expenses</th>
                             <th> </th>
                         </tr>
 
                         @for (int i = 0; i < Model.Count; i++)
-    {
-        if (Model[i].AccountType.ToLower() == "expense")
-        {
-                    <tr>
-                        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                        <td align="right">@Model[i].CurrentBalance</td>
-                    </tr>
-}
-}
+                        {
+                            if (Model[i].AccountType.ToLower() == "expense")
+                            {
+                                <tr>
+                                    <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                    <td align="right">@Model[i].CurrentBalance</td>
+                                </tr>
+                            }
+                        }
 
                         <tr>
-                            <td>Total Expense</td>
-                            <td align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: solid; border-bottom-width: .2rem;">@ViewBag.ExpenseTotal</td>
+                            <td style="text-align:left">Total Expenses</td>
+                            <td align="right" style="border-top: .15rem solid; border-bottom: .15rem solid; width:128px">@ViewBag.ExpenseTotal</td>
                         </tr>
                         <tr height=20px></tr>
                         <tr>
-                            <td>Net Income (Loss)</td>
-                            <td align="right" style="border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">@ViewBag.NetIncome_Loss</td>
+                            <td style="text-align:left"><b>Net Income (Loss)</b></td>
+                            <td align="right" style="border-bottom: .4rem double">@ViewBag.NetIncome_Loss</td>
+                            @*should the top border be there? don't know if it's supposed to be removed or if the bottom double border was supposed to be removed*@
                         </tr>
                     </table>
                 </div>
@@ -103,6 +104,155 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            FormatTableAmounts();
+            //FormatTableAmounts2();
+
+            PlaceDollarSigns();
+        });
+    </script>
+
+    <script>
+
+        function FormatTableAmounts() {
+            var table = document.getElementById("revenueTable");
+            var table2 = document.getElementById("expenseTable");
+
+            //alert("Got here");
+            //alert("rows " + table.rows.length);
+            //alert("rows " + table2.rows.length);
+            for (var i = 1; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[1].innerText;
+                //var Chtml = table.rows[i].cells[1].innerText;
+
+                var newDhtml = Dhtml.replace("$", "");
+                //var newChtml = Chtml.replace("$", "");
+
+                if (newDhtml != "") {
+                    table.rows[i].cells[1].innerText = formatMoney(newDhtml);
+                }
+
+                //if (newChtml != "") {
+                //    table.rows[i].cells[1].innerText = formatMoney(newChtml);
+                //}
+
+            }
+            //alert("Got here 2");
+            for (var j = 1; j < table2.rows.length-2; j++) {
+                                
+
+                //var Dhtml = table2.rows[j].cells[1].innerText;
+                var Chtml = table2.rows[j].cells[1].innerText;
+
+                //var newDhtml = Dhtml.replace("$", "");
+                var newChtml = Chtml.replace("$", "");
+
+                //if (newDhtml != "") {
+                //    table2.rows[j].cells[1].innerText = formatMoney(newDhtml);
+                //}
+
+                if (newChtml != "") {
+                    table2.rows[j].cells[1].innerText = formatMoney(newChtml);
+                }
+
+            }
+
+            var num = table2.rows.length - 1;
+            var x = table2.rows[num].cells[1].innerText;
+            
+            table2.rows[num].cells[1].innerText = formatMoney(x);
+
+            //x.innerText =
+            //= formatMoney(newChtml);
+            //alert("Got here 3");
+        }
+
+        //function FormatTableAmounts2() {
+        //    var table2 = document.getElementById("expenseTable");
+
+
+        //    for (var i = 1; i < table2.rows.length; i++) {
+        //        //var Dhtml = table.rows[i].cells[1].innerText;
+        //        var Chtml = table2.rows[i].cells[1].innerText;
+
+        //        //var newDhtml = Dhtml.replace("$", "");
+        //        var newChtml = Chtml.replace("$", "");
+
+        //        //if (newDhtml != "") {
+        //        //    table.rows[i].cells[1].innerText = formatMoney(newDhtml);
+        //        //}
+
+        //        if (newChtml != "") {
+        //            table2.rows[i].cells[1].innerText = formatMoney(newChtml);
+        //        }
+
+        //    }
+
+        //}
+
+        function formatMoney(n, c, d, t) {
+            var c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
+        function PlaceDollarSigns() {
+            var table = document.getElementById("revenueTable");
+            var rowsNum = table.rows.length;
+
+            //Place dollar sign for debit
+            for (var k = 1; k < rowsNum; k++) {
+                var Dhtml = table.rows[k].cells[1].innerText;
+
+                if (Dhtml != "") {
+
+                    table.rows[k].cells[1].innerText = "$ " + Dhtml;
+
+
+                    break;
+                }
+
+            }
+
+            var table2 = document.getElementById("expenseTable");
+
+            var num = table2.rows.length - 1;
+            var x = table2.rows[num].cells[1].innerText;
+
+            table2.rows[num].cells[1].innerText = "$ " + x;
+
+            //Place dollar sign for credit
+            //for (var i = 1; i < rowsNum; i++) {
+            //    var Chtml = table.rows[i].cells[2].innerText;
+
+
+            //    if (Chtml != "") {
+
+            //        table.rows[i].cells[2].innerText = "$ " + Chtml;
+
+
+            //        break;
+            //    }
+            //}
+
+            //var NetIncome = table.rows[rowsNum - 1].cells[1].innerText;
+            //var TotalCredit = table.rows[rowsNum - 1].cells[2].innerText;
+
+            //table.rows[rowsNum - 1].cells[1].innerText = "$ " + NetIncome;
+            //table.rows[rowsNum - 1].cells[2].innerText = "$ " + TotalCredit;
+
+        }
+
+    </script>
+
 </body>
 
 </html>

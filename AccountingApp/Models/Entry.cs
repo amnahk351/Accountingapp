@@ -16,6 +16,7 @@ namespace AccountingApp.Models
         public List<String> accountNames { get; set; }
         public List<Decimal> debits { get; set; }
         public List<Decimal> credits { get; set; }
+        public List<DocumentsTable> files { get; set; }
 
         public Entry()
         {
@@ -23,6 +24,7 @@ namespace AccountingApp.Models
             accountNames = new List<String>();
             debits = new List<Decimal>();
             credits = new List<Decimal>();
+            files = new List<DocumentsTable>();
         }
 
         public Entry(int entryID, string status, DateTime submitDate, string comment)
@@ -35,6 +37,23 @@ namespace AccountingApp.Models
             accountNames = new List<String>();
             debits = new List<Decimal>();
             credits = new List<Decimal>();
+            files = new List<DocumentsTable>();
+        }
+
+        public string FormattedFileNames() {
+
+            string formatted = "";
+            List<String> AllFiles = new List<String>();
+
+            foreach (DocumentsTable f in files)
+            {
+                //AllFiles.Add("<a href=\"../Accountant/Download?file=" + f.FileName + "\" target=\"_blank\">" + f.FileName + "</a>");
+                AllFiles.Add(f.FileName);
+            }
+
+            formatted = string.Join(", ", AllFiles);
+
+            return formatted;
         }
 
         public string FormattedAccountNames() {

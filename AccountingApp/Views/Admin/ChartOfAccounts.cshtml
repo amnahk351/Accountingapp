@@ -229,6 +229,7 @@
 
                 </li>
             </ul>
+<<<<<<< HEAD
 
         </nav>
 
@@ -268,6 +269,178 @@
 
                                 </button>
                             </li>
+=======
+        </div>
+    </nav>*@
+
+
+    <div class="container body-content" style="width:85%; margin:0 auto">
+        <h4>Chart Of Accounts</h4>
+        <hr class="my-4" />
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                @TempData["Message"]
+            </div>
+        }
+        
+        
+            <a href="@Url.Action("NewAccount")" class="btn btn-success icon" role="button" aria-pressed="true">
+                Create Account
+            </a>       
+
+        <br />
+        <br />
+        <br />
+        <!-- Modal -->
+        @*@using (Html.BeginForm())
+            {
+
+                <form method="post" id="accountform">
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Create New Account</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+
+                                            <label for="AccountNumber">Account Number</label>
+                                            <input type="text" class="form-control" id="AccountNumber">
+
+                                        </div>
+                                        <div class="form-group col-md-6">
+
+                                            <label for="AccountName">Account Name</label>
+                                            <input type="text" class="form-control" id="AccountName">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <div class="form-group">
+                                                <label for="AccountType">Account Type</label>
+                                                <select class="form-control" id="AccountType">
+                                                    <option value="Assets">Assets</option>
+                                                    <option value="Assets">Liabilities</option>
+                                                    <option value="Assets">Equity</option>
+                                                    <option value="Assets">Revenue</option>
+                                                    <option value="Assets">Expense</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+
+                                            <div class="form-group">
+                                                <label for="NormalSide">Normal Side</label>
+                                                <select class="cutom-select form-control" id="NormalSide">
+                                                    <option value="Debit">Debit</option>
+                                                    <option value="Credit">Credit</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <div class="form-group">
+                                                <label for="OriginalBalance">Original Balance</label>
+                                                <input type="text" class="form-control text-right" id="OriginalBalance" placeholder="0.00">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <div class="form-group">
+                                                <label for="c">Current Balance</label>
+                                                <input type="text" class="form-control text-right" id="AccountDescription" placeholder="0.00">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <label for="AccountDescription">Account Description</label>
+                                        <textarea class="form-control" id="AccountDescription" rows="7"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="CreatedBy">Created By</label>
+                                        <input type="text" class="form-control" id="CreatedBy" placeholder="Admin">
+                                    </div>
+
+                                    <div class="form-group col-md-12 custom-control custom-radio">
+                                        <label for="Active">Active</label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="Active" id="Yes" value="option1">
+                                            <label class="form-check-label custom-control-label" for="Yes">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="Active" id="No" value="option2">
+                                            <label class="form-check-label custom-control-label" for="No">No</label>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    <button type="submit"  class="btn btn-primary" id="btnsubmit">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            }*@
+        <div>
+            <table id="Accountstable" class="table table-responsive table-striped">
+                <thead>
+                    <tr>
+                        <th>Account Number</th>
+                        <th>Account Name</th>
+                        <th>Account Type</th>
+                        <th>Normal Side</th>
+                        <th>Original Balance</th>
+                        <th>Current Balance</th>
+                        <th>Account Description</th>
+                        <th>Active</th>
+                        <th>Created By</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Model[i].AccountNumber</td>
+                            <td>@Model[i].AccountName</td>
+                            <td>@Model[i].AccountType</td>
+                            <td>@Model[i].NormalSide</td>
+                            <td>@Model[i].OriginalBalance</td>
+                            <td>@Model[i].CurrentBalance</td>
+                            <td>@Model[i].AccountDescription</td>
+                            <td>@(Model[i].Active ? "Y" : "N")</td>
+                            <td>@Model[i].CreatedBy</td>
+                            <td>
+
+                                <a href="@Url.Action("EditAccount", new { id = Model[i].AccountNumber})">
+                                    Edit
+                                </a>
+                                
+                            </td>
+>>>>>>> 09afc94bff8d32e466dcf5216cdea3ce1d99ff02
 
                         </ul>
                     </div>
