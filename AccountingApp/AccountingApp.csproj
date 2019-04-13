@@ -419,6 +419,7 @@
     <Content Include="Views\Manager\BalanceSheet.cshtml" />
     <Content Include="Views\Manager\RetainedEarnings.cshtml" />
     <Content Include="Views\Manager\PostClosingTrialBalance.cshtml" />
+    <Content Include="Views\Shared\_Layout_Manager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />
