@@ -420,6 +420,9 @@
     <Content Include="Views\Manager\RetainedEarnings.cshtml" />
     <Content Include="Views\Manager\PostClosingTrialBalance.cshtml" />
     <Content Include="Views\Shared\_Layout_Manager.cshtml" />
+    <Content Include="Views\Manager\ShowUserData.cshtml" />
+    <Content Include="Views\Manager\ChartOfAccounts.cshtml" />
+    <Content Include="Views\Manager\EventLog.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />

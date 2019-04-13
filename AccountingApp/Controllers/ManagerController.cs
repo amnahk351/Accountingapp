@@ -313,5 +313,47 @@ namespace AccountingApp.Controllers
         {
             return View();
         }
+
+        public ActionResult ShowUserData()
+        {
+            List<CreateUser> listUser;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                listUser = db.Query<CreateUser>($"Select * from dbo.Usertable").ToList();
+            }
+
+            return View(listUser);
+            //var item = db.CreateUsers.ToList();
+            //return View(item);
+        }
+        public ActionResult ChartOfAccounts()
+        {
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+            }
+            return View(listAccounts);
+            //var item = db.ChartOfAccs.ToList();
+            //return View(item);
+
+
+        }
+        public ActionResult EventLog()
+        {
+            List<Models.EventLog> events;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                events = db.Query<Models.EventLog>($"Select * from dbo.EventLogTable").ToList();
+            }
+
+            return View(events);
+            //Database1Entities6 db2 = new Database1Entities6();
+            //var events = db2.EventLogs.ToList();
+            //return View(events);
+        }
     }
 }

@@ -1,12 +1,31 @@
-﻿
-<!DOCTYPE html>
-<html>
+﻿@model IEnumerable<AccountingApp.Models.EventLog>
 
+@{
+    ViewBag.Title = "Event Log";
+    //Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    Layout = null;
+}
+<html>
 <head>
+
+
     <meta charset="utf-8">
-    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Bootstrap CSS -->
+    @*
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
+    @*
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
@@ -195,7 +214,7 @@
                         <li>
                             <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
                         </li>
-                       
+
 
                     </ul>
                 </li>
@@ -204,7 +223,6 @@
                     <a href="/Accountant/Journalize">
                         <i class="far fa-edit" style="margin-right:10px"></i>
 
-
                         Journalize
                     </a>
                 </li>
@@ -212,8 +230,6 @@
 
                     <a href="">
                         <i class="fas fa-book" style="margin-right:10px"></i>
-
-
 
                         General Ledger
                     </a>
@@ -289,7 +305,7 @@
                         <li>
                             <a href="/Manager/ShowUserData">User List</a>
                         </li>
-                       
+
 
                     </ul>
                     <a href="/Manager/EventLog">
@@ -344,8 +360,71 @@
                 </div>
             </nav>
 
+
+            <h4>Event Log</h4>
+            <hr />
+            <div>
+                <table class="table table-responsive table-hover shadow " id="Events" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
+                    <thead class="shadow" style="background-color:white; ">
+                    <td>
+                        @*@Html.DisplayNameFor(model => model.Event_ID)*@
+                        Event ID
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </td>
+                    <td>
+                        @*@Html.DisplayNameFor(model => model.User_ID)*@
+                        User ID
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.From)
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.To)
+                    </td>
+                    <td>
+                        @*@Html.DisplayNameFor(model => model.IP_Address)*@
+                        IP Address
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.Screen)
+                    </td>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Event_ID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User_ID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.From)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.To)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IP_Address)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Screen)
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
             <div class="container body-content">
-                @RenderBody()
 
                 <hr />
                 <footer align="center">
@@ -358,7 +437,6 @@
         </div>
 
     </div>
-
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -383,11 +461,15 @@
             });
 
         });
+        @Styles.Render("~/Content/dataTables")
+    @Scripts.Render("~/bundles/dataTables")
     </script>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            $('#Events').DataTable();
+        });
+    </script>
+
 </body>
 </html>
-

@@ -1,12 +1,21 @@
-﻿
-<!DOCTYPE html>
-<html>
+﻿@model List<AccountingApp.Models.CreateUser>
 
+@{
+    ViewBag.Title = "Current Users";
+    //Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    Layout = null;
+}
+<html>
 <head>
     <meta charset="utf-8">
-    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">*@
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
@@ -16,6 +25,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+
     <style>
         a,
         a:hover,
@@ -171,69 +182,48 @@
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar" class="fixed-left">
-
             <div class="sidebar-header">
                 <h5>Menu</h5>
             </div>
-
             <ul class="list-unstyled components">
                 <li class="active">
                     <a href="/Manager/ManagerIndex">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
-
                 </li>
                 <li>
-
                     <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-list" style="margin-right:10px;"></i>
-
                         Chart Of Accounts
                     </a>
                     <ul class="collapse list-unstyled" id="accountSubmenu">
                         <li>
                             <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
                         </li>
-                       
-
                     </ul>
                 </li>
                 <li>
-
                     <a href="/Accountant/Journalize">
                         <i class="far fa-edit" style="margin-right:10px"></i>
-
-
                         Journalize
                     </a>
                 </li>
                 <li>
-
                     <a href="">
                         <i class="fas fa-book" style="margin-right:10px"></i>
-
-
-
                         General Ledger
                     </a>
                 </li>
                 <li>
-
                     <a href="/Manager/GeneralJournal">
                         <i class="fas fa-book" style="margin-right:10px"></i>
-
-
-
                         General Journal
                     </a>
                 </li>
                 <li>
-
                     <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
-
-
                         Transactions
                     </a>
                     <ul class="collapse list-unstyled" id="transactionSubmenu">
@@ -249,15 +239,11 @@
                         <li>
                             <a href="">Suspended Transactions</a>
                         </li>
-
                     </ul>
                 </li>
                 <li>
-
                     <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="far fa-chart-bar" style="margin-right:10px"></i>
-
-
                         Reports
                     </a>
                     <ul class="collapse list-unstyled" id="reportSubmenu">
@@ -281,22 +267,17 @@
                 <li>
                     <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-users" style="margin-right:10px;"></i>
-
-
                         Users
                     </a>
                     <ul class="collapse list-unstyled" id="userSubmenu">
                         <li>
                             <a href="/Manager/ShowUserData">User List</a>
                         </li>
-                       
-
                     </ul>
                     <a href="/Manager/EventLog">
                         <i class="fas fa-briefcase" style="margin-right:10px;"></i>
                         Event Log
                     </a>
-
                 </li>
             </ul>
 
@@ -344,10 +325,67 @@
                 </div>
             </nav>
 
-            <div class="container body-content">
-                @RenderBody()
+            <div class=" body-content" style="width:100%; margin:0 auto;">
+                <div>
 
+                    <h4 style="display:inline">@ViewBag.Title</h4>
+                   
+                </div>
+
+                <hr class="my-4" />
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        @TempData["Message"]
+                    </div>
+                }
+
+                <table class="table table-responsive table-hover shadow " id="users" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
+                    <thead class="shadow" style="background-color:white; ">
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Phone</th>
+                            <th>Allowed Access</th>
+                            <th>Address</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>ZIP Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count(); i++)
+                        {
+                            <tr>
+                                <td>@Model[i].ID</td>
+                                <td>@Model[i].FirstName</td>
+                                <td>@Model[i].LastName</td>
+                                <td>@Model[i].Email</td>
+                                <td>@Model[i].Username</td>
+                                <td>@Model[i].Role</td>
+                                <td>@Model[i].Phone</td>
+                                <td>@(Model[i].Active ? "Y" : "N")</td>
+                                <td>@Model[i].Address</td>
+                                <td>@Model[i].City</td>
+                                <td>@Model[i].State</td>
+                                <td>@Model[i].ZIP_Code</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <br />
                 <hr />
+
+            </div>
+            <div class="container body-content">
+
                 <footer align="center">
                     <p>
                         &copy; @DateTime.Now.Year - Objective Accounting
@@ -358,15 +396,13 @@
         </div>
 
     </div>
-
-
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
     <script type="text/javascript">
 
     window.onload = function () {
@@ -385,9 +421,10 @@
         });
     </script>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            $('#users').DataTable();
+        });
+    </script>
 </body>
 </html>
-
