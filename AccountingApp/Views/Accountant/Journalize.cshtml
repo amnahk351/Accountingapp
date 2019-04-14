@@ -551,42 +551,17 @@
                 </div>
             </nav>
 
-
-
-
-
-
-
-
             @using (Html.BeginForm(new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 <br />
                 <div class="form-horizontal">
 
-
-
-
-                    @*<div class="form-group">
-                            <div class="col-md-offset-2 col-md-10">
-                                <button type="submit" href="@Url.Action(" ShowUserData")" class="btn btn-success btn-lg margin-right">
-                                    Save
-                                </button>
-
-                                <a href="@Url.Action(" Index")" class="btn btn-warning btn-lg">
-                                    Cancel
-                                </a>
-                            </div>
-                        </div>*@
-
                     <div class="container shadow" style="width:80%">
 
                         <h4>Journalize</h4>
 
                         <hr />
-
-                        @*<div class="form-group col-md-4">
-                        *@
 
                         <table id="InputTable" style="width:100%">
                             <colgroup>
@@ -771,17 +746,12 @@
                             </div>
                             <br />
                             <h6>Uploaded files : </h6>
-                            @*<ul class="list-group" id="uploadList"></ul>*@
 
                             <table id="uploadList" class="uploadList" style="width: 43%">
                                 <colgroup>
                                     <col style="width: 40%">
                                     <col style="width: 3%">
                                 </colgroup>
-                                @*<tr>
-                                        <td>cell1_1</td>
-                                        <td>cell2_1</td>
-                                    </tr>*@
                             </table>
 
                             <br />
@@ -800,7 +770,6 @@
                         <div class="journalize-footer" style="text-align:right">
                             <button type="button" onclick="ResetFunction()" class="btn btn-info">Reset</button>
 
-                            @*<button type="submit" id="btnSubmit" class="btn btn-success">Submit</button>*@
                             <button type="button" id="btnSubmit" class="btn btn-success">Submit</button>
 
                             <button type="button" id="btnSave" class="btn btn-warning">Suspend</button>
