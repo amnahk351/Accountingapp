@@ -53,10 +53,10 @@ namespace AccountingApp.Controllers
             tbl.City = model.City;
             tbl.State = model.State;
             tbl.ZIP_Code = model.ZIP_Code;
-            tbl.Account_Locked = false;
-            tbl.Login_Attempts = 10;
-            tbl.Login_Amount = 0;
-            tbl.Login_Fails = 0;
+            tbl.AccountLocked = false;
+            tbl.LoginAttempts = 10;
+            tbl.LoginAmount = 0;
+            tbl.LoginFails = 0;
 
            
             if (ModelState.IsValid)
@@ -85,10 +85,10 @@ namespace AccountingApp.Controllers
                         City = tbl.City,
                         State = tbl.State,
                         ZIP_Code = tbl.ZIP_Code,
-                        AccountLocked = tbl.Account_Locked,
-                        LoginAttempts = tbl.Login_Attempts,
-                        LoginAmount = tbl.Login_Amount,
-                        LoginFails = tbl.Login_Fails
+                        AccountLocked = tbl.AccountLocked,
+                        LoginAttempts = tbl.LoginAttempts,
+                        LoginAmount = tbl.LoginAmount,
+                        LoginFails = tbl.LoginFails
                     });
                 }
                 //db.CreateUsers.Ad

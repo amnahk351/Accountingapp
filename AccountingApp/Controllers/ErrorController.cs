@@ -20,7 +20,7 @@ namespace AccountingApp.Controllers
             {
 
                 
-                errors.Add(db.Query<ErrorMessageModel>("Select * from ErrorMessages Where Error_ID = @ID", new { ID = id }).FirstOrDefault());
+                errors.Add(db.Query<ErrorMessageModel>("Select * from dbo.ErrorMessages Where Error_ID = @ID", new { ID = id }).FirstOrDefault());
 
             }
             return errors[0].Description.ToString();
