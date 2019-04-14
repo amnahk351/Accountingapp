@@ -22,7 +22,7 @@ namespace AccountingApp.Controllers
             sqlCon.Open();
 
             //string query = "SELECT Old_Passwords FROM CreateUsers WHERE ID = '" + UserId + "'";
-            string query = "SELECT OldPasswords FROM Usertable WHERE ID = '" + UserId + "'";
+            string query = "SELECT OldPasswords FROM dbo.UserTable WHERE ID = '" + UserId + "'";
 
             SqlCommand conData = new SqlCommand(query, sqlCon);
             SqlDataReader myReader;
@@ -32,7 +32,7 @@ namespace AccountingApp.Controllers
             while (myReader.Read())
             {
                 //FoundPasswords = myReader.GetString(0);
-                int x = myReader.GetOrdinal("Old_Passwords");
+                int x = myReader.GetOrdinal("OldPasswords");
 
                 FoundPasswords = myReader.IsDBNull(x) ? string.Empty : myReader.GetString(0);
             }
