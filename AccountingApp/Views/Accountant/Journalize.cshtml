@@ -853,6 +853,33 @@
 
     </script>
 
+    @section Scripts{
+        <script src="~/Scripts/jquery.filedrop.js"></script>
+        <script type="text/javascript">
+        $(function () {
+            $('#dropArea').filedrop({
+                url: '@Url.Action("UploadFiles")',
+                allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+                allowedfileextensions: ['.JPG', '.jpg', '.JPEG', '.jpeg', '.PNG', '.png', '.GIF', '.gif', '.txt', '.TXT', '.doc', '.DOC', '.docx', '.DOCX', '.pdf', '.PDF', '.xls', '.XLS', '.xlsx', '.XLSX'],
+                fallback_id: 'input',
+                paramname: 'files',
+                dragOver: function () {
+                    $('#dropArea').addClass('active-drop');
+                },
+                dragLeave: function () {
+                    $('#dropArea').removeClass('active-drop');
+                },
+                drop: function () {
+                    $('#dropArea').removeClass('active-drop');
+                },
+                uploadFinished: function (i, file, response, time) {
+                    AppendToUploadList(file.name);
+                }
+            })
+        })
+        </script>
+    }
+
     <script>
 
         function AppendToUploadList(fileName) {
@@ -957,1004 +984,977 @@
 
     </script>
 
+    @Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
+    @Scripts.Render("~/Scripts/jquery.filedrop.js")
 
-    @section scripts{
-        <script src="~/Scripts/jquery.filedrop.js" type="text/javascript">
-            $(function() {
-                $('#dropArea').filedrop({
-                    url: '@Url.Action("UploadFiles")',
-                    allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-                    allowedfileextensions: ['.JPG', '.jpg', '.JPEG', '.jpeg', '.PNG', '.png', '.GIF', '.gif', '.txt', '.TXT', '.doc', '.DOC', '.docx', '.DOCX', '.pdf', '.PDF', '.xls', '.XLS', '.xlsx', '.XLSX'],
-                    fallback_id: 'input',
-                    paramname: 'files',
-                    dragOver: function () {
-                        $('#dropArea').addClass('active-drop');
-                    },
-                    dragLeave: function () {
-                        $('#dropArea').removeClass('active-drop');
-                    },
-                    drop: function () {
-                        $('#dropArea').removeClass('active-drop');
-                    },
-                    uploadFinished: function (i, file, response, time) {
-                        AppendToUploadList(file.name);
-                    }
-                });
-            }
-        </script>
-        }
-
-@Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
-@Scripts.Render("~/Scripts/bootstrap.min.js")
-@Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
-@Scripts.Render("~/Scripts/jquery.filedrop.js")
-
-@*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
-<script type="text/javascript">
-            $('.form_datetime').datetimepicker({
-                format: "m/d/yyyy",
-                weekStart: 1,
-                todayBtn: 1,
-                autoclose: 1,
-                todayHighlight: 1,
-                startView: 2,
-                forceParse: 0,
-                showMeridian: 1
-            });
-</script>
-
-<script>
-
-    function RemoveLine(button) {
-        //Determine the reference of the Row using the Button.
-        var row = $(button).closest("TR");
-
-        //Get the reference of the Table.
-        var table = $("#EntryTable")[0];
-
-        //Get Account Listed In Table
-        var ActualAccount = table.rows[row[0].rowIndex].cells[1].innerText;
-
-
-        //Add account back to drop down list
-        var x = document.getElementById("AccountNumber");
-        var option = document.createElement("option");
-        option.text = ActualAccount;
-        x.add(option, 1);
-
-        //Delete the Table row using it's Index.
-        table.deleteRow(row[0].rowIndex);
-
-        AddDateToTable();
-        GetZeroColumn();
-        PlaceDollarSign();
-        AdjustTotals();
-        SortAccountList();
-    };
-
-</script>
-
-<script>
-    //Only allow digits and two decimal places in credit and debit fields
-
-    function validateFloatKeyPress(el, evt) {
-        var charCode = (evt.which) ? evt.which : event.keyCode;
-        var number = el.value.split('.');
-        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-            return false;
-        }
-        //just one dot
-        if (number.length > 1 && charCode == 46) {
-            return false;
-        }
-        //get the carat position
-        var caratPos = getSelectionStart(el);
-        var dotPos = el.value.indexOf(".");
-        if (caratPos > dotPos && dotPos > -1 && (number[1].length > 1)) {
-            return false;
-        }
-        return true;
-    }
-
-    function validateContentEditable(el, evt) {
-        var charCode = (evt.which) ? evt.which : event.keyCode;
-        var number = el.innerText.split('.');
-        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-            return false;
-        }
-        //just one dot
-        if (number.length > 1 && charCode == 46) {
-            return false;
-        }
-
-        return true;
-    }
-
-    function getSelectionStart(o) {
-        if (o.createTextRange) {
-            var r = document.selection.createRange().duplicate()
-            r.moveEnd('character', o.value.length)
-            if (r.text == '') return o.value.length
-            return o.value.lastIndexOf(r.text)
-        } else return o.selectionStart
-    }
-
-</script>
-
-<script>
-
-    $(document).ready(function () {
-
-        //Populate date field with today
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
-        var yyyy = today.getFullYear();
-
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
-
-        today = mm + '/' + dd + '/' + yyyy;
-
-        var d = document.getElementById("Date");
-        d.value = today;
-
-
-        //Sort Account list
-        $("#AccountNumber").html($('#AccountNumber option').sort(function (x, y) {
-            return $(x).text() < $(y).text() ? -1 : 1;
-        }))
-
-
-        //Add default option at top
-        var x = document.getElementById("AccountNumber");
-        var option = document.createElement("option");
-        option.text = "Please select an account";
-        x.add(option, 0);
-
-        //Select first item
-        $("#AccountNumber").get(0).selectedIndex = 0;
-
-    });
-
-</script>
-
-
-<script>
-
-    function selectElementContents(el) {
-        var range = document.createRange();
-        range.selectNodeContents(el);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-    }
-
-    function setCaretPosition(ctrl, pos) {
-        // Modern browsers
-        if (ctrl.setSelectionRange) {
-            ctrl.focus();
-            ctrl.setSelectionRange(pos, pos);
-
-            // IE8 and below
-        } else if (ctrl.createTextRange) {
-            var range = ctrl.createTextRange();
-            range.collapse(true);
-            range.moveEnd('character', pos);
-            range.moveStart('character', pos);
-            range.select();
-        }
-    }
-
-    function saveRangePosition() {
-        var range = window.getSelection().getRangeAt(0);
-        var sC = range.startContainer, eC = range.endContainer;
-
-        A = []; while (sC !== bE) { A.push(getNodeIndex(sC)); sC = sC.parentNode }
-        B = []; while (eC !== bE) { B.push(getNodeIndex(eC)); eC = eC.parentNode }
-
-        window.rp = { "sC": A, "sO": range.startOffset, "eC": B, "eO": range.endOffset };
-    }
-
-    function restoreRangePosition(bE) {
-        bE.focus();
-        var sel = window.getSelection(), range = sel.getRangeAt(0);
-        var x, C, sC = bE, eC = bE;
-
-        C = rp.sC; x = C.length; while (x--) sC = sC.childNodes[C[x]];
-        C = rp.eC; x = C.length; while (x--) eC = eC.childNodes[C[x]];
-
-        range.setStart(sC, rp.sO);
-        range.setEnd(eC, rp.eO);
-        sel.removeAllRanges();
-        sel.addRange(range)
-    }
-    function getNodeIndex(n) { var i = 0; while (n = n.previousSibling) i++; return i }
-
-
-    var throttle = false;
-
-    function EditAccountEnter(x) {
-
-        (x).addEventListener('click', function (evt) {
-
-            if (!throttle && evt.detail === 2) {
-                //X was just double clicked
-                throttle = true;
-                setTimeout(function () {
-                    throttle = false;
-                }, 1000);
-
-
-                if (x.innerHTML.indexOf("TempAccountList") !== -1) {
-                    //X is a drop down list, prevent creating another list
-                    return;
-                }
-
-
-                $.ajax({
-                    url: "/Account/GetErrors",
-                    method: 'post',
-                    dataType: 'json',
-                    success: function (data) {
-                        //Index starts from 0 so number is 1 off from database
-                        //Populate error message from database
-                        document.getElementById('AccountEntryError').innerText = data[49];  //innerHTML works too
-                    }
-                });
-
-
-                var Check = FindTempListRow();
-
-                if (Check != -1) {
-                    //There is a row that already has drop down list in it
-                    return;
-                }
-
-                //Create the drop down list in the table in place of the clicked current account
-                var CurrrentAccount = x.innerText;
-                var AccountList = document.getElementById("AccountNumber");
-
-                var ListClone = AccountList.cloneNode(true);
-
-
-                //Add current account to top of list
-                var option = document.createElement("option");
-                option.text = CurrrentAccount;
-                ListClone.add(option, 1);
-
-
-                x.setAttribute('style', 'padding-left: 0%');
-                ListClone.setAttribute('id', 'TempAccountList');
-                ListClone.setAttribute("onchange", "EditAccountExit()");
-                var newDiv = document.createElement("TempAccountList");  //Create a new div element
-
-                newDiv.appendChild(ListClone);  //Add the list to the newly created div
-
-                x.innerHTML = newDiv.innerHTML;
-
-            }
+    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
+    <script type="text/javascript">
+        $('.form_datetime').datetimepicker({
+            format: "m/d/yyyy",
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
         });
+    </script>
 
-    }
+    <script>
 
+        function RemoveLine(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
 
-    function FindTempListRow() {
+            //Get the reference of the Table.
+            var table = $("#EntryTable")[0];
 
-        var table = document.getElementById("EntryTable");
-
-        for (var i = 2; i < table.rows.length; i++) {
-            var item = table.rows[i].cells[1];
-
-            if (item.innerHTML.indexOf("TempAccountList") !== -1) {
-                return i;
-            }
-
-        }
-
-        return -1;
-
-    }
+            //Get Account Listed In Table
+            var ActualAccount = table.rows[row[0].rowIndex].cells[1].innerText;
 
 
-    function EditAccountExit() {
-
-        var table = document.getElementById("EntryTable");
-
-        var AccountSelect = document.getElementById("TempAccountList");
-        var acc = AccountSelect.options[AccountSelect.selectedIndex].textContent;
-        var index = AccountSelect.selectedIndex;
-
-        var RowNum = FindTempListRow();
-
-        var DebitCell = table.rows[RowNum].cells[2].innerText;
-        var CreditCell = table.rows[RowNum].cells[3].innerText;
-
-        document.getElementById('AccountEntryError').innerText = "";
-
-        if (index != 0) {
-
-            //Add old selection back into original list
-            var OldSelection = AccountSelect.options[1].textContent;
-
+            //Add account back to drop down list
             var x = document.getElementById("AccountNumber");
             var option = document.createElement("option");
-            option.text = OldSelection;
-            x.add(option);
+            option.text = ActualAccount;
+            x.add(option, 1);
 
-            //Remove new selection from original list
-            for (var i = 0; i < x.length; i++) {
-                if (x.options[i].textContent == acc)
-                    x.remove(i);
+            //Delete the Table row using it's Index.
+            table.deleteRow(row[0].rowIndex);
+
+            AddDateToTable();
+            GetZeroColumn();
+            PlaceDollarSign();
+            AdjustTotals();
+            SortAccountList();
+        };
+
+    </script>
+
+    <script>
+        //Only allow digits and two decimal places in credit and debit fields
+
+        function validateFloatKeyPress(el, evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            var number = el.value.split('.');
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            //just one dot
+            if (number.length > 1 && charCode == 46) {
+                return false;
+            }
+            //get the carat position
+            var caratPos = getSelectionStart(el);
+            var dotPos = el.value.indexOf(".");
+            if (caratPos > dotPos && dotPos > -1 && (number[1].length > 1)) {
+                return false;
+            }
+            return true;
+        }
+
+        function validateContentEditable(el, evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            var number = el.innerText.split('.');
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            //just one dot
+            if (number.length > 1 && charCode == 46) {
+                return false;
             }
 
-            SortAccountList();
+            return true;
         }
 
-
-        if (DebitCell != "") {
-            //It is a debit
-            table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
-
+        function getSelectionStart(o) {
+            if (o.createTextRange) {
+                var r = document.selection.createRange().duplicate()
+                r.moveEnd('character', o.value.length)
+                if (r.text == '') return o.value.length
+                return o.value.lastIndexOf(r.text)
+            } else return o.selectionStart
         }
 
-        if (CreditCell != "") {
-            //It is a credit
-            table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
+    </script>
 
-        }
+    <script>
 
-    }
+        $(document).ready(function () {
 
-    function EditTableValueEnter(x) {
+            //Populate date field with today
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
 
-        x.style.background = "#9ac4ea";
-        x.style.cursor = "text";
-        var tempVal = StripMoneyFormatting(x.innerText);
-        x.innerText = tempVal;
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
 
-        $(x).keypress(function (e) {
-            return validateContentEditable(x, event);
+            today = mm + '/' + dd + '/' + yyyy;
+
+            var d = document.getElementById("Date");
+            d.value = today;
+
+
+            //Sort Account list
+            $("#AccountNumber").html($('#AccountNumber option').sort(function (x, y) {
+                return $(x).text() < $(y).text() ? -1 : 1;
+            }))
+
+
+            //Add default option at top
+            var x = document.getElementById("AccountNumber");
+            var option = document.createElement("option");
+            option.text = "Please select an account";
+            x.add(option, 0);
+
+            //Select first item
+            $("#AccountNumber").get(0).selectedIndex = 0;
 
         });
 
-        saveRangePosition();
-    }
-
-    function EditTableValueExit(x) {
+    </script>
 
 
-        var newVal = formatMoney(x.innerText);
-        x.innerText = newVal;
+    <script>
+
+        function selectElementContents(el) {
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+
+        function setCaretPosition(ctrl, pos) {
+            // Modern browsers
+            if (ctrl.setSelectionRange) {
+                ctrl.focus();
+                ctrl.setSelectionRange(pos, pos);
+
+                // IE8 and below
+            } else if (ctrl.createTextRange) {
+                var range = ctrl.createTextRange();
+                range.collapse(true);
+                range.moveEnd('character', pos);
+                range.moveStart('character', pos);
+                range.select();
+            }
+        }
+
+        function saveRangePosition() {
+            var range = window.getSelection().getRangeAt(0);
+            var sC = range.startContainer, eC = range.endContainer;
+
+            A = []; while (sC !== bE) { A.push(getNodeIndex(sC)); sC = sC.parentNode }
+            B = []; while (eC !== bE) { B.push(getNodeIndex(eC)); eC = eC.parentNode }
+
+            window.rp = { "sC": A, "sO": range.startOffset, "eC": B, "eO": range.endOffset };
+        }
+
+        function restoreRangePosition(bE) {
+            bE.focus();
+            var sel = window.getSelection(), range = sel.getRangeAt(0);
+            var x, C, sC = bE, eC = bE;
+
+            C = rp.sC; x = C.length; while (x--) sC = sC.childNodes[C[x]];
+            C = rp.eC; x = C.length; while (x--) eC = eC.childNodes[C[x]];
+
+            range.setStart(sC, rp.sO);
+            range.setEnd(eC, rp.eO);
+            sel.removeAllRanges();
+            sel.addRange(range)
+        }
+        function getNodeIndex(n) { var i = 0; while (n = n.previousSibling) i++; return i }
 
 
-        if (x.innerText == "0.00") {
+        var throttle = false;
 
-            var columnNum = GetZeroColumn();
+        function EditAccountEnter(x) {
 
-            if (columnNum == 2) {
-                $.ajax({
-                    //0 entered for Debit
-                    url: "/Account/GetErrors",
-                    method: 'post',
-                    dataType: 'json',
-                    success: function (data) {
-                        //Index starts from 0 so number is 1 off from database
-                        //Populate error message from database
-                        document.getElementById('DebitEntryError').innerText = data[41];  //innerHTML works too
+            (x).addEventListener('click', function (evt) {
+
+                if (!throttle && evt.detail === 2) {
+                    //X was just double clicked
+                    throttle = true;
+                    setTimeout(function () {
+                        throttle = false;
+                    }, 1000);
+
+
+                    if (x.innerHTML.indexOf("TempAccountList") !== -1) {
+                        //X is a drop down list, prevent creating another list
+                        return;
                     }
-                });
 
-            }
 
-            if (columnNum == 3) {
-                //0 entered for Credit
-                $.ajax({
-                    url: "/Account/GetErrors",
-                    method: 'post',
-                    dataType: 'json',
-                    success: function (data) {
-                        //Index starts from 0 so number is 1 off from database
-                        //Populate error message from database
-                        document.getElementById('CreditEntryError').innerText = data[42];  //innerHTML works too
+                    $.ajax({
+                        url: "/Account/GetErrors",
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            //Index starts from 0 so number is 1 off from database
+                            //Populate error message from database
+                            document.getElementById('AccountEntryError').innerText = data[49];  //innerHTML works too
+                        }
+                    });
+
+
+                    var Check = FindTempListRow();
+
+                    if (Check != -1) {
+                        //There is a row that already has drop down list in it
+                        return;
                     }
-                });
 
-            }
-            restoreRangePosition(x);
+                    //Create the drop down list in the table in place of the clicked current account
+                    var CurrrentAccount = x.innerText;
+                    var AccountList = document.getElementById("AccountNumber");
 
-        } else {
-
-            document.getElementById('DebitEntryError').innerText = "";
-            document.getElementById('CreditEntryError').innerText = "";
-
-            x.style.background = "#EEEEEE";
-
-            PlaceDollarSign();
-            AdjustTotals();
-
-        }
-    }
-</script>
-
-<script>
-
-    function GetZeroColumn() {
-
-        var table = document.getElementById("EntryTable");
-
-        for (var i = 2; i < table.rows.length; i++) {
-            var Dhtml = table.rows[i].cells[2].innerText;
-
-            if (Dhtml == "0.00") {
-                return 2;
-            }
-
-        }
-
-        for (var i = 2; i < table.rows.length; i++) {
-            var Chtml = table.rows[i].cells[3].innerText;
-
-            if (Chtml == "0.00") {
-                return 3;
-            }
-        }
-
-        //No 0 found, hide error messages
-        document.getElementById("DebitEntryError").innerText = "";
-        document.getElementById("CreditEntryError").innerText = "";
-    }
-
-</script>
-
-<script>
-    function PlaceDollarSign() {
-        var table = document.getElementById("EntryTable");
-
-        //Place dollar sign for debit
-        for (var i = 2; i < table.rows.length; i++) {
-            var Dhtml = table.rows[i].cells[2].innerText;
-
-            if (Dhtml != "") {
-
-                if (Dhtml.indexOf("$ ") !== -1) {
-                    //already has a $ sign
-
-                } else {
-                    table.rows[i].cells[2].innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Dhtml + "</span>";
-                }
-
-                break;
-            }
-
-        }
-
-        //Place dollar sign for credit
-        for (var i = 2; i < table.rows.length; i++) {
-            var Chtml = table.rows[i].cells[3].innerText;
+                    var ListClone = AccountList.cloneNode(true);
 
 
-            if (Chtml != "") {
+                    //Add current account to top of list
+                    var option = document.createElement("option");
+                    option.text = CurrrentAccount;
+                    ListClone.add(option, 1);
 
-                if (Chtml.indexOf("$ ") !== -1) {
-                    //already has a $ sign
 
-                } else {
-                    table.rows[i].cells[3].innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Chtml + "</span>";
-                }
+                    x.setAttribute('style', 'padding-left: 0%');
+                    ListClone.setAttribute('id', 'TempAccountList');
+                    ListClone.setAttribute("onchange", "EditAccountExit()");
+                    var newDiv = document.createElement("TempAccountList");  //Create a new div element
 
-                break;
-            }
-        }
-    }
+                    newDiv.appendChild(ListClone);  //Add the list to the newly created div
 
-</script>
+                    x.innerHTML = newDiv.innerHTML;
 
-<script>
-    function AppendToList() {
-
-        var Elem = document.getElementById('AccountEntryError');
-
-        if (Elem.innerText != "") {
-            return;
-        }
-
-        if ($("#Date").val() == "") {
-            $.ajax({
-                url: "/Account/GetErrors",
-                method: 'post',
-                dataType: 'json',
-                success: function (data) {
-                    //Index starts from 0 so number is 1 off from database
-                    //Populate error message from database
-                    document.getElementById('DateError').innerText = data[37];  //innerHTML works too
                 }
             });
-            return;
-        }
 
-        //Clear Error Message
-        document.getElementById('DateError').innerText = "";
-
-        if (document.getElementById('AccountNumber').selectedIndex == 0) {
-            $.ajax({
-                url: "/Account/GetErrors",
-                method: 'post',
-                dataType: 'json',
-                success: function (data) {
-                    //Index starts from 0 so number is 1 off from database
-                    //Populate error message from database
-                    document.getElementById('AccountError').innerText = data[38];  //innerHTML works too
-                }
-            });
-            return;
-        }
-
-        //Clear Error Message
-        document.getElementById('AccountError').innerText = "";
-
-        if (($("#Debit").val() == "") && ($("#Credit").val() == "")) {
-
-            $.ajax({
-                url: "/Account/GetErrors",
-                method: 'post',
-                dataType: 'json',
-                success: function (data) {
-                    //Index starts from 0 so number is 1 off from database
-                    //Populate error message from database
-                    document.getElementById('DebitError').innerText = data[39];  //innerHTML works too
-                    document.getElementById('CreditError').innerText = data[40];  //innerHTML works too
-                }
-            });
-            return;
         }
 
 
-        var table = document.getElementById("EntryTable");
+        function FindTempListRow() {
 
-
-        //Get text value of drop down
-        var AccountSelect = document.getElementById("AccountNumber");
-        var acc = AccountSelect.options[AccountSelect.selectedIndex].textContent;
-
-
-        var deb = document.getElementById("Debit").value;
-        var cre = document.getElementById("Credit").value;
-
-
-        //check for only 0 in credit or debit field
-        if (cre != "") {
-            //credit is entered
-
-            var CreTest = cre.replace(/0/g, "");
-            //var res = NumValue.replace(/0/g, "");
-
-            if (CreTest == "") {
-                //All 0's entered for Credit
-                $.ajax({
-                    url: "/Account/GetErrors",
-                    method: 'post',
-                    dataType: 'json',
-                    success: function (data) {
-                        //Index starts from 0 so number is 1 off from database
-                        //Populate error message from database
-                        document.getElementById('CreditError').innerText = data[42];  //innerHTML works too
-                    }
-                });
-
-                return;
-            }
-
-        } else {
-            //debit is entered
-            var DebTest = deb.replace(/0/g, "");
-
-            if (DebTest == "") {
-                //All 0's entered for Debit
-                $.ajax({
-                    url: "/Account/GetErrors",
-                    method: 'post',
-                    dataType: 'json',
-                    success: function (data) {
-                        //Index starts from 0 so number is 1 off from database
-                        //Populate error message from database
-                        document.getElementById('DebitError').innerText = data[41];  //innerHTML works too
-                    }
-                });
-
-                return;
-            }
-        }
-
-
-        var RowtoInsertAt = -1;
-        var row;
-
-        if (deb != "") {
-            //debit being entered, need to insert above credits
-
-            var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
             var table = document.getElementById("EntryTable");
 
-            //loop through html table from bottom to top, find the first debit
-            for (j = rowsAmount; j >= 1; j--) {
+            for (var i = 2; i < table.rows.length; i++) {
+                var item = table.rows[i].cells[1];
 
-                if (rowsAmount == 1) {
-                    //table is empty
-                    RowtoInsertAt = 2;
-                    break;
+                if (item.innerHTML.indexOf("TempAccountList") !== -1) {
+                    return i;
                 }
 
-                //Get Account Listed In Table
-                var DebitAmount = table.rows[j].cells[2].innerHTML;
-
-                if (DebitAmount != "") {
-                    //debit found
-                    RowtoInsertAt = j + 1;
-                    break;
-                }
             }
 
-            if (RowtoInsertAt == -1) {
-                //no debit was found
-                RowtoInsertAt = 2;
-            }
-
-            row = table.insertRow(RowtoInsertAt);
-        } else {
-            //credit being inserted so insert at bottom
-            row = table.insertRow();
-        }
-
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-        var cell5 = row.insertCell(4);
-
-
-
-        if (cre != "") {
-            //credit is entered, add padding to tab over the account name
-            cell2.innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">" + acc + "</span>";
-
-            var CreMoney = formatMoney(cre);
-
-            cell4.innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + CreMoney + "</span>";
-
-        } else {
-            //debit is entered, no padding needed
-            cell2.innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">" + acc + "</span>";
-
-            var DebMoney = formatMoney(deb);
-
-            cell3.innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + DebMoney + "</span>";
+            return -1;
 
         }
 
 
-        //Add delete button to last column
-        cell5.innerHTML = '<input type="button" title=\"Click to Remove Row\" class="deletebutton" onclick="RemoveLine(this)"/>';
+        function EditAccountExit() {
 
-        PlaceDollarSign();
-        AdjustTotals();
-        AddDateToTable();
+            var table = document.getElementById("EntryTable");
 
+            var AccountSelect = document.getElementById("TempAccountList");
+            var acc = AccountSelect.options[AccountSelect.selectedIndex].textContent;
+            var index = AccountSelect.selectedIndex;
 
-        //Delete account from drop down
-        var x = document.getElementById("AccountNumber");
-        x.remove(x.selectedIndex);
+            var RowNum = FindTempListRow();
 
-        //Move selection back to 'Please select an account'
-        document.getElementById("AccountNumber").selectedIndex = "0";
+            var DebitCell = table.rows[RowNum].cells[2].innerText;
+            var CreditCell = table.rows[RowNum].cells[3].innerText;
 
-        //Clear debit and credit textboxes
-        var deb2 = document.getElementById("Debit");
-        var cre2 = document.getElementById("Credit");
+            document.getElementById('AccountEntryError').innerText = "";
 
-        deb2.disabled = false;
-        cre2.disabled = false;
-        deb2.value = "";
-        cre2.value = "";
-    }
-</script>
+            if (index != 0) {
 
-<script>
+                //Add old selection back into original list
+                var OldSelection = AccountSelect.options[1].textContent;
 
-    function AddDateToTable() {
+                var x = document.getElementById("AccountNumber");
+                var option = document.createElement("option");
+                option.text = OldSelection;
+                x.add(option);
 
-        var table = document.getElementById("EntryTable");
+                //Remove new selection from original list
+                for (var i = 0; i < x.length; i++) {
+                    if (x.options[i].textContent == acc)
+                        x.remove(i);
+                }
 
-        //Get Date element value
-        var date = document.getElementById("Date").value;
-
-        //Get number of rows
-        var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+                SortAccountList();
+            }
 
 
-        //loop through date column from bottom to top, find the first cell
-        for (var j = rowsAmount; j >= 1; j--) {
+            if (DebitCell != "") {
+                //It is a debit
+                table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
 
-            if (j == 2) {
-                //The top cell
-                table.rows[2].cells[0].innerText = date;
+            }
+
+            if (CreditCell != "") {
+                //It is a credit
+                table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
+
+            }
+
+        }
+
+        function EditTableValueEnter(x) {
+
+            x.style.background = "#9ac4ea";
+            x.style.cursor = "text";
+            var tempVal = StripMoneyFormatting(x.innerText);
+            x.innerText = tempVal;
+
+            $(x).keypress(function (e) {
+                return validateContentEditable(x, event);
+
+            });
+
+            saveRangePosition();
+        }
+
+        function EditTableValueExit(x) {
+
+
+            var newVal = formatMoney(x.innerText);
+            x.innerText = newVal;
+
+
+            if (x.innerText == "0.00") {
+
+                var columnNum = GetZeroColumn();
+
+                if (columnNum == 2) {
+                    $.ajax({
+                        //0 entered for Debit
+                        url: "/Account/GetErrors",
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            //Index starts from 0 so number is 1 off from database
+                            //Populate error message from database
+                            document.getElementById('DebitEntryError').innerText = data[41];  //innerHTML works too
+                        }
+                    });
+
+                }
+
+                if (columnNum == 3) {
+                    //0 entered for Credit
+                    $.ajax({
+                        url: "/Account/GetErrors",
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            //Index starts from 0 so number is 1 off from database
+                            //Populate error message from database
+                            document.getElementById('CreditEntryError').innerText = data[42];  //innerHTML works too
+                        }
+                    });
+
+                }
+                restoreRangePosition(x);
 
             } else {
 
-                table.rows[j].cells[0].innerText = "";
+                document.getElementById('DebitEntryError').innerText = "";
+                document.getElementById('CreditEntryError').innerText = "";
+
+                x.style.background = "#EEEEEE";
+
+                PlaceDollarSign();
+                AdjustTotals();
+
+            }
+        }
+    </script>
+
+    <script>
+
+        function GetZeroColumn() {
+
+            var table = document.getElementById("EntryTable");
+
+            for (var i = 2; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[2].innerText;
+
+                if (Dhtml == "0.00") {
+                    return 2;
+                }
+
+            }
+
+            for (var i = 2; i < table.rows.length; i++) {
+                var Chtml = table.rows[i].cells[3].innerText;
+
+                if (Chtml == "0.00") {
+                    return 3;
+                }
+            }
+
+            //No 0 found, hide error messages
+            document.getElementById("DebitEntryError").innerText = "";
+            document.getElementById("CreditEntryError").innerText = "";
+        }
+
+    </script>
+
+    <script>
+        function PlaceDollarSign() {
+            var table = document.getElementById("EntryTable");
+
+            //Place dollar sign for debit
+            for (var i = 2; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[2].innerText;
+
+                if (Dhtml != "") {
+
+                    if (Dhtml.indexOf("$ ") !== -1) {
+                        //already has a $ sign
+
+                    } else {
+                        table.rows[i].cells[2].innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Dhtml + "</span>";
+                    }
+
+                    break;
+                }
+
+            }
+
+            //Place dollar sign for credit
+            for (var i = 2; i < table.rows.length; i++) {
+                var Chtml = table.rows[i].cells[3].innerText;
+
+
+                if (Chtml != "") {
+
+                    if (Chtml.indexOf("$ ") !== -1) {
+                        //already has a $ sign
+
+                    } else {
+                        table.rows[i].cells[3].innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + "$ " + Chtml + "</span>";
+                    }
+
+                    break;
+                }
+            }
+        }
+
+    </script>
+
+    <script>
+        function AppendToList() {
+
+            var Elem = document.getElementById('AccountEntryError');
+
+            if (Elem.innerText != "") {
+                return;
+            }
+
+            if ($("#Date").val() == "") {
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById('DateError').innerText = data[37];  //innerHTML works too
+                    }
+                });
+                return;
+            }
+
+            //Clear Error Message
+            document.getElementById('DateError').innerText = "";
+
+            if (document.getElementById('AccountNumber').selectedIndex == 0) {
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById('AccountError').innerText = data[38];  //innerHTML works too
+                    }
+                });
+                return;
+            }
+
+            //Clear Error Message
+            document.getElementById('AccountError').innerText = "";
+
+            if (($("#Debit").val() == "") && ($("#Credit").val() == "")) {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById('DebitError').innerText = data[39];  //innerHTML works too
+                        document.getElementById('CreditError').innerText = data[40];  //innerHTML works too
+                    }
+                });
+                return;
             }
 
 
-        }
-    }
-
-    function SortAccountList() {
-
-        //Remove the 'Please select an account'
-        var x = document.getElementById("AccountNumber");
-        x.remove(0);
-
-        //Sort Account list
-        $("#AccountNumber").html($('#AccountNumber option').sort(function (x, y) {
-            return $(x).text() < $(y).text() ? -1 : 1;
-        }))
+            var table = document.getElementById("EntryTable");
 
 
-        //Add back in 'Please select an account' to top
-        var x = document.getElementById("AccountNumber");
-        var option = document.createElement("option");
-        option.text = "Please select an account";
-        x.add(option, 0);
-
-        //Select first item
-        $("#AccountNumber").get(0).selectedIndex = 0;
-    }
-
-</script>
-
-<script>
-
-    $("body").on("click", "#btnSave", function () {
-
-        //Get totals
-        var debTot = document.getElementById("DebitTotal").innerText;
-        var creTot = document.getElementById("CreditTotal").innerText;
+            //Get text value of drop down
+            var AccountSelect = document.getElementById("AccountNumber");
+            var acc = AccountSelect.options[AccountSelect.selectedIndex].textContent;
 
 
-        //Check if anything was entered
+            var deb = document.getElementById("Debit").value;
+            var cre = document.getElementById("Credit").value;
 
-        if (debTot == "$ 0.00" && creTot == "$ 0.00") {
 
-            $.ajax({
-                url: "/Account/GetErrors",
-                method: 'post',
-                dataType: 'json',
-                success: function (data) {
-                    //Index starts from 0 so number is 1 off from database
-                    //Populate error message from database
-                    document.getElementById("SubmitError").innerText = data[45];  //innerHTML works too
+            //check for only 0 in credit or debit field
+            if (cre != "") {
+                //credit is entered
+
+                var CreTest = cre.replace(/0/g, "");
+                //var res = NumValue.replace(/0/g, "");
+
+                if (CreTest == "") {
+                    //All 0's entered for Credit
+                    $.ajax({
+                        url: "/Account/GetErrors",
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            //Index starts from 0 so number is 1 off from database
+                            //Populate error message from database
+                            document.getElementById('CreditError').innerText = data[42];  //innerHTML works too
+                        }
+                    });
+
+                    return;
                 }
-            });
-            return;
-        }
 
+            } else {
+                //debit is entered
+                var DebTest = deb.replace(/0/g, "");
 
-        var AccountError = document.getElementById("AccountEntryError").innerText;
-        var DebError = document.getElementById("DebitEntryError").innerText;
-        var CreError = document.getElementById("CreditEntryError").innerText;
+                if (DebTest == "") {
+                    //All 0's entered for Debit
+                    $.ajax({
+                        url: "/Account/GetErrors",
+                        method: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            //Index starts from 0 so number is 1 off from database
+                            //Populate error message from database
+                            document.getElementById('DebitError').innerText = data[41];  //innerHTML works too
+                        }
+                    });
 
-        //Check if there are any errors in the table
-        if (AccountError != "" || DebError != "" || CreError != "") {
-
-            $.ajax({
-                url: "/Account/GetErrors",
-                method: 'post',
-                dataType: 'json',
-                success: function (data) {
-                    //Index starts from 0 so number is 1 off from database
-                    //Populate error message from database
-                    document.getElementById("SubmitError").innerText = data[48];  //innerHTML works too
+                    return;
                 }
-            });
-            return;
-        }
-
-        //Loop through the Table rows and build a JSON array.
-        var transactions = new Array();
-        $("#EntryTable TBODY TR").each(function () {
-            var row = $(this);
-            var transaction = {};
-            transaction.DateSubmitted = row.find("TD").eq(0).html();
-
-            var Comm = document.getElementById("Comment")
-            transaction.AccountantComment = Comm.value;
-
-            var EnType = document.getElementById("EntryType").value;
-            transaction.Entry_Type = EnType;
-
-            transaction.Status = "suspended";
-
-
-            var Acc2 = row.find("TD").eq(1).html();
-            var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
-            var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
-            var Acc4 = Acc3.replace("</span>", "");
-            var AccFix = Acc4;
-
-            transaction.AccountName = AccFix;
-
-
-            var DebitFix = row.find("TD").eq(2).html();
-            var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-            var DebitFx2 = DebitFx.replace("</span>", "")
-            var DebitFix2 = StripMoneyFormatting(DebitFx2);
-
-            transaction.Debit = DebitFix2;
-
-
-            var CreditFix = row.find("TD").eq(3).html();
-            var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-            var CreditFix3 = CreditFix2.replace("</span>", "")
-            var CreditFix3 = StripMoneyFormatting(CreditFix3);
-
-            transaction.Credit = CreditFix3;
-
-            transactions.push(transaction);
-        });
-
-        //Send the JSON array to Controller using AJAX.
-        $.ajax({
-            type: "POST",
-            url: "/Accountant/InsertJournal",
-            data: JSON.stringify(transactions),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (r) {
-                //alert(r + " record(s) inserted.");
-                alert("Journal Saved!");
             }
-        });
-
-        ResetFunction();
-
-    });
-
-</script>
 
 
-<script>
+            var RowtoInsertAt = -1;
+            var row;
 
-    $("body").on("click", "#btnSubmit", function () {
+            if (deb != "") {
+                //debit being entered, need to insert above credits
 
+                var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+                var table = document.getElementById("EntryTable");
 
-        //Get totals
-        var debTot = document.getElementById("DebitTotal").innerText;
-        var creTot = document.getElementById("CreditTotal").innerText;
+                //loop through html table from bottom to top, find the first debit
+                for (j = rowsAmount; j >= 1; j--) {
 
+                    if (rowsAmount == 1) {
+                        //table is empty
+                        RowtoInsertAt = 2;
+                        break;
+                    }
 
-        //Check if anything was entered
+                    //Get Account Listed In Table
+                    var DebitAmount = table.rows[j].cells[2].innerHTML;
 
-        if (debTot == "$ 0.00" && creTot == "$ 0.00") {
-
-            $.ajax({
-                url: "/Account/GetErrors",
-                method: 'post',
-                dataType: 'json',
-                success: function (data) {
-                    //Index starts from 0 so number is 1 off from database
-                    //Populate error message from database
-                    document.getElementById("SubmitError").innerText = data[44];  //innerHTML works too
+                    if (DebitAmount != "") {
+                        //debit found
+                        RowtoInsertAt = j + 1;
+                        break;
+                    }
                 }
-            });
-            return;
-        }
 
-        var AccountError = document.getElementById("AccountEntryError").innerText;
-        var DebError = document.getElementById("DebitEntryError").innerText;
-        var CreError = document.getElementById("CreditEntryError").innerText;
-
-        //Check if there are any errors in the table
-        if (AccountError != "" || DebError != "" || CreError != "") {
-
-            $.ajax({
-                url: "/Account/GetErrors",
-                method: 'post',
-                dataType: 'json',
-                success: function (data) {
-                    //Index starts from 0 so number is 1 off from database
-                    //Populate error message from database
-                    document.getElementById("SubmitError").innerText = data[47];  //innerHTML works too
+                if (RowtoInsertAt == -1) {
+                    //no debit was found
+                    RowtoInsertAt = 2;
                 }
-            });
-            return;
-        }
 
-        //Check if total of debits is the same as credits
-        if (debTot != creTot) {
-            $.ajax({
-                url: "/Account/GetErrors",
-                method: 'post',
-                dataType: 'json',
-                success: function (data) {
-                    //Index starts from 0 so number is 1 off from database
-                    //Populate error message from database
-                    document.getElementById("SubmitError").innerText = data[43];  //innerHTML works too
-                }
-            });
-            return;
-        }
-
-
-        //Loop through the Table rows and build a JSON array.
-        var transactions = new Array();
-        $("#EntryTable TBODY TR").each(function () {
-            var row = $(this);
-            var transaction = {};
-            transaction.DateSubmitted = row.find("TD").eq(0).html();
-
-            var Comm = document.getElementById("Comment")
-
-            transaction.AccountantComment = Comm.value;
-
-            var EnType = document.getElementById("EntryType").value;
-
-            transaction.Entry_Type = EnType;
-
-            transaction.Status = "pending";
-
-            var Acc2 = row.find("TD").eq(1).html();
-            var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
-            var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
-            var Acc4 = Acc3.replace("</span>", "");
-
-            var AccFix = Acc4;
-
-            transaction.AccountName = AccFix;
-
-
-
-            var DebitFix = row.find("TD").eq(2).html();
-            var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-            var DebitFx2 = DebitFx.replace("</span>", "")
-            var DebitFix2 = StripMoneyFormatting(DebitFx2);
-
-            transaction.Debit = DebitFix2;
-
-
-            var CreditFix = row.find("TD").eq(3).html();
-            var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-            var CreditFix3 = CreditFix2.replace("</span>", "")
-            var CreditFix3 = StripMoneyFormatting(CreditFix3);
-
-            transaction.Credit = CreditFix3;
-
-            transactions.push(transaction);
-        });
-
-        //Send the JSON array to Controller using AJAX.
-        $.ajax({
-            type: "POST",
-            url: "/Accountant/InsertJournal",
-            data: JSON.stringify(transactions),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (r) {
-                //alert(r + " record(s) inserted.");
-                alert("Journal Submitted!");
+                row = table.insertRow(RowtoInsertAt);
+            } else {
+                //credit being inserted so insert at bottom
+                row = table.insertRow();
             }
+
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+
+
+
+            if (cre != "") {
+                //credit is entered, add padding to tab over the account name
+                cell2.innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">" + acc + "</span>";
+
+                var CreMoney = formatMoney(cre);
+
+                cell4.innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + CreMoney + "</span>";
+
+            } else {
+                //debit is entered, no padding needed
+                cell2.innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">" + acc + "</span>";
+
+                var DebMoney = formatMoney(deb);
+
+                cell3.innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + DebMoney + "</span>";
+
+            }
+
+
+            //Add delete button to last column
+            cell5.innerHTML = '<input type="button" title=\"Click to Remove Row\" class="deletebutton" onclick="RemoveLine(this)"/>';
+
+            PlaceDollarSign();
+            AdjustTotals();
+            AddDateToTable();
+
+
+            //Delete account from drop down
+            var x = document.getElementById("AccountNumber");
+            x.remove(x.selectedIndex);
+
+            //Move selection back to 'Please select an account'
+            document.getElementById("AccountNumber").selectedIndex = "0";
+
+            //Clear debit and credit textboxes
+            var deb2 = document.getElementById("Debit");
+            var cre2 = document.getElementById("Credit");
+
+            deb2.disabled = false;
+            cre2.disabled = false;
+            deb2.value = "";
+            cre2.value = "";
+        }
+    </script>
+
+    <script>
+
+        function AddDateToTable() {
+
+            var table = document.getElementById("EntryTable");
+
+            //Get Date element value
+            var date = document.getElementById("Date").value;
+
+            //Get number of rows
+            var rowsAmount = document.getElementById('EntryTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+
+
+            //loop through date column from bottom to top, find the first cell
+            for (var j = rowsAmount; j >= 1; j--) {
+
+                if (j == 2) {
+                    //The top cell
+                    table.rows[2].cells[0].innerText = date;
+
+                } else {
+
+                    table.rows[j].cells[0].innerText = "";
+                }
+
+
+            }
+        }
+
+        function SortAccountList() {
+
+            //Remove the 'Please select an account'
+            var x = document.getElementById("AccountNumber");
+            x.remove(0);
+
+            //Sort Account list
+            $("#AccountNumber").html($('#AccountNumber option').sort(function (x, y) {
+                return $(x).text() < $(y).text() ? -1 : 1;
+            }))
+
+
+            //Add back in 'Please select an account' to top
+            var x = document.getElementById("AccountNumber");
+            var option = document.createElement("option");
+            option.text = "Please select an account";
+            x.add(option, 0);
+
+            //Select first item
+            $("#AccountNumber").get(0).selectedIndex = 0;
+        }
+
+    </script>
+
+    <script>
+
+        $("body").on("click", "#btnSave", function () {
+
+            //Get totals
+            var debTot = document.getElementById("DebitTotal").innerText;
+            var creTot = document.getElementById("CreditTotal").innerText;
+
+
+            //Check if anything was entered
+
+            if (debTot == "$ 0.00" && creTot == "$ 0.00") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById("SubmitError").innerText = data[45];  //innerHTML works too
+                    }
+                });
+                return;
+            }
+
+
+            var AccountError = document.getElementById("AccountEntryError").innerText;
+            var DebError = document.getElementById("DebitEntryError").innerText;
+            var CreError = document.getElementById("CreditEntryError").innerText;
+
+            //Check if there are any errors in the table
+            if (AccountError != "" || DebError != "" || CreError != "") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById("SubmitError").innerText = data[48];  //innerHTML works too
+                    }
+                });
+                return;
+            }
+
+            //Loop through the Table rows and build a JSON array.
+            var transactions = new Array();
+            $("#EntryTable TBODY TR").each(function () {
+                var row = $(this);
+                var transaction = {};
+                transaction.DateSubmitted = row.find("TD").eq(0).html();
+
+                var Comm = document.getElementById("Comment")
+                transaction.AccountantComment = Comm.value;
+
+                var EnType = document.getElementById("EntryType").value;
+                transaction.Entry_Type = EnType;
+
+                transaction.Status = "suspended";
+
+
+                var Acc2 = row.find("TD").eq(1).html();
+                var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
+                var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
+                var Acc4 = Acc3.replace("</span>", "");
+                var AccFix = Acc4;
+
+                transaction.AccountName = AccFix;
+
+
+                var DebitFix = row.find("TD").eq(2).html();
+                var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+                var DebitFx2 = DebitFx.replace("</span>", "")
+                var DebitFix2 = StripMoneyFormatting(DebitFx2);
+
+                transaction.Debit = DebitFix2;
+
+
+                var CreditFix = row.find("TD").eq(3).html();
+                var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+                var CreditFix3 = CreditFix2.replace("</span>", "")
+                var CreditFix3 = StripMoneyFormatting(CreditFix3);
+
+                transaction.Credit = CreditFix3;
+
+                transactions.push(transaction);
+            });
+
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/Accountant/InsertJournal",
+                data: JSON.stringify(transactions),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    //alert(r + " record(s) inserted.");
+                    alert("Journal Saved!");
+                }
+            });
+
+            ResetFunction();
+
         });
 
-        ResetFunction();
+    </script>
 
-    });
 
-</script>
+    <script>
+
+        $("body").on("click", "#btnSubmit", function () {
+
+
+            //Get totals
+            var debTot = document.getElementById("DebitTotal").innerText;
+            var creTot = document.getElementById("CreditTotal").innerText;
+
+
+            //Check if anything was entered
+
+            if (debTot == "$ 0.00" && creTot == "$ 0.00") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById("SubmitError").innerText = data[44];  //innerHTML works too
+                    }
+                });
+                return;
+            }
+
+            var AccountError = document.getElementById("AccountEntryError").innerText;
+            var DebError = document.getElementById("DebitEntryError").innerText;
+            var CreError = document.getElementById("CreditEntryError").innerText;
+
+            //Check if there are any errors in the table
+            if (AccountError != "" || DebError != "" || CreError != "") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById("SubmitError").innerText = data[47];  //innerHTML works too
+                    }
+                });
+                return;
+            }
+
+            //Check if total of debits is the same as credits
+            if (debTot != creTot) {
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //Index starts from 0 so number is 1 off from database
+                        //Populate error message from database
+                        document.getElementById("SubmitError").innerText = data[43];  //innerHTML works too
+                    }
+                });
+                return;
+            }
+
+
+            //Loop through the Table rows and build a JSON array.
+            var transactions = new Array();
+            $("#EntryTable TBODY TR").each(function () {
+                var row = $(this);
+                var transaction = {};
+                transaction.DateSubmitted = row.find("TD").eq(0).html();
+
+                var Comm = document.getElementById("Comment")
+
+                transaction.AccountantComment = Comm.value;
+
+                var EnType = document.getElementById("EntryType").value;
+
+                transaction.Entry_Type = EnType;
+
+                transaction.Status = "pending";
+
+                var Acc2 = row.find("TD").eq(1).html();
+                var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
+                var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
+                var Acc4 = Acc3.replace("</span>", "");
+
+                var AccFix = Acc4;
+
+                transaction.AccountName = AccFix;
+
+
+
+                var DebitFix = row.find("TD").eq(2).html();
+                var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+                var DebitFx2 = DebitFx.replace("</span>", "")
+                var DebitFix2 = StripMoneyFormatting(DebitFx2);
+
+                transaction.Debit = DebitFix2;
+
+
+                var CreditFix = row.find("TD").eq(3).html();
+                var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+                var CreditFix3 = CreditFix2.replace("</span>", "")
+                var CreditFix3 = StripMoneyFormatting(CreditFix3);
+
+                transaction.Credit = CreditFix3;
+
+                transactions.push(transaction);
+            });
+
+            //Send the JSON array to Controller using AJAX.
+            $.ajax({
+                type: "POST",
+                url: "/Accountant/InsertJournal",
+                data: JSON.stringify(transactions),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    //alert(r + " record(s) inserted.");
+                    alert("Journal Submitted!");
+                }
+            });
+
+            ResetFunction();
+
+        });
+
+    </script>
 
 </body>
 </html>
