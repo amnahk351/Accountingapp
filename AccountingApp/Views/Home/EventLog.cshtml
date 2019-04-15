@@ -8,8 +8,6 @@
 <html>
 <head>
 
-<br />
-<h2>Event Log</h2>
 
 @*<p>
         @Html.ActionLink("Create New", "Create")
@@ -26,69 +24,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
-
-<table class="table" id="Events">
-    <tr>
-        <th>
-            @*@Html.DisplayNameFor(model => model.Event_ID)*@
-            Event ID
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.User_ID)*@
-            User ID
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.From)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.To)
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.IP_Address)*@
-            IP Address
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Screen)
-        </th>
-
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.From)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.To)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IPAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Screen)
-            </td>
-
-        </tr>
-    }
-
-</table>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
     @*
