@@ -53,10 +53,10 @@ namespace AccountingApp.Controllers
             tbl.City = model.City;
             tbl.State = model.State;
             tbl.ZIP_Code = model.ZIP_Code;
-            tbl.Account_Locked = false;
-            tbl.Login_Attempts = 10;
-            tbl.Login_Amount = 0;
-            tbl.Login_Fails = 0;
+            tbl.AccountLocked = false;
+            tbl.LoginAttempts = 10;
+            tbl.LoginAmount = 0;
+            tbl.LoginFails = 0;
 
            
             if (ModelState.IsValid)
@@ -85,10 +85,10 @@ namespace AccountingApp.Controllers
                         City = tbl.City,
                         State = tbl.State,
                         ZIP_Code = tbl.ZIP_Code,
-                        AccountLocked = tbl.Account_Locked,
-                        LoginAttempts = tbl.Login_Attempts,
-                        LoginAmount = tbl.Login_Amount,
-                        LoginFails = tbl.Login_Fails
+                        AccountLocked = tbl.AccountLocked,
+                        LoginAttempts = tbl.LoginAttempts,
+                        LoginAmount = tbl.LoginAmount,
+                        LoginFails = tbl.LoginFails
                     });
                 }
                 //db.CreateUsers.Ad
@@ -146,7 +146,7 @@ namespace AccountingApp.Controllers
         //    return View("ShowUserData",item2);
         //}
 
-        public ActionResult Edit(int id)
+        public ActionResult EditUser(int id)
         {
             List<CreateUser> editUser;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -187,7 +187,7 @@ namespace AccountingApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(EditUserModel value)
+        public ActionResult EditUser(EditUserModel value)
         {
             EventLogHandler Logger = new EventLogHandler();
             List<CreateUser> CurrentUser;
@@ -319,7 +319,7 @@ namespace AccountingApp.Controllers
                 string sql = "Update dbo.UserTable set FirstName = @FirstName, LastName = @LastName, " +
                     "Username = @Username, Password = @Password, Role = @Role, Phone = @Phone, " +
                     "Email = @Email, DateModified = @Date_Modified, Active = @Active, Address = @Address, " +
-                    "City = @City, State = @State, ZIP_Code = @ZIP_Code  Where ID = @ID;";
+                    "City = @City, State = @State, ZIP_Code = @ZIP_Code Where ID = @ID;";
 
                 db.Execute(sql, new
                 {

@@ -1,7 +1,7 @@
 ﻿@model AccountingApp.Models.ChartOfAcc
 
 @{
-    ViewBag.Title = "NewAccount";
+    ViewBag.Title = "New Account";
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
     //Layout = null;
 }
@@ -32,7 +32,7 @@
                     <div class="form-group col-md-6">
 
                         <label for="AccountNumber validationTooltip01" class="control-label">Account Number</label>
-                        <input type="number" class="form-control" id="AccountNumber validationTooltip01" name="AccountNumber" required>
+                        <input type="text" class="form-control" id="AccountNumber validationTooltip01" name="AccountNumber" required>
                         @*@Html.ValidationMessageFor(m => m.AccountNumber, "", new { @class = "text-danger" })*@
                         <div class="invalid-feedback">
                             Please enter account number.
@@ -90,7 +90,7 @@
                     <div class="form-group col-md-6">
                         <div class="form-group">
                             <label for="OriginalBalance">Original Balance</label>
-                            <input type="number" step="0.01" class="form-control text-right right-justified" id="OriginalBalance" placeholder="0.00" name="OriginalBalance" required>
+                            <input type="text" class="form-control text-right right-justified" id="OriginalBalance" placeholder="0.00" name="OriginalBalance" required>
                             @*@Html.ValidationMessageFor(m => m.OriginalBalance, "", new { @class = "text-danger" })*@
                             <div class="invalid-feedback">
                                 This field is required (No more than two decimal places)
@@ -100,7 +100,7 @@
                     <div class="form-group col-md-6">
                         <div class="form-group">
                             <label for="CurrentBalance">Current Balance</label>
-                            <input type="number" step="0.01" class="form-control text-right" id="CurrentBalance" placeholder="0.00" name="CurrentBalance" required>
+                            <input type="text" class="form-control text-right" id="CurrentBalance" readonly="readonly" value="0.00" name="CurrentBalance" required>
                             @*@Html.ValidationMessageFor(m => m.CurrentBalance, "", new { @class = "text-danger" })*@
                             <div class="invalid-feedback">
                                 This field is required (No more than two decimal places)
@@ -113,14 +113,14 @@
                     <label for="AccountDescription">Account Description</label>
                     <textarea class="form-control" id="AccountDescription" rows="5" name="AccountDescription" placeholder="(optional)"></textarea>
                 </div>
-                <div class="form-group">
+                @*<div class="form-group">
                     <label for="CreatedBy">Created By</label>
-                    <input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy" required>
+                    <input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy" required>*@
                     @*@Html.ValidationMessageFor(m => m.CreatedBy, "", new { @class = "text-danger" })*@
-                    <div class="invalid-feedback">
+                    @*<div class="invalid-feedback">
                         This field is required
                     </div>
-                </div>
+                </div>*@
 
                 @*<div class="form-group">
                     <label for="Active" class="control-label">Active</label>
@@ -167,6 +167,66 @@
                 });
             }, false);
         })();
+
+    </script>
+
+    <script>
+
+        // Restricts input for the given textbox to the given inputFilter.
+        function setInputFilter(textbox, inputFilter) {
+            ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
+                textbox.addEventListener(event, function () {
+                    if (inputFilter(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    }
+                });
+            });
+        }
+
+        setInputFilter(document.getElementById("AccountNumber validationTooltip01"), function (value) {
+            return /^\d*$/.test(value);
+        });
+
+        setInputFilter(document.getElementById("OriginalBalance"), function (value) {
+            return /^-?\d*[.,]?\d{0,2}$/.test(value);
+        });
+
+    </script>
+
+    <script>
+
+        function validateFloatKeyPress(el, evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            var number = el.value.split('.');
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            //just one dot
+            if (number.length > 1 && charCode == 46) {
+                return false;
+            }
+            //get the carat position
+            var caratPos = getSelectionStart(el);
+            var dotPos = el.value.indexOf(".");
+            if (caratPos > dotPos && dotPos > -1 && (number[1].length > 1)) {
+                return false;
+            }
+            return true;
+        }
+
+        function getSelectionStart(o) {
+            if (o.createTextRange) {
+                var r = document.selection.createRange().duplicate()
+                r.moveEnd('character', o.value.length)
+                if (r.text == '') return o.value.length
+                return o.value.lastIndexOf(r.text)
+            } else return o.selectionStart
+        }
 
     </script>
 

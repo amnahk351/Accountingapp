@@ -12,15 +12,12 @@ namespace AccountingApp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class EventLog
+    public partial class DocumentsTable
     {
-        public int EventID { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> UserID { get; set; }
-        public string From { get; set; }
-        public string To { get; set; }
-        public string IPAddress { get; set; }
-        public string Screen { get; set; }
-        public string Access_Level { get; set; }
+        public int FileId { get; set; }
+        public byte[] FileBytes { get; set; }
+        public string ContentType { get; set; }
+        public string FileName { get; set; }
+        public Nullable<int> FK_EntryId { get; set; }
     }
 }

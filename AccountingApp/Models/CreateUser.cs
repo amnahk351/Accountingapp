@@ -31,16 +31,16 @@ namespace AccountingApp.Models
         public string State { get; set; }
         public string ZIP_Code { get; set; }
         public string ResetPasswordCode { get; set; }
-        public Nullable<int> Login_Amount { get; set; }
-        public Nullable<int> Login_Fails { get; set; }
-        public Nullable<bool> Account_Locked { get; set; }
-        public Nullable<System.DateTime> Last_Signout { get; set; }
-        public string Security_Question1 { get; set; }
-        public string Answer_1 { get; set; }
-        public string Security_Question2 { get; set; }
-        public string Answer_2 { get; set; }
-        public Nullable<short> Login_Attempts { get; set; }
-        public Nullable<System.DateTime> Last_Login { get; set; }
-        public Nullable<int> TotalOnline_Mins { get; set; }
+        public Nullable<int> LoginAmount { get; set; }
+        public Nullable<int> LoginFails { get; set; }
+        public Nullable<bool> AccountLocked { get; set; }
+        public Nullable<System.DateTime> LastSignout { get; set; }
+        public string SecurityQuestion1 { get; set; }
+        public string Answer1 { get; set; }
+        public string SecurityQuestion2 { get; set; }
+        public string Answer2 { get; set; }
+        public Nullable<short> LoginAttempts { get; set; }
+        public Nullable<System.DateTime> LastLogin { get; set; }
+        public Nullable<int> TotalOnlineMinutes { get; set; }
     }
 }

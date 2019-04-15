@@ -22,8 +22,8 @@ namespace AccountingApp.Controllers
             return View("Login");
         }
         [HttpPost]
-        public ActionResult Authenticate(CreateUser userLoggingIn)
-        {
+        public ActionResult Authenticate(LoginModel userLoggingIn)
+        {          
             EventLogHandler Logger = new EventLogHandler();
             ErrorController GetErr = new ErrorController();
             string inv = GetErr.GetErrorMessage(19);
@@ -37,123 +37,158 @@ namespace AccountingApp.Controllers
                         
             //var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username).FirstOrDefault();  //get the account for the typed username
             //List<CreateUser> validateLogin;
-            List<UserModel> validateLogin;
+            List<UserModel> userDetails;
 
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                validateLogin = db.Query<UserModel>("Select * from dbo.Usertable Where Username = @Username AND Password = @Password", new { Username = userLoggingIn.Username, Password = userLoggingIn.Password }).ToList();
+                userDetails = db.Query<UserModel>("Select * from dbo.UserTable Where Username = @Username", new { Username = userLoggingIn.Username }).ToList();
 
-                //validateLogin = db.Query<CreateUser>("Select * from dbo.Usertable Where Username = @Username AND Password = @Password", new { Username = userLoggingIn.Username, Password = userLoggingIn.Password }).ToList();
             }
 
             try
             {
-                //if (userDetails == null)
-                //{
-                //    throw new Exception(inv);  //the username does not exist                    
-                //}
-
-                if (validateLogin.Count == 0)
-                    throw new Exception(inv);
-                else if (userLoggingIn.Password != validateLogin[0].Password)
+                if (userDetails == null)
                 {
-                    //usernames exists, but password is wrong                    
-                    //if (validateLogin[0].Login_Attempts == 1)
-                        if (validateLogin[0].LoginAttempts == 1)
-                        {
+                    throw new Exception(inv);  //the username does not exist                    
+                }
+
+                else if (userDetails.Count == 0)
+                {
+                    throw new Exception(inv);
+                }
+
+                else if (userDetails[0].Active == false)
+                {
+                    throw new Exception(denied);
+                }
+
+                else if (userDetails[0].AccountLocked == true) {
+                    throw new Exception(locked);
+                }
+                    
+
+                if (userLoggingIn.Password != userDetails[0].Password)
+                {                    
+                    //usernames exists, but password is wrong
+
+                    if (userDetails[0].LoginAttempts == 1)
+                    {
+
+                        //Adjust fails and login attempts for last attempt
                         using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                         {
-
-                            string sql = "Update dbo.UserTable set AccountLocked = true Where Username = @Username";
+                            string sql = "Update dbo.UserTable set LoginFails = @fails, LoginAttempts = @attempts Where Username = @name;";
 
                             db.Execute(sql, new
                             {
-                                Username = validateLogin[0].Username
+                                fails = userDetails[0].LoginFails + 1,
+                                attempts = userDetails[0].LoginAttempts - 1,
+                                name = userDetails[0].Username
 
                             });
                         }
+
+                        //Lock account for too many invalid login attempts;
+                        bool NewLock = true;
+
+                        using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                        {
+                            string sql = "Update dbo.UserTable set AccountLocked = @Lock Where Username = @name;";
+
+                            db.Execute(sql, new
+                            {
+                                Lock = NewLock,
+                                name = userDetails[0].Username
+
+                            });
+                        }                 
+
+                        Logger.LogAccountLocked(userDetails[0].ID, userDetails[0].Username);
+                        throw new Exception(locked);
                     }
+                    
+
                     using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                     {
-
-                        string sql = "Update dbo.UserTable set LoginFails = LoginFails + 1, LoginAttempts = LoginAttempts - 1 Where Username = @Username";
+                        string sql = "Update dbo.UserTable set LoginFails = @fails, LoginAttempts = @attempts Where Username = @name;";
 
                         db.Execute(sql, new
                         {
-                            Username = validateLogin[0].Username
+                            fails = userDetails[0].LoginFails + 1,
+                            attempts = userDetails[0].LoginAttempts - 1,
+                            name = userDetails[0].Username
 
                         });
                     }
 
+                    int AmountRemaining = (int) userDetails[0].LoginAttempts - 1;
 
-                    throw new Exception(attempts + " " + validateLogin[0].LoginAttempts.ToString());
+
+                    throw new Exception(attempts + " " + AmountRemaining.ToString());
 
                     //throw new Exception(attempts + " " + validateLogin[0].Login_Attempts.ToString());
                 }
 
-                else if (validateLogin[0].Active == false)
-                    throw new Exception(denied);
-                else if (validateLogin[0].AccountLocked == true)
-
-                    //else if (validateLogin[0].Account_Locked == true)
-                    throw new Exception(denied);
-                else if (validateLogin[0].SecurityQuestion1 == null)
-
-                //else if (validateLogin[0].Security_Question1 == null)
+                
+                else if (userDetails[0].SecurityQuestion1 == null)                
                 {
-                    System.Web.HttpContext.Current.Session["FirstNameofUser"] = validateLogin[0].FirstName;
-                    System.Web.HttpContext.Current.Session["Username"] = validateLogin[0].Username;
-                    System.Web.HttpContext.Current.Session["UserRole"] = validateLogin[0].Role;
-
+                    System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails[0].FirstName;
+                    System.Web.HttpContext.Current.Session["Username"] = userDetails[0].Username;
+                    System.Web.HttpContext.Current.Session["UserRole"] = userDetails[0].Role;
+                                        
                     
+
                     using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                     {
-
-                        string sql = "Update dbo.UserTable set LoginAmount = LoginAmount+1 Where Username = @Username";
+                        string sql = "Update dbo.UserTable set LoginAmount = @amount Where Username = @name;";
 
                         db.Execute(sql, new
                         {
-                            Username = validateLogin[0].Username
+                            amount = userDetails[0].LoginAmount + 1,
+                            name = userDetails[0].Username
 
                         });
                     }
-                    
 
-                    System.Diagnostics.Debug.WriteLine("Went to security questions.");
+
                     return Redirect("~/Account/SecurityQuestions");
                 }
                 else
                 {
                     //The account is allowed
-                    System.Web.HttpContext.Current.Session["FirstNameofUser"] = validateLogin[0].FirstName;
-                    System.Web.HttpContext.Current.Session["Username"] = validateLogin[0].Username;
-                    System.Web.HttpContext.Current.Session["UserRole"] = validateLogin[0].Role;
-                    //System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
-                    //System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
-                    //System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
+                    System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails[0].FirstName;
+                    System.Web.HttpContext.Current.Session["Username"] = userDetails[0].Username;
+                    System.Web.HttpContext.Current.Session["UserRole"] = userDetails[0].Role;
+                    
+                    //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
+                    
+
+                    int x = 10;
+
                     using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                     {
-
-                        string sql = "Update dbo.UserTable set LoginAmount = LoginAmount + 1, LoginAttempts = 10 Where Username = @Username";
+                        string sql = "Update dbo.UserTable set LoginAmount = @amount, LoginAttempts = @attempts Where Username = @name;";
 
                         db.Execute(sql, new
                         {
-                            Username = validateLogin[0].Username
+                            amount = userDetails[0].LoginAmount + 1,
+                            attempts = x,
+                            name = userDetails[0].Username
 
                         });
                     }
 
 
-                    if (validateLogin[0].Role == "Admin")
+                    if (userDetails[0].Role == "Admin")
                     {
                         return Redirect("~/Admin/AdminIndex"); //takes user to admin page
                     }
-                    else if (validateLogin[0].Role == "Accountant")
+                    else if (userDetails[0].Role == "Accountant")
                     {
-                        return Redirect("~/Accountant/AccountantIndex");  //takes user to accountant page, probably should make this one go to a manager page
+                        return Redirect("~/Accountant/AccountantIndex");  //takes user to accountant page
                     }
-                    else if (validateLogin[0].Role == "Manager")
+                    else if (userDetails[0].Role == "Manager")
                     {
                         return Redirect("~/Manager/ManagerIndex");
                     }
@@ -161,6 +196,8 @@ namespace AccountingApp.Controllers
 
                 }
             }
+
+
             
             //try
             //{
@@ -238,7 +275,7 @@ namespace AccountingApp.Controllers
             {
                 Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'Login';</script>");
             }
-
+            
             //return Redirect("~/Admin/AdminIndex");  //just a default page to end up at if neither option above was used, probably should make this an accountant
             return View("~/Views/Admin/AdminIndex.cshtml"); //just a default page to end up at if neither option above was used, probably should make this an accountant
 
@@ -413,14 +450,16 @@ namespace AccountingApp.Controllers
                     {
 
                         string sql = $"Update dbo.UserTable set Password = @Password, ResetPasswordCode = NULL where Username = @Username";
-                        db.Execute(sql, new { Password = validatePasswordCode[0].Password, Username = validatePasswordCode[0].Username });
+                        db.Execute(sql, new { Password = model.Password, Username = validatePasswordCode[0].Username });
                         message = "Password updated successfully.";
                         Logger.LogPasswordReset(validatePasswordCode[0].ID, validatePasswordCode[0].Username);
                         ViewBag.Message = message;
                     }
                 }
             }
-                return View(model);
+
+
+            return View(model);
                 //if (ModelState.IsValid)
                 //{
                 //    using (Database1Entities5 dc = new Database1Entities5())
@@ -557,15 +596,15 @@ namespace AccountingApp.Controllers
 
 
                 user = db.Query<CreateUser>("Select * from dbo.UserTable where Username = @Username", new { Username = sessionUser }).ToList();
-                string sql = $"Update dbo.UserTable set SecurityQuestion1 = @SecurityQuestion1, Answer1 = @Answer1," +
-                             $"SecurityQuestion = @SecurityQuestion2, Answer2 = @Answer2 where Username = @Username";
+                string sql = $"Update dbo.UserTable set SecurityQuestion1 = @Question1, Answer1 = @Ans1," +
+                             "SecurityQuestion2 = @Question2, Answer2 = @Ans2 where Username = @Username";
                 db.Execute(sql, new
                 {
-                    SecurityQuestion1 = model.Security_Question1,
-                    Answer1 = model.Answer_1,
-                    SecurityQuestion2 = model.Security_Question2,
-                    Answer2 = model.Answer_2,
-                    Username = user[0].Username
+                    Question1 = model.Security_Question1,
+                    Ans1 = model.Answer_1,
+                    Question2 = model.Security_Question2,
+                    Ans2 = model.Answer_2,
+                    Username = sessionUser
                 });
             }
             //using (Database1Entities5 dc = new Database1Entities5())
@@ -602,16 +641,19 @@ namespace AccountingApp.Controllers
         public ActionResult AccountRecovery(AccountRecoveryModel model) {
             ErrorController ErrorFinder = new ErrorController();
             List<CreateUser> user;
+
+            
+
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-               
-
                 user = db.Query<CreateUser>("Select * from dbo.UserTable where Username = @Username AND Email = @Email;", 
                     new { Username = model.Username, Email = model.Email }).ToList();
             }
-            if (user.Count() > 0)
+
+
+            if (user.Count() == 0)
                 ViewBag.Message = ErrorFinder.GetErrorMessage(35);
-            else if(user[0].Account_Locked == false)
+            else if(user[0].AccountLocked == false)
                 ViewBag.Message = ErrorFinder.GetErrorMessage(36);
             else
             {
@@ -659,16 +701,14 @@ namespace AccountingApp.Controllers
             List<CreateUser> user;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-
-
                 user = db.Query<CreateUser>("Select * from dbo.UserTable where Username = @Username AND Email = @Email;",
                     new { Username = sessionUser, Email = sessionEmail }).ToList();
             }
             //Database1Entities5 db = new Database1Entities5();
             //var userDetails = db.CreateUsers.Where(validUser => validUser.Username == sessionUser && validUser.Email == sessionEmail).FirstOrDefault();
-
-            //ViewBag.Question_1 = userDetails.Security_Question1;
-            //ViewBag.Question_2 = userDetails.Security_Question2;
+            
+            ViewBag.Question_1 = user[0].SecurityQuestion1;
+            ViewBag.Question_2 = user[0].SecurityQuestion2;
 
             return View(CustomView);
         }
@@ -690,14 +730,14 @@ namespace AccountingApp.Controllers
                 user = db.Query<CreateUser>("Select * from dbo.UserTable where Username = @Username AND Email = @Email;",
                     new { Username = sessionUser, Email = sessionEmail }).ToList();
             }
-            ViewBag.Question_1 = user[0].Security_Question1;
-            ViewBag.Question_2 = user[0].Security_Question2;
+            ViewBag.Question_1 = user[0].SecurityQuestion1;
+            ViewBag.Question_2 = user[0].SecurityQuestion2;
             //Database1Entities5 db = new Database1Entities5();
             //var userDetails = db.CreateUsers.Where(validUser => validUser.Username == sessionUser && validUser.Email == sessionEmail).FirstOrDefault();
 
             //ViewBag.Question_1 = userDetails.Security_Question1;
             //ViewBag.Question_2 = userDetails.Security_Question2;
-            if (model.Answer_1 == user[0].Answer_1 && model.Answer_2 == user[0].Answer_2)
+            if (model.Answer_1 == user[0].Answer1 && model.Answer_2 == user[0].Answer2)
             {
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {

@@ -33,16 +33,18 @@
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
-                    <h3 class="card-title">Addams & Family Inc.</h3>
-                    <h3 class="card-title">Balance Sheet</h3>
-                    <hr />
-                    <h4>
+                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
+                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Balance Sheet</h4>
+                    @*<hr style="padding: 0px; margin: 0px;" />*@
+                    <h4 style="padding: 0px; margin: 0px;">
+                        As of
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
-
-                    <table id="assetsTable" class="table-striped" style="width:500px;">
+                    @*<br />*@
+                    <hr style="border-width: 2px; border-color: black" />
+                    <table id="assetsTable" class="table-striped" style="width:510px;">
 
                         <tr class="titleRow">
                             <th class="text-left" colspan="3">Assets</th>
@@ -64,7 +66,8 @@
                                         <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
                                         <td>@Model[i].CurrentBalance</td>
                                         <td> </td>
-                                    }
+                                    } @*need to write a function to include a border at the bottom of this list, maybe like list.end or something*@
+                                @*chart seems to be messing up by displaying the dark backgrounds of 2 rows together twice instead of being separated by white*@
 
                                 </tr>
                             }
@@ -92,7 +95,7 @@
                                     }
                                     else
                                     {
-                                        <td>(@Model[i].CurrentBalance)</td>
+                                        <td style="border-bottom: .15rem solid">(@Model[i].CurrentBalance)</td>
                                     }
                                     <td> </td>
                                 }
@@ -109,13 +112,13 @@
                         <tr>
                             <th class="text-left">Total Asset</th>
                             <td> </td>
-                            <td>@ViewBag.totalAssets</td>
+                            <td style="border-top: .15rem solid; border-bottom: .4rem double">@ViewBag.totalAssets</td>
                         </tr>
                     </table>
 
                     <br />
 
-                    <table id="liabilitiesTable" class="table-striped" style="width:500px;">
+                    <table id="liabilitiesTable" class="table-striped" style="width:510px;">
 
                         <tr class="titleRow">
                             <th class="text-left">Liabilities & Stockholder's Equity</th>
@@ -138,13 +141,13 @@
                                     @if (Model[i].AccountName.ToLower() != "unearned revenue" && Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                     {
                                         <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                        <td align="right">@Model[i].CurrentBalance</td>
+                                        <td align="right" >@Model[i].CurrentBalance</td>
                                         <td> </td>
                                     }
                                     else if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                     {
                                         <td align="left">&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                        <td align="right">@Model[i].CurrentBalance</td>
+                                        <td align="right" style="border-bottom: .15rem solid">@Model[i].CurrentBalance</td>
                                         <td> </td>
                                     }
 
@@ -160,7 +163,7 @@
                         <tr>
                             <td align="left">Total Liabilities</td>
                             <td> </td>
-                            <td>@ViewBag.totalLiabilities</td>
+                            <td style="border-top: .15rem solid; border-bottom: .15rem solid; text-align: right">@ViewBag.totalLiabilities</td>
                         </tr>
 
                         <tr>
@@ -193,12 +196,13 @@
                         <tr>
                             <th class="text-left">Total Stockholders' Equity</th>
                             <td> </td>
-                            <td>@ViewBag.totalStockHolderEquity</td>
+                            <td style="border-top: .15rem solid; border-bottom: .15rem solid">@ViewBag.totalStockHolderEquity</tdstyle="border-top:>
                         </tr>
+                        <tr height=20px></tr>
                         <tr>
                             <th class="text-left">Total Liabilities & Stockholders' Equity</th>
                             <td> </td>
-                            <td>@ViewBag.totalLiabilitesStockEquity</td>
+                            <td style="border-bottom: .4rem double">@ViewBag.totalLiabilitesStockEquity</tdstyle="border-bottom:>
                         </tr>
                     </table>
                 </div>

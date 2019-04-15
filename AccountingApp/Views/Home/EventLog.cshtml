@@ -9,8 +9,21 @@
 <head>
 
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
 
     <!-- Bootstrap CSS -->
     @*
@@ -322,13 +335,13 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Event_ID)
+                                    @Html.DisplayFor(modelItem => item.EventID)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Date)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.User_ID)
+                                    @Html.DisplayFor(modelItem => item.UserID)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.From)
@@ -337,7 +350,7 @@
                                     @Html.DisplayFor(modelItem => item.To)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.IP_Address)
+                                    @Html.DisplayFor(modelItem => item.IPAddress)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Screen)
