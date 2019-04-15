@@ -357,154 +357,8 @@
 </head>
 <body>
     <div class="wrapper">
-        <!-- Sidebar  -->
-        @*<nav id="sidebar" class="fixed-left">
-
-                <div class="sidebar-header">
-                    <h5>Menu</h5>
-                </div>
-
-                <ul class="list-unstyled components">
-                    <li class="active">
-                        <a href="/Accountant/AccountantIndex">
-                            <i class="fas fa-home" style="margin-right:10px;"></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li>
-
-                        <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                            <i class="fas fa-list" style="margin-right:10px;"></i>
-
-                            Chart Of Accounts
-                        </a>
-                        <ul class="collapse list-unstyled" id="accountSubmenu">
-                            <li>
-                                <a href="/Accountant/ChartOfAccounts">Chart of Accounts</a>
-                            </li>
-
-
-                        </ul>
-                    </li>
-                    <li>
-
-                        <a href="/Accountant/Journalize">
-                            <i class="far fa-edit" style="margin-right:10px"></i>
-                            Journalize
-                        </a>
-                    </li>
-                    <li>
-
-                        <a href="">
-                            <i class="fas fa-book" style="margin-right:10px"></i>
-                            General Ledger
-                        </a>
-                    </li>
-                    <li>
-
-                        <a href="/Accountant/AccountantIndex">
-                            <i class="fas fa-book" style="margin-right:10px"></i>
-                            General Journal
-                        </a>
-                    </li>
-                    <li>
-
-                        <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                            <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
-                            Transactions
-                        </a>
-                        <ul class="collapse list-unstyled" id="transactionSubmenu">
-                            <li>
-                                <a href="/Accountant/ManagerApproval">Pending Transactions</a>
-                            </li>
-                            <li>
-                                <a href="">Posted Transactions</a>
-                            </li>
-                            <li>
-                                <a href="">Rejected Transactions</a>
-                            </li>
-                            <li>
-                                <a href="">Suspended Transactions</a>
-                            </li>
-
-                        </ul>
-                    </li>
-                    <li>
-
-                        <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                            <i class="far fa-chart-bar" style="margin-right:10px"></i>
-                            Reports
-                        </a>
-                        <ul class="collapse list-unstyled" id="reportSubmenu">
-                            <li>
-                                <a href="/Accountant/TrialBalance">Trial Balance</a>
-                            </li>
-                            <li>
-                                <a href="/Accountant/IncomeStatement">Income Statement</a>
-                            </li>
-                            <li>
-                                <a href="/Accountant/RetainedEarnings">Statement Of Retained Earnings</a>
-                            </li>
-                            <li>
-                                <a href="/Accountant/BalanceSheet">Balance Sheet</a>
-                            </li>
-                            <li>
-                                <a href="/Accountant/PostClosingTrialBalance">Post Closing Trial Balance</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="/Accountant/EventLog">
-                            <i class="fas fa-briefcase" style="margin-right:10px;"></i>
-                            Event Log
-                        </a>
-
-                    </li>
-                </ul>
-
-            </nav>*@
 
         <div id="content">
-
-            @*<nav class="navbar navbar-expand-lg sticky-top navbar-light justify-content-between">
-                    <div class="container-fluid">
-
-                        <button type="button" id="sidebarCollapse" class="btn btn-info" style="background-color:#3e547f">
-                            <i class="fas fa-bars"></i>
-
-                        </button>
-                        <a class="navbar-brand" href="#">
-                            <img src="~/img/Accounting Logo.PNG" width="150" height="40" style="margin-right: 15px; margin-left: 10px;" />
-
-                        </a>
-                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <i class="fas fa-align-justify"></i>
-                        </button>
-
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="nav navbar-nav ml-auto" style="float:right">
-                                <li class="nav-item active" style="margin-top:10px">
-                                    <a>
-                                        <i class="fas fa-user-circle" style="color:#3e547f;font-size:24px; "></i>
-
-
-                                        <i id="LoggedName" class="nav-item" style="font-size: large;  font-style: normal;">Welcome, Admin</i>
-                                    </a>
-
-                                </li>
-
-                                <li class="nav-item active">
-                                    <button class=" btn btn-outline-success" href="#" style="font-size:large;margin-left:30px">
-                                        Log Out
-
-
-                                    </button>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </div>
-                </nav>*@
 
             @using (Html.BeginForm(new { enctype = "multipart/form-data" }))
             {
@@ -738,16 +592,6 @@
                 <br />
             }
 
-            <div class="container body-content">
-
-                <hr />
-                <footer align="center">
-                    <p>
-                        &copy; @DateTime.Now.Year - Objective Accounting
-                        Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
-                    </p>
-                </footer>
-            </div>
         </div>
 
     </div>
@@ -989,12 +833,10 @@
     @Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
     @Scripts.Render("~/Scripts/jquery.filedrop.js")
 
-    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript">
         $('.form_datetime').datetimepicker({
             format: "m/d/yyyy",
