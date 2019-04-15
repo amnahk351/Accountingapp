@@ -24,33 +24,7 @@ namespace AccountingApp.Controllers
                 return View(getAllEntriesOfStatus(status));
         }
 
-        [HttpPost]
-        public ActionResult Journalize(Transaction transaction)
-        {
-            Trace.WriteLine(transaction.Debit);
-            Trace.WriteLine(transaction.AccountNumber);
-
-            List<ChartOfAcc> listAccounts;
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
-            }
-            List<SelectListItem> sliAccountList = new List<SelectListItem>();
-
-            foreach (ChartOfAcc coa in listAccounts)
-            {
-                SelectListItem item = new SelectListItem
-                {
-                    Text = coa.AccountName,
-                    Value = coa.AccountNumber.ToString()
-                };
-                sliAccountList.Add(item);
-            }
-
-            ViewBag.accountlist = sliAccountList;
-            return View("~/Views/Accountant/AccountantIndex.cshtml");
-        }
+        
 
 
         public int GetLatestEntryId()
@@ -70,51 +44,7 @@ namespace AccountingApp.Controllers
         }
 
 
-        [HttpPost]
-        public JsonResult InsertJournal(Transaction[] transactions)
-        {
-            int insertedRecords = 0;
-            int NewEntryId = GetLatestEntryId();
-            var sessionUser = Session["Username"] as string;
-            EventLogHandler Logger = new EventLogHandler();
-
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-
-                for (int i = 1; i < transactions.Length; i++)
-                {
-                    //var x = DateTime.Now;
-
-                    //if was submitted today added the current time to the database
-
-                    //if submitted on another day, default the time to 12
-
-
-                    string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
-                    "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)" +
-                    "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," +
-                    "@Debit,@Credit,@EntryId,@Entry_Type)";
-
-                    db.Execute(sql, new
-                    {
-                        AccountantUsername = sessionUser,
-                        AccountantComment = transactions[i].AccountantComment,
-                        DateSubmitted = transactions[i].DateSubmitted,
-                        Status = transactions[i].Status,
-                        AccountName = transactions[i].AccountName,
-                        Debit = transactions[i].Debit,
-                        Credit = transactions[i].Credit,
-                        EntryId = NewEntryId + 1,
-                        Entry_Type = transactions[i].Entry_Type
-                    });
-
-                    insertedRecords++;
-                    //Logger.LogJournalEntrySubmitted(sessionUser, NewEntryId.ToString());
-                }
-            }
-
-            return Json(insertedRecords);
-        }
+       
 
         private static byte[] getBytes(string file)
         {
@@ -277,6 +207,9 @@ namespace AccountingApp.Controllers
 
             return entries;
         }
+
+
+       
 
         public ActionResult ChartOfAccounts()
         {

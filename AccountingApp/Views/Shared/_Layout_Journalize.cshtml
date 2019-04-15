@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title - Objective Accounting</title>
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    @*link above is for user icon*@
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
+    @*added the 3 links above to see if collapse would work*@
+
+    <style>
+       
+        body {
+            padding-top: 0px; /*Do not delete this line, it's an override*/
+            display: block;
+            margin: 0px;
+            background: #f4f4f4;
+        }
+
+        .navbar {
+            /*overflow: hidden;*/ /*important to keep this hidden or dropdown will be within/behind navbar*/
+            background-color: silver;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            /*padding: 14px 16px;*/
+            /*padding: 0rem 1rem;*/
+            /*padding: 0px;*/
+        }
+
+            .navbar a {
+                /*float: left;*/
+                display: inline-block;
+                font-size: 20px;
+                color: black; /*text color for non-dropdown headings*/
+                /*text-align: center;*/
+                /*padding: 0rem 1rem;*/
+                padding: 14px 16px;
+                /*padding: 24px 25px; crucial for horizontal spacing*/
+                text-decoration: none;
+            }
+
+        .nav_dropdown {
+            float: left; /*don't think it does anything*/
+            overflow: hidden;
+            color: black; /*color for dropdown headings*/
+        }
+
+            .nav_dropdown .nav_dropbtn {
+                font-size: 20px;
+                border: none;
+                outline: none;
+                /*color: black; dont think this does anything*/
+                padding: 14px 16px;
+                /*padding: 24px 25px; crucial for horizontal spacing*/
+                background-color: inherit;
+                font-family: inherit;
+                margin: 0;
+            }
+
+            .navbar a:hover, .nav_dropdown:hover .nav_dropbtn {
+                background-color: #0087ff; /*hover color for each heading*/
+                color: black; /*color for individual links within dropdown*/
+                cursor: pointer;
+            }
+
+        .nav_dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .nav_dropdown-content a {
+                float: none;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+            }
+
+                .nav_dropdown-content a:hover {
+                    text-decoration: none;
+                    background-color: #ddd;
+                    /*color: white;*/
+                }
+
+        .nav_dropdown:hover .nav_dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+   
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer align="center">
+            <p>
+                &copy; @DateTime.Now.Year - Objective Accounting -
+                Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
+            </p>
+        </footer>
+    </div>
+
+    <script type="text/javascript">
+    window.onload = function () {
+        var username = '@Session["FirstNameofUser"]';
+        document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
+    };
+    </script>
+
+    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>*@
+    @*added the 2 scripts above to see if the collapse would work*@
+
+    @*@Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")*@
+    @RenderSection("scripts", required: false)
+</body>
+</html>

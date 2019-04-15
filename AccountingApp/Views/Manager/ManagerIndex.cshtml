@@ -16,6 +16,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">*@
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
@@ -31,6 +39,13 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
     <style>
+        #container {
+            min-width: 310px;
+            max-width: 800px;
+            height: 400px;
+            margin: 0 auto
+        }
+        
         a,
         a:hover,
         a:focus {
@@ -365,8 +380,8 @@
 
                 </div>
                 <hr class="my-4" />
-                <div class="row">
-                    <div class="column " style="width:45%; margin-left:20px;height:170px">
+                <div class="row ">
+                    <div class="column " style="width:45%; margin-left:24px;height:170px">
                         <div class="form-row left-div " style="width:100%">
                             <div class="card shadow " style="flex-basis: 85rem; flex-grow: 0; border-top-width:10px; border-top-color:forestgreen" ;>
                                 <div class="card-body">
@@ -392,9 +407,9 @@
                         <br />
 
                     </div>
-                    <div class="column " style="width:45%; margin-left:20px; height:170px">
+                    <div class="column " style="width:45%; margin-left:22px; height:170px">
                         <div class="form-row left-div " style="width:100%">
-                            <div class="card shadow " style="flex-basis: 65rem; flex-grow: 0; border-top-width:10px; border-top-color:forestgreen" ;>
+                            <div class="card shadow " style="flex-basis: 68rem; flex-grow: 0; border-top-width:10px; border-top-color:forestgreen" ;>
                                 <div class="card-body">
                                     <h4>
                                         <i class="fas fa-dollar-sign" style="color:forestgreen"></i>
@@ -423,8 +438,26 @@
 
                     <br />
                 </div>
+                <br />
+                <div class="row ">
+                    <div class="column shadow" style="width:45%; margin-left:20px;">
+                        <div class="shadow" id="chart" style="width:100%"></div>
+                    </div>
+                    <div class="column " style="width:45%; margin-left:20px; ">
+                        <div class="shadow" id="graph" style="float:left;width:100%"></div>
+                    </div>
 
+                </div>
+                <br />
+                <div class="row ">
+                    <div class="column shadow" style="width:45%; margin-left:20px;">
+                        <div class="shadow" id="profitloss" style="width:100%"></div>
+                    </div>
+                    <div class="column " style="width:45%; margin-left:20px; ">
+                        <div class="shadow" id="equity" style="float:left;width:100%"></div>
+                    </div>
 
+                </div>
                 <hr />
 
             </div>
@@ -470,6 +503,201 @@
     <script>
         $(document).ready(function () {
             $('#Accountstable').DataTable();
+        });
+    </script>
+
+
+    <script>
+
+        var chart = Highcharts.chart('chart', {
+            title: {
+                text: 'Current Assets And Current Liabilities'
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: ['Current Assets', 'Current Liabilities']
+            },
+            plotOptions: {
+                series: {
+                    pointWidth: 45
+                }
+            },
+
+            series: [{
+                type: 'column',
+                colorByPoint: true,
+                data: [
+                { y: 6000, color: 'green' },
+                { y: 2000, color: 'orange' }],
+                showInLegend: false
+            }]
+
+        });
+
+
+       
+      
+       
+
+
+
+
+
+
+        Highcharts.chart('graph', {
+
+            title: {
+                text: 'Current Ratio and Quick Ratio'
+            },
+
+           
+
+            yAxis: {
+               
+                categories: [0, 10, 20, 40, 80],
+            
+                title: {
+                    text: 'Values'
+                }
+            },
+           
+            legend: {
+                layout: 'Vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            chart: {
+                width: null
+            },
+
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 2015
+                }
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Current Ratio(Annual)',
+                data: [12.4, 17.8, 10.2, 8.8,14.8]
+            },  {name: 'Quick Ratio(Annual)',
+                    data: [ 0.83, 15.8, 10.2, 9.2, 10.8,  ]
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 800
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+        });
+
+
+        var chart = Highcharts.chart('profitloss', {
+
+            title: {
+                text: 'Net Income'
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+
+            series: [{
+                name: 'Net Income',
+
+                type: 'column',
+                colorByPoint: true,
+                data: [{ y: 6000, color: 'green' },
+                    { y: 2000, color: 'green' },
+                    { y: 3000, color: 'green' },
+                    { y: 6000, color: 'green' },
+                    { y: 7000, color: 'green' },
+                    { y: 6000, color: 'green' }, { y: 6000, color: 'green' },
+                    { y: 4000, color: 'green' },
+                    { y: 3000, color: 'green' },
+                    { y: -2000, color: 'red' },
+                    { y: 6000, color: 'green' },
+                    { y: 6000, color: 'green' }],
+                showInLegend: false
+            }]
+
+        });
+
+
+
+
+
+
+        Highcharts.chart('equity', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Return on Equity'
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                
+                colorByPoint: true,
+                data: [{
+                    name: 'Equity',
+                    y: 20000
+                }, {
+                    name: 'Net Income',
+                     y: 10000, color: 'green' 
+                }]
+            }]
         });
     </script>
 </body>
