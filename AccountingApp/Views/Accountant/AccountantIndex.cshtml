@@ -412,22 +412,36 @@
                                 <th>Debit</th>
                                 <th>Credit</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody style="background-color:white; width:100%">
                             @for (int i = 0; i < Model.entries.Count; i++)
                             {
-                                <tr>
-                                    <td>@Model.entries[i].submitDate</td>
-                                    <td>@Model.entries[i].entryID</td>
-                                    <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
-                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                                    <td id="transactionstatus" class="status">
-                                        @Model.entries[i].status
+                            <tr>
+                                <td>@Model.entries[i].submitDate</td>
+                                <td>@Model.entries[i].entryID</td>
+                                <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
+                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                                <td id="transactionstatus" class="status">
+                                    @Model.entries[i].status
 
-                                    </td>
-                                </tr>
+                                </td>
+                                <td>
+                                    @if (@Model.entries[i].status == "suspended")
+                                    {
+                                        <a style="color: blue" href="@Url.Action("EditJournal", new { id = Model.entries[i].entryID})">
+                                            Edit
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: blue; cursor: pointer">View</span>
+                                    }
+
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>
