@@ -228,7 +228,7 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Accountant/AccountantIndex">
+                    <a href="/Accountant/Dashboard">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
@@ -328,13 +328,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="/Accountant/EventLog">
-                        <i class="fas fa-briefcase" style="margin-right:10px;"></i>
-                        Event Log
-                    </a>
-
-                </li>
+               
             </ul>
 
         </nav>
@@ -418,6 +412,23 @@
                         <tbody style="background-color:white; width:100%">
                             @for (int i = 0; i < Model.entries.Count; i++)
                             {
+<<<<<<< HEAD
+                                <tr>
+                                    <td>@Model.entries[i].submitDate</td>
+                                    <td>@Model.entries[i].entryID</td>
+                                    <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                                    <td id="transactionstatus" class="status" >
+                                        <script>
+
+                                        </script>
+                                        @Model.entries[i].status
+
+
+                                    </td>
+                                </tr>
+=======
                             <tr>
                                 <td>@Model.entries[i].submitDate</td>
                                 <td>@Model.entries[i].entryID</td>
@@ -442,6 +453,7 @@
 
                                 </td>
                             </tr>
+>>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318
                             }
                         </tbody>
                     </table>

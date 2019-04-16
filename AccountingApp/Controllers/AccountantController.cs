@@ -16,6 +16,10 @@ namespace AccountingApp.Controllers
 {
     public class AccountantController : Controller
     {
+        public ActionResult Dashboard()
+        {
+            return View();
+        }
 
         public ActionResult EditJournal(double id)
         {

@@ -268,6 +268,8 @@
 
                                 </button>
                             </li>
+<<<<<<< HEAD
+=======
                     </div>
             </nav>
 
@@ -436,13 +438,16 @@
                                         <a href="@Url.Action("EditAccount", new { id = Model[i].AccountNumber })">
                                             Edit
                                         </a>
+>>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318
 
                                     </td>
                                     </tr>
                             }
                     </div>
 
-                <div class=" body-content" style="width:100%; margin:0 auto">
+    <div class="body-content" style="width:100%; margin:0 auto">
+        
+   
                     <div>
                         <h4 style="display:inline">Chart Of Accounts</h4>
                         @*<button type="button" class="btn btn-success" href="#NewAccount" data-toggle="modal" data-target="#exampleModal" style="float:right">*@
@@ -464,6 +469,27 @@
                         </div>
                     }
 
+<<<<<<< HEAD
+                        <table id="Accountstable" class="table table-responsive table-hover shadow " style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
+                            <thead class="shadow" style="background-color:white; ">
+                                <tr>
+                                    <th style="width:10%">Account Number</th>
+                                    <th style="width:20%">Account Name</th>
+                                    <th style="width:10%">Account Type</th>
+                                    <th style="width:10%">Normal Side</th>
+                                    <th style="width:10%">Original Balance</th>
+                                    <th style="width:10%">Current Balance</th>
+                                    <th style="width:10%">Account Description</th>
+                                    <th style="width:10%">Active</th>
+                                    <th style="width:10%">Created By</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @for (int i = 0; i < Model.Count(); i++)
+                                {
+=======
                     <table id="Accountstable" class="table table-responsive table-hover shadow " style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                         <thead class="shadow" style="background-color:white; ">
                             <tr>
@@ -484,6 +510,7 @@
 
                             @for (int i = 0; i < Model.Count(); i++)
                             {
+>>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318
                                 <tr>
                                     <td>@Model[i].AccountNumber</td>
                                     <td>   <a href="#" style="color:blue">@Model[i].AccountName</a></td>
@@ -501,10 +528,13 @@
 
                                         </a>
 
+<<<<<<< HEAD
+=======
                                         @*<a href="@Url.Action("Delete", new { id = Model[i].AccountNumber})">
                                                 <i class="fas fa-user-edit"></i>
                                                 Delete
                                             </a>*@
+>>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318
                                     </td>
 
 
@@ -515,6 +545,16 @@
                     </table>
                     <hr />
 
+<<<<<<< HEAD
+            <div class="container body-content">
+
+                <footer align="center">
+                    <p>
+                        &copy; @DateTime.Now.Year - Objective Accounting
+                        Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
+                    </p>
+                </footer>
+=======
                 </div>
                 <div class="container body-content">
 
@@ -525,6 +565,7 @@
                         </p>
                     </footer>
                 </div>
+>>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318
             </div>
 
         </div>

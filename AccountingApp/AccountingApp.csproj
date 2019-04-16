@@ -497,15 +497,18 @@
     <Content Include="Views\Manager\ChartOfAccounts.cshtml" />
     <Content Include="Views\Manager\EventLog.cshtml" />
     <Content Include="Views\Accountant\ChartOfAccounts.cshtml" />
-    <Content Include="Views\Accountant\EventLog.cshtml" />
     <Content Include="Views\Accountant\PostClosingTrialBalance.cshtml" />
     <Content Include="Views\Accountant\RetainedEarnings.cshtml" />
     <Content Include="Views\Accountant\BalanceSheet.cshtml" />
     <Content Include="Views\Accountant\IncomeStatement.cshtml" />
     <Content Include="Views\Accountant\TrialBalance.cshtml" />
     <Content Include="Views\Accountant\EditJournal.cshtml" />
+<<<<<<< HEAD
+    <Content Include="Views\Accountant\Dashboard.cshtml" />
+=======
     <Content Include="Views\Shared\_Layout_Journalize.cshtml" />
     <Content Include="Views\Accountant\TransactionSummary.cshtml" />
+>>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />

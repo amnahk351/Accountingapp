@@ -1,34 +1,29 @@
 ﻿
-@model IEnumerable<AccountingApp.Models.EventLog>
-
 @{
-    ViewBag.Title = "Event Log";
+    ViewBag.Title = "AdminIndex";
     //Layout = "~/Views/Shared/_Layout_Admin.cshtml";
     Layout = null;
 }
+
+<!DOCTYPE html>
 <html>
+
 <head>
-
-
     <meta charset="utf-8">
+    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <!-- Bootstrap CSS -->
-    @*
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
-    @*
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">*@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
@@ -37,6 +32,13 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
     <style>
+        #container {
+            min-width: 310px;
+            max-width: 800px;
+            height: 400px;
+            margin: 0 auto
+        }
+
         a,
         a:hover,
         a:focus {
@@ -190,15 +192,16 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar" class="fixed-left">
+        <nav id="sidebar">
 
             <div class="sidebar-header">
                 <h5>Menu</h5>
             </div>
 
+
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Accountant/ManagerIndex">
+                    <a href="/Accountant/Dashboard">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
@@ -216,7 +219,6 @@
                             <a href="/Accountant/ChartOfAccounts">Chart of Accounts</a>
                         </li>
 
-
                     </ul>
                 </li>
                 <li>
@@ -224,20 +226,23 @@
                     <a href="/Accountant/Journalize">
                         <i class="far fa-edit" style="margin-right:10px"></i>
 
+
                         Journalize
                     </a>
                 </li>
                 <li>
 
-                    <a href="">
+                    <a href="/Accountant/GeneralLedger">
                         <i class="fas fa-book" style="margin-right:10px"></i>
+
+
 
                         General Ledger
                     </a>
                 </li>
                 <li>
 
-                    <a href="/Accountant/AccountantIndex">
+                    <a href="/Accountant/GeneralJournal">
                         <i class="fas fa-book" style="margin-right:10px"></i>
 
 
@@ -295,6 +300,9 @@
                         </li>
                     </ul>
                 </li>
+<<<<<<< HEAD:AccountingApp/Views/Accountant/Dashboard.cshtml
+               
+=======
                 <li>
 
                     <a href="/Accountant/EventLog">
@@ -303,6 +311,7 @@
                     </a>
 
                 </li>
+>>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318:AccountingApp/Views/Accountant/EventLog.cshtml
             </ul>
 
         </nav>
@@ -348,10 +357,33 @@
                     </div>
                 </div>
             </nav>
+            <div class=" body-content" style="width:100%; margin:0 auto; height:auto">
+                <h4 style="display:inline">Dashboard</h4>
+            </div>
+            <hr class="my-4" />
+            <br />
+            <div class="row ">
+                <div class="column shadow" style="width:45%; margin-left:20px;">
+                    <div class="shadow" id="chart" style="width:100%"></div>
+                </div>
+                <div class="column shadow" style="width:45%; margin-left:20px; ">
+                    <div class="shadow" id="graph" style="float:left;width:100%"></div>
+                </div>
 
+            </div>
+            <br />
+            <div class="row ">
+                <div class="column shadow" style="width:45%; margin-left:20px;">
+                    <div class="shadow" id="profitloss" style="width:100%"></div>
+                </div>
+                <div class="column shadow" style="width:45%; margin-left:20px; ">
+                    <div class="shadow" id="equity" style="float:left;width:100%"></div>
+                </div>
 
-            <h4>Event Log</h4>
+            </div>
             <hr />
+<<<<<<< HEAD:AccountingApp/Views/Accountant/Dashboard.cshtml
+=======
             <div>
                 <table class="table table-responsive table-hover shadow " id="Events" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                     <thead class="shadow" style="background-color:white; ">
@@ -411,8 +443,13 @@
                         }
                     </tbody>
                 </table>
+>>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318:AccountingApp/Views/Accountant/EventLog.cshtml
 
-            </div>
+
+            <br />
+            <br />
+
+
             <div class="container body-content">
 
                 <hr />
@@ -423,24 +460,140 @@
                     </p>
                 </footer>
             </div>
+
         </div>
 
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
-    <script type="text/javascript">
+        <script type="text/javascript">
 
     window.onload = function () {
         var username = '@Session["FirstNameofUser"]';
         document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
     };
 
+<<<<<<< HEAD:AccountingApp/Views/Accountant/Dashboard.cshtml
+        </script>
+        <script>
+            $(document).ready(function () {
+
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar').toggleClass('active');
+                });
+
+            });
+        </script>
+        <script>
+
+            var chart = Highcharts.chart('chart', {
+                title: {
+                    text: 'Current Assets And Current Liabilities'
+                },
+                exporting: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                    categories: ['Current Assets', 'Current Liabilities']
+                },
+                plotOptions: {
+                    series: {
+                        pointWidth: 45
+                    }
+                },
+
+                series: [{
+                    type: 'column',
+                    colorByPoint: true,
+                    data: [
+                        { y: 6000, color: 'green' },
+                        { y: 2000, color: 'orange' }],
+                    showInLegend: false
+                }]
+
+            });
+
+
+
+
+
+
+
+
+
+
+
+            Highcharts.chart('graph', {
+
+                title: {
+                    text: 'Current Ratio and Quick Ratio'
+                },
+
+
+
+                yAxis: {
+
+                    categories: [0, 10, 20, 40, 80],
+
+                    title: {
+                        text: 'Values'
+                    }
+                },
+
+                legend: {
+                    layout: 'Vertical',
+                    align: 'right',
+                    verticalAlign: 'middle'
+                },
+                chart: {
+                    width: null
+                },
+
+                plotOptions: {
+                    series: {
+                        label: {
+                            connectorAllowed: false
+                        },
+                        pointStart: 2015
+                    }
+                },
+                exporting: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [{
+                    name: 'Current Ratio(Annual)',
+                    data: [12.4, 17.8, 10.2, 8.8, 14.8]
+                }, {
+                    name: 'Quick Ratio(Annual)',
+                    data: [0.83, 15.8, 10.2, 9.2, 10.8,]
+                }],
+
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 800
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom'
+                            }
+                        }
+                    }]
+                }
+=======
     </script>
 
     <script>
@@ -467,21 +620,209 @@
 
     <script>
         $(document).ready(function () {
+>>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318:AccountingApp/Views/Accountant/EventLog.cshtml
 
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
             });
 
-        });
-        @Styles.Render("~/Content/dataTables")
-    @Scripts.Render("~/bundles/dataTables")
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            $('#Events').DataTable();
-        });
-    </script>
+            var chart = Highcharts.chart('profitloss', {
 
+                title: {
+                    text: 'Net Income'
+                },
+                exporting: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                },
+
+                series: [{
+                    name: 'Net Income',
+
+                    type: 'column',
+                    colorByPoint: true,
+                    data: [{ y: 6000, color: 'green' },
+                        { y: 2000, color: 'green' },
+                        { y: 3000, color: 'green' },
+                        { y: 6000, color: 'green' },
+                        { y: 7000, color: 'green' },
+                        { y: 6000, color: 'green' }, { y: 6000, color: 'green' },
+                        { y: 4000, color: 'green' },
+                        { y: 3000, color: 'green' },
+                        { y: -2000, color: 'red' },
+                        { y: 6000, color: 'green' },
+                        { y: 6000, color: 'green' }],
+                    showInLegend: false
+                }]
+
+            });
+
+
+
+
+
+
+            Highcharts.chart('equity', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Return on Equity'
+                },
+                exporting: {
+                    enabled: false
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Equity',
+                        y: 30.00
+                    }, {
+                        name: 'Net Income',
+                        y: 70.00, color: 'green'
+                    }]
+                }]
+            });
+        </script>
+        @*@Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/bootstrap")*@
+        @*@RenderSection("scripts", required: false)*@
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
