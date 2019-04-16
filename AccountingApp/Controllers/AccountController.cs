@@ -168,17 +168,19 @@ namespace AccountingApp.Controllers
 
                     using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                     {
-                        string sql = "Update dbo.UserTable set LoginAmount = @amount, LoginAttempts = @attempts Where Username = @name;";
+                        string sql = "Update dbo.UserTable set LoginAmount = @amount, LoginAttempts = @attempts, LastLogin = @time Where Username = @name;";
 
                         db.Execute(sql, new
                         {
                             amount = userDetails[0].LoginAmount + 1,
                             attempts = x,
+                            time = DateTime.Now,
                             name = userDetails[0].Username
 
                         });
                     }
 
+                    Logger.LogUserLogin(userDetails[0].Username);
 
                     if (userDetails[0].Role == "Admin")
                     {

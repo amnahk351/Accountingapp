@@ -62,6 +62,40 @@ namespace AccountingApp.Controllers
             return user[0].ID;
         }
 
+        public void LogUserLogin(string Username) {
+            string ip = HttpContext.Current.Request.UserHostAddress;
+            EventLog model = new EventLog();
+
+
+            model.Date = DateTime.Now;
+            model.UserID = FindUserId(Username);
+            model.From = "";
+            model.To = Username + " just logged in to Objective Accounting.";
+            model.IPAddress = ip;
+            model.Screen = "Login";
+            model.Access_Level = "All";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
+                    "[From], [To], IPAddress, Screen, AccessLevel) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
+                db.Execute(sql, new
+                {
+
+                    Date = model.Date,
+                    UserID = model.UserID,
+                    From = model.From,
+                    To = model.To,
+                    IPAddress = model.IPAddress,
+                    Screen = model.Screen,
+                    AccessLevel = model.Access_Level
+
+                });
+            }
+        }
+
         public void LogEditUser(int UserId, string Username, string Original, string Updated)
         {
             var sessionUserID = HttpContext.Current.Session["UserID"] as string;
