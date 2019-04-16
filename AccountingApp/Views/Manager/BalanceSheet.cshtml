@@ -161,11 +161,12 @@
                         @for (int i = 0; i < Model.Count; i++)
                         {
 
-                            <tr>
-                                @if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
-                                {
-                                    <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                    if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
+                            if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
+                            {
+                                <tr>
+                                    <td align="left" style="text-indent: 8%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+
+                                    @if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                     {
                                         <td>@Model[i].CurrentBalance</td>
                                     }
@@ -174,40 +175,11 @@
                                         <td style="border-bottom: .15rem solid">(@Model[i].CurrentBalance)</td>
                                     }
                                     <td> </td>
-                                }
+                                </tr>
+                            }
 
-                            </tr>
+
                         }
-                        @*tried rewrite the method above to fix the horizontal rows that were the same colors*@
-                        @*@for (int i = 0; i < Model.Count; i++)
-                        {
-
-                            if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
-                            {
-                                @*<tr>
-                                    <td align="left" style="text-indent: 8%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                </tr>*@
-                                @*if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
-                                    {
-                                        <tr>
-                                            <td>@Model[i].CurrentBalance</td>
-                                            <td> </td>
-                                        </tr>
-                                    }
-                                else
-                                {
-                                    <tr>
-                                        <td style="border-bottom: .15rem solid">(@Model[i].CurrentBalance)</td>
-                                        <td> </td>
-                                    </tr>
-                                }*@
-                                   @*<td> </td>
-                                   </tr>*@
-                            @*}
-
-
-                        }*@
-
                         <tr>
                             <th class="text-left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Property Plant & Equipment, Net</th>
                             <td></td>
@@ -255,7 +227,7 @@
                                 else if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                 {
                                     <tr>
-                                        <td align= "left" style="text-indent:4%;"><b>&nbsp;&nbsp;&nbsp;@Model[i].AccountName</b></td>
+                                        <td align="left" style="text-indent:4%;"><b>&nbsp;&nbsp;&nbsp;@Model[i].AccountName</b></td>
                                         <td align="right" style="border-bottom: .15rem solid">@Model[i].CurrentBalance</td>
                                         <td></td>
                                     </tr>
@@ -306,7 +278,8 @@
                             <td> </td>
                             <td style="border-top: .15rem solid; border-bottom: .15rem solid">@ViewBag.totalStockHolderEquity</td>
                         </tr>
-                        <tr height=20px></tr>
+                        <tr height=10px></tr>
+                        <tr height=10px></tr>
                         <tr>
                             <th class="text-left">Total Liabilities & Stockholders' Equity</th>
                             <td> </td>
@@ -334,17 +307,17 @@
     <script>
 
         function FormatTableAmounts() {
-            var table = document.getElementById("assetsTable");
-            var table2 = document.getElementById("liabilitiesTable");
+            //var table = document.getElementById("assetsTable");
+            //var table2 = document.getElementById("liabilitiesTable");
 
             //var rows = document.getElementById("assetsTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
-            var rowCount = $('#assetsTable tr').length;
+            //var rowCount = $('#assetsTable tr').length;
             
-            alert(table.rows[8].cells[1].innerText);
+            //alert(table.rows[8].cells[1].innerText);
             //alert(table[1].innerText);
-
+            //alert("Got here");
             //alert("rows1 " + rowCount);
-            alert("rows1 " + table.rows.length);
+            //alert("rows1 " + table.rows.length);
             for (var i = 1; i < table.rows.length; i++) {
                 var Dhtml = table.rows[i].cells[1].innerText;
                 //var Chtml = table.rows[i].cells[2].innerText;
@@ -361,7 +334,7 @@
                 //}
 
             }
-            alert("Got here 2");
+            //alert("Got here 2");
             for (var j = 1; j < table2.rows.length; j++) {
                 var Dhtml = table2.rows[j].cells[1].innerText;
                 //var Chtml = table.rows[i].cells[2].innerText;
@@ -379,7 +352,7 @@
 
             }
 
-            alert("Got here 3");
+            //alert("Got here 3");
 
         }
 
