@@ -115,6 +115,7 @@
                 <div class="card-body" style="display:inline-block;">
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Statement of Retained Earnings</h4>
+
                     <h4 style="padding: 0px; margin: 0px;"> @*style="padding-bottom: 20px" <- this was here if we wanted to increase vertical blank space*@
                         For the Period Ending
                         <script>
@@ -130,27 +131,29 @@
                                     var date = new Date();
                                     date.setFullYear(date.getFullYear() - 1);
                                     document.write(date.toDateString());
+
                                 </script>
                             </td>
                             <td style="text-align: right">$0.00</td>
                         </tr>
-                        <tr class="titleRow">
+                        <tr class="titleRow" >
                             <td style="text-align: left">Add: Net Income</td>
                             <td style="float:right">@ViewBag.NetIncome</td>
                         </tr>
-                        <tr class="titleRow">
+                        <tr class="titleRow" >
                             <td style="text-align: left">Less: Dividents Paid</td>
                             <td style="text-align: right; border-bottom: .15rem solid">0.00</td>
                         </tr>
-                        <tr class="titleRow">
+                        <tr class="titleRow" >
                             <td style="text-align: left">
-                                End Retained Earnings,
+                                 End Retained Earnings,
                                 <script>
                                     document.write(new Date().toDateString());
                                 </script>
                             </td>
                             <td style="text-align: right; border-bottom: .4rem double;">$@ViewBag.NetIncome</td>
                         </tr>
+
                     </table>
                 </div>
             </div>
