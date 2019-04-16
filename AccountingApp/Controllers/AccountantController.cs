@@ -203,6 +203,51 @@ namespace AccountingApp.Controllers
             return Json(insertedRecords);
         }
 
+        public ActionResult TransactionSummary(int id) {
+
+            List<Transaction> transactionList;
+            Entry EnModel = new Entry();
+            List<String> Names = new List<String>();
+            List<Decimal> Debits = new List<Decimal>();
+            List<Decimal> Credits = new List<Decimal>();
+            List<DocumentsTable> files;
+            List<String> NamesofFiles = new List<String>();
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            EnModel.entryID = (int)transactionList[0].EntryId;
+            EnModel.status = transactionList[0].Status;
+            EnModel.comment = transactionList[0].AccountantComment;
+            EnModel.submitDate = (DateTime) transactionList[0].DateSubmitted;
+            
+            for (int i = 0; i < transactionList.Count; i++) {
+                Names.Add(transactionList[i].AccountName);
+                Debits.Add((Decimal)transactionList[i].Debit);
+                Credits.Add((Decimal)transactionList[i].Credit);
+            }
+
+            EnModel.accountNames = Names;
+            EnModel.debits = Debits;
+            EnModel.credits = Credits;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                files = db.Query<DocumentsTable>($"Select FileName From dbo.DocumentsTable Where FK_EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            for (int i = 0; i < files.Count; i++)
+            {
+                NamesofFiles.Add(files[i].FileName);
+            }
+
+            EnModel.fileNames = NamesofFiles;
+
+            return View(EnModel);
+        }
+
 
         [HttpPost]
         public JsonResult InsertEditedJournal(Transaction[] transactions, string id)
@@ -229,13 +274,13 @@ namespace AccountingApp.Controllers
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
 
-                for (int i = 1; i < transactions.Length; i++)
+                for (int i = 0; i < transactions.Length; i++)
                 {
                     //if was submitted today added the current time to the database
 
                     //if submitted on another day, default the time to 12
 
-                    if (i == 1)
+                    if (i == 0)
                     {
                         var DatetoUse = DateTime.Now;
                         System.Diagnostics.Debug.WriteLine("Date Now: " + DatetoUse);

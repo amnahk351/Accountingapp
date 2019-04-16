@@ -17,6 +17,7 @@ namespace AccountingApp.Models
         public List<Decimal> debits { get; set; }
         public List<Decimal> credits { get; set; }
         public List<DocumentsTable> files { get; set; }
+        public List<String> fileNames { get; set; }
 
         public Entry()
         {
@@ -25,6 +26,7 @@ namespace AccountingApp.Models
             debits = new List<Decimal>();
             credits = new List<Decimal>();
             files = new List<DocumentsTable>();
+            fileNames = new List<String>();
         }
 
         public Entry(int entryID, string status, DateTime submitDate, string comment)
@@ -38,6 +40,7 @@ namespace AccountingApp.Models
             debits = new List<Decimal>();
             credits = new List<Decimal>();
             files = new List<DocumentsTable>();
+            fileNames = new List<String>();
         }
 
         public string FormattedFileNames() {
