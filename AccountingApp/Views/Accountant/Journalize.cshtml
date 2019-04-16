@@ -661,6 +661,25 @@
 
         function DeleteAllTableFiles() {
 
+            var Number;
+
+            $.ajax(
+                {
+                    url: '/Accountant/GetLatestEntryIdforFile/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    success: function (result) {
+                        //alert(result);
+                        Number = result;
+
+                    },
+                    error: function (error) {
+                        alert(JSON.stringify(error));
+                    }
+                });
+
             var table = document.getElementById("uploadList");
             for (var i = 0, row; row = table.rows[i]; i++) {
                 //iterate through rows
@@ -669,7 +688,7 @@
                 $.ajax({
                     url: "/Accountant/DeleteFile",
                     contentType: "application/json; charset=utf-8",
-                    data: "{'file': '" + file + "'}",
+                    data: "{'file':'" + file + "', 'id':'" + Number + "'}",
                     type: 'POST',
                     cache: false,
                     success: function (result) {

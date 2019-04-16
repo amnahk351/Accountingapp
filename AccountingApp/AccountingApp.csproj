@@ -502,6 +502,7 @@
     <Content Include="Views\Accountant\IncomeStatement.cshtml" />
     <Content Include="Views\Accountant\TrialBalance.cshtml" />
     <Content Include="Views\Accountant\EditJournal.cshtml" />
+    <Content Include="Views\Accountant\TransactionSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />
