@@ -1793,46 +1793,108 @@
 
             //Loop through the Table rows and build a JSON array.
             var transactions = new Array();
-            $("#EntryTable TBODY TR").each(function () {
-                var row = $(this);
+
+            var table = document.getElementById("EntryTable");
+
+
+            for (var i = 2; i < table.rows.length; i++) {
                 var transaction = {};
-                transaction.DateSubmitted = row.find("TD").eq(0).html();
 
-                var Comm = document.getElementById("Comment")
-                transaction.AccountantComment = Comm.value;
+                if (i == 2) {
+                    //Only the date is the extra item that needs saved once
+                    var Comm = document.getElementById("Comment")
+                    if (Comm != null || Comm != "") {
+                        transaction.AccountantComment = Comm.value;
+                    }
 
-                var EnType = document.getElementById("EntryType").value;
-                transaction.Entry_Type = EnType;
+                    var EnType = document.getElementById("EntryType").value;
+                    transaction.Entry_Type = EnType;
 
-                transaction.Status = "suspended";
+                    transaction.Status = "suspended";
 
+                    var Date = table.rows[i].cells[0].innerText;
+                    transaction.DateSubmitted = Date;
 
-                var Acc2 = row.find("TD").eq(1).html();
-                var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
-                var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
-                var Acc4 = Acc3.replace("</span>", "");
-                var AccFix = Acc4;
+                    var AccountName = table.rows[i].cells[1].innerText;
+                    transaction.AccountName = AccountName;
 
-                transaction.AccountName = AccFix;
+                    var DText = table.rows[i].cells[2].innerText;
+                    var DebitFix = StripMoneyFormatting(DText);
+                    transaction.Debit = DebitFix;
 
+                    var CText = table.rows[i].cells[3].innerText;
+                    var CreditFix = StripMoneyFormatting(CText);
+                    transaction.Credit = CreditFix;
 
-                var DebitFix = row.find("TD").eq(2).html();
-                var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-                var DebitFx2 = DebitFx.replace("</span>", "")
-                var DebitFix2 = StripMoneyFormatting(DebitFx2);
+                } else {
 
-                transaction.Debit = DebitFix2;
+                    var Comm = document.getElementById("Comment")
+                    if (Comm != null || Comm != "") {
+                        transaction.AccountantComment = Comm.value;
+                    }
 
+                    var EnType = document.getElementById("EntryType").value;
+                    transaction.Entry_Type = EnType;
 
-                var CreditFix = row.find("TD").eq(3).html();
-                var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-                var CreditFix3 = CreditFix2.replace("</span>", "")
-                var CreditFix3 = StripMoneyFormatting(CreditFix3);
+                    transaction.Status = "suspended";
 
-                transaction.Credit = CreditFix3;
+                    var AccountName = table.rows[i].cells[1].innerText;
+                    transaction.AccountName = AccountName;
+
+                    var DText = table.rows[i].cells[2].innerText;
+                    var DebitFix = StripMoneyFormatting(DText);
+                    transaction.Debit = DebitFix;
+
+                    var CText = table.rows[i].cells[3].innerText;
+                    var CreditFix = StripMoneyFormatting(CText);
+                    transaction.Credit = CreditFix;
+                }
 
                 transactions.push(transaction);
-            });
+            }
+
+            //Loop through the Table rows and build a JSON array.
+            //var transactions = new Array();
+            //$("#EntryTable TBODY TR").each(function () {
+            //    var row = $(this);
+            //    var transaction = {};
+            //    transaction.DateSubmitted = row.find("TD").eq(0).html();
+
+            //    var Comm = document.getElementById("Comment")
+            //    transaction.AccountantComment = Comm.value;
+
+            //    var EnType = document.getElementById("EntryType").value;
+            //    transaction.Entry_Type = EnType;
+
+            //    transaction.Status = "suspended";
+
+
+            //    var Acc2 = row.find("TD").eq(1).html();
+            //    var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
+            //    var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
+            //    var Acc4 = Acc3.replace("</span>", "");
+            //    var AccFix = Acc4;
+
+            //    transaction.AccountName = AccFix;
+
+
+            //    var DebitFix = row.find("TD").eq(2).html();
+            //    var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+            //    var DebitFx2 = DebitFx.replace("</span>", "")
+            //    var DebitFix2 = StripMoneyFormatting(DebitFx2);
+
+            //    transaction.Debit = DebitFix2;
+
+
+            //    var CreditFix = row.find("TD").eq(3).html();
+            //    var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+            //    var CreditFix3 = CreditFix2.replace("</span>", "")
+            //    var CreditFix3 = StripMoneyFormatting(CreditFix3);
+
+            //    transaction.Credit = CreditFix3;
+
+            //    transactions.push(transaction);
+            //});
 
             var str = window.location.pathname;
             var Number = str.replace("/Accountant/EditJournal/", "");
@@ -1937,52 +1999,112 @@
                 return;
             }
 
-
             //Loop through the Table rows and build a JSON array.
             var transactions = new Array();
-            $("#EntryTable TBODY TR").each(function () {
-                var row = $(this);
+
+            var table = document.getElementById("EntryTable");
+
+
+            for (var i = 2; i < table.rows.length; i++) {
                 var transaction = {};
-                transaction.DateSubmitted = row.find("TD").eq(0).html();
 
-                var Comm = document.getElementById("Comment")
+                if (i == 2) {
+                    //Only the date is the extra item that needs saved once
+                    var Comm = document.getElementById("Comment")
+                    if (Comm != null || Comm != "") {
+                        transaction.AccountantComment = Comm.value;
+                    }
 
-                transaction.AccountantComment = Comm.value;
+                    var EnType = document.getElementById("EntryType").value;
+                    transaction.Entry_Type = EnType;
 
-                var EnType = document.getElementById("EntryType").value;
+                    transaction.Status = "pending";
 
-                transaction.Entry_Type = EnType;
+                    var Date = table.rows[i].cells[0].innerText;
+                    transaction.DateSubmitted = Date;
 
-                transaction.Status = "pending";
+                    var AccountName = table.rows[i].cells[1].innerText;
+                    transaction.AccountName = AccountName;
 
-                var Acc2 = row.find("TD").eq(1).html();
-                var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
-                var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
-                var Acc4 = Acc3.replace("</span>", "");
+                    var DText = table.rows[i].cells[2].innerText;
+                    var DebitFix = StripMoneyFormatting(DText);
+                    transaction.Debit = DebitFix;
 
-                var AccFix = Acc4;
+                    var CText = table.rows[i].cells[3].innerText;
+                    var CreditFix = StripMoneyFormatting(CText);
+                    transaction.Credit = CreditFix;
 
-                transaction.AccountName = AccFix;
+                } else {
 
+                    var Comm = document.getElementById("Comment")
+                    if (Comm != null || Comm != "") {
+                        transaction.AccountantComment = Comm.value;
+                    }
 
+                    var EnType = document.getElementById("EntryType").value;
+                    transaction.Entry_Type = EnType;
 
-                var DebitFix = row.find("TD").eq(2).html();
-                var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-                var DebitFx2 = DebitFx.replace("</span>", "")
-                var DebitFix2 = StripMoneyFormatting(DebitFx2);
+                    transaction.Status = "pending";
 
-                transaction.Debit = DebitFix2;
+                    var AccountName = table.rows[i].cells[1].innerText;
+                    transaction.AccountName = AccountName;
 
+                    var DText = table.rows[i].cells[2].innerText;
+                    var DebitFix = StripMoneyFormatting(DText);
+                    transaction.Debit = DebitFix;
 
-                var CreditFix = row.find("TD").eq(3).html();
-                var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-                var CreditFix3 = CreditFix2.replace("</span>", "")
-                var CreditFix3 = StripMoneyFormatting(CreditFix3);
-
-                transaction.Credit = CreditFix3;
+                    var CText = table.rows[i].cells[3].innerText;
+                    var CreditFix = StripMoneyFormatting(CText);
+                    transaction.Credit = CreditFix;
+                }
 
                 transactions.push(transaction);
-            });
+            }
+            //Loop through the Table rows and build a JSON array.
+            //var transactions = new Array();
+            //$("#EntryTable TBODY TR").each(function () {
+            //    var row = $(this);
+            //    var transaction = {};
+            //    transaction.DateSubmitted = row.find("TD").eq(0).html();
+
+            //    var Comm = document.getElementById("Comment")
+
+            //    transaction.AccountantComment = Comm.value;
+
+            //    var EnType = document.getElementById("EntryType").value;
+
+            //    transaction.Entry_Type = EnType;
+
+            //    transaction.Status = "pending";
+
+            //    var Acc2 = row.find("TD").eq(1).html();
+            //    var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
+            //    var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
+            //    var Acc4 = Acc3.replace("</span>", "");
+
+            //    var AccFix = Acc4;
+
+            //    transaction.AccountName = AccFix;
+
+
+
+            //    var DebitFix = row.find("TD").eq(2).html();
+            //    var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+            //    var DebitFx2 = DebitFx.replace("</span>", "")
+            //    var DebitFix2 = StripMoneyFormatting(DebitFx2);
+
+            //    transaction.Debit = DebitFix2;
+
+
+            //    var CreditFix = row.find("TD").eq(3).html();
+            //    var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+            //    var CreditFix3 = CreditFix2.replace("</span>", "")
+            //    var CreditFix3 = StripMoneyFormatting(CreditFix3);
+
+            //    transaction.Credit = CreditFix3;
+
+            //    transactions.push(transaction);
+            //});
 
             //Send the JSON array to Controller using AJAX.
             //$.ajax({
