@@ -125,7 +125,7 @@
                     <hr style="border-width: 2px; border-color: black" />
                     <table id="retainedEarningsTable" class="table-striped" style="width:510px">
                         <tr class="titleRow">
-                            <th style="text-align: left">
+                            <td style="text-align: left">
                                 Beg Retained Earnings,
                                 <script>
                                     var date = new Date();
@@ -133,25 +133,25 @@
                                     document.write(date.toDateString());
 
                                 </script>
-                            </th>
-                            <th style="text-align: right">$0.00</th>
+                            </td>
+                            <td style="text-align: right">$0.00</td>
                         </tr>
                         <tr class="titleRow" >
-                            <th style="text-align: left">Add: Net Income</th>
-                            <th style="float:right">@ViewBag.NetIncome</th>
+                            <td style="text-align: left">Add: Net Income</td>
+                            <td style="float:right">@ViewBag.NetIncome</td>
                         </tr>
                         <tr class="titleRow" >
-                            <th style="text-align: left">Less: Dividents Paid</th>
-                            <th style="text-align: right; border-bottom: .15rem solid">0.00</th>
+                            <td style="text-align: left">Less: Dividents Paid</td>
+                            <td style="text-align: right; border-bottom: .15rem solid">0.00</td>
                         </tr>
                         <tr class="titleRow" >
-                            <th style="text-align: left">
+                            <td style="text-align: left">
                                  End Retained Earnings,
                                 <script>
                                     document.write(new Date().toDateString());
                                 </script>
-                            </th>
-                            <th style="text-align: right; border-bottom: .4rem double;">$@ViewBag.NetIncome</th>
+                            </td>
+                            <td style="text-align: right; border-bottom: .4rem double;">$@ViewBag.NetIncome</td>
                         </tr>
 
                     </table>
