@@ -444,6 +444,7 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Views\Manager\Journalize.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -486,6 +487,7 @@
     <Content Include="Views\Shared\_Layout_Accountant.cshtml" />
     <Content Include="Views\Shared\_Layout_Admin.cshtml" />
     <Content Include="Views\Accountant\Journalize.cshtml" />
+    <Content Include="Views\Manager\Journalize.cshtml" />
     <Content Include="Views\Manager\IncomeStatement.cshtml" />
     <Content Include="Views\Manager\BalanceSheet.cshtml" />
     <Content Include="Views\Manager\RetainedEarnings.cshtml" />
@@ -502,7 +504,6 @@
     <Content Include="Views\Accountant\IncomeStatement.cshtml" />
     <Content Include="Views\Accountant\TrialBalance.cshtml" />
     <Content Include="Views\Accountant\EditJournal.cshtml" />
-    <Content Include="Views\Manager\Journalize.cshtml" />
     <Content Include="Views\Shared\_Layout_Journalize.cshtml" />
   </ItemGroup>
   <ItemGroup>
