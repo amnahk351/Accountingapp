@@ -9,8 +9,22 @@
 <head>
 
 
+    @*<p>
+            @Html.ActionLink("Create New", "Create")
+        </p>*@
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <!-- Bootstrap CSS -->
     @*
@@ -22,7 +36,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
@@ -223,20 +236,23 @@
                     <a href="/Manager/Journalize">
                         <i class="far fa-edit" style="margin-right:10px"></i>
 
+
                         Journalize
                     </a>
                 </li>
                 <li>
 
-                    <a href="">
+                    <a href="#">
                         <i class="fas fa-book" style="margin-right:10px"></i>
+
+
 
                         General Ledger
                     </a>
                 </li>
                 <li>
 
-                    <a href="/Manager/GeneralJournal">
+                    <a href="Manager/ManagerApproval">
                         <i class="fas fa-book" style="margin-right:10px"></i>
 
 
@@ -254,7 +270,7 @@
                     </a>
                     <ul class="collapse list-unstyled" id="transactionSubmenu">
                         <li>
-                            <a href="/Manager/ManagerApproval">Pending Transactions</a>
+                            <a href="@Url.Action("ManagerApproval")">Pending Transactions</a>
                         </li>
                         <li>
                             <a href="">Posted Transactions</a>
@@ -366,30 +382,30 @@
             <div>
                 <table class="table table-responsive table-hover shadow " id="Events" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                     <thead class="shadow" style="background-color:white; ">
-                    <td>
+                    <th>
                         @*@Html.DisplayNameFor(model => model.Event_ID)*@
                         Event ID
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.Date)
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         @*@Html.DisplayNameFor(model => model.User_ID)*@
                         User ID
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.From)
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.To)
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         @*@Html.DisplayNameFor(model => model.IP_Address)*@
                         IP Address
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.Screen)
-                    </td>
+                    </th>
 
                     </thead>
                     <tbody>
@@ -397,13 +413,13 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Event_ID)
+                                    @Html.DisplayFor(modelItem => item.EventID)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Date)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.User_ID)
+                                    @Html.DisplayFor(modelItem => item.UserID)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.From)
@@ -412,7 +428,7 @@
                                     @Html.DisplayFor(modelItem => item.To)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.IP_Address)
+                                    @Html.DisplayFor(modelItem => item.IPAddress)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Screen)
