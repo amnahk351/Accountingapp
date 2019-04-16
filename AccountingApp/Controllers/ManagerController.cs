@@ -116,6 +116,32 @@ namespace AccountingApp.Controllers
             return View();
         }
 
+        public ActionResult Journalize()
+        {
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+            }
+            List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+
+            foreach (ChartOfAcc coa in listAccounts)
+            {
+                SelectListItem item = new SelectListItem
+                {
+                    Text = coa.AccountName,
+                    Value = coa.AccountNumber.ToString()
+                };
+                sliAccountList.Add(item);
+            }
+
+            ViewBag.accountlist = sliAccountList;
+
+
+            return View();
+        }
 
         [HttpPost]
         public ActionResult Journalize(Transaction transaction)
@@ -335,16 +361,51 @@ namespace AccountingApp.Controllers
             return entries;
         }
 
-
-
         public ActionResult RetainedEarnings()
         {
+            List<ChartOfAcc> coa;
+            decimal revenueTotal = 0;
+            decimal expenseTotal = 0;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                foreach (ChartOfAcc c in coa)
+                {
+                    if (c.AccountType.ToLower() == "revenue")
+                        revenueTotal += c.CurrentBalance.Value;
+                    if (c.AccountType.ToLower() == "expense")
+                        expenseTotal += c.CurrentBalance.Value;
+
+
+                }
+            }
+            ViewBag.NetIncome = revenueTotal - expenseTotal;
             return View();
         }
 
         public ActionResult PostClosingTrialBalance()
         {
-            return View();
+            List<ChartOfAcc> coa;
+            decimal debTotal = 0;
+            decimal credTotal = 0;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active And Not AccountType = @revenue And Not AccountType = @expense",
+                    new { active = true, revenue = "Revenue", expense = "Expense" }).ToList();
+                foreach (ChartOfAcc c in coa)
+                {
+                    if (c.NormalSide.ToLower() == "debit")
+                        debTotal += c.CurrentBalance.Value;
+                    else
+                        credTotal += c.CurrentBalance.Value;
+                }
+
+                ViewBag.DebitTotal = debTotal;
+                ViewBag.CreditTotal = credTotal;
+            }
+
+            return View(coa);
         }
 
         public ActionResult ShowUserData()

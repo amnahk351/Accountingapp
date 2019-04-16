@@ -362,7 +362,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <button class=" btn btn-outline-success" href="#" style="font-size:large;margin-left:30px">
+                                <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
                                     Log Out
 
 
@@ -391,6 +391,9 @@
                     <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-success" role="button" aria-pressed="true">
                         Pending
                     </a>
+                    <a href="@Url.Action("AccountantIndex", new { status = "suspended"})" class="btn btn-success" role="button" aria-pressed="true">
+                        Suspended
+                    </a>
                 </div>
                 <hr />
                 <div>
@@ -403,11 +406,13 @@
                                 <th>Debit</th>
                                 <th>Credit</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody style="background-color:white; width:100%">
                             @for (int i = 0; i < Model.entries.Count; i++)
                             {
+<<<<<<< HEAD
                                 <tr>
                                     <td>@Model.entries[i].submitDate</td>
                                     <td>@Model.entries[i].entryID</td>
@@ -423,6 +428,32 @@
 
                                     </td>
                                 </tr>
+=======
+                            <tr>
+                                <td>@Model.entries[i].submitDate</td>
+                                <td>@Model.entries[i].entryID</td>
+                                <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
+                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                                <td id="transactionstatus" class="status">
+                                    @Model.entries[i].status
+
+                                </td>
+                                <td>
+                                    @if (@Model.entries[i].status == "suspended")
+                                    {
+                                        <a style="color: blue" href="@Url.Action("EditJournal", new { id = Model.entries[i].entryID})">
+                                            Edit
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: blue; cursor: pointer">View</span>
+                                    }
+
+                                </td>
+                            </tr>
+>>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318
                             }
                         </tbody>
                     </table>
@@ -473,6 +504,28 @@
         var username = '@Session["FirstNameofUser"]';
         document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
     };
+
+    </script>
+
+    <script>
+
+        function LogOutUser() {
+
+            var username = '@Session["Username"]';
+
+            $.ajax({
+                url: "/Account/LogOutUser",
+                contentType: "application/json; charset=utf-8",
+                data: "{'username':'" + username + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
+                }
+            });
+            
+            window.location.href = '../../Account/Login';
+        }
 
     </script>
     <script>

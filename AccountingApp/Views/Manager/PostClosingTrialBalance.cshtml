@@ -28,36 +28,52 @@
 <body>
    
 
-    @*Amnah*@
     <div class="shadow container" style="width:60%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
-                    <h4 class="card-title">Objective Accounting</h4>
+                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
                     @*<br />*@
-                    <h4 class="card-title">Post Closing Trial Balance</h4>
+                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Post Closing Trial Balance</h4>
                     @*<hr />*@
                     <h4>
+                        For the Period Ending 
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
-                    @*<br />*@
+                    <hr style="border-width: 2px; border-color: black" />
                     <table id="trialTable" class="table-striped" style="width:510px;">
 
                         <tr class="titleRow">
-                            <th align="center">Account Name</th>
-                            <th align="center">Debit</th>
-                            <th align="center">Credit</th>
-
+                            <th style="text-align:left">Account</th>
+                            <th style="text-align:center">Debit</th>
+                            <th style="text-align:center">Credit</th>
                         </tr>
+
+
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+
+                            <tr>
+                                <td style="text-align:left"> @Model[i].AccountName</td>
+                                @if (Model[i].NormalSide.ToLower() == "debit")
+                                {
+                                    <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
+                                    <td class="" style="text-align:right"></td>
+                                }
+                                else
+                                {
+                                    <td class="" style="text-align:right"></td>
+                                    <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
+                                }
+                            </tr>
+                        }
                         <tr class="totalRow">
-                            <td align="left">Total:</td>
-                            <td class="total" align="center" style="text-decoration: underline double ;">$0.00</td>
-                            <td class="total" align="center" style="text-decoration: underline double ;">$0.00</td>
+                            <td style="text-align:left; padding-right: 2%"><b>Totals</b></td>
+                            <td class="total" style="text-align:right; border-top: .15rem solid; border-bottom: .4rem double">$@ViewBag.DebitTotal</td>
+                            <td class="total" style="text-align:right; border-top: .15rem solid; border-bottom: .4rem double">$@ViewBag.CreditTotal</td>
                         </tr>
-
-
 
                     </table>
                 </div>
@@ -69,8 +85,93 @@
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
-  
 
+    <script>
+        $(document).ready(function () {
+
+            FormatTableAmounts();
+
+            PlaceDollarSigns();
+        });
+    </script>
+
+    <script>
+
+        function FormatTableAmounts() {
+            var table = document.getElementById("trialTable");
+
+
+            for (var i = 1; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[1].innerText;
+                var Chtml = table.rows[i].cells[2].innerText;
+
+                var newDhtml = Dhtml.replace("$", "");
+                var newChtml = Chtml.replace("$", "");
+
+                if (newDhtml != "") {
+                    table.rows[i].cells[1].innerText = formatMoney(newDhtml);
+                }
+
+                if (newChtml != "") {
+                    table.rows[i].cells[2].innerText = formatMoney(newChtml);
+                }
+
+            }
+
+        }
+
+        function formatMoney(n, c, d, t) {
+            var c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
+        function PlaceDollarSigns() {
+            var table = document.getElementById("trialTable");
+            var rowsNum = table.rows.length;
+
+            //Place dollar sign for debit
+            for (var i = 1; i < rowsNum; i++) {
+                var Dhtml = table.rows[i].cells[1].innerText;
+
+                if (Dhtml != "") {
+
+                    table.rows[i].cells[1].innerText = "$ " + Dhtml;
+
+
+                    break;
+                }
+
+            }
+
+            //Place dollar sign for credit
+            for (var i = 1; i < rowsNum; i++) {
+                var Chtml = table.rows[i].cells[2].innerText;
+
+
+                if (Chtml != "") {
+
+                    table.rows[i].cells[2].innerText = "$ " + Chtml;
+
+
+                    break;
+                }
+            }
+
+            var TotalDebit = table.rows[rowsNum - 1].cells[1].innerText;
+            var TotalCredit = table.rows[rowsNum - 1].cells[2].innerText;
+
+            table.rows[rowsNum - 1].cells[1].innerText = "$ " + TotalDebit;
+            table.rows[rowsNum - 1].cells[2].innerText = "$ " + TotalCredit;
+
+        }
+
+    </script>
 
 
 </body>

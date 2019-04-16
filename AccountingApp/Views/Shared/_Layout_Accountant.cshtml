@@ -314,7 +314,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <button class=" btn btn-outline-success" href="#" style="font-size:large;margin-left:30px">
+                                <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
                                     Log Out
 
 
@@ -366,9 +366,35 @@
 
         });
     </script>
+<<<<<<< HEAD
     @* The below two files are conflicting with the file uploading *@
     @*@Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")*@
+=======
+
+    <script>
+
+        function LogOutUser() {
+
+            var username = '@Session["Username"]';
+
+            $.ajax({
+                url: "/Account/LogOutUser",
+                contentType: "application/json; charset=utf-8",
+                data: "{'username':'" + username + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
+                }
+            });
+
+            window.location.href = '../../Account/Login';
+        }
+
+    </script>
+
+>>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318
     @RenderSection("scripts", required: false)
 </body>
 </html>
