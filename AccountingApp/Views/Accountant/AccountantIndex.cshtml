@@ -1,9 +1,9 @@
 ﻿@model AccountingApp.Models.Entries
 
 @{
-    ViewBag.Title = "Accountant Index";
-    Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
-    //Layout = null;
+    ViewBag.Title = "AccountantIndex";
+    //Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
+    Layout = null;
 
 }
 
@@ -13,11 +13,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     @Styles.Render("~/Scripts/bootstrap-datetimepicker.min.css")
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
     <!-- Bootstrap CSS -->
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
 
 
     @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -25,6 +35,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
 
 
 
@@ -55,178 +66,446 @@
             font-size: 14px;
         }
 
+        a,
+        a:hover,
+        a:focus {
+            color: inherit;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .navbar {
+            padding: 15px 10px;
+            background: #fff;
+            border: none;
+            border-radius: 0;
+            margin-bottom: 40px;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-btn {
+            box-shadow: none;
+            outline: none !important;
+            border: none;
+        }
+
+        .line {
+            width: 100%;
+            height: 1px;
+            border-bottom: 1px dashed #ddd;
+            margin: 40px 0;
+        }
+
+        i,
+        span {
+            display: inline-block;
+        }
+
+
+        #content {
+            width: 100%;
+            padding: 20px;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+
+
+        .wrapper {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .wrapper {
+            display: flex;
+            align-items: stretch;
+        }
+
+        #sidebar {
+            min-width: 300px;
+            max-width: 650px;
+            min-height: 100vh;
+        }
+        /*#sidebar.active {
+                margin-left: -150px;
+            }*/
+        a[data-toggle="collapse"] {
+            position: relative;
+        }
+
+        .dropdown-toggle::after {
+            display: block;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+        }
+
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background: #f4f4f4;
+            font-size: 1.2em;
+        }
+
+        p {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 1.1em;
+            font-weight: 300;
+            line-height: 1.7em;
+            color: #999;
+        }
+
+        a, a:hover, a:focus {
+            color: inherit;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        #sidebar {
+            background: #3e547f;
+            color: lightgray;
+            transition: all 0.3s;
+        }
+
+            #sidebar .sidebar-header {
+                padding: 20px;
+                background: #3e547f;
+                border-bottom: 1px solid #47748b;
+            }
+
+            #sidebar ul.components {
+                padding: 20px 0;
+                border-bottom: 1px solid #47748b;
+            }
+
+            #sidebar ul p {
+                color: #d5d8e0;
+                padding: 20px;
+            }
+
+            #sidebar ul li a {
+                padding: 20px;
+                font-size: 1.2em;
+                display: block;
+            }
+
+                #sidebar ul li a:hover {
+                    color: #3e547f;
+                    background: #d5d8e0;
+                }
+
+            #sidebar ul li.active > a, a[aria-expanded="true"] {
+                color: #fff;
+                background: #3e547f;
+            }
+
+        ul ul a {
+            font-size: 0.9em !important;
+            padding-left: 30px !important;
+            background: #6579a0;
+        }
+
+        @@media (max-width: 768px) {
+            #sidebar {
+                margin-left: -300px;
+            }
+
+                #sidebar.active {
+                    margin-left: 0;
+                }
+        }
+       
     </style>
 </head>
 <body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar" class="fixed-left">
 
-    <br />
-    <div style="width:80%; margin:0 auto">
+            <div class="sidebar-header">
+                <h5>Menu</h5>
+            </div>
 
-    
-        <h5>General Journal</h5>
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <a href="@Url.Action("AccountantIndex", new { status = "all"})" class="btn btn-success" role="button" aria-pressed="true">
-                All
-            </a>
-            <a href="@Url.Action("AccountantIndex", new { status = "approved"})" class="btn btn-success" role="button" aria-pressed="true">
-                Approved
-            </a>
-            <a href="@Url.Action("AccountantIndex", new { status = "disapproved"})" class="btn btn-success" role="button" aria-pressed="true">
-                Disapproved
-            </a>
-            <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-success" role="button" aria-pressed="true">
-                Pending
-            </a>
-            <a href="@Url.Action("AccountantIndex", new { status = "suspended"})" class="btn btn-success" role="button" aria-pressed="true">
-                Suspended
-            </a>
-        </div>
-        <hr />
-        <div>
-            <table id="GeneralJournalTable" class="table table-responsive table-striped" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Entry ID</th>
-                        <th>Accounts Affected</th>
-                        <th>Debit</th>
-                        <th>Credit</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                        @*<th>Files</th>*@
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < Model.entries.Count; i++)
-                {
-                    <tr>
-                        <td>@Model.entries[i].submitDate</td>
-                        <td>@Model.entries[i].entryID</td>
-                        <td style="white-space: pre-wrap;">@Model.entries[i].FormattedAccountNames()</td>
-                        <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                        <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                        <td>@Model.entries[i].status</td>
-                        <td>
-                            @if (@Model.entries[i].status == "suspended")
-                                {
-                                @*<img height="3" width="3" alt="Image"
-                                         src="@Url.Content("~/content/images/icon_red_questions_returnedbyreviewer.gif")" />*@
-                                @*<span>Edit</span>*@
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="/Accountant/AccountantIndex">
+                        <i class="fas fa-home" style="margin-right:10px;"></i>
+                        Dashboard
+                    </a>
 
-                                <a href="@Url.Action("EditJournal", new { id = Model.entries[i].entryID})">
-                                    Edit
+                </li>
+                <li>
+
+                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-list" style="margin-right:10px;"></i>
+
+                        Chart Of Accounts
+                    </a>
+                    <ul class="collapse list-unstyled" id="accountSubmenu">
+                        <li>
+                            <a href="/Accountant/ChartOfAccounts">Chart of Accounts</a>
+                        </li>
+
+
+                    </ul>
+                </li>
+                <li>
+
+                    <a href="/Accountant/Journalize">
+                        <i class="far fa-edit" style="margin-right:10px"></i>
+
+
+                        Journalize
+                    </a>
+                </li>
+                <li>
+
+                    <a href="">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+
+
+
+                        General Ledger
+                    </a>
+                </li>
+                <li>
+
+                    <a href="/Accountant/AccountantIndex">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+
+
+
+                        General Journal
+                    </a>
+                </li>
+                <li>
+
+                    <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
+
+
+                        Transactions
+                    </a>
+                    <ul class="collapse list-unstyled" id="transactionSubmenu">
+                        <li>
+                            <a href="/Accountant/ManagerApproval">Pending Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Posted Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Rejected Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Suspended Transactions</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li>
+
+                    <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="far fa-chart-bar" style="margin-right:10px"></i>
+
+
+                        Reports
+                    </a>
+                    <ul class="collapse list-unstyled" id="reportSubmenu">
+                        <li>
+                            <a href="/Accountant/TrialBalance">Trial Balance</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/IncomeStatement">Income Statement</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/RetainedEarnings">Statement Of Retained Earnings</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/BalanceSheet">Balance Sheet</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/PostClosingTrialBalance">Post Closing Trial Balance</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/Accountant/EventLog">
+                        <i class="fas fa-briefcase" style="margin-right:10px;"></i>
+                        Event Log
+                    </a>
+
+                </li>
+            </ul>
+
+        </nav>
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg sticky-top navbar-light justify-content-between">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-info" style="background-color:#3e547f">
+                        <i class="fas fa-bars"></i>
+
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <img src="~/img/Accounting Logo.PNG" width="150" height="40" style="margin-right: 15px; margin-left: 10px;" />
+
+                    </a>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto" style="float:right">
+                            <li class="nav-item active" style="margin-top:10px">
+                                <a>
+                                    <i class="fas fa-user-circle" style="color:#3e547f;font-size:24px; "></i>
+
+
+                                    <i id="LoggedName" class="nav-item" style="font-size: large;  font-style: normal;">Welcome, Admin</i>
                                 </a>
+
+                            </li>
+
+                            <li class="nav-item active">
+                                <button class=" btn btn-outline-success" href="#" style="font-size:large;margin-left:30px">
+                                    Log Out
+
+
+                                </button>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <br />
+            <div style="width:100%; margin:0 auto">
+
+
+                <h5>General Journal</h5>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <a href="@Url.Action("AccountantIndex", new { status = "all"})" class="btn btn-success" role="button" aria-pressed="true">
+                        All
+                    </a>
+                    <a href="@Url.Action("AccountantIndex", new { status = "approved"})" class="btn btn-success" role="button" aria-pressed="true">
+                        Approved
+                    </a>
+                    <a href="@Url.Action("AccountantIndex", new { status = "disapproved"})" class="btn btn-success" role="button" aria-pressed="true">
+                        Disapproved
+                    </a>
+                    <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-success" role="button" aria-pressed="true">
+                        Pending
+                    </a>
+                </div>
+                <hr />
+                <div>
+                    <table id="GeneralJournalTable" class="table table-responsive table-hover shadow" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
+                        <thead style="background-color:white">
+                            <tr class="shadow">
+                                <th style="width:20%">Date</th>
+                                <th style="width:10%">Entry ID</th>
+                                <th style="width:60%">Accounts Affected</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody style="background-color:white; width:100%">
+                            @for (int i = 0; i < Model.entries.Count; i++)
+                            {
+                                <tr>
+                                    <td>@Model.entries[i].submitDate</td>
+                                    <td>@Model.entries[i].entryID</td>
+                                    <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                                    <td id="transactionstatus" class="status">
+                                        @Model.entries[i].status
+
+                                    </td>
+                                </tr>
                             }
-                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="container body-content">
 
-                        </td>
-                        @*<td>@(@Model.entries[i].status ? "Y" : "N")</td>*@
-                        @*<td>@Model.entries[i].FormattedFileNames()</td>*@
-                        @*<td>
-                            <a href="@Url.Action("Download", new { file = Model.entries[i].FormattedFileNames()})">
-                                Edit
-                            </a>
-
-                        </td>*@
-                    </tr>
-                }
-                </tbody>
-            </table>
+                <hr />
+                <footer align="center">
+                    <p>
+                        &copy; @DateTime.Now.Year - Objective Accounting
+                        Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
+                    </p>
+                </footer>
+            </div>
         </div>
+
     </div>
     @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
-    <script>
-        $(document).ready(function () {
-            $('#JournalEntries').DataTable();
-            RemoveDateTimes();
-        });
-    </script>
-
-    <script>
-
-        function RemoveDateTimes() {
-
-            var table = document.getElementById("GeneralJournalTable");
-            for (var i = 0, row; row = table.rows[i]; i++) {
-                //iterate through rows
-                //rows would be accessed using the "row" variable assigned in the for loop
-                var date = table.rows[i].cells[0].innerText;
-                var res = date.split(" ");
-                table.rows[i].cells[0].innerText = res[0];  //Just the date portion
-            }
-        }
-
-    </script>
-    <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function () {
-            'use strict';
-            window.addEventListener('load', function () {
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.getElementsByClassName('needs-validation');
-                // Loop over them and prevent submission
-                var validation = Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-    </script>
-
-
-
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
     @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>*@
-    <script>
-        $(function () {
-            $('#addMore').on('click', function () {
-                var data = $("#tb tr:eq(1)").clone(true).appendTo("#tb");
-                data.find("input").val('');
-            });
-            $(document).on('click', '.remove', function () {
-                var trIndex = $(this).closest("tr").index();
-                $(this).closest("tr").remove();
-                //if (trIndex > 1) {
-                //    $(this).closest("tr").remove();
-                //} else {
-                //    alert("Can't remove first row!");
-                //}
-            });
-        });
-    </script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>*@
 
- 
-    @Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
-    @Scripts.Render("~/Scripts/bootstrap.min.js")
+
+
+
 
     @* The script below has been commented out because testing showed it was interfering with posting journals to the database *@
     @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>*@
     @*<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
-
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
 
     <script>
+       
+    </script>
+    <script type="text/javascript">
+
+    window.onload = function () {
+        var username = '@Session["FirstNameofUser"]';
+        document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
+    };
+
+    </script>
+    <script>
         $(document).ready(function () {
-            $('#JournalEntries').DataTable();
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+
         });
     </script>
 
-   
+    @*@RenderSection("scripts", required: false)*@
+    @*@Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")*@
+    @Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    <script>
+        $(document).ready(function () {
+            $('#GeneralJournalTable').DataTable();
+        });
+    </script>
+
+
+
+    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
 </body>
 </html>

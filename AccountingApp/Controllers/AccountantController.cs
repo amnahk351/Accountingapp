@@ -86,33 +86,7 @@ namespace AccountingApp.Controllers
                 return View(getAllEntriesOfStatus(status));
         }
 
-        [HttpPost]
-        public ActionResult Journalize(Transaction transaction)
-        {
-            Trace.WriteLine(transaction.Debit);
-            Trace.WriteLine(transaction.AccountNumber);
-
-            List<ChartOfAcc> listAccounts;
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
-            }
-            List<SelectListItem> sliAccountList = new List<SelectListItem>();
-
-            foreach (ChartOfAcc coa in listAccounts)
-            {
-                SelectListItem item = new SelectListItem
-                {
-                    Text = coa.AccountName,
-                    Value = coa.AccountNumber.ToString()
-                };
-                sliAccountList.Add(item);
-            }
-
-            ViewBag.accountlist = sliAccountList;
-            return View("~/Views/Accountant/AccountantIndex.cshtml");
-        }
+        
 
 
         public int GetLatestEntryId()
@@ -556,6 +530,174 @@ namespace AccountingApp.Controllers
             return entries;
         }
 
+
+       
+
+        public ActionResult ChartOfAccounts()
+        {
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+            }
+            return View(listAccounts);
+            //var item = db.ChartOfAccs.ToList();
+            //return View(item);
+
+
+        }
+        //broderick's
+        public ActionResult EventLog()
+        {
+            List<Models.EventLog> events;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                events = db.Query<Models.EventLog>($"Select * from dbo.EventLogTable").ToList();
+            }
+
+            return View(events);
+            //Database1Entities6 db2 = new Database1Entities6();
+            //var events = db2.EventLogs.ToList();
+            //return View(events);
+        }
+
+        //colt's code
+        public ActionResult TrialBalance()
+        {
+
+            List<ChartOfAcc> coa;
+            decimal debTotal = 0;
+            decimal credTotal = 0;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                foreach (ChartOfAcc c in coa)
+                {
+                    if (c.NormalSide.ToLower() == "debit")
+                        debTotal += c.CurrentBalance.Value;
+                    else
+                        credTotal += c.CurrentBalance.Value;
+                }
+
+                ViewBag.DebitTotal = debTotal;
+                ViewBag.CreditTotal = credTotal;
+            }
+
+            return View(coa);
+        }
+
+
+
+        public ActionResult IncomeStatement()
+        {
+
+            List<ChartOfAcc> coa;
+            decimal revenueTotal = 0;
+            decimal expenseTotal = 0;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                foreach (ChartOfAcc c in coa)
+                {
+                    if (c.AccountType.ToLower() == "revenue")
+                        revenueTotal += c.CurrentBalance.Value;
+                    if (c.AccountType.ToLower() == "expense")
+                        expenseTotal += c.CurrentBalance.Value;
+
+
+                }
+
+                ViewBag.RevenueTotal = revenueTotal;
+                ViewBag.ExpenseTotal = expenseTotal;
+                ViewBag.NetIncome_Loss = revenueTotal - expenseTotal;
+            }
+
+            return View(coa);
+        }
+
+        public ActionResult BalanceSheet()
+        {
+
+            List<ChartOfAcc> coa;
+            decimal totalCurrentAssets = 0;
+            decimal totalAssets = 0;
+            decimal propPlanEquipNet = 0;
+            decimal totalCurrentLiabilities = 0;
+            decimal totalLiabilities = 0;
+            decimal retainedEarnings = 0;
+            decimal totalStockHolderEquity = 0;
+            decimal totalLiabilitesStockEquity = 0;
+            decimal unearnedRevenue = 0;
+            decimal contributedCapital = 0;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+
+                for (int i = 0; i < coa.Count; i++)
+                {
+                    if (coa[i].AccountName.ToLower() == "cash" || coa[i].AccountName.ToLower() == "accounts receivable" || coa[i].AccountName.ToLower() == "supplies" || coa[i].AccountName.ToLower() == "prepaid insurance" || coa[i].AccountName.ToLower() == "prepaid rent")
+                    {
+                        totalCurrentAssets += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "office supplies")
+                    {
+                        propPlanEquipNet += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "accumulated depreciation equipment")
+                    {
+                        propPlanEquipNet -= coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "accounts payable" || coa[i].AccountName.ToLower() == "salaries payable")
+                    {
+                        totalCurrentLiabilities += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "unearned revenue")
+                    {
+                        unearnedRevenue += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "contributed capital")
+                    {
+                        contributedCapital += coa[i].CurrentBalance.Value;
+                    }
+                }
+
+            }
+
+            totalAssets = totalCurrentAssets + propPlanEquipNet;
+            totalLiabilities = unearnedRevenue + totalCurrentLiabilities;
+
+            retainedEarnings = totalAssets - totalLiabilities - contributedCapital;
+
+            totalStockHolderEquity = retainedEarnings + contributedCapital;
+            totalLiabilitesStockEquity = totalStockHolderEquity + totalLiabilities;
+
+            ViewBag.totalCurrentAssets = totalCurrentAssets;
+            ViewBag.totalAssets = totalAssets;
+            ViewBag.propPlanEquipNet = propPlanEquipNet;
+            ViewBag.totalCurrentLiabilities = totalCurrentLiabilities;
+            ViewBag.totalLiabilities = totalLiabilities;
+            ViewBag.retainedEarnings = retainedEarnings;
+            ViewBag.totalStockHolderEquity = totalStockHolderEquity;
+            ViewBag.totalLiabilitesStockEquity = totalLiabilitesStockEquity;
+
+            return View(coa);
+        }
+        //colt's code
+
+
+        public ActionResult RetainedEarnings()
+        {
+            return View();
+        }
+
+        public ActionResult PostClosingTrialBalance()
+        {
+            return View();
+        }
     }
 
     //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html
