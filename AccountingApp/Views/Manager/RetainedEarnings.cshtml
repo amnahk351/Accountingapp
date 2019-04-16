@@ -115,14 +115,13 @@
                 <div class="card-body" style="display:inline-block;">
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Statement of Retained Earnings</h4>
-
                     <h4 style="padding: 0px; margin: 0px;"> @*style="padding-bottom: 20px" <- this was here if we wanted to increase vertical blank space*@
                         For the Period Ending
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
-                    <hr style="border-width: 2px; border-color: black" />
+                    <hr style="border-width: 2px; border-color: black"/>
                     <table id="retainedEarningsTable" class="table-striped" style="width:510px">
                         <tr class="titleRow">
                             <td style="text-align: left">
@@ -136,15 +135,15 @@
                             </td>
                             <td style="text-align: right">$0.00</td>
                         </tr>
-                        <tr class="titleRow" >
+                        <tr class="titleRow">
                             <td style="text-align: left">Add: Net Income</td>
                             <td style="float:right">@ViewBag.NetIncome</td>
                         </tr>
-                        <tr class="titleRow" >
+                        <tr class="titleRow">
                             <td style="text-align: left">Less: Dividents Paid</td>
                             <td style="text-align: right; border-bottom: .15rem solid">0.00</td>
                         </tr>
-                        <tr class="titleRow" >
+                        <tr class="titleRow">
                             <td style="text-align: left">
                                  End Retained Earnings,
                                 <script>
@@ -153,7 +152,6 @@
                             </td>
                             <td style="text-align: right; border-bottom: .4rem double;">$@ViewBag.NetIncome</td>
                         </tr>
-
                     </table>
                 </div>
             </div>
