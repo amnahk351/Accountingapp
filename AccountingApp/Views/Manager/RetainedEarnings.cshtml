@@ -117,15 +117,15 @@
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Statement of Retained Earnings</h4>
 
                     <h4 style="padding: 0px; margin: 0px;"> @*style="padding-bottom: 20px" <- this was here if we wanted to increase vertical blank space*@
-                        For the Year Ended
+                        For the Period Ending
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
                     <hr style="border-width: 2px; border-color: black" />
-                    <table id="trialTable" class="table-striped" style="width:510px">
+                    <table id="retainedEarningsTable" class="table-striped" style="width:510px">
                         <tr class="titleRow">
-                            <th style="text-align: left">
+                            <td style="text-align: left">
                                 Beg Retained Earnings,
                                 <script>
                                     var date = new Date();
@@ -133,25 +133,25 @@
                                     document.write(date.toDateString());
 
                                 </script>
-                            </th>
-                            <th style="text-align: right">$0.00</th>
+                            </td>
+                            <td style="text-align: right">$0.00</td>
                         </tr>
                         <tr class="titleRow" >
-                            <th style="text-align: left">Add: Net Income </th>
-                            <th style="float:right">0.00</th>
+                            <td style="text-align: left">Add: Net Income</td>
+                            <td style="float:right">@ViewBag.NetIncome</td>
                         </tr>
                         <tr class="titleRow" >
-                            <th style="text-align: left">Less: Dividents Paid</th>
-                            <th style="text-align: right; border-bottom: .15rem solid">0.00</th>
+                            <td style="text-align: left">Less: Dividents Paid</td>
+                            <td style="text-align: right; border-bottom: .15rem solid">0.00</td>
                         </tr>
                         <tr class="titleRow" >
-                            <th style="text-align: left">
+                            <td style="text-align: left">
                                  End Retained Earnings,
                                 <script>
                                     document.write(new Date().toDateString());
                                 </script>
-                            </th>
-                            <th style="text-align: right; border-bottom: .4rem double;">$0.00</th>
+                            </td>
+                            <td style="text-align: right; border-bottom: .4rem double;">$@ViewBag.NetIncome</td>
                         </tr>
 
                     </table>
@@ -164,7 +164,44 @@
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            var table = document.getElementById("retainedEarningsTable");
 
+            for (var i = 1; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[1].innerText;
+                var newDhtml = Dhtml.replace("$", "");
+
+                if (newDhtml != "") {
+                    table.rows[i].cells[1].innerText = formatMoney(newDhtml);
+                }
+            }
+
+            placeDollarSigns();
+        });
+    </script>
+
+    <script>
+        function formatMoney(n, c, d, t) {
+            var c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
+        function placeDollarSigns() {
+            var table2 = document.getElementById("retainedEarningsTable");
+
+            var num = table2.rows.length - 1;
+            var x = table2.rows[num].cells[1].innerText;
+
+            table2.rows[num].cells[1].innerText = "$ " + x;
+        }
+    </script>
 
 
 </body>
