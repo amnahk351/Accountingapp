@@ -313,7 +313,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <button class=" btn btn-outline-success" href="#" style="font-size:large;margin-left:30px">
+                                <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
                                     Log Out
 
 
@@ -329,7 +329,7 @@
                 <div>
 
                     <h4 style="display:inline">@ViewBag.Title</h4>
-                   
+
                 </div>
 
                 <hr class="my-4" />
@@ -425,6 +425,27 @@
         $(document).ready(function () {
             $('#users').DataTable();
         });
+    </script>
+    <script>
+
+        function LogOutUser() {
+
+            var username = '@Session["Username"]';
+
+            $.ajax({
+                url: "/Account/LogOutUser",
+                contentType: "application/json; charset=utf-8",
+                data: "{'username':'" + username + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
+                }
+            });
+
+            window.location.href = '../../Account/Login';
+        }
+
     </script>
 </body>
 </html>

@@ -296,7 +296,7 @@
                     </ul>
                 </li>
                 <li>
-                    
+
                     <a href="/Accountant/EventLog">
                         <i class="fas fa-briefcase" style="margin-right:10px;"></i>
                         Event Log
@@ -337,7 +337,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <button class=" btn btn-outline-success" href="#" style="font-size:large;margin-left:30px">
+                                <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
                                     Log Out
 
 
@@ -442,6 +442,29 @@
     };
 
     </script>
+
+    <script>
+
+        function LogOutUser() {
+
+            var username = '@Session["Username"]';
+
+            $.ajax({
+                url: "/Account/LogOutUser",
+                contentType: "application/json; charset=utf-8",
+                data: "{'username':'" + username + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
+                }
+            });
+
+            window.location.href = '../../Account/Login';
+        }
+
+    </script>
+
     <script>
         $(document).ready(function () {
 
