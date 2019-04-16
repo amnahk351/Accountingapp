@@ -283,6 +283,25 @@ namespace AccountingApp.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult LogOutUser(string username)
+        {
+            System.Diagnostics.Debug.WriteLine("user " + username);
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                //string sql = $"Insert into dbo.UserTable LastSignout = @time WHERE Username = @user";
+                string sql = $"Update dbo.UserTable set LastSignout = @time WHERE Username = @user";
+
+                db.Execute(sql, new
+                {
+                    time = DateTime.Now,
+                    user = username
+                });
+            }
+            //return View("Login");
+            return Json("User Signed Out!");
+        }
+
         [HttpGet]
         public ActionResult ForgotPassword()
         {
@@ -314,7 +333,7 @@ namespace AccountingApp.Controllers
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
 
-                    string sql = "Update dbo.UserTable set ResetPasswordCode = @resetCode  where Username = @Username";
+                    string sql = "Update dbo.UserTable set ResetPasswordCode = @resetCode where Username = @Username";
                     db.Execute(sql, new { resetCode = resetCode, Username = validateEmail[0].Username });
                 }
                 Logger.LogForgotPassword(Em);
