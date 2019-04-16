@@ -667,7 +667,6 @@
             var str = window.location.pathname;
             var Number = str.replace("/Accountant/EditJournal/", "");
 
-
             var row = $(button).closest('tr');
             var table = document.getElementById("uploadList");
 
@@ -676,7 +675,6 @@
             $.ajax({
                 url: "/Accountant/DeleteFile",
                 contentType: "application/json; charset=utf-8",
-                //data: "{'file': '" + file + "'}",
                 data: "{'file':'" + file + "', 'id':'" + Number + "'}",
                 type: 'POST',
                 cache: false,

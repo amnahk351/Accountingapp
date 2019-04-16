@@ -128,17 +128,13 @@ namespace AccountingApp.Controllers
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
 
-                for (int i = 1; i < transactions.Length; i++)
+                for (int i = 0; i < transactions.Length; i++)
                 {
                     //if was submitted today added the current time to the database
-
                     //if submitted on another day, default the time to 12
-
-                    if (i == 1)
+                    if (i == 0)
                     {
                         var DatetoUse = DateTime.Now;
-                        System.Diagnostics.Debug.WriteLine("Date Now: " + DatetoUse);
-                        System.Diagnostics.Debug.WriteLine("Date: " + transactions[i].DateSubmitted);
 
                         var TodayString = DatetoUse.ToString();
                         string[] Pieces = TodayString.Split(' ');
@@ -151,7 +147,6 @@ namespace AccountingApp.Controllers
 
                         if (JustDate != JustDate2)
                         {
-                            System.Diagnostics.Debug.WriteLine("Other date: " + (DateTime)transactions[i].DateSubmitted);
                             DatetoUse = (DateTime)transactions[i].DateSubmitted;
                         }
 

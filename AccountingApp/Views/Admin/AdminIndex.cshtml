@@ -244,7 +244,7 @@
             </ul>
 
         </nav>
-
+    </div>
         <div id="content">
 
             <nav class="navbar navbar-expand-lg sticky-top navbar-light justify-content-between">
@@ -275,7 +275,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <button class=" btn btn-outline-success" href="#" style="font-size:large;margin-left:30px">
+                                <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
                                     Log Out
 
 
@@ -555,7 +555,27 @@
 </body>
 </html>
 
+<script>
 
+        function LogOutUser() {
+
+            var username = '@Session["Username"]';
+
+            $.ajax({
+                url: "/Account/LogOutUser",
+                contentType: "application/json; charset=utf-8",
+                data: "{'username':'" + username + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
+                }
+            });
+
+            window.location.href = '../../Account/Login';
+        }
+
+</script>
 
 
 

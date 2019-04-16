@@ -218,7 +218,7 @@
                     </a>
                     <ul class="collapse list-unstyled" id="userSubmenu">
                         <li>
-                            <a href="/Home/ShowUserData" >User List</a>
+                            <a href="/Home/ShowUserData">User List</a>
                         </li>
                         <li>
                             <a href="/Home/NewUser">Create New User</a>
@@ -265,7 +265,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <button class=" btn btn-outline-success" href="#" style="font-size:large;margin-left:30px">
+                                <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
                                     Log Out
 
 
@@ -319,7 +319,7 @@
                             <th>State</th>
                             <th>ZIP Code</th>
                             @*<th>Date Created</th>
-                    <th>Date Modified</th>*@
+                                <th>Date Modified</th>*@
                             <th>Edit</th>
 
                         </tr>
@@ -342,7 +342,7 @@
                                 <td>@Model[i].State</td>
                                 <td>@Model[i].ZIP_Code</td>
                                 @*<td>@Model[i].Date</td>
-                        <td>@Model[i].Date_Modified</td>*@
+                                    <td>@Model[i].Date_Modified</td>*@
                                 <td>
                                     <a href="@Url.Action("Edit", new { id = Model[i].ID})">
                                         <i class="fas fa-edit" style="color:#3e547f"></i>
@@ -396,6 +396,28 @@
             });
 
         });
+    </script>
+
+    <script>
+
+        function LogOutUser() {
+
+            var username = '@Session["Username"]';
+
+            $.ajax({
+                url: "/Account/LogOutUser",
+                contentType: "application/json; charset=utf-8",
+                data: "{'username':'" + username + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
+                }
+            });
+
+            window.location.href = '../../Account/Login';
+        }
+
     </script>
 
     <script>

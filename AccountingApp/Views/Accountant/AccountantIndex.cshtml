@@ -368,7 +368,7 @@
                             </li>
 
                             <li class="nav-item active">
-                                <button class=" btn btn-outline-success" href="#" style="font-size:large;margin-left:30px">
+                                <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
                                     Log Out
 
 
@@ -396,6 +396,9 @@
                     </a>
                     <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-success" role="button" aria-pressed="true">
                         Pending
+                    </a>
+                    <a href="@Url.Action("AccountantIndex", new { status = "suspended"})" class="btn btn-success" role="button" aria-pressed="true">
+                        Suspended
                     </a>
                 </div>
                 <hr />
@@ -475,6 +478,28 @@
         var username = '@Session["FirstNameofUser"]';
         document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
     };
+
+    </script>
+
+    <script>
+
+        function LogOutUser() {
+
+            var username = '@Session["Username"]';
+
+            $.ajax({
+                url: "/Account/LogOutUser",
+                contentType: "application/json; charset=utf-8",
+                data: "{'username':'" + username + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
+                }
+            });
+            
+            window.location.href = '../../Account/Login';
+        }
 
     </script>
     <script>
