@@ -123,7 +123,7 @@
                         </script>
                     </h4>
                     <hr style="border-width: 2px; border-color: black" />
-                    <table id="trialTable" class="table-striped" style="width:510px">
+                    <table id="retainedEarningsTable" class="table-striped" style="width:510px">
                         <tr class="titleRow">
                             <th style="text-align: left">
                                 Beg Retained Earnings,
@@ -138,7 +138,7 @@
                         </tr>
                         <tr class="titleRow" >
                             <th style="text-align: left">Add: Net Income </th>
-                            <th style="float:right">0.00</th>
+                            <th style="float:right">@ViewBag.NetIncome</th>
                         </tr>
                         <tr class="titleRow" >
                             <th style="text-align: left">Less: Dividents Paid</th>
@@ -151,7 +151,7 @@
                                     document.write(new Date().toDateString());
                                 </script>
                             </th>
-                            <th style="text-align: right; border-bottom: .4rem double;">$0.00</th>
+                            <th style="text-align: right; border-bottom: .4rem double;">$@ViewBag.NetIncome</th>
                         </tr>
 
                     </table>
@@ -164,7 +164,44 @@
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            var table = document.getElementById("retainedEarningsTable");
 
+            for (var i = 1; i < table.rows.length; i++) {
+                var Dhtml = table.rows[i].cells[1].innerText;
+                var newDhtml = Dhtml.replace("$", "");
+
+                if (newDhtml != "") {
+                    table.rows[i].cells[1].innerText = formatMoney(newDhtml);
+                }
+            }
+
+            placeDollarSigns();
+        });
+    </script>
+
+    <script>
+        function formatMoney(n, c, d, t) {
+            var c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
+        function placeDollarSigns() {
+            var table2 = document.getElementById("retainedEarningsTable");
+
+            var num = table2.rows.length - 1;
+            var x = table2.rows[num].cells[1].innerText;
+
+            table2.rows[num].cells[1].innerText = "$ " + x;
+        }
+    </script>
 
 
 </body>
