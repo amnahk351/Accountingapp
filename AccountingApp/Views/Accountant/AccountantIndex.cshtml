@@ -214,7 +214,6 @@
                     margin-left: 0;
                 }
         }
-       
     </style>
 </head>
 <body>
@@ -328,7 +327,7 @@
                         </li>
                     </ul>
                 </li>
-               
+
             </ul>
 
         </nav>
@@ -412,48 +411,31 @@
                         <tbody style="background-color:white; width:100%">
                             @for (int i = 0; i < Model.entries.Count; i++)
                             {
-<<<<<<< HEAD
                                 <tr>
                                     <td>@Model.entries[i].submitDate</td>
                                     <td>@Model.entries[i].entryID</td>
                                     <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                                    <td id="transactionstatus" class="status" >
-                                        <script>
-
-                                        </script>
+                                    <td id="transactionstatus" class="status">
                                         @Model.entries[i].status
 
+                                    </td>
+                                    <td>
+                                        @if (@Model.entries[i].status == "suspended")
+                                        {
+                                            <a style="color: blue" href="@Url.Action("EditJournal", new { id = Model.entries[i].entryID})">
+                                                Edit
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span style="color: blue; cursor: pointer">View</span>
+                                        }
 
                                     </td>
                                 </tr>
-=======
-                            <tr>
-                                <td>@Model.entries[i].submitDate</td>
-                                <td>@Model.entries[i].entryID</td>
-                                <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
-                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                                <td id="transactionstatus" class="status">
-                                    @Model.entries[i].status
 
-                                </td>
-                                <td>
-                                    @if (@Model.entries[i].status == "suspended")
-                                    {
-                                        <a style="color: blue" href="@Url.Action("EditJournal", new { id = Model.entries[i].entryID})">
-                                            Edit
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <span style="color: blue; cursor: pointer">View</span>
-                                    }
-
-                                </td>
-                            </tr>
->>>>>>> f89b50b11a22f05e0c56b083df68ac07f26e1318
                             }
                         </tbody>
                     </table>
@@ -496,7 +478,7 @@
         <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
 
     <script>
-       
+
     </script>
     <script type="text/javascript">
 
@@ -523,7 +505,7 @@
                     //alert(result);
                 }
             });
-            
+
             window.location.href = '../../Account/Login';
         }
 
