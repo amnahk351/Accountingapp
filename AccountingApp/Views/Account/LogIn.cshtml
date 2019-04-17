@@ -31,9 +31,12 @@
         body {
             margin: 0;
             padding: 0;
-            background-image: url('../../img/ac.jpg');
+            /*background-image: url('../../img/ac.jpg');*/
             background-repeat: no-repeat;
-            background-size: cover;
+            background-size: 100% 100%;
+            /*background-size: cover;*/
+            /*background-size: contain;
+            background-position: center;*/
             background-color: gainsboro;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 18px;
@@ -50,6 +53,7 @@
             color: dodgerblue;
             border-radius: 10px;
             background-color: #FFFFFF;
+            opacity: 0.8;
             padding: 35px;
         }
 
@@ -243,10 +247,9 @@
                 background-image: -o-linear-gradient(top, #26759e, #133d5b);
                 background-image: linear-gradient(to bottom, #26759e, #133d5b);
                 filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#26759e, endColorstr=#133d5b);
-            }
+            }        
     </style>
 </head>
-
 
 
 
@@ -306,6 +309,32 @@
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var header = $('body');
+
+        var backgrounds = new Array(
+            'url(https://media0.giphy.com/media/3oriO7A7bt1wsEP4cw/giphy.gif?cid=790b76115cb7647c2f6e6d6367fb7efd)'
+            , 'url(https://media.giphy.com/media/l378gW7GaWG6Leeas/giphy.gif)'
+            , 'url(https://media1.giphy.com/media/rM0wxzvwsv5g4/giphy.gif?cid=790b76115cb7644b4a38642e6b53749c)'
+            , 'url(https://media.giphy.com/media/7Je6xAM4Yq6fe6GvjC/giphy.gif)'
+            , 'url(https://media2.giphy.com/media/LZ2WRdQu8udNPSZxbg/giphy.gif?cid=790b76115cb763ee6766475849833599)'
+        );
+
+        var current = 0;
+
+        function nextBackground() {
+            current++;
+            current = current % backgrounds.length;
+            header.css('background-image', backgrounds[current]);
+        }
+        setInterval(nextBackground, 1400);
+
+        header.css('background-image', backgrounds[0]);
+    });
+</script>
+
 <script>
     function displayToggle() {
 
