@@ -1,26 +1,21 @@
-﻿
+﻿@model List<AccountingApp.Models.CreateUser>
+
 @{
-    ViewBag.Title = "AdminIndex";
+    ViewBag.Title = "Current Users";
     //Layout = "~/Views/Shared/_Layout_Admin.cshtml";
     Layout = null;
 }
-
-<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
-    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">*@
+    <!-- Bootstrap CSS -->
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/series-label.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
@@ -30,13 +25,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+
     <style>
-        #container {
-            min-width: 310px;
-            max-width: 800px;
-            height: 400px;
-            margin: 0 auto
-        }
         a,
         a:hover,
         a:focus {
@@ -191,59 +182,107 @@
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar" class="fixed-left">
-
             <div class="sidebar-header">
                 <h5>Menu</h5>
             </div>
-
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Admin/AdminIndex">
+                    <a href="/Manager/ManagerIndex">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
-
                 </li>
                 <li>
-
                     <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-list" style="margin-right:10px;"></i>
-
                         Chart Of Accounts
                     </a>
                     <ul class="collapse list-unstyled" id="accountSubmenu">
                         <li>
-                            <a href="/Admin/ChartOfAccounts">Chart of Accounts</a>
+                            <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/Manager/Journalize">
+                        <i class="far fa-edit" style="margin-right:10px"></i>
+                        Journalize
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+                        General Ledger
+                    </a>
+                </li>
+                <li>
+                    <a href="/Manager/GeneralJournal">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+                        General Journal
+                    </a>
+                </li>
+                <li>
+                    <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
+                        Transactions
+                    </a>
+                    <ul class="collapse list-unstyled" id="transactionSubmenu">
+                        <li>
+                            <a href="/Manager/ManagerApproval">Pending Transactions</a>
                         </li>
                         <li>
-                            <a href="/Admin/NewAccount">Create New Account</a>
+                            <a href="">Posted Transactions</a>
                         </li>
-
+                        <li>
+                            <a href="">Rejected Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Suspended Transactions</a>
+                        </li>
                     </ul>
+                </li>
+                <li>
+                    <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="far fa-chart-bar" style="margin-right:10px"></i>
+                        Reports
+                    </a>
+                    <ul class="collapse list-unstyled" id="reportSubmenu">
+                        <li>
+                            <a href="/Manager/TrialBalance">Trial Balance</a>
+                        </li>
+                        <li>
+                            <a href="/Manager/IncomeStatement">Income Statement</a>
+                        </li>
+                        <li>
+                            <a href="/Manager/RetainedEarnings">Statement Of Retained Earnings</a>
+                        </li>
+                        <li>
+                            <a href="/Manager/BalanceSheet">Balance Sheet</a>
+                        </li>
+                        <li>
+                            <a href="/Manager/PostClosingTrialBalance">Post Closing Trial Balance</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
                     <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-users" style="margin-right:10px;"></i>
-
-
                         Users
                     </a>
                     <ul class="collapse list-unstyled" id="userSubmenu">
                         <li>
-                            <a href="/Home/ShowUserData">User List</a>
+                            <a href="/Manager/ShowUserData">User List</a>
                         </li>
-                        <li>
-                            <a href="/Home/NewUser">Create New User</a>
-                        </li>
-
                     </ul>
-                    <a href="/Home/EventLog">
+                    <a href="/Manager/EventLog">
                         <i class="fas fa-briefcase" style="margin-right:10px;"></i>
                         Event Log
                     </a>
-
                 </li>
             </ul>
 
         </nav>
+
         <div id="content">
 
             <nav class="navbar navbar-expand-lg sticky-top navbar-light justify-content-between">
@@ -285,40 +324,68 @@
                     </div>
                 </div>
             </nav>
-            <div class=" body-content" style="width:100%; margin:0 auto; height:auto">
-                <h4 style="display:inline">Dashboard</h4>
+
+            <div class=" body-content" style="width:100%; margin:0 auto;">
+                <div>
+
+                    <h4 style="display:inline">@ViewBag.Title</h4>
+
+                </div>
+
+                <hr class="my-4" />
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        @TempData["Message"]
+                    </div>
+                }
+
+                <table class="table table-responsive table-hover shadow " id="users" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
+                    <thead class="shadow" style="background-color:white; ">
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Phone</th>
+                            <th>Allowed Access</th>
+                            <th>Address</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>ZIP Code</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count(); i++)
+                        {
+                            <tr>
+                                <td>@Model[i].ID</td>
+                                <td>@Model[i].FirstName</td>
+                                <td>@Model[i].LastName</td>
+                                <td>@Model[i].Email</td>
+                                <td>@Model[i].Username</td>
+                                <td>@Model[i].Role</td>
+                                <td>@Model[i].Phone</td>
+                                <td>@(Model[i].Active ? "Y" : "N")</td>
+                                <td>@Model[i].Address</td>
+                                <td>@Model[i].City</td>
+                                <td>@Model[i].State</td>
+                                <td>@Model[i].ZIP_Code</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <br />
+                <hr />
+
             </div>
-            <hr class="my-4" />
-            <br />
-            <div class="row ">
-                <div class="column shadow" style="width:45%; margin-left:20px;">
-                    <div class="shadow" id="chart" style="width:100%"></div>
-                </div>
-                <div class="column shadow" style="width:45%; margin-left:20px; ">
-                    <div class="shadow" id="graph" style="float:left;width:100%"></div>
-                </div>
-
-            </div>
-            <br />
-            <div class="row ">
-                <div class="column shadow" style="width:45%; margin-left:20px;">
-                    <div class="shadow" id="profitloss" style="width:100%"></div>
-                </div>
-                <div class="column shadow" style="width:45%; margin-left:20px; ">
-                    <div class="shadow" id="equity" style="float:left;width:100%"></div>
-                </div>
-
-            </div>
-            <hr />
-
-
-            <br />
-            <br />
-
-
             <div class="container body-content">
 
-                <hr />
                 <footer align="center">
                     <p>
                         &copy; @DateTime.Now.Year - Objective Accounting
@@ -326,235 +393,40 @@
                     </p>
                 </footer>
             </div>
-
         </div>
-</div>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-        <script type="text/javascript">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
 
     window.onload = function () {
         var username = '@Session["FirstNameofUser"]';
         document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
     };
 
-        </script>
-        <script>
-            $(document).ready(function () {
+    </script>
+    <script>
+        $(document).ready(function () {
 
-                $('#sidebarCollapse').on('click', function () {
-                    $('#sidebar').toggleClass('active');
-                });
-
-            });
-        </script>
-        <script>
-
-            var chart = Highcharts.chart('chart', {
-                title: {
-                    text: 'Current Assets And Current Liabilities'
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: {
-                    enabled: false
-                },
-                xAxis: {
-                    categories: ['Current Assets', 'Current Liabilities']
-                },
-                plotOptions: {
-                    series: {
-                        pointWidth: 45
-                    }
-                },
-
-                series: [{
-                    type: 'column',
-                    colorByPoint: true,
-                    data: [
-                        { y: 6000, color: 'green' },
-                        { y: 2000, color: 'orange' }],
-                    showInLegend: false
-                }]
-
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
             });
 
+        });
+    </script>
 
-
-
-
-
-
-
-
-
-
-            Highcharts.chart('graph', {
-
-                title: {
-                    text: 'Current Ratio and Quick Ratio'
-                },
-
-
-
-                yAxis: {
-
-                    categories: [0, 10, 20, 40, 80],
-
-                    title: {
-                        text: 'Values'
-                    }
-                },
-
-                legend: {
-                    layout: 'Vertical',
-                    align: 'right',
-                    verticalAlign: 'middle'
-                },
-                chart: {
-                    width: null
-                },
-
-                plotOptions: {
-                    series: {
-                        label: {
-                            connectorAllowed: false
-                        },
-                        pointStart: 2015
-                    }
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: {
-                    enabled: false
-                },
-                series: [{
-                    name: 'Current Ratio(Annual)',
-                    data: [12.4, 17.8, 10.2, 8.8, 14.8]
-                }, {
-                    name: 'Quick Ratio(Annual)',
-                    data: [0.83, 15.8, 10.2, 9.2, 10.8,]
-                }],
-
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 800
-                        },
-                        chartOptions: {
-                            legend: {
-                                layout: 'horizontal',
-                                align: 'center',
-                                verticalAlign: 'bottom'
-                            }
-                        }
-                    }]
-                }
-
-            });
-
-
-            var chart = Highcharts.chart('profitloss', {
-
-                title: {
-                    text: 'Net Income'
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: {
-                    enabled: false
-                },
-                xAxis: {
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-                },
-
-                series: [{
-                    name: 'Net Income',
-
-                    type: 'column',
-                    colorByPoint: true,
-                    data: [{ y: 6000, color: 'green' },
-                        { y: 2000, color: 'green' },
-                        { y: 3000, color: 'green' },
-                        { y: 6000, color: 'green' },
-                        { y: 7000, color: 'green' },
-                        { y: 6000, color: 'green' }, { y: 6000, color: 'green' },
-                        { y: 4000, color: 'green' },
-                        { y: 3000, color: 'green' },
-                        { y: -2000, color: 'red' },
-                        { y: 6000, color: 'green' },
-                        { y: 6000, color: 'green' }],
-                    showInLegend: false
-                }]
-
-            });
-
-
-
-
-
-
-            Highcharts.chart('equity', {
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                title: {
-                    text: 'Return on Equity'
-                },
-                exporting: {
-                    enabled: false
-                },
-                credits: {
-                    enabled: false
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                            style: {
-                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                            }
-                        }
-                    }
-                },
-                series: [{
-
-                    colorByPoint: true,
-                    data: [{
-                        name: 'Equity',
-                        y: 30.00
-                    }, {
-                        name: 'Net Income',
-                        y: 70.00, color: 'green'
-                    }]
-                }]
-            });
-        </script>
-        @*@Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")*@
-        @*@RenderSection("scripts", required: false)*@
-</body>
-</html>
-
-<script>
+    <script>
+        $(document).ready(function () {
+            $('#users').DataTable();
+        });
+    </script>
+    <script>
 
         function LogOutUser() {
 
@@ -574,111 +446,6 @@
             window.location.href = '../../Account/Login';
         }
 
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </script>
+</body>
+</html>

@@ -16,14 +16,18 @@ namespace AccountingApp.Controllers
 {
     public class AccountantController : Controller
     {
+        public ActionResult Dashboard()
+        {
+            return View();
+        }
 
         public ActionResult EditJournal(double id)
         {
             List<ChartOfAcc> listAccounts;
+            bool t = true;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Active=@Value", new { Value = t }).ToList();
             }
             List<SelectListItem> sliAccountList = new List<SelectListItem>();
 
@@ -54,10 +58,10 @@ namespace AccountingApp.Controllers
             {
                 transactions = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
             }
-                        
+
             var result = JsonConvert.SerializeObject(transactions);
             //System.Diagnostics.Debug.WriteLine("json: " + result);
-            
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -65,14 +69,20 @@ namespace AccountingApp.Controllers
         public JsonResult GetAllFiles(int id)
         {
             List<DocumentsTable> files = new List<DocumentsTable>();
+            List<String> names = new List<String>();
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 files = db.Query<DocumentsTable>($"Select FileName From dbo.DocumentsTable Where FK_EntryId = @ID", new { ID = id }).ToList();
             }
 
-            var result = JsonConvert.SerializeObject(files);
-            //System.Diagnostics.Debug.WriteLine("json: " + result);
+            for (int i = 0; i < files.Count; i++) {
+                names.Add(files[i].FileName);
+            }
+
+            var result = JsonConvert.SerializeObject(names);
+
+            System.Diagnostics.Debug.WriteLine("json: " + result);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -80,39 +90,13 @@ namespace AccountingApp.Controllers
         [HttpGet]
         public ActionResult AccountantIndex(string status)
         {
-            if (status == null || status =="")
+            if (status == null || status == "")
                 return View(getAllEntriesOfStatus("approved"));
             else
                 return View(getAllEntriesOfStatus(status));
         }
 
-        [HttpPost]
-        public ActionResult Journalize(Transaction transaction)
-        {
-            Trace.WriteLine(transaction.Debit);
-            Trace.WriteLine(transaction.AccountNumber);
-
-            List<ChartOfAcc> listAccounts;
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
-            }
-            List<SelectListItem> sliAccountList = new List<SelectListItem>();
-
-            foreach (ChartOfAcc coa in listAccounts)
-            {
-                SelectListItem item = new SelectListItem
-                {
-                    Text = coa.AccountName,
-                    Value = coa.AccountNumber.ToString()
-                };
-                sliAccountList.Add(item);
-            }
-
-            ViewBag.accountlist = sliAccountList;
-            return View("~/Views/Accountant/AccountantIndex.cshtml");
-        }
+        
 
 
         public int GetLatestEntryId()
@@ -121,7 +105,7 @@ namespace AccountingApp.Controllers
 
             SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
             SqlCommand cmd = new SqlCommand($"SELECT TOP 1 EntryId FROM dbo.TransactionTable ORDER BY TransactionID DESC", con);
-            
+
             con.Open();
             string s = cmd.ExecuteScalar().ToString();  //Stores the latest EntryId in the table
 
@@ -146,24 +130,21 @@ namespace AccountingApp.Controllers
             {
                 type = "Submitted";
             }
-            else {
+            else
+            {
                 type = "Suspended";
             }
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
 
-                for (int i = 1; i < transactions.Length; i++)
+                for (int i = 0; i < transactions.Length; i++)
                 {
                     //if was submitted today added the current time to the database
-
                     //if submitted on another day, default the time to 12
-
-                    if (i == 1)
+                    if (i == 0)
                     {
                         var DatetoUse = DateTime.Now;
-                        System.Diagnostics.Debug.WriteLine("Date Now: " + DatetoUse);
-                        System.Diagnostics.Debug.WriteLine("Date: " + transactions[i].DateSubmitted);
 
                         var TodayString = DatetoUse.ToString();
                         string[] Pieces = TodayString.Split(' ');
@@ -176,7 +157,6 @@ namespace AccountingApp.Controllers
 
                         if (JustDate != JustDate2)
                         {
-                            System.Diagnostics.Debug.WriteLine("Other date: " + (DateTime)transactions[i].DateSubmitted);
                             DatetoUse = (DateTime)transactions[i].DateSubmitted;
                         }
 
@@ -233,6 +213,51 @@ namespace AccountingApp.Controllers
             return Json(insertedRecords);
         }
 
+        public ActionResult TransactionSummary(int id) {
+
+            List<Transaction> transactionList;
+            Entry EnModel = new Entry();
+            List<String> Names = new List<String>();
+            List<Decimal> Debits = new List<Decimal>();
+            List<Decimal> Credits = new List<Decimal>();
+            List<DocumentsTable> files;
+            List<String> NamesofFiles = new List<String>();
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            EnModel.entryID = (int)transactionList[0].EntryId;
+            EnModel.status = transactionList[0].Status;
+            EnModel.comment = transactionList[0].AccountantComment;
+            EnModel.submitDate = (DateTime) transactionList[0].DateSubmitted;
+            
+            for (int i = 0; i < transactionList.Count; i++) {
+                Names.Add(transactionList[i].AccountName);
+                Debits.Add((Decimal)transactionList[i].Debit);
+                Credits.Add((Decimal)transactionList[i].Credit);
+            }
+
+            EnModel.accountNames = Names;
+            EnModel.debits = Debits;
+            EnModel.credits = Credits;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                files = db.Query<DocumentsTable>($"Select FileName From dbo.DocumentsTable Where FK_EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            for (int i = 0; i < files.Count; i++)
+            {
+                NamesofFiles.Add(files[i].FileName);
+            }
+
+            EnModel.fileNames = NamesofFiles;
+
+            return View(EnModel);
+        }
+
 
         [HttpPost]
         public JsonResult InsertEditedJournal(Transaction[] transactions, string id)
@@ -259,13 +284,13 @@ namespace AccountingApp.Controllers
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
 
-                for (int i = 1; i < transactions.Length; i++)
+                for (int i = 0; i < transactions.Length; i++)
                 {
                     //if was submitted today added the current time to the database
 
                     //if submitted on another day, default the time to 12
 
-                    if (i == 1)
+                    if (i == 0)
                     {
                         var DatetoUse = DateTime.Now;
                         System.Diagnostics.Debug.WriteLine("Date Now: " + DatetoUse);
@@ -365,7 +390,8 @@ namespace AccountingApp.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetLatestEntryIdforFile() {
+        public JsonResult GetLatestEntryIdforFile()
+        {
 
             int EntryId;
 
@@ -378,7 +404,7 @@ namespace AccountingApp.Controllers
             con.Close();
             EntryId = Int32.Parse(s);
 
-            
+
             var result = JsonConvert.SerializeObject(EntryId + 1);
             System.Diagnostics.Debug.WriteLine("json latest entry id: " + result);
 
@@ -386,19 +412,68 @@ namespace AccountingApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteFile(string file, int id) {
+        public ActionResult RequestAccount(int number, string name, string type, string side, string balance, string comment)
+        {
+            var sessionUser = Session["Username"] as string;
+            bool a = false;
+            string v = "requested";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.ChartOfAccounts (AccountNumber, AccountName, " +
+                    "AccountType, NormalSide, OriginalBalance, AccountDescription, CreatedBy, Active, Visibility)" +
+                    "values(@AccountNumber, @AccountName, @AccountType,@NormalSide,@OriginalBalance," +
+                    "@AccountDescription,@CreatedBy,@Active,@Visibility)";
+                db.Execute(sql, new
+                {
+                    AccountNumber = number,
+                    AccountName = name,
+                    AccountType = type,
+                    NormalSide = side,
+                    OriginalBalance = balance,
+                    AccountDescription = comment,
+                    CreatedBy = sessionUser,
+                    Active = a,
+                    Visibility = v
+                });
+            }
+
+            return Json("Request Submitted.");
+        }
+
+        [HttpGet]
+        public ActionResult RetreiveComment(int id)
+        {
+            List<Transaction> transactionList;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {                
+                transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryId=@ID", new { ID = id }).ToList();
+            }
+
+            string comment = transactionList[0].AccountantComment;
+            var result = JsonConvert.SerializeObject(comment);
+            System.Diagnostics.Debug.WriteLine("json: " + result);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteFile(string file, int id)
+        {
 
             //int EntryID = GetLatestEntryId() + 1;
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 string sql = $"DELETE FROM dbo.DocumentsTable WHERE FileName=@File AND FK_EntryId=@ID";
-                
+
                 db.Execute(sql, new
                 {
                     File = file,
                     ID = id
-                });                
+                });
 
             }
 
@@ -437,7 +512,7 @@ namespace AccountingApp.Controllers
             }
             return Json(files.Count + " Files Uploaded!");
 
-        }        
+        }
 
         [HttpPost]
         public ActionResult UploadEditedFiles(string id)
@@ -460,10 +535,10 @@ namespace AccountingApp.Controllers
         public ActionResult Journalize()
         {
             List<ChartOfAcc> listAccounts;
+            bool t = true;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Active=@Value", new { Value = t }).ToList();
             }
             List<SelectListItem> sliAccountList = new List<SelectListItem>();
 
@@ -492,7 +567,7 @@ namespace AccountingApp.Controllers
             List<Transaction> transactionList;
             List<DocumentsTable> fileList = new List<DocumentsTable>();
 
-            
+
 
             if (s == "all")
             {
@@ -531,8 +606,8 @@ namespace AccountingApp.Controllers
                     ids.Add(id);
 
                 Entry e = new Entry(id, status, date, comment);
-                
-                
+
+
                 foreach (Transaction t2 in transactionList)
                 {
                     if (t2.EntryId == id)
@@ -540,11 +615,12 @@ namespace AccountingApp.Controllers
                         for (int i = 0; i < fileList.Count; i++)
                         {
 
-                            if (fileList[i].FK_EntryId == t2.EntryId) {
+                            if (fileList[i].FK_EntryId == t2.EntryId)
+                            {
                                 e.files.Add(fileList[i]);
                             }
                         }
-                        
+
 
                         e.accountNames.Add(t2.AccountName);
                         e.debits.Add(t2.Debit.GetValueOrDefault());
@@ -557,6 +633,170 @@ namespace AccountingApp.Controllers
             return entries;
         }
 
+               
+
+        public ActionResult ChartOfAccounts()
+        {
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Visibility = @V", new { V = "visible" }).ToList();
+            }
+            return View(listAccounts);
+        }
+
+
+        //broderick's
+        public ActionResult EventLog()
+        {
+            List<Models.EventLog> events;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                events = db.Query<Models.EventLog>($"Select * from dbo.EventLogTable").ToList();
+            }
+
+            return View(events);
+            //Database1Entities6 db2 = new Database1Entities6();
+            //var events = db2.EventLogs.ToList();
+            //return View(events);
+        }
+
+        //colt's code
+        public ActionResult TrialBalance()
+        {
+
+            List<ChartOfAcc> coa;
+            decimal debTotal = 0;
+            decimal credTotal = 0;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                foreach (ChartOfAcc c in coa)
+                {
+                    if (c.NormalSide.ToLower() == "debit")
+                        debTotal += c.CurrentBalance.Value;
+                    else
+                        credTotal += c.CurrentBalance.Value;
+                }
+
+                ViewBag.DebitTotal = debTotal;
+                ViewBag.CreditTotal = credTotal;
+            }
+
+            return View(coa);
+        }
+
+
+
+        public ActionResult IncomeStatement()
+        {
+
+            List<ChartOfAcc> coa;
+            decimal revenueTotal = 0;
+            decimal expenseTotal = 0;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                foreach (ChartOfAcc c in coa)
+                {
+                    if (c.AccountType.ToLower() == "revenue")
+                        revenueTotal += c.CurrentBalance.Value;
+                    if (c.AccountType.ToLower() == "expense")
+                        expenseTotal += c.CurrentBalance.Value;
+
+
+                }
+
+                ViewBag.RevenueTotal = revenueTotal;
+                ViewBag.ExpenseTotal = expenseTotal;
+                ViewBag.NetIncome_Loss = revenueTotal - expenseTotal;
+            }
+
+            return View(coa);
+        }
+
+        public ActionResult BalanceSheet()
+        {
+
+            List<ChartOfAcc> coa;
+            decimal totalCurrentAssets = 0;
+            decimal totalAssets = 0;
+            decimal propPlanEquipNet = 0;
+            decimal totalCurrentLiabilities = 0;
+            decimal totalLiabilities = 0;
+            decimal retainedEarnings = 0;
+            decimal totalStockHolderEquity = 0;
+            decimal totalLiabilitesStockEquity = 0;
+            decimal unearnedRevenue = 0;
+            decimal contributedCapital = 0;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+
+                for (int i = 0; i < coa.Count; i++)
+                {
+                    if (coa[i].AccountName.ToLower() == "cash" || coa[i].AccountName.ToLower() == "accounts receivable" || coa[i].AccountName.ToLower() == "supplies" || coa[i].AccountName.ToLower() == "prepaid insurance" || coa[i].AccountName.ToLower() == "prepaid rent")
+                    {
+                        totalCurrentAssets += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "office supplies")
+                    {
+                        propPlanEquipNet += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "accumulated depreciation equipment")
+                    {
+                        propPlanEquipNet -= coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "accounts payable" || coa[i].AccountName.ToLower() == "salaries payable")
+                    {
+                        totalCurrentLiabilities += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "unearned revenue")
+                    {
+                        unearnedRevenue += coa[i].CurrentBalance.Value;
+                    }
+                    else if (coa[i].AccountName.ToLower() == "contributed capital")
+                    {
+                        contributedCapital += coa[i].CurrentBalance.Value;
+                    }
+                }
+
+            }
+
+            totalAssets = totalCurrentAssets + propPlanEquipNet;
+            totalLiabilities = unearnedRevenue + totalCurrentLiabilities;
+
+            retainedEarnings = totalAssets - totalLiabilities - contributedCapital;
+
+            totalStockHolderEquity = retainedEarnings + contributedCapital;
+            totalLiabilitesStockEquity = totalStockHolderEquity + totalLiabilities;
+
+            ViewBag.totalCurrentAssets = totalCurrentAssets;
+            ViewBag.totalAssets = totalAssets;
+            ViewBag.propPlanEquipNet = propPlanEquipNet;
+            ViewBag.totalCurrentLiabilities = totalCurrentLiabilities;
+            ViewBag.totalLiabilities = totalLiabilities;
+            ViewBag.retainedEarnings = retainedEarnings;
+            ViewBag.totalStockHolderEquity = totalStockHolderEquity;
+            ViewBag.totalLiabilitesStockEquity = totalLiabilitesStockEquity;
+
+            return View(coa);
+        }
+        //colt's code
+
+
+        public ActionResult RetainedEarnings()
+        {
+            return View();
+        }
+
+        public ActionResult PostClosingTrialBalance()
+        {
+            return View();
+        }
     }
 
     //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html
@@ -566,7 +806,7 @@ namespace AccountingApp.Controllers
         public void SaveFileDetails(HttpPostedFileBase file)
         {
             int newID = GetLatestEntryId();
-            
+
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 string sql = $"Insert into dbo.DocumentsTable (FileBytes, ContentType, " +

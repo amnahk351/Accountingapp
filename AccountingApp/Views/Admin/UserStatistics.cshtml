@@ -1,0 +1,70 @@
+﻿@model IEnumerable<AccountingApp.Models.UserStatsModel>
+
+@{
+    ViewBag.Title = "User Statistics";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    //Layout = null;
+}
+
+<h2>User Statistics</h2>
+
+
+<table class="table">
+    <tr>
+        <th>            
+            User ID
+        </th>
+        <th>
+            Username
+        </th>
+        <th>
+            Date Created
+        </th>
+        <th>
+            Date Modified
+        </th>
+        <th>
+            Most Recent Login
+        </th>
+        <th>
+            Last Time Online
+        </th>
+        <th>
+            Total Login
+        </th>
+        <th>
+            Login Fails
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateModified)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastLogin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastSignout)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoginAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoginFails)
+        </td>        
+    </tr>
+}
+
+</table>

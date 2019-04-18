@@ -1,8 +1,8 @@
 ﻿@model List<AccountingApp.Models.ChartOfAcc>
 
 @{
-    ViewBag.Title = "Post Closing Trial Balance";
-    Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
+    ViewBag.Title = "PostClosingTrialBalance";
+    Layout = "~/Views/Shared/_Layout_Manager.cshtml";
     //Layout = null;
 
 }
@@ -14,41 +14,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <style>
-        body {
-            background-color: white;
-        }
-
-        .navbar-text {
-            padding-right: 20px;
-        }
-
-        .container {
-            width: 100%;
-            margin-top: 2%;
-        }
-
-        .inner {
-            overflow: hidden;
-        }
-
-            .inner img {
-                transition: all 1.5s ease;
-            }
-
-            .inner:hover img {
-                transform: scale(1.5);
-            }
+        
     </style>
 </head>
 
 <body>
+   
 
     <div class="shadow container" style="width:60%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">

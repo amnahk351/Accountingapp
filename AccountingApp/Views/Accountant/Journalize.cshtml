@@ -16,13 +16,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-        
+
     <style>
-        
+
+
         .form_datetime {
             display: block;
             width: 100%;
@@ -64,8 +61,6 @@
             border: none;
             cursor: pointer;
             color: white;
-            /*padding: 4px 14px;
-            font-size: 16px;*/
         }
 
             .deletebutton:hover {
@@ -86,6 +81,7 @@
             font-family: Arial, Helvetica, sans-serif;
             background-color: #c0d0e5;
             text-align: left;
+            color: blue;
         }
 
             table.uploadList td, table.uploadList th {
@@ -212,267 +208,395 @@
                     table.EntryTable thead th:first-child {
                         border-left: none;
                     }
+
+        a,
+        a:hover,
+        a:focus {
+            color: inherit;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .navbar {
+            padding: 15px 10px;
+            background: #fff;
+            border: none;
+            border-radius: 0;
+            margin-bottom: 40px;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-btn {
+            box-shadow: none;
+            outline: none !important;
+            border: none;
+        }
+
+        .line {
+            width: 100%;
+            height: 1px;
+            border-bottom: 1px dashed #ddd;
+            margin: 40px 0;
+        }
+
+        i,
+        span {
+            display: inline-block;
+        }
+
+
+        #content {
+            width: 100%;
+            padding: 20px;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+
+
+        .wrapper {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .wrapper {
+            display: flex;
+            align-items: stretch;
+        }
+
+        #sidebar {
+            min-width: 300px;
+            max-width: 650px;
+            min-height: 100vh;
+        }
+
+        a[data-toggle="collapse"] {
+            position: relative;
+        }
+
+        .dropdown-toggle::after {
+            display: block;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+        }
+
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background: #f4f4f4;
+            font-size: 1.2em;
+        }
+
+        p {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 1.1em;
+            font-weight: 300;
+            line-height: 1.7em;
+            color: #999;
+        }
+
+        a, a:hover, a:focus {
+            color: inherit;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        #sidebar {
+            background: #3e547f;
+            color: lightgray;
+            transition: all 0.3s;
+        }
+
+            #sidebar .sidebar-header {
+                padding: 20px;
+                background: #3e547f;
+                border-bottom: 1px solid #47748b;
+            }
+
+            #sidebar ul.components {
+                padding: 20px 0;
+                border-bottom: 1px solid #47748b;
+            }
+
+            #sidebar ul p {
+                color: #d5d8e0;
+                padding: 20px;
+            }
+
+            #sidebar ul li a {
+                padding: 20px;
+                font-size: 1.2em;
+                display: block;
+            }
+
+                #sidebar ul li a:hover {
+                    color: #3e547f;
+                    background: #d5d8e0;
+                }
+
+            #sidebar ul li.active > a, a[aria-expanded="true"] {
+                color: #fff;
+                background: #3e547f;
+            }
+
+        ul ul a {
+            font-size: 0.9em !important;
+            padding-left: 30px !important;
+            background: #6579a0;
+        }
+
+        @@media (max-width: 768px) {
+            #sidebar {
+                margin-left: -300px;
+            }
+
+                #sidebar.active {
+                    margin-left: 0;
+                }
+        }
     </style>
 </head>
 <body>
+    <div class="wrapper">
+
+        <div id="content">
+
+            @using (Html.BeginForm(new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <br />
+                <div class="form-horizontal">
+
+                    <div class="container shadow" style="width:80%; background-color:white">
+                        <br />
+                        <h4>Journalize</h4>
+
+                        <hr />
+
+                        <table id="InputTable" style="width:100%">
+                            <colgroup>
+                                <col style="width: 16%">
+                                <col style="width: 1%">
+                                <col style="width: 46%">
+                                <col style="width: 1%">
+                                <col style="width: 18%">
+                                <col style="width: 1%">
+                                <col style="width: 18%">
+                                <col style="width: 1%">
+                                <col style="width: 1%">
+                            </colgroup>
+                            <tr>
+                                <td>Entry Type</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                            </tr>
+                            <tr>
+                                <td>
+
+                                    <select name="EntryType" class="EntryType" id="EntryType" value="@Request["EntryType"]">
+                                        <option value="Normal">Normal</option>
+                                        <option value="Adjusting">Adjusting</option>
+                                        <option value="Reversing">Reversing</option>
+                                        <option value="Closing">Closing</option>
+
+                                    </select>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                            </tr>
+                            <tr>
+                                <td>Date</td>
+                                <td></td>
+                                <td>Account</td>
+                                <td></td>
+                                <td>Debit</td>
+                                <td></td>
+                                <td>Credit</td>
+                                <td></td>
+                            </tr>
+
+                            <tr>
+
+                                <td><input type="text" id="Date" onkeydown="return false;" autocomplete="off" class="form_datetime" style="text-align:right" value="" placeholder="mm/dd/yyyy"></td>
+
+                                <td></td>
+
+                                <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
+                                    <div>
+                                        @Html.DropDownList("AccountNumber", (List<SelectListItem>)ViewBag.accountList, new { @class = "Account-Select", @name = "AccountNumber[]", required = "required" })
+                                    </div>
+                                </td>
+
+                                <td></td>
+
+                                <td><input type="text" id="Debit" class="form-control" autocomplete="off" style="text-align:right" onkeyup="AdjustTextboxes();" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
+
+                                <td></td>
+
+                                <td><input type="text" id="Credit" class="form-control" autocomplete="off" style="text-align:right" onkeyup="AdjustTextboxes();" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
+
+                                <td></td>
+
+                                <td><button type="button" id="AddEntry" class="btn btn-info" onclick="AppendToList()">Add</button></td>
+                            </tr>
+
+                            <tr>
+                                <td><span id="DateError" class="ErrorMessage"></span></td>
+                                <td></td>
+                                <td><span id="AccountError" class="ErrorMessage"></span></td>
+                                <td></td>
+                                <td><span id="DebitError" class="ErrorMessage"></span></td>
+                                <td></td>
+                                <td><span id="CreditError" class="ErrorMessage"></span></td>
+
+                            </tr>
+
+                        </table>
+
+                        <hr>
 
 
-    @using (Html.BeginForm(new { enctype = "multipart/form-data" }))
-    {
-        @Html.AntiForgeryToken()
-        <br />
-        <div class="form-horizontal">
+                        <table id="EntryErrorTable" style="table-layout: fixed; width: 100%; margin-bottom: 5px">
+                            <colgroup>
+                                <col style="width: 15%">
+                                <col style="width: 43%">
+                                <col style="width: 18%">
+                                <col style="width: 18%">
+                                <col style="width: 6%">
+                            </colgroup>
+                            <tr>
+                                <td></td>
+                                <td><span id="AccountEntryError" style="font-size: 13px; color:red;"></span></td>
+                                <td><span id="DebitEntryError" style="font-size: 13px; color:red;"></span></td>
+                                <td><span id="CreditEntryError" style="font-size: 13px; color:red;"></span></td>
+                                <td></td>
+
+                            </tr>
+
+                        </table>
+
+                        <table id="EntryTable" class="EntryTable" style="table-layout: fixed; width: 100%">
+                            <colgroup>
+                                <col style="width: 15%">
+                                <col style="width: 43%">
+                                <col style="width: 18%">
+                                <col style="width: 18%">
+                                <col style="width: 6%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Account</th>
+                                    <th>Debit</th>
+                                    <th>Credit</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @* Extra row in table to show brown strip *@
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                        <table style="table-layout: fixed; width: 98%; text-align: right; margin-top: 8px">
+                            <colgroup>
+                                <col style="width: 58%">
+                                <col style="width: 19%">
+                                <col style="width: 19%">
+                                <col style="width: 6%">
+                            </colgroup>
+                            <tr id="totals">
+                                <td><span id="TotalLabel" style="font-size: 16px;">Totals:</span></td>
+                                <td><span id="DebitTotal" style="font-size: 16px;">$ 0.00</span></td>
+                                <td><span id="CreditTotal" style="font-size: 16px;">$ 0.00</span></td>
+                                <td></td>
+                            </tr>
+
+                        </table>
+
+                        <br />
 
 
+                        <div class="col-md-12">
 
+                            <div class="form-group col-md-10">
+                                <label for="Comment" class="control-label">Comment</label>
+                                <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="Optional"></textarea>
 
-            @*<div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" href="@Url.Action(" ShowUserData")" class="btn btn-success btn-lg margin-right">
-                            Save
-                        </button>
-
-                        <a href="@Url.Action(" Index")" class="btn btn-warning btn-lg">
-                            Cancel
-                        </a>
-                    </div>
-                </div>*@
-
-            <div class="container shadow" style="width:80%">
-
-                <h4>Journalize</h4>
-
-                <hr />
-
-                @*<div class="form-group col-md-4">
-                *@
-
-                <table id="InputTable" style="width:100%">
-                    <colgroup>
-                        <col style="width: 16%">
-                        <col style="width: 1%">
-                        <col style="width: 46%">
-                        <col style="width: 1%">
-                        <col style="width: 18%">
-                        <col style="width: 1%">
-                        <col style="width: 18%">
-                        <col style="width: 1%">
-                        <col style="width: 1%">
-                    </colgroup>
-                    <tr>
-                        <td>Entry Type</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-
-                    </tr>
-                    <tr>
-                        <td>
-
-                            <select name="EntryType" class="EntryType" id="EntryType" value="@Request["EntryType"]">
-                                <option value="Normal">Normal</option>
-                                <option value="Adjusting">Adjusting</option>
-                                <option value="Reversing">Reversing</option>
-                                <option value="Closing">Closing</option>
-
-                            </select>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-
-                    </tr>
-                    <tr>
-                        <td>Date</td>
-                        <td></td>
-                        <td>Account</td>
-                        <td></td>
-                        <td>Debit</td>
-                        <td></td>
-                        <td>Credit</td>
-                        <td></td>
-                    </tr>
-
-                    <tr>
-
-                        <td><input type="text" id="Date" onkeydown="return false;" autocomplete="off" class="form_datetime" style="text-align:right" value="" placeholder="mm/dd/yyyy"></td>
-
-                        <td></td>
-
-                        <td class="selectpicker active-cyan-4 mb-4" data-live-search="true" multiple data-max-options="2" required>
-                            <div>
-                                @Html.DropDownList("AccountNumber", (List<SelectListItem>)ViewBag.accountList, new { @class = "Account-Select", @name = "AccountNumber[]", required = "required" })
                             </div>
-                        </td>
 
-                        <td></td>
+                            <div class="form-group col-md-12">
+                                <input type="file" class="form-control-file" id="input" name="file" multiple />
+                            </div>
 
-                        <td><input type="text" id="Debit" class="form-control" autocomplete="off" style="text-align:right" onkeyup="AdjustTextboxes();" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
+                            <div id="dropArea">
+                                Drop your files here or Click to Upload
+                            </div>
+                            <br />
+                            <h6>Uploaded files : </h6>
 
-                        <td></td>
+                            <table id="uploadList" class="uploadList" style="width: 43%;">
+                                <colgroup>
+                                    <col style="width: 40%">
+                                    <col style="width: 3%">
+                                </colgroup>
+                            </table>
 
-                        <td><input type="text" id="Credit" class="form-control" autocomplete="off" style="text-align:right" onkeyup="AdjustTextboxes();" onkeypress="return validateFloatKeyPress(this,event);" value="" placeholder="$0.00"></td>
+                            <br />
 
-                        <td></td>
+                            <div class="form-group col-md-10">
 
-                        <td><button type="button" id="AddEntry" class="btn btn-info" onclick="AppendToList()">Add</button></td>
-                    </tr>
+                                <span id="SubmitError" style="font-size: 18px;" class="ErrorMessage"></span>
 
-                    <tr>
-                        <td><span id="DateError" class="ErrorMessage"></span></td>
-                        <td></td>
-                        <td><span id="AccountError" class="ErrorMessage"></span></td>
-                        <td></td>
-                        <td><span id="DebitError" class="ErrorMessage"></span></td>
-                        <td></td>
-                        <td><span id="CreditError" class="ErrorMessage"></span></td>
+                            </div>
 
-                    </tr>
-
-                </table>
-
-                <hr>
+                        </div>
 
 
-                <table id="EntryErrorTable" style="table-layout: fixed; width: 100%; margin-bottom: 5px">
-                    <colgroup>
-                        <col style="width: 15%">
-                        <col style="width: 43%">
-                        <col style="width: 18%">
-                        <col style="width: 18%">
-                        <col style="width: 6%">
-                    </colgroup>
-                    <tr>
-                        <td></td>
-                        <td><span id="AccountEntryError" style="font-size: 13px; color:red;"></span></td>
-                        <td><span id="DebitEntryError" style="font-size: 13px; color:red;"></span></td>
-                        <td><span id="CreditEntryError" style="font-size: 13px; color:red;"></span></td>
-                        <td></td>
+                        <br />
 
-                    </tr>
+                        <div class="journalize-footer" style="text-align:right">
+                            <button type="button" onclick="ResetFunction()" class="btn btn-info">Reset</button>
 
-                </table>
+                            <button type="button" id="btnSubmit" class="btn btn-success">Submit</button>
 
-                <table id="EntryTable" class="EntryTable" style="table-layout: fixed; width: 100%">
-                    <colgroup>
-                        <col style="width: 15%">
-                        <col style="width: 43%">
-                        <col style="width: 18%">
-                        <col style="width: 18%">
-                        <col style="width: 6%">
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Account</th>
-                            <th>Debit</th>
-                            <th>Credit</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                            <button type="button" id="btnSave" class="btn btn-warning">Suspend</button>
 
-                        @* Extra row in table to show brown strip *@
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-                <table style="table-layout: fixed; width: 98%; text-align: right; margin-top: 8px">
-                    <colgroup>
-                        <col style="width: 58%">
-                        <col style="width: 19%">
-                        <col style="width: 19%">
-                        <col style="width: 6%">
-                    </colgroup>
-                    <tr id="totals">
-                        <td><span id="TotalLabel" style="font-size: 16px;">Totals:</span></td>
-                        <td><span id="DebitTotal" style="font-size: 16px;">$ 0.00</span></td>
-                        <td><span id="CreditTotal" style="font-size: 16px;">$ 0.00</span></td>
-                        <td></td>
-                    </tr>
-
-                </table>
-
-                <br />
-
-
-                <div class="col-md-12">
-
-                    <div class="form-group col-md-10">
-                        <label for="Comment" class="control-label">Comment</label>
-                        <textarea class="form-control" id="Comment" name="Comment" rows="1" placeholder="Optional"></textarea>
-
-                    </div>                    
-
-                    <div class="form-group col-md-12">
-                        <input type="file" class="form-control-file" id="input" name="file" multiple />
-                    </div>
-
-                    <div id="dropArea">
-                        Drop your files here or Click to Upload
-                    </div>
-                    <br />
-                    <h6>Uploaded files : </h6>
-                    @*<ul class="list-group" id="uploadList"></ul>*@
-
-                    <table id="uploadList" class="uploadList" style="width: 43%">
-                        <colgroup>
-                            <col style="width: 40%">
-                            <col style="width: 3%">
-                        </colgroup>
-                        @*<tr>
-                            <td>cell1_1</td>
-                            <td>cell2_1</td>
-                        </tr>*@
-                    </table>
-                    
-                    <br />
-
-                    <div class="form-group col-md-10">
-
-                        <span id="SubmitError" style="font-size: 18px;" class="ErrorMessage"></span>
-
+                        </div>
+                        <br />
                     </div>
 
                 </div>
-                               
 
                 <br />
-
-                <div class="journalize-footer" style="text-align:right">
-                    <button type="button" onclick="ResetFunction()" class="btn btn-info">Reset</button>
-
-                    @*<button type="submit" id="btnSubmit" class="btn btn-success">Submit</button>*@
-                    <button type="button" id="btnSubmit" class="btn btn-success">Submit</button>
-
-                    <button type="button" id="btnSave" class="btn btn-warning">Suspend</button>
-
-                </div>
-                <br />
-            </div>
+            }
 
         </div>
 
-        <br />
-    }
-
+    </div>
 
     <script>
 
@@ -539,15 +663,34 @@
 
         function DeleteAllTableFiles() {
 
+            var Number;
+
+            $.ajax(
+                {
+                    url: '/Accountant/GetLatestEntryIdforFile/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    success: function (result) {
+                        //alert(result);
+                        Number = result;
+
+                    },
+                    error: function (error) {
+                        alert(JSON.stringify(error));
+                    }
+                });
+
             var table = document.getElementById("uploadList");
             for (var i = 0, row; row = table.rows[i]; i++) {
                 //iterate through rows
-                var file = table.rows[i].cells[0].innerText;              
+                var file = table.rows[i].cells[0].innerText;
 
                 $.ajax({
                     url: "/Accountant/DeleteFile",
                     contentType: "application/json; charset=utf-8",
-                    data: "{'file': '" + file + "'}",
+                    data: "{'file':'" + file + "', 'id':'" + Number + "'}",
                     type: 'POST',
                     cache: false,
                     success: function (result) {
@@ -561,7 +704,7 @@
 
         function ResetFunction() {
 
-            
+
             var EntryAmount = document.getElementById("EntryTable").rows.length;
             var Amount = document.getElementById("uploadList").rows.length;
             if (Amount > 0) {
@@ -571,29 +714,9 @@
 
             //Refresh the page
             location.reload();
-
-
-            //if (EntryAmount > 2 || Amount > 0) {
-
-            //    if (confirm('Warning, you are about to remove unsaved changes! Are you sure?')) {
-
-            //        if (Amount > 0) {
-            //            //There is documents that need removed that the user does not want to saved
-            //            DeleteAllTableFiles();
-            //        }
-
-            //        //Refresh the page
-            //        location.reload();
-            //    } else {
-            //        // Do nothing!
-            //    }
-
-            //}
-
         }
 
     </script>
-
 
     @section Scripts{
         <script src="~/Scripts/jquery.filedrop.js"></script>
@@ -634,7 +757,7 @@
                     type: "GET",
                     async: false,
                     dataType: "json",
-                    contentType: "application/json;",                    
+                    contentType: "application/json;",
                     success: function (result) {
                         //alert(result);
                         Number = result;
@@ -650,12 +773,12 @@
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             // the ../ goes back one directory, needed to prevent calling Accountant twice
-            cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id="+ Number +"\" target=\"_blank\">" + fileName + "</a>";            
-            cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';            
+            cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
+            cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
         }
 
         function DeleteFile(button) {
-            
+
             var Number;
 
             $.ajax(
@@ -680,7 +803,7 @@
             var table = document.getElementById("uploadList");
 
             var file = table.rows[row[0].rowIndex].cells[0].innerText;
-            
+
             $.ajax({
                 url: "/Accountant/DeleteFile",
                 contentType: "application/json; charset=utf-8",
@@ -731,6 +854,10 @@
     @Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
     @Scripts.Render("~/Scripts/jquery.filedrop.js")
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript">
         $('.form_datetime').datetimepicker({
             format: "m/d/yyyy",
@@ -754,8 +881,8 @@
             var table = $("#EntryTable")[0];
 
             //Get Account Listed In Table
-            var ActualAccount = table.rows[row[0].rowIndex].cells[1].innerText;        
-            
+            var ActualAccount = table.rows[row[0].rowIndex].cells[1].innerText;
+
 
             //Add account back to drop down list
             var x = document.getElementById("AccountNumber");
@@ -765,7 +892,6 @@
 
             //Delete the Table row using it's Index.
             table.deleteRow(row[0].rowIndex);
-
 
             AddDateToTable();
             GetZeroColumn();
@@ -808,17 +934,7 @@
             if (number.length > 1 && charCode == 46) {
                 return false;
             }
-            //get the carat position
-            //var caratPos = getContentSelectionStart(el.innerText);
-            ////var caratPos = 5;
-            ////var caratPot = ($(x).innerText + currentValue).toFixed(3);
-            //var dotPos = el.innerText.indexOf(".");
 
-            ////var caratPos = el.innerText.length - dotPos;
-            ////var caratPos = dotPos + 3;
-            //if (caratPos > dotPos && dotPos > -1 && (number[1].length > 1)) {
-            //    return false;
-            //}
             return true;
         }
 
@@ -830,16 +946,6 @@
                 return o.value.lastIndexOf(r.text)
             } else return o.selectionStart
         }
-
-        //function getContentSelectionStart(o) {
-        //    if (o.createTextRange) {
-        //        var r = window.getSelection;
-        //        //var r = document.selection.createRange().duplicate()
-        //        r.moveEnd('character', o.length)
-        //        if (r.text == '') return o.length
-        //        return o.lastIndexOf(r.text)
-        //    } else return o.selectionStart
-        //}
 
     </script>
 
@@ -947,8 +1053,8 @@
                     setTimeout(function () {
                         throttle = false;
                     }, 1000);
-                    
-                    
+
+
                     if (x.innerHTML.indexOf("TempAccountList") !== -1) {
                         //X is a drop down list, prevent creating another list
                         return;
@@ -979,7 +1085,7 @@
                     var AccountList = document.getElementById("AccountNumber");
 
                     var ListClone = AccountList.cloneNode(true);
-                                                            
+
 
                     //Add current account to top of list
                     var option = document.createElement("option");
@@ -989,7 +1095,7 @@
 
                     x.setAttribute('style', 'padding-left: 0%');
                     ListClone.setAttribute('id', 'TempAccountList');
-                    ListClone.setAttribute("onchange", "EditAccountExit()"); 
+                    ListClone.setAttribute("onchange", "EditAccountExit()");
                     var newDiv = document.createElement("TempAccountList");  //Create a new div element
 
                     newDiv.appendChild(ListClone);  //Add the list to the newly created div
@@ -1029,7 +1135,7 @@
             var index = AccountSelect.selectedIndex;
 
             var RowNum = FindTempListRow();
-            
+
             var DebitCell = table.rows[RowNum].cells[2].innerText;
             var CreditCell = table.rows[RowNum].cells[3].innerText;
 
@@ -1054,7 +1160,7 @@
                 SortAccountList();
             }
 
-            
+
             if (DebitCell != "") {
                 //It is a debit
                 table.rows[RowNum].cells[1].innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\" >" + acc + "</span>";
@@ -1132,7 +1238,7 @@
                 document.getElementById('CreditEntryError').innerText = "";
 
                 x.style.background = "#EEEEEE";
-
+                x.style.cursor = "pointer";
                 PlaceDollarSign();
                 AdjustTotals();
 
@@ -1215,7 +1321,7 @@
 
     <script>
         function AppendToList() {
-                        
+
             var Elem = document.getElementById('AccountEntryError');
 
             if (Elem.innerText != "") {
@@ -1274,7 +1380,7 @@
 
 
             var table = document.getElementById("EntryTable");
-            
+
 
             //Get text value of drop down
             var AccountSelect = document.getElementById("AccountNumber");
@@ -1374,7 +1480,7 @@
             var cell3 = row.insertCell(2);
             var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4);
-            
+
 
 
             if (cre != "") {
@@ -1384,7 +1490,7 @@
                 var CreMoney = formatMoney(cre);
 
                 cell4.innerHTML = "<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable='true'>" + CreMoney + "</span>";
-                
+
             } else {
                 //debit is entered, no padding needed
                 cell2.innerHTML = "<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">" + acc + "</span>";
@@ -1447,7 +1553,7 @@
                     table.rows[j].cells[0].innerText = "";
                 }
 
-                
+
             }
         }
 
@@ -1522,48 +1628,113 @@
                 return;
             }
 
+            
             //Loop through the Table rows and build a JSON array.
             var transactions = new Array();
-            $("#EntryTable TBODY TR").each(function () {
-                var row = $(this);
+
+            var table = document.getElementById("EntryTable");
+
+
+            for (var i = 2; i < table.rows.length; i++) {
                 var transaction = {};
-                transaction.DateSubmitted = row.find("TD").eq(0).html();
 
-                var Comm = document.getElementById("Comment")
-                transaction.AccountantComment = Comm.value;
+                if (i == 2) {
+                    //Only the date is the extra item that needs saved once
+                    var Comm = document.getElementById("Comment")
+                    if (Comm != null || Comm != "") {
+                        transaction.AccountantComment = Comm.value;
+                    }
 
-                var EnType = document.getElementById("EntryType").value;
-                transaction.Entry_Type = EnType;
+                    var EnType = document.getElementById("EntryType").value;
+                    transaction.Entry_Type = EnType;
 
-                transaction.Status = "suspended";
+                    transaction.Status = "suspended";
 
+                    var Date = table.rows[i].cells[0].innerText;
+                    transaction.DateSubmitted = Date;
 
-                var Acc2 = row.find("TD").eq(1).html();
-                var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
-                var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
-                var Acc4 = Acc3.replace("</span>", "");
-                var AccFix = Acc4;
-                
-                transaction.AccountName = AccFix;
+                    var AccountName = table.rows[i].cells[1].innerText;
+                    transaction.AccountName = AccountName;
 
-                
-                var DebitFix = row.find("TD").eq(2).html();
-                var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-                var DebitFx2 = DebitFx.replace("</span>", "")
-                var DebitFix2 = StripMoneyFormatting(DebitFx2);
+                    var DText = table.rows[i].cells[2].innerText;
+                    var DebitFix = StripMoneyFormatting(DText);
+                    transaction.Debit = DebitFix;
 
-                transaction.Debit = DebitFix2;
+                    var CText = table.rows[i].cells[3].innerText;
+                    var CreditFix = StripMoneyFormatting(CText);
+                    transaction.Credit = CreditFix;
 
+                } else {
 
-                var CreditFix = row.find("TD").eq(3).html();
-                var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-                var CreditFix3 = CreditFix2.replace("</span>", "")
-                var CreditFix3 = StripMoneyFormatting(CreditFix3);
+                    var Comm = document.getElementById("Comment")
+                    if (Comm != null || Comm != "") {
+                        transaction.AccountantComment = Comm.value;
+                    }
 
-                transaction.Credit = CreditFix3;
+                    var EnType = document.getElementById("EntryType").value;
+                    transaction.Entry_Type = EnType;
+
+                    transaction.Status = "suspended";
+
+                    var AccountName = table.rows[i].cells[1].innerText;
+                    transaction.AccountName = AccountName;
+
+                    var DText = table.rows[i].cells[2].innerText;
+                    var DebitFix = StripMoneyFormatting(DText);
+                    transaction.Debit = DebitFix;
+
+                    var CText = table.rows[i].cells[3].innerText;
+                    var CreditFix = StripMoneyFormatting(CText);
+                    transaction.Credit = CreditFix;
+                }
 
                 transactions.push(transaction);
-            });
+            }
+
+
+
+            //Old way, has bugs
+            //var transactions = new Array();
+            //$("#EntryTable TBODY TR").each(function () {
+            //    var row = $(this);
+            //    var transaction = {};
+            //    transaction.DateSubmitted = row.find("TD").eq(0).html();
+
+            //    var Comm = document.getElementById("Comment")
+            //    transaction.AccountantComment = Comm.value;
+
+            //    var EnType = document.getElementById("EntryType").value;
+            //    transaction.Entry_Type = EnType;
+
+            //    transaction.Status = "suspended";
+
+
+            //    var Acc2 = row.find("TD").eq(1).html();
+            //    var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
+            //    var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
+            //    var Acc4 = Acc3.replace("</span>", "");
+            //    var AccFix = Acc4;
+
+            //    transaction.AccountName = AccFix;
+
+
+            //    var DebitFix = row.find("TD").eq(2).html();
+            //    var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+            //    var DebitFx2 = DebitFx.replace("</span>", "")
+            //    var DebitFix2 = StripMoneyFormatting(DebitFx2);
+
+            //    transaction.Debit = DebitFix2;
+
+
+            //    var CreditFix = row.find("TD").eq(3).html();
+            //    var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+            //    var CreditFix3 = CreditFix2.replace("</span>", "")
+            //    var CreditFix3 = StripMoneyFormatting(CreditFix3);
+
+            //    transaction.Credit = CreditFix3;
+
+            //    transactions.push(transaction);
+            //});
 
             //Send the JSON array to Controller using AJAX.
             $.ajax({
@@ -1650,49 +1821,115 @@
 
             //Loop through the Table rows and build a JSON array.
             var transactions = new Array();
-            $("#EntryTable TBODY TR").each(function () {
-                var row = $(this);
+
+            var table = document.getElementById("EntryTable");
+            
+
+            for (var i = 2; i < table.rows.length; i++) {
                 var transaction = {};
-                transaction.DateSubmitted = row.find("TD").eq(0).html();
 
-                var Comm = document.getElementById("Comment")
+                if (i == 2) {
+                    //Only the date is the extra item that needs saved once
+                    var Comm = document.getElementById("Comment")
+                    if (Comm != null || Comm != "") {
+                        transaction.AccountantComment = Comm.value;
+                    }
 
-                transaction.AccountantComment = Comm.value;
+                    var EnType = document.getElementById("EntryType").value;
+                    transaction.Entry_Type = EnType;
 
-                var EnType = document.getElementById("EntryType").value;
+                    transaction.Status = "pending";
 
-                transaction.Entry_Type = EnType;
+                    var Date = table.rows[i].cells[0].innerText;
+                    transaction.DateSubmitted = Date;
 
-                transaction.Status = "pending";
+                    var AccountName = table.rows[i].cells[1].innerText;
+                    transaction.AccountName = AccountName;
 
-                var Acc2 = row.find("TD").eq(1).html();
-                var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
-                var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
-                var Acc4 = Acc3.replace("</span>", "");
-                
-                var AccFix = Acc4;
+                    var DText = table.rows[i].cells[2].innerText;
+                    var DebitFix = StripMoneyFormatting(DText);
+                    transaction.Debit = DebitFix;
 
-                transaction.AccountName = AccFix;
+                    var CText = table.rows[i].cells[3].innerText;
+                    var CreditFix = StripMoneyFormatting(CText);
+                    transaction.Credit = CreditFix;
 
+                } else {
+                    
+                    var Comm = document.getElementById("Comment")
+                    if (Comm != null || Comm != "") {
+                        transaction.AccountantComment = Comm.value;
+                    }
 
+                    var EnType = document.getElementById("EntryType").value;
+                    transaction.Entry_Type = EnType;
 
-                var DebitFix = row.find("TD").eq(2).html();
-                var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-                var DebitFx2 = DebitFx.replace("</span>", "")
-                var DebitFix2 = StripMoneyFormatting(DebitFx2);
+                    transaction.Status = "pending";
 
-                transaction.Debit = DebitFix2;
+                    var AccountName = table.rows[i].cells[1].innerText;
+                    transaction.AccountName = AccountName;
 
+                    var DText = table.rows[i].cells[2].innerText;
+                    var DebitFix = StripMoneyFormatting(DText);
+                    transaction.Debit = DebitFix;
 
-                var CreditFix = row.find("TD").eq(3).html();
-                var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
-                var CreditFix3 = CreditFix2.replace("</span>", "")                
-                var CreditFix3 = StripMoneyFormatting(CreditFix3);
-
-                transaction.Credit = CreditFix3;
+                    var CText = table.rows[i].cells[3].innerText;
+                    var CreditFix = StripMoneyFormatting(CText);
+                    transaction.Credit = CreditFix;                    
+                }
 
                 transactions.push(transaction);
-            });
+            }
+
+            //Old ways, has bugs
+            //$("#EntryTable TBODY TR").each(function () {
+            //    var row = $(this);
+            //    var transaction = {};
+            //    transaction.DateSubmitted = row.find("TD").eq(0).html();
+
+            //    var Comm = document.getElementById("Comment")
+
+            //    transaction.AccountantComment = Comm.value;
+
+            //    var EnType = document.getElementById("EntryType").value;
+
+            //    transaction.Entry_Type = EnType;
+
+            //    transaction.Status = "pending";
+
+            //    var Acc2 = row.find("TD").eq(1).html();
+            //    var Acc2_5 = Acc2.replace("<span title=\"Double Click to Edit\" class=\"AccountCredit\" onclick=\"EditAccountEnter(this)\">", "");
+            //    var Acc3 = Acc2_5.replace("<span title=\"Double Click to Edit\" class=\"AccountDebit\" onclick=\"EditAccountEnter(this)\">", "");
+            //    var Acc4 = Acc3.replace("</span>", "");
+
+            //    var AccFix = Acc4;
+
+            //    transaction.AccountName = AccFix;
+
+
+
+            //    var DebitFix = row.find("TD").eq(2).html();
+            //    //DebitFix.substring(DebitFix.indexOf('>'), DebitFix.indexOf('<',1))
+            //    var DebitFx = DebitFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+            //    var DebitFx15 = DebitFx.replace("<span title=\"Click to Edit\" style=\"cursor: pointer; background: rgb(238 238 238); \" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+            //    var DebitFx2 = DebitFx15.replace("</span>", "")
+            //    var DebitFix2 = StripMoneyFormatting(DebitFx2);
+                
+            //    transaction.Debit = DebitFix2;
+
+
+            //    var CreditFix = row.find("TD").eq(3).html();
+            //    alert(CreditFix);
+            //    var CreditFix2 = CreditFix.replace("<span title=\"Click to Edit\" style=\"cursor: pointer;\" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+            //    var CreditFx15 = CreditFix2.replace("<span title=\"Click to Edit\" style=\"cursor: pointer; background: rgb(238, 238, 238); \" onfocus=\"EditTableValueEnter(this)\" onblur=\"EditTableValueExit(this)\" contenteditable=\"true\">", "");
+            //    var CreditFix3 = CreditFx15.replace("</span>", "")
+            //    alert(CreditFix3);
+            //    var CreditFix3 = StripMoneyFormatting(CreditFix3);
+                
+            //    transaction.Credit = CreditFix3;
+
+            //    transactions.push(transaction);
+            //});
 
             //Send the JSON array to Controller using AJAX.
             $.ajax({
@@ -1705,7 +1942,7 @@
                     //alert(r + " record(s) inserted.");
                     alert("Journal Submitted!");
                 }
-            });            
+            });
 
             ResetFunction();
 
@@ -1713,42 +1950,5 @@
 
     </script>
 
-
-    @* Old Upload file script *@
-    @*<script>
-        function UploadFiles() {
-            var files = $("#fileInput").get(0).files;
-
-            if (files.length == 0) {
-                //no files attached, do not upload
-                return;
-            }
-
-            var fileData = new FormData();
-
-
-            for (var i = 0; i < files.length; i++) {
-                fileData.append("fileInput", files[i]);
-            }
-
-
-            $.ajax({
-                type: "POST",
-                url: "/Accountant/UploadFiles",
-                dataType: "json",
-                contentType: false, // Not to set any content header
-                processData: false, // Not to process data
-                data: fileData,
-                success: function (result, status, xhr) {
-                    alert(result);
-                },
-                error: function (xhr, status, error) {
-                    alert(status);
-                }
-
-            });
-        };
-
-    </script>*@
 </body>
 </html>

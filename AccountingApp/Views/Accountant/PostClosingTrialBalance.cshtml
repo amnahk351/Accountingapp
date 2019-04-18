@@ -1,0 +1,78 @@
+﻿@model List<AccountingApp.Models.ChartOfAcc>
+
+@{
+    ViewBag.Title = "PostClosingTrialBalance";
+    Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
+    //Layout = null;
+
+}
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <style>
+    </style>
+</head>
+
+<body>
+
+
+    @*Amnah*@
+    <div class="shadow container" style="width:60%; background-color:gainsboro;">
+        <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
+            <div class="card" style="text-align:center;">
+                <div class="card-body" style="display:inline-block;">
+                    <h3 class="card-title">Objective Accounting</h3>
+                    <br />
+                    <h3 class="card-title">Post Closing Trial Balance</h3>
+                    <hr />
+                    <h4>
+                        <script>
+                            document.write(new Date().toDateString());
+                        </script>
+                    </h4>
+                    <br />
+                    <table id="trialTable" class="table-striped" style="width:800px;">
+
+                        <tr class="titleRow">
+                            <th align="center">Account Name</th>
+                            <th align="center">Debit</th>
+                            <th align="center">Credit</th>
+
+                        </tr>
+                        <tr class="totalRow">
+                            <td align="left">Total:</td>
+                            <td class="total" align="center" style="text-decoration: underline double ;">$0.00</td>
+                            <td class="total" align="center" style="text-decoration: underline double ;">$0.00</td>
+                        </tr>
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+
+
+</body>
+
+</html>
+

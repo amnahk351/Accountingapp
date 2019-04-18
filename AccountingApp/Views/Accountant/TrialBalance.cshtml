@@ -1,8 +1,9 @@
-﻿@model List<AccountingApp.Models.ChartOfAcc>
+﻿
+@model List<AccountingApp.Models.ChartOfAcc>
 
 @{
-    ViewBag.Title = "Trial Balance";
-    Layout = "~/Views/Shared/_Layout_Manager.cshtml";
+    ViewBag.Title = "TrialBalance";
+    Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
     //Layout = null;
 }
 
@@ -14,33 +15,32 @@
 
     <!-- Bootstrap CSS -->
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <style>
-       
     </style>
 </head>
 
 <body>
+
+    @*Amnah*@
     <div class="shadow container" style="width:60%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
-                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
-                    <h4 class="card-title" style="padding: 0px; margin: 0px;">Trial Balance</h4>
-
-                    <h4 class="card-title" style="padding: 0px; margin: 0px;">
+                    <h3 class="card-title">Addams & Family</h3>
+                    <h3 class="card-title">Trial Balance</h3>
+                    <h4 class="card-title">
                         As of
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
-
                     <hr style="border-width: 2px; border-color: black" />
-                    <table id="trialTable" class="table-striped" style="width:510px;">
+                    <table id="trialTable" class="table-striped" style="width:500px;">
 
                         <tr class="titleRow">
                             <th style="text-align:center">Account</th>
@@ -53,7 +53,7 @@
                         {
 
                             <tr>
-                                <td style="text-align:left"> @Model[i].AccountName</td>
+                                <td>@Model[i].AccountName</td>
                                 @if (Model[i].NormalSide.ToLower() == "debit")
                                 {
                                     <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
@@ -67,9 +67,9 @@
                             </tr>
                         }
                         <tr class="totalRow">
-                            <td style="text-align:left; padding-right: 2%"><b>Totals</b></td>
-                            <td class="total" style="text-align:right; border-top: .15rem solid; border-bottom: .4rem double">$@ViewBag.DebitTotal</td>
-                            <td class="total" style="text-align:right; border-top: .15rem solid; border-bottom: .4rem double">$@ViewBag.CreditTotal</td>
+                            <td style="text-align:right; padding-right: 2%">Total:</td>
+                            <td class="total" style="text-align:right; border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.DebitTotal</td>
+                            <td class="total" style="text-align:right; border-top-style: solid; border-top-width: .2rem; border-bottom-style: double; border-bottom-width: .4rem">$@ViewBag.CreditTotal</td>
                         </tr>
 
                     </table>
@@ -86,7 +86,7 @@
 
     <script>
         $(document).ready(function () {
-            
+
             FormatTableAmounts();
 
             PlaceDollarSigns();

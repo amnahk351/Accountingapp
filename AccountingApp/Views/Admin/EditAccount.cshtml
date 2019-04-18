@@ -31,108 +31,18 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
     @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
 
 
-    <style>
-        /*body {
-            padding-top: 70px;
-            margin: 40px;
-            background-color: gainsboro;
-        }
 
-        .nav {
-            padding-right: 70px;
-        }
-
-        .navbar-header {
-            padding-left: 70px;
-        }*/
-        .navbar-text {
-            padding-right: 20px;
-        }
-
-        .container {
-            width: 100%;
-            margin-top: 2%;
-        }
-
-        .inner {
-            overflow: hidden;
-        }
-
-            .inner img {
-                transition: all 1.5s ease;
-            }
-
-            .inner:hover img {
-                transform: scale(1.5);
-            }
-    </style>
 </head>
 <body>
-    @*<div class="nav">
-            <nav class="navbar navbar-inverse navbar-fixed-top navbar-collapse navbar-nav">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="#">Objective Accounting</a>
-                    </div>
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-
-                        <li><a href="#">User Log</a></li>
-
-                        <li><a href="@Url.Action("ShowUserData","Home")">Users</a></li>
-
-                        <li><a href="#">Chart Of Accounts</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
-                        <li><a href="#">SignOut</a></li>
-                    </ul>
-                </div>
-
-            </nav>
-        </div>*@
-
-
-    @*<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                <a class="navbar-brand" href="#">
-                    <img src="~/img/Accounting Logo.PNG" width="150" height="40" />
-                </a>
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>
-                    <br />
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Account/Login">Sign Out</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>*@
-
     <br />
 
     @*@using (Html.BeginForm())
@@ -143,8 +53,8 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
             @Html.ValidationSummary(true, "The following errors were found:", new { @class = "alert alert-danger" })
         </div>
 
-        <div class="container shadow" style="width: 60%">
-
+        <div class="container shadow" style="width: 70%; background-color:white">
+            <br />
             <h2>Edit Account</h2>
             <hr />
             <div class="form-row">
@@ -161,7 +71,9 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
                     <label for="AccountName" class="control-label">Account Name</label>
                     @*<input type="text" class="form-control" id="AccountName" name="AccountName">*@
                     @Html.TextBoxFor(x => x.AccountName, new { @class = "form-control", @required = "required" })
+                    <div id="AccountNameError" class="invalid-feedback">
 
+                    </div>
 
                 </div>
             </div>
@@ -171,13 +83,13 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
                     <div class="form-group">
                         <label for="AccountType" class="control-label">Account Type</label>
                         @*<select name="AccountType" class="form-control" id="AccountType">
-                        <option value="Assets">Assets</option>
-                        <option value="Liabilities">Liabilities</option>
-                        <option value="Equity">Equity</option>
-                        <option value="Revenue">Revenue</option>
-                        <option value="Expense">Expense</option>
+                                <option value="Assets">Assets</option>
+                                <option value="Liabilities">Liabilities</option>
+                                <option value="Equity">Equity</option>
+                                <option value="Revenue">Revenue</option>
+                                <option value="Expense">Expense</option>
 
-                    </select>*@
+                            </select>*@
                         @Html.DropDownListFor(x => x.AccountType, selectListItems, new { @class = "form-control", @required = "required" })
 
                     </div>
@@ -191,10 +103,10 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
                             <option value="Credit">Credit</option>
 
                         </select>*@
-                        @*@Html.DropDownListFor(x => x.NormalSide, selectListItems, new { @class = "form-control", @required = "required" })*@
+                @*@Html.DropDownListFor(x => x.NormalSide, selectListItems, new { @class = "form-control", @required = "required" })*@
 
-                    @*</div>
-                </div>*@
+                @*</div>
+                    </div>*@
 
             </div>
 
@@ -202,20 +114,20 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
                 <div class="form-group col-md-6">
                     <div class="form-group">
                         <label for="OriginalBalance">Original Balance</label>*@
-                        @* <input type="text" class="form-control text-right" id="OriginalBalance" placeholder="0.00" name="OriginalBalance">*@
-                        @*@Html.TextBoxFor(x => x.OriginalBalance, new { @class = "form-control", @required = "required" })
+            @* <input type="text" class="form-control text-right" id="OriginalBalance" placeholder="0.00" name="OriginalBalance">*@
+            @*@Html.TextBoxFor(x => x.OriginalBalance, new { @class = "form-control", @required = "required" })
 
                     </div>
                 </div>
                 <div class="form-group col-md-6">
                     <div class="form-group">
                         <label for="CurrentBalance">Current Balance</label>*@
-                        @* <input type="text" class="form-control text-right" id="CurrentBalance" placeholder="0.00" name="CurrentBalance">*@
-                        @*@Html.TextBoxFor(x => x.CurrentBalance, new { @class = "form-control", @required = "required" })
+            @* <input type="text" class="form-control text-right" id="CurrentBalance" placeholder="0.00" name="CurrentBalance">*@
+            @*@Html.TextBoxFor(x => x.CurrentBalance, new { @class = "form-control", @required = "required" })
 
+                        </div>
                     </div>
-                </div>
-            </div>*@
+                </div>*@
 
             <div class="form-group ">
                 <label for="AccountDescription">Account Description</label>
@@ -224,18 +136,18 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
             </div>
 
             @*</div>
-        <div class="form-group ">
-            <label for="CreatedBy">Created By</label>*@
+                <div class="form-group ">
+                    <label for="CreatedBy">Created By</label>*@
             @*<input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy">*@
             @*@Html.TextBoxFor(x => x.CreatedBy, new { @class = "form-control", @required = "required" })
 
-        </div>*@
+                </div>*@
 
-          
+
             <div class="form-group ">
                 <label for="Active" class="control-label">Active</label>
                 @*<input data-val="true" id="Active" name="Active" type="checkbox" value="true" />
-            <input name="Active" type="hidden" value="false" />*@
+                    <input name="Active" type="hidden" value="false" />*@
                 @Html.EditorFor(model => model.Active)
 
                 @*@Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })*@
@@ -249,15 +161,15 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
             <hr />
 
         </div>
-     
-</form>
+
+    </form>
     @*}*@
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
 
 
 
@@ -287,5 +199,28 @@ new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
         var username = '@Session["FirstNameofUser"]';
         document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
     };
+
+</script>
+
+@Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
+
+<script>
+
+    window.onload = onPageLoad();
+
+    function onPageLoad() {
+        
+        $.ajax({
+            url: "/Account/GetErrors",
+            method: 'post',
+            dataType: 'json',
+            success: function (data) {
+                //Index starts from 0 so number is 1 off from database
+                //Populate error message from database
+                document.getElementById('AccountNameError').innerText = data[51];
+            }
+        });
+
+    }
 
 </script>
