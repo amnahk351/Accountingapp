@@ -485,8 +485,7 @@
                                             </a>
                                         }
                                         else
-                                        {
-                                            @*<span style="color: blue; cursor: pointer">View</span>*@
+                                        {                                            
                                             <button type="button" class="viewModal" onclick="PopulateEntryModal(this)" data-toggle="modal" data-target="#myModal">View</button>
                                         }
 
@@ -516,12 +515,11 @@
                     <!-- Modal content-->
                     <div class="modal-content">
                         <div class="modal-header">
-                            @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                            
                             <h4 style="text-align:left" class="modal-title">Entry Details</h4>
                         </div>
                         <div id="EntryModalContent" class="modal-body">
-                            @*<p>Some text in the modal.</p>*@
-                            
+                                                        
                             <div id="ModalEntryID">ID: </div>
                             <div id="ModalDate">Date Created: </div>
                             <div id="ModalStatus">Status: </div>
