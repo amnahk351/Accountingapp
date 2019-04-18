@@ -407,19 +407,14 @@
                     </a>
                     <a href="@Url.Action("AccountantIndex", new { status = "approved"})" class="btn btn-success" role="button" aria-pressed="true">
                         <i class="fas fa-check"></i>
-
                         Approved
                     </a>
                     <a href="@Url.Action("AccountantIndex", new { status = "disapproved"})" class="btn btn-danger" role="button" aria-pressed="true">
                         <i class="fas fa-times"></i>
-
-
                         Disapproved
                     </a>
                     <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-warning" role="button" aria-pressed="true">
                         <i class="fas fa-exclamation-circle" style="color:white"></i>
-
-
                         Pending
                     </a>
                     <a href="@Url.Action("AccountantIndex", new { status = "suspended"})" class="btn btn-info" role="button" aria-pressed="true">
@@ -485,8 +480,8 @@
                                             </a>
                                         }
                                         else
-                                        {                                            
-                                            <button type="button" class="viewModal" onclick="PopulateEntryModal(this)" data-toggle="modal" data-target="#myModal">View</button>
+                                        {
+                                            <button type="button" class="viewModal" onclick="PopulateEntryModal(this)" data-toggle="modal" data-target="#EntryModal">View</button>
                                         }
 
                                     </td>
@@ -509,17 +504,17 @@
             </div>
 
             <!-- Modal -->
-            <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal fade" id="EntryModal" role="dialog">
                 <div class="modal-dialog">
 
                     <!-- Modal content-->
                     <div class="modal-content">
                         <div class="modal-header">
-                            
+
                             <h4 style="text-align:left" class="modal-title">Entry Details</h4>
                         </div>
                         <div id="EntryModalContent" class="modal-body">
-                                                        
+
                             <div id="ModalEntryID">ID: </div>
                             <div id="ModalDate">Date Created: </div>
                             <div id="ModalStatus">Status: </div>
@@ -544,9 +539,7 @@
                             <br />
 
                             <div>Files: </div>
-                            <table id="ModalFiles" style="color:blue">
-                                
-                            </table>
+                            <table id="ModalFiles" style="color:blue"></table>
 
                         </div>
                         <div class="modal-footer">
@@ -556,7 +549,6 @@
 
                 </div>
             </div>
-
         </div>
 
     </div>

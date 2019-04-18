@@ -405,6 +405,37 @@ namespace AccountingApp.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult RequestAccount(int number, string name, string type, string side, string balance, string comment)
+        {
+            var sessionUser = Session["Username"] as string;
+            bool a = false;
+            string v = "requested";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.ChartOfAccounts (AccountNumber, AccountName, " +
+                    "AccountType, NormalSide, OriginalBalance, AccountDescription, CreatedBy, Active, Visibility)" +
+                    "values(@AccountNumber, @AccountName, @AccountType,@NormalSide,@OriginalBalance," +
+                    "@AccountDescription,@CreatedBy,@Active,@Visibility)";
+                db.Execute(sql, new
+                {
+                    AccountNumber = number,
+                    AccountName = name,
+                    AccountType = type,
+                    NormalSide = side,
+                    OriginalBalance = balance,
+                    AccountDescription = comment,
+                    CreatedBy = sessionUser,
+                    Active = a,
+                    Visibility = v
+                });
+            }
+
+            return Json("Request Submitted.");
+        }
+
         [HttpGet]
         public ActionResult RetreiveComment(int id)
         {
@@ -596,23 +627,19 @@ namespace AccountingApp.Controllers
             return entries;
         }
 
-
-       
+               
 
         public ActionResult ChartOfAccounts()
         {
             List<ChartOfAcc> listAccounts;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Visibility = @V", new { V = "visible" }).ToList();
             }
             return View(listAccounts);
-            //var item = db.ChartOfAccs.ToList();
-            //return View(item);
-
-
         }
+
+
         //broderick's
         public ActionResult EventLog()
         {

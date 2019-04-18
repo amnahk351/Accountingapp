@@ -74,6 +74,7 @@ namespace AccountingApp.Controllers
             tb2.AccountDescription = model.AccountDescription;
             tb2.CreatedBy = sessionUser;
             tb2.Active = model.Active;
+            
 
             if (ModelState.IsValid)
             {
@@ -81,9 +82,9 @@ namespace AccountingApp.Controllers
                 {
 
                     string sql = $"Insert into dbo.ChartOfAccounts (AccountNumber, AccountName, " +
-                        "AccountType, NormalSide, OriginalBalance, CurrentBalance, AccountDescription, CreatedBy, Active)" +
+                        "AccountType, NormalSide, OriginalBalance, CurrentBalance, AccountDescription, CreatedBy, Active, Visibility)" +
                         "values(@AccountNumber, @AccountName, @AccountType,@NormalSide,@OriginalBalance," +
-                        "@CurrentBalance,@AccountDescription,@CreatedBy,@Active)";
+                        "@CurrentBalance,@AccountDescription,@CreatedBy,@Active,@Visibility)";
                     db.Execute(sql, new
                     {
 
@@ -95,7 +96,8 @@ namespace AccountingApp.Controllers
                         CurrentBalance = model.CurrentBalance,
                         AccountDescription = model.AccountDescription,
                         CreatedBy = sessionUser,
-                        Active = model.Active
+                        Active = model.Active,
+                        Visibility = "visible"
                     });
                 }
 
@@ -121,16 +123,12 @@ namespace AccountingApp.Controllers
         {
             List<ChartOfAcc> listAccounts;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+            {                
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Visibility = @V", new { V = "visible" }).ToList();
             }
             return View(listAccounts);
-            //var item = db.ChartOfAccs.ToList();
-            //return View(item);
-
-
         }
+
 
         public ActionResult EditAccount(double id)
         {

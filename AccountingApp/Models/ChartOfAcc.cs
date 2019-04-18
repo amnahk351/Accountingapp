@@ -23,5 +23,6 @@ namespace AccountingApp.Models
         public string AccountDescription { get; set; }
         public bool Active { get; set; }
         public string CreatedBy { get; set; }
+        public string Visibility { get; set; }
     }
 }

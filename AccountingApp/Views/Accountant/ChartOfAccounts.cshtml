@@ -197,23 +197,18 @@
 
                     <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-list" style="margin-right:10px;"></i>
-
                         Chart Of Accounts
                     </a>
                     <ul class="collapse list-unstyled" id="accountSubmenu">
                         <li>
                             <a href="/Accountant/ChartOfAccounts">Chart of Accounts</a>
                         </li>
-
-
                     </ul>
                 </li>
                 <li>
 
                     <a href="/Accountant/Journalize">
                         <i class="far fa-edit" style="margin-right:10px"></i>
-
-
                         Journalize
                     </a>
                 </li>
@@ -221,9 +216,6 @@
 
                     <a href="">
                         <i class="fas fa-book" style="margin-right:10px"></i>
-
-
-
                         General Ledger
                     </a>
                 </li>
@@ -231,9 +223,6 @@
 
                     <a href="/Accountant/AccountantIndex">
                         <i class="fas fa-book" style="margin-right:10px"></i>
-
-
-
                         General Journal
                     </a>
                 </li>
@@ -241,8 +230,6 @@
 
                     <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
-
-
                         Transactions
                     </a>
                     <ul class="collapse list-unstyled" id="transactionSubmenu">
@@ -287,7 +274,7 @@
                         </li>
                     </ul>
                 </li>
-                
+
             </ul>
 
         </nav>
@@ -324,8 +311,6 @@
                             <li class="nav-item active">
                                 <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
                                     Log Out
-
-
                                 </button>
                             </li>
 
@@ -337,6 +322,11 @@
             <div class=" body-content" style="width:100%; margin:0 auto">
                 <div>
                     <h4 style="display:inline">Chart Of Accounts</h4>
+                </div>
+                <br />
+                <div>
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#RequestAccountModal">Request New Account</button>
+
                 </div>
                 <hr class="my-4" />
                 @if (TempData["Message"] != null)
@@ -393,6 +383,103 @@
                     </p>
                 </footer>
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="RequestAccountModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                            <h4 style="text-align:left" class="modal-title">Request New Account</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div>
+                                <label for="Name" class="control-label">Account Number</label>
+                                <input type="text" id="AccountNumber" class="form-control" autocomplete="off" />
+                                <label for="NumberError" id="NumberError" class="text-danger"></label>
+                            </div>
+
+                            <div>
+                                <label for="Name" class="control-label">Account Name</label>
+                                <input type="text" id="AccountName" class="form-control" autocomplete="off" />
+                                <label for="NameError" id="NameError" class="text-danger"></label>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="AccountType" class="control-label">Account Type</label>
+                                <select name="AccountType" class="form-control" id="AccountType">
+                                    <option value="">Select..</option>
+
+                                    <option value="Assets">Assets</option>
+                                    <option value="Liabilities">Liabilities</option>
+                                    <option value="Equity">Equity</option>
+                                    <option value="Revenue">Revenue</option>
+                                    <option value="Expense">Expense</option>
+
+                                </select>
+                            </div>
+
+                            
+                            <div id="AccountTypeError" class="text-danger">
+
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label for="NormalSide">Normal Side</label>
+                                <select class="cutom-select form-control" id="NormalSide" name="NormalSide">
+                                    <option value="">Select..</option>
+
+                                    <option value="Debit">Debit</option>
+                                    <option value="Credit">Credit</option>
+
+                                </select>
+
+                            </div>
+
+                            
+                            <div id="AccountSideError" class="text-danger">
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="OriginalBalance">Original Balance</label>
+                                <input type="text" class="form-control text-right right-justified" id="OriginalBalance" placeholder="0.00" name="OriginalBalance" required>
+
+                                <div id="AccountOriginalBalanceError" class="text-danger">
+
+                                </div>
+                            </div>
+
+                            @*<div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="Active" name="Active" required>
+                                <label class="form-check-label" for="Active" style="font-size:large; padding-left:0">
+                                    Active
+                                </label>
+
+                            </div>*@
+
+                            <div>
+                                <label for="Description" class="control-label">Account Description</label>
+                                <textarea class="form-control" id="Description" name="Description" rows="3" placeholder="Optional"></textarea>
+                            </div>
+                            <br />
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="SubmitAccountRequest()" class="btn btn-success">Submit</button>
+                            <button id="CloseModal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
     </div>
@@ -421,6 +508,152 @@
             });
 
         });
+    </script>
+
+    <script>
+        function SubmitAccountRequest() {
+
+            var num = document.getElementById("AccountNumber").value;
+            if (num == "") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        document.getElementById('NumberError').innerText = data[50];
+                    }
+                });
+            }
+
+            var name = document.getElementById("AccountName").value;
+            if (name == "") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        document.getElementById('NameError').innerText = data[51];
+                    }
+                });
+            }
+
+            var Select = document.getElementById("AccountType");
+            var type = Select.options[Select.selectedIndex].text;
+            
+            if (type == "Select..") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        document.getElementById('AccountTypeError').innerText = data[52];
+                    }
+                });
+            }
+
+            var Select2 = document.getElementById("NormalSide");
+            var side = Select2.options[Select2.selectedIndex].text;
+            if (side == "Select..") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        document.getElementById('AccountSideError').innerText = data[53];
+                    }
+                });
+            }
+
+            var bal = document.getElementById("OriginalBalance").value;
+            if (bal == "") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        document.getElementById('AccountOriginalBalanceError').innerText = data[54];
+                    }
+                });                                
+            }
+
+            if (num == "" || name == "" || type == "Select.." || side == "Select.." || bal == "") {
+                return;
+            }
+
+            else {
+                //alert("something to submit");
+
+
+                var comm = document.getElementById("Description").value;
+
+
+                $.ajax({
+                    url: "/Accountant/RequestAccount",
+                    contentType: "application/json; charset=utf-8",
+                    data: "{'number':'" + num + "', 'name':'" + name + "', 'type':'" + type + "', 'side':'" + side + "', 'balance':'" + bal + "', 'comment':'" + comm + "'}",
+                    type: 'POST',
+                    cache: false,
+                    success: function (result) {
+                        //alert(result);
+                    }
+                });
+
+                alert("Your request has been submitted.");
+
+                //Simulate button click to close modal
+                document.getElementById('CloseModal').click();
+            
+                
+                document.getElementById('AccountNumber').value = "";
+                document.getElementById('AccountName').value = "";
+                document.getElementById("AccountType").selectedIndex = "0";
+                document.getElementById("NormalSide").selectedIndex = "0";
+                document.getElementById('OriginalBalance').value = "";
+                document.getElementById('Description').value = "";
+                
+
+                document.getElementById('NumberError').innerText = "";
+                document.getElementById('NameError').innerText = "";
+                document.getElementById('AccountTypeError').innerText = "";
+                document.getElementById('AccountSideError').innerText = "";
+                document.getElementById('AccountOriginalBalanceError').innerText = "";
+            }
+
+        }
+    </script>
+
+    <script>
+
+        // Restricts input for the given textbox to the given inputFilter.
+        function setInputFilter(textbox, inputFilter) {
+            ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
+                textbox.addEventListener(event, function () {
+                    if (inputFilter(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    }
+                });
+            });
+        }
+
+        setInputFilter(document.getElementById("AccountNumber"), function (value) {
+            return /^\d*$/.test(value);
+        });
+        
+
+        setInputFilter(document.getElementById("OriginalBalance"), function (value) {
+            return /^-?\d*[.,]?\d{0,2}$/.test(value);
+        });
+
     </script>
 
     <script>

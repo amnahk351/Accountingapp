@@ -424,15 +424,12 @@ namespace AccountingApp.Controllers
             List<ChartOfAcc> listAccounts;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Visibility = @V", new { V = "visible" }).ToList();
             }
             return View(listAccounts);
-            //var item = db.ChartOfAccs.ToList();
-            //return View(item);
-
-
         }
+
+
         //Broderick's code
         public ActionResult EventLog()
         {
