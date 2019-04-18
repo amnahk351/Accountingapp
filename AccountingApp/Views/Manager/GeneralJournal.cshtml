@@ -382,21 +382,34 @@
             <div style="width:100%; margin:0 auto">
 
 
-                <h5>General Journal</h5>
-                <div class="btn-group" role="group" aria-label="Basic example">
+                <h3 style="display:inline">General Journal</h3>
+                <div class="" style=" float:right" role="group" aria-label="Basic example">
                     <a href="@Url.Action("AccountantIndex", new { status = "all"})" class="btn btn-success" role="button" aria-pressed="true">
                         All
                     </a>
                     <a href="@Url.Action("AccountantIndex", new { status = "approved"})" class="btn btn-success" role="button" aria-pressed="true">
+                        <i class="fas fa-check"></i>
+
                         Approved
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "disapproved"})" class="btn btn-success" role="button" aria-pressed="true">
+                    <a href="@Url.Action("AccountantIndex", new { status = "disapproved"})" class="btn btn-danger" role="button" aria-pressed="true">
+                        <i class="fas fa-times"></i>
+
+
                         Disapproved
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-success" role="button" aria-pressed="true">
+                    <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-warning" role="button" aria-pressed="true">
+                        <i class="fas fa-exclamation-circle" style="color:white"></i>
+
+
                         Pending
                     </a>
+                    <a href="@Url.Action("AccountantIndex", new { status = "suspended"})" class="btn btn-info" role="button" aria-pressed="true">
+                        Suspended
+                    </a>
                 </div>
+                <br />
+                <br />
                 <hr />
                 <div>
                     <table id="GeneralJournalTable" class="table table-responsive table-hover shadow" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
@@ -404,30 +417,62 @@
                             <tr class="shadow">
                                 <th style="width:20%">Date</th>
                                 <th style="width:10%">Entry ID</th>
-                                <th style="width:60%">Accounts Affected</th>
+                                <th style="width:50%">Accounts Affected</th>
                                 <th>Debit</th>
                                 <th>Credit</th>
-                                <th>Status</th>
+                                <th style="width:10%">Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody style="background-color:white; width:100%">
                             @for (int i = 0; i < Model.entries.Count; i++)
                             {
-                                <tr>
-                                    <td>@Model.entries[i].submitDate</td>
-                                    <td>@Model.entries[i].entryID</td>
-                                    <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
-                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                                    <td id="transactionstatus" class="status">
-                                        <script>
+                            <tr>
+                                <td>@Model.entries[i].submitDate</td>
+                                <td>@Model.entries[i].entryID</td>
+                                <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
+                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                                <td>
+                                    @*@Model.entries[i].status*@
+                                    @if (@Model.entries[i].status == "approved")
+                                    {<i class="fas fa-check" style="color: limegreen;"></i>
 
-                                        </script>
-                                        @Model.entries[i].status
+                                        <span style="color: limegreen;">@Model.entries[i].status</span>
+
+                                    }
+                                    else if (@Model.entries[i].status == "disapproved")
+                                    { <i class="fas fa-times" style="color: red;"></i>
+
+                                        <span style="color: red;">  @Model.entries[i].status</span>
+                                    }
+                                    else if (@Model.entries[i].status == "pending")
+                                    { <i class="fas fa-exclamation-circle" style="color:darkorange"></i>
+
+                                        <span style="color: darkorange;">  @Model.entries[i].status</span>
+
+                                    }
+                                    else
+                                    {<i class="fas fa-exclamation" style="color:#17a2b8;"></i>
 
 
-                                    </td>
-                                </tr>
+                                        <span style="color:#17a2b8;">  @Model.entries[i].status</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (@Model.entries[i].status == "suspended")
+                                    {
+                                        <a style="color: blue" href="@Url.Action("EditJournal", new { id = Model.entries[i].entryID})">
+                                            Edit
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: blue; cursor: pointer">View</span>
+                                    }
+
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>
