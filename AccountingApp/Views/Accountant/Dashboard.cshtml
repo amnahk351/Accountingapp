@@ -20,7 +20,12 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
 
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
@@ -191,15 +196,16 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar" class="fixed-left">
+        <nav id="sidebar">
 
             <div class="sidebar-header">
                 <h5>Menu</h5>
             </div>
 
+
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="@Url.Action("/Admin/AdminIndex")" data-toggle="collapse" aria-expanded="false">
+                    <a href="/Accountant/Dashboard">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
@@ -214,34 +220,91 @@
                     </a>
                     <ul class="collapse list-unstyled" id="accountSubmenu">
                         <li>
-                            <a href="/Admin/ChartOfAccounts">Chart of Accounts</a>
-                        </li>
-                        <li>
-                            <a href="/Admin/NewAccount">Create New Account</a>
+                            <a href="/Accountant/ChartOfAccounts">Chart of Accounts</a>
                         </li>
 
                     </ul>
-                    <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-users" style="margin-right:10px;"></i>
-
-
-                        Users
-                    </a>
-                    <ul class="collapse list-unstyled" id="userSubmenu">
-                        <li>
-                            <a href="/Home/ShowUserData">User List</a>
-                        </li>
-                        <li>
-                            <a href="/Home/NewUser">Create New User</a>
-                        </li>
-
-                    </ul>
-                    <a href="/Home/EventLog">
-                        <i class="fas fa-briefcase" style="margin-right:10px;"></i>
-                        Event Log
-                    </a>
-
                 </li>
+                <li>
+
+                    <a href="/Accountant/Journalize">
+                        <i class="far fa-edit" style="margin-right:10px"></i>
+
+
+                        Journalize
+                    </a>
+                </li>
+                <li>
+
+                    <a href="/Accountant/GeneralLedger">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+
+
+
+                        General Ledger
+                    </a>
+                </li>
+                <li>
+
+                    <a href="/Accountant/AccountantIndex">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+
+
+
+                        General Journal
+                    </a>
+                </li>
+                <li>
+
+                    <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
+
+
+                        Transactions
+                    </a>
+                    <ul class="collapse list-unstyled" id="transactionSubmenu">
+                        <li>
+                            <a href="/Accountant/ManagerApproval">Pending Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Posted Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Rejected Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Suspended Transactions</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li>
+
+                    <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="far fa-chart-bar" style="margin-right:10px"></i>
+
+
+                        Reports
+                    </a>
+                    <ul class="collapse list-unstyled" id="reportSubmenu">
+                        <li>
+                            <a href="/Accountant/TrialBalance">Trial Balance</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/IncomeStatement">Income Statement</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/RetainedEarnings">Statement Of Retained Earnings</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/BalanceSheet">Balance Sheet</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/PostClosingTrialBalance">Post Closing Trial Balance</a>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
 
         </nav>
@@ -302,13 +365,9 @@
             </div>
             <br />
             <div class="row ">
-                <div class="column shadow" style="width:45%; margin-left:20px;">
-                    <div class="shadow" id="profitloss" style="width:100%"></div>
-                </div>
-                <div class="column shadow" style="width:45%; margin-left:20px; ">
-                    <div class="shadow" id="equity" style="float:left;width:100%"></div>
-                </div>
 
+
+                <div id="container"></div>
             </div>
             <hr />
 
@@ -337,6 +396,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
 
     <script type="text/javascript">
 
@@ -462,42 +522,172 @@
 
         });
 
+        //$(function () {
+        //    // Create the chart
+        //    chart = new Highcharts.Chart({
+        //        chart: {
+        //            renderTo: 'container',
+        //            type: 'pie'
+        //        },
+        //        title: {
+        //            text: ''
+        //        },
+        //        plotOptions: {
+        //            pie: {
+        //                shadow: false
+        //            }
+        //        },
+        //        series: [{
+        //            name: 'Browsers',
+        //            data: [["Total", 60], ["Empty", 40]],
+        //            size: '100%',
+        //            innerSize: '95%',
+        //            showInLegend: false,
+        //            dataLabels: {
+        //                enabled: false
+        //            }
+        //        }]
+        //    });
+        //});
 
-        var chart = Highcharts.chart('profitloss', {
 
-            title: {
-                text: 'Net Income'
-            },
-            exporting: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
-            xAxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            },
+        //function renderIcons() {
 
-            series: [{
-                name: 'Net Income',
+        //    // Move icon
+        //    if (!this.series[0].icon) {
+        //        this.series[0].icon = this.renderer.path(['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8])
+        //            .attr({
+        //                stroke: '#303030',
+        //                'stroke-linecap': 'round',
+        //                'stroke-linejoin': 'round',
+        //                'stroke-width': 2,
+        //                zIndex: 10
+        //            })
+        //            .add(this.series[2].group);
+        //    }
+        //    this.series[0].icon.translate(
+        //        this.chartWidth / 2 - 10,
+        //        this.plotHeight / 2 - this.series[0].points[0].shapeArgs.innerR -
+        //        (this.series[0].points[0].shapeArgs.r - this.series[0].points[0].shapeArgs.innerR) / 2
+        //    );
 
-                type: 'column',
-                colorByPoint: true,
-                data: [{ y: 6000, color: 'green' },
-                { y: 2000, color: 'green' },
-                { y: 3000, color: 'green' },
-                { y: 6000, color: 'green' },
-                { y: 7000, color: 'green' },
-                { y: 6000, color: 'green' }, { y: 6000, color: 'green' },
-                { y: 4000, color: 'green' },
-                { y: 3000, color: 'green' },
-                { y: -2000, color: 'red' },
-                { y: 6000, color: 'green' },
-                { y: 6000, color: 'green' }],
-                showInLegend: false
-            }]
+        //    // Exercise icon
+        //    if (!this.series[1].icon) {
+        //        this.series[1].icon = this.renderer.path(
+        //            ['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8,
+        //                'M', 8, -8, 'L', 16, 0, 8, 8]
+        //        )
+        //            .attr({
+        //                stroke: '#ffffff',
+        //                'stroke-linecap': 'round',
+        //                'stroke-linejoin': 'round',
+        //                'stroke-width': 2,
+        //                zIndex: 10
+        //            })
+        //            .add(this.series[2].group);
+        //    }
+        //    this.series[1].icon.translate(
+        //        this.chartWidth / 2 - 10,
+        //        this.plotHeight / 2 - this.series[1].points[0].shapeArgs.innerR -
+        //        (this.series[1].points[0].shapeArgs.r - this.series[1].points[0].shapeArgs.innerR) / 2
+        //    );
 
-        });
+        //    // Stand icon
+        //    if (!this.series[2].icon) {
+        //        this.series[2].icon = this.renderer.path(['M', 0, 8, 'L', 0, -8, 'M', -8, 0, 'L', 0, -8, 8, 0])
+        //            .attr({
+        //                stroke: '#303030',
+        //                'stroke-linecap': 'round',
+        //                'stroke-linejoin': 'round',
+        //                'stroke-width': 2,
+        //                zIndex: 10
+        //            })
+        //            .add(this.series[2].group);
+        //    }
+
+        //    this.series[2].icon.translate(
+        //        this.chartWidth / 2 - 10,
+        //        this.plotHeight / 2 - this.series[2].points[0].shapeArgs.innerR -
+        //        (this.series[2].points[0].shapeArgs.r - this.series[2].points[0].shapeArgs.innerR) / 2
+        //    );
+        //}
+
+        //Highcharts.chart('container', {
+
+        //    chart: {
+        //        type: 'solidgauge',
+        //        height: '110%',
+        //        events: {
+        //            render: renderIcons
+        //        }
+        //    },
+
+        //    title: {
+        //        text: 'Activity',
+        //        style: {
+        //            fontSize: '24px'
+        //        }
+        //    },
+
+        //    tooltip: {
+        //        borderWidth: 0,
+        //        backgroundColor: 'none',
+        //        shadow: false,
+        //        style: {
+        //            fontSize: '16px'
+        //        },
+        //        pointFormat: '{series.name}<br><span style="font-size:2em; color: {point.color}; font-weight: bold">{point.y}%</span>',
+        //        positioner: function (labelWidth) {
+        //            return {
+        //                x: (this.chart.chartWidth - labelWidth) / 2,
+        //                y: (this.chart.plotHeight / 2) + 15
+        //            };
+        //        }
+        //    },
+
+        //    pane: {
+        //        startAngle: 0,
+        //        endAngle: 360,
+        //        background: [{ // Track for Move
+        //            outerRadius: '112%',
+        //            innerRadius: '88%',
+        //            backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0])
+        //                .setOpacity(0.3)
+        //                .get(),
+        //            borderWidth: 0
+        //        }]
+        //    },
+
+        //    yAxis: {
+        //        min: 0,
+        //        max: 100,
+        //        lineWidth: 0,
+        //        tickPositions: []
+        //    },
+
+        //    plotOptions: {
+        //        solidgauge: {
+        //            dataLabels: {
+        //                enabled: false
+        //            },
+        //            linecap: 'round',
+        //            stickyTracking: false,
+        //            rounded: true
+        //        }
+        //    },
+
+        //    series: [{
+        //        name: 'Move',
+        //        data: [{
+        //            color: Highcharts.getOptions().colors[0],
+        //            radius: '112%',
+        //            innerRadius: '88%',
+        //            y: 80
+        //        }]
+        //    }]
+        //});
+
+
 
 
 
