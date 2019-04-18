@@ -405,6 +405,23 @@ namespace AccountingApp.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public ActionResult RetreiveComment(int id)
+        {
+            List<Transaction> transactionList;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {                
+                transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryId=@ID", new { ID = id }).ToList();
+            }
+
+            string comment = transactionList[0].AccountantComment;
+            var result = JsonConvert.SerializeObject(comment);
+            System.Diagnostics.Debug.WriteLine("json: " + result);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public ActionResult DeleteFile(string file, int id)
         {

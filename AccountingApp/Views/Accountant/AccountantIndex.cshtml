@@ -101,6 +101,30 @@
             display: inline-block;
         }
 
+        .viewModal {
+            background-color: #2982cf;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #79a1a8;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Verdana;
+            font-size: 17px;
+            padding: 6px 10px;
+            text-decoration: none;
+        }
+
+            .viewModal:hover {
+                background-color: #0057b3;
+            }
+
+            .viewModal:active {
+                position: relative;
+                top: 1px;
+            }
+
 
         #content {
             width: 100%;
@@ -430,7 +454,8 @@
                                         }
                                         else
                                         {
-                                            <span style="color: blue; cursor: pointer">View</span>
+                                            @*<span style="color: blue; cursor: pointer">View</span>*@
+                                            <button type="button" class="viewModal" onclick="PopulateEntryModal(this)" data-toggle="modal" data-target="#myModal">View</button>
                                         }
 
                                     </td>
@@ -451,6 +476,57 @@
                     </p>
                 </footer>
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                            <h4 style="text-align:left" class="modal-title">Entry Details</h4>
+                        </div>
+                        <div id="EntryModalContent" class="modal-body">
+                            @*<p>Some text in the modal.</p>*@
+                            
+                            <div id="ModalEntryID">ID: </div>
+                            <div id="ModalDate">Date Created: </div>
+                            <div id="ModalStatus">Status: </div>
+                            <br />
+                            <table>
+                                <tr>
+                                    <th>Accounts</th>
+                                    <th>Debits</th>
+                                    <th>Credits</th>
+                                </tr>
+                                <tr>
+                                    <td id="AccNames"></td>
+                                    <td id="Debs" style="text-align:right"></td>
+                                    <td id="Creds" style="text-align:right"></td>
+                                </tr>
+                            </table>
+
+                            <br />
+
+                            <div id="ModalComment">Comment: </div>
+
+                            <br />
+
+                            <div>Files: </div>
+                            <table id="ModalFiles" style="color:blue">
+                                
+                            </table>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -486,6 +562,170 @@
         var username = '@Session["FirstNameofUser"]';
         document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
     };
+
+    </script>
+
+    <script>
+
+        function PopulateEntryModal(button) {
+
+            var row = $(button).closest('tr');
+            var table = document.getElementById("GeneralJournalTable");
+
+            var ID = table.rows[row[0].rowIndex].cells[1].innerText;
+            var ModalID = document.getElementById("ModalEntryID");
+            ModalID.innerHTML = "ID: " + ID;
+
+            var Date = table.rows[row[0].rowIndex].cells[0].innerText;
+            var ModalDate = document.getElementById("ModalDate");
+            ModalDate.innerHTML = "Date Created: " + Date;
+
+            var Stat = table.rows[row[0].rowIndex].cells[5].innerText;
+            var ModalStat = document.getElementById("ModalStatus");
+            ModalStat.innerHTML = "Status: " + Stat;
+
+
+            var Accounts = table.rows[row[0].rowIndex].cells[2].innerText;            
+            var text = Accounts.replace(/\t/g, "&nbsp;&nbsp;&nbsp;");
+            var res0 = text.split("\n");
+            var finalAcc = "";
+
+            for (i = 0; i < res0.length; i++) {
+                
+                finalAcc += res0[i] + "<br>";
+            }
+
+            var ModalAcc = document.getElementById("AccNames");
+            ModalAcc.innerHTML = finalAcc;
+
+
+            var De = table.rows[row[0].rowIndex].cells[3].innerText;
+            var res = De.split("\n");
+            var finalDe = "";
+
+            for (i = 0; i < res.length; i++) {
+                finalDe += res[i] + "<br>";
+            }
+
+            var ModalDe = document.getElementById("Debs");
+            ModalDe.innerHTML = finalDe;
+
+
+            var Cr = table.rows[row[0].rowIndex].cells[4].innerText;
+            var res2 = Cr.split("\n");
+            var finalCr = "";
+
+            for (i = 0; i < res2.length; i++) {
+                finalCr += res2[i] + "<br>";
+            }
+
+            var ModalCr = document.getElementById("Creds");
+            ModalCr.innerHTML = finalCr;
+
+            
+            var Query;
+
+            $.ajax(
+                {
+                    url: '/Accountant/RetreiveComment/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    data: { "id": ID },
+                    success: function (result) {
+                        //alert(result);
+                        Query = result;
+
+                    },
+                    error: function (error) {
+                        alert(JSON.stringify(error));
+                    }
+                });
+
+            var Query2 = Query.replace(/"/g, "");
+
+            var ModalComm = document.getElementById("ModalComment");
+
+            if (Query2 == "null") {
+                ModalComm.innerHTML = "Comment: N/A";
+            } else {
+                ModalComm.innerHTML = "Comment: " + Query2;
+            }
+
+            $("#ModalFiles tr").remove(); 
+            GetAllRelatedFiles(ID);
+           
+        }
+
+    </script>
+
+    <script>
+
+        function GetAllRelatedFiles(Id) {
+
+            var Query;
+
+            $.ajax(
+                {
+                    url: '/Accountant/GetAllFiles/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    data: { "id": Id },
+                    success: function (result) {
+                        //alert(result);
+                        Query = result;
+
+                    },
+                    error: function (error) {
+                        alert(JSON.stringify(error));
+                    }
+                });
+
+            var File = Query.match(/FileName.*?,"F/);
+
+            //var Newm = QueryString.match(/AccountName.*?,"EntryId/);
+
+            if (File != null) {
+                //var f = File.toString();
+
+
+                var QueryCopy = Query;
+                var QueryString = QueryCopy.toString();
+                var found = 0;
+                while (found != -1) {
+
+                    var m = QueryString.match(/FileName.*?,"F/);
+                    var m2 = m.toString();
+
+                    var m3 = m2.replace("FileName\":\"", "");
+                    var fileName = m3.replace("\",\"F", "");
+
+
+                    var table = document.getElementById("ModalFiles");
+                    var row = table.insertRow();
+                    var cell1 = row.insertCell(0);
+                    // the ../ goes back one directory, needed to prevent calling Accountant twice
+                    cell1.innerHTML = "<a href=\"../../Accountant/Download?file=" + fileName + "&id=" + Id + "\" target=\"_blank\">" + fileName + "</a>";
+
+                    //download needs fixed with id parameter
+
+                    QueryString = QueryString.replace(m2, "");
+                    var Newm = QueryString.match(/FileName.*?,"F/);
+
+                    if (Newm == null) {
+                        break;
+                    }
+                    var New = Newm.toString();
+                    found = New.indexOf(New);
+
+                }
+
+            }
+
+        }
 
     </script>
 
