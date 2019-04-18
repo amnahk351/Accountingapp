@@ -69,14 +69,20 @@ namespace AccountingApp.Controllers
         public JsonResult GetAllFiles(int id)
         {
             List<DocumentsTable> files = new List<DocumentsTable>();
+            List<String> names = new List<String>();
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 files = db.Query<DocumentsTable>($"Select FileName From dbo.DocumentsTable Where FK_EntryId = @ID", new { ID = id }).ToList();
             }
 
-            var result = JsonConvert.SerializeObject(files);
-            //System.Diagnostics.Debug.WriteLine("json: " + result);
+            for (int i = 0; i < files.Count; i++) {
+                names.Add(files[i].FileName);
+            }
+
+            var result = JsonConvert.SerializeObject(names);
+
+            System.Diagnostics.Debug.WriteLine("json: " + result);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

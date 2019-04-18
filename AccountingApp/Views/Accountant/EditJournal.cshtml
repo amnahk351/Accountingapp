@@ -86,6 +86,7 @@
             font-family: Arial, Helvetica, sans-serif;
             background-color: #c0d0e5;
             text-align: left;
+            color: blue;
         }
 
             table.uploadList td, table.uploadList th {
@@ -904,52 +905,24 @@
                     }
                 });
 
-            var File = Query.match(/FileName.*?,"F/);
-
-            //var Newm = QueryString.match(/AccountName.*?,"EntryId/);
-
-            if (File != null) {
-                //var f = File.toString();
 
 
-                var QueryCopy = Query;
-                var QueryString = QueryCopy.toString();
-                var found = 0;
-                while (found != -1) {
+            var Q1 = Query.replace("[", "");
+            var Q2 = Q1.replace("]", "");
+            var res = Q2.split("\",\"");
 
-                    var m = QueryString.match(/FileName.*?,"F/);
-                    var m2 = m.toString();
+            for (var i = 0; i < res.length; i++) {
+                var file = res[i].replace(/"/g, "");
 
-                    var m3 = m2.replace("FileName\":\"", "");
-                    var fileName = m3.replace("\",\"F", "");
-
-
-                    var str = window.location.pathname;
-                    var Number = str.replace("/Accountant/EditJournal/", "");
-
-
-                    var table = document.getElementById("uploadList");
-                    var row = table.insertRow();
-                    var cell1 = row.insertCell(0);
-                    var cell2 = row.insertCell(1);
-                    // the ../ goes back one directory, needed to prevent calling Accountant twice
-                    cell1.innerHTML = "<a href=\"../../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
-                    cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
-
-                    //download needs fixed with id parameter
-
-                    QueryString = QueryString.replace(m2, "");
-                    var Newm = QueryString.match(/FileName.*?,"F/);
-
-                    if (Newm == null) {
-                        break;
-                    }
-                    var New = Newm.toString();
-                    found = New.indexOf(New);
-
-                }
-                
+                var table = document.getElementById("uploadList");
+                var row = table.insertRow();
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                // the ../ goes back one directory, needed to prevent calling Accountant twice
+                cell1.innerHTML = "<a href=\"../../Accountant/Download?file=" + file + "&id=" + Id + "\" target=\"_blank\">" + file + "</a>";
+                cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
             }
+
 
         }
 

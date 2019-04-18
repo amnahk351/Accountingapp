@@ -706,45 +706,20 @@
                     }
                 });
 
-            var File = Query.match(/FileName.*?,"F/);
 
-            //var Newm = QueryString.match(/AccountName.*?,"EntryId/);
+            
+            var Q1 = Query.replace("[", "");
+            var Q2 = Q1.replace("]", "");            
+            var res = Q2.split("\",\"");
 
-            if (File != null) {
-                //var f = File.toString();
+            for (var i = 0; i < res.length; i++) {
+                var file = res[i].replace(/"/g, "");                
 
-
-                var QueryCopy = Query;
-                var QueryString = QueryCopy.toString();
-                var found = 0;
-                while (found != -1) {
-
-                    var m = QueryString.match(/FileName.*?,"F/);
-                    var m2 = m.toString();
-
-                    var m3 = m2.replace("FileName\":\"", "");
-                    var fileName = m3.replace("\",\"F", "");
-
-
-                    var table = document.getElementById("ModalFiles");
-                    var row = table.insertRow();
-                    var cell1 = row.insertCell(0);
-                    // the ../ goes back one directory, needed to prevent calling Accountant twice
-                    cell1.innerHTML = "<a href=\"../../Accountant/Download?file=" + fileName + "&id=" + Id + "\" target=\"_blank\">" + fileName + "</a>";
-
-                    //download needs fixed with id parameter
-
-                    QueryString = QueryString.replace(m2, "");
-                    var Newm = QueryString.match(/FileName.*?,"F/);
-
-                    if (Newm == null) {
-                        break;
-                    }
-                    var New = Newm.toString();
-                    found = New.indexOf(New);
-
-                }
-
+                var table = document.getElementById("ModalFiles");
+                var row = table.insertRow();
+                var cell1 = row.insertCell(0);
+                // the ../ goes back one directory, needed to prevent calling Accountant twice
+                cell1.innerHTML = "<a href=\"../../Accountant/Download?file=" + file + "&id=" + Id + "\" target=\"_blank\">" + file + "</a>";
             }
 
         }
