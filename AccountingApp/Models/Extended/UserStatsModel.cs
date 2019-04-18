@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace AccountingApp.Models.Extended
+namespace AccountingApp.Models
 {
     public class UserStatsModel
     {

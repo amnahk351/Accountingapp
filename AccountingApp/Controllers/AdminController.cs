@@ -24,9 +24,34 @@ namespace AccountingApp.Controllers
         }
 
 
+        public ActionResult UserStatistics()
+        {
+            List<UserStatsModel> stats = new List<UserStatsModel>();
+
+            List<CreateUser> listUser;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                listUser = db.Query<CreateUser>($"Select * from dbo.UserTable").ToList();
+            }
+
+            for (int i = 0; i < listUser.Count; i++) {
+                UserStatsModel mod = new UserStatsModel();
+                mod.ID = listUser[i].ID;
+                mod.Username = listUser[i].Username;
+                mod.Date = listUser[i].Date_Created;
+                mod.DateModified = listUser[i].Date_Modified;
+                mod.LastLogin = listUser[i].LastLogin;
+                mod.LastSignout = listUser[i].LastSignout;
+                mod.LoginAmount = listUser[i].LoginAmount;
+                mod.LoginFails = listUser[i].LoginFails;
 
 
+                stats.Add(mod);
+            }
 
+            return View(stats);
+        }
 
 
         public ActionResult NewAccount()
