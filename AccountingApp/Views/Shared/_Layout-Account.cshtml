@@ -29,7 +29,13 @@
             color: dodgerblue;
             border-radius: 10px;
             background-color: #FFFFFF;
-            padding: 35px;
+            padding-left: 31px;
+            padding-right: 31px;
+            padding-top: 25px;
+            padding-bottom: 20px;
+            border-style: solid;
+            border-width: 5px;
+            border-color: #1202FF;
         }
 
         .button_example {
@@ -76,20 +82,40 @@
             margin: 8px 0;
             border: 2px solid dodgerblue;
             border-radius: 6px;
-<<<<<<< HEAD
         }*/
-=======
+
+
+        .textbox {
+            width: 100%;
+            overflow: hidden;
+            font-size: 20px;
+            padding: 8px 0;
+            margin: 8px 0;
+            border: 2px solid dodgerblue;
+            border-radius: 6px;
         }
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
+
+            .textbox i {
+                width: 26px;
+                float: left;
+                text-align: center;
+            }
+
+            .textbox input {
+                border: none;
+                outline: none;
+                background: none;
+                color: black;
+                font-size: 18px;
+                width: 100%;
+                float: left;
+                margin: 0 10px;
+            }
 
         .field-validation-error.text-danger {
             color: red;
             font-size: 14px;
-<<<<<<< HEAD
         }
-=======
-        }*/
->>>>>>> 76c2ee6f67f7c0df87bf8b0cc6fc4c58b0e86630
 
         /*.control-label.col-md-2 {
             margin-top: 25px;
@@ -103,10 +129,10 @@
     <div class="container body-content">
         <img src="~/img/Accounting Logo.PNG" alt="Logo" width="330" height="110" />
         @RenderBody()
-        <hr />
+        <hr style="margin-top: 0px; margin-bottom: 0px"/>
         <footer></footer>
     </div>
-
+        
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
