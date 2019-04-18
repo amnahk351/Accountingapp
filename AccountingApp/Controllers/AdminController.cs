@@ -39,8 +39,8 @@ namespace AccountingApp.Controllers
                 UserStatsModel mod = new UserStatsModel();
                 mod.ID = listUser[i].ID;
                 mod.Username = listUser[i].Username;
-                mod.Date = listUser[i].Date_Created;
-                mod.DateModified = listUser[i].Date_Modified;
+                mod.Date = listUser[i].Date;
+                mod.DateModified = listUser[i].DateModified;
                 mod.LastLogin = listUser[i].LastLogin;
                 mod.LastSignout = listUser[i].LastSignout;
                 mod.LoginAmount = listUser[i].LoginAmount;

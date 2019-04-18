@@ -47,7 +47,7 @@ namespace AccountingApp.Controllers
             tbl.Role = model.Role;
             tbl.Phone = model.Phone;
             tbl.Email = model.Email;
-            tbl.Date_Created = model.Date_Created;
+            tbl.Date = model.Date_Created;
             tbl.Active = model.Active;
             tbl.Address = model.Address;
             tbl.City = model.City;
@@ -79,7 +79,7 @@ namespace AccountingApp.Controllers
                         Role = tbl.Role,
                         Phone = tbl.Phone,
                         Email = tbl.Email,
-                        Date = tbl.Date_Created,
+                        Date = tbl.Date,
                         Active = tbl.Active,
                         Address = tbl.Address,
                         City = tbl.City,
@@ -209,8 +209,8 @@ namespace AccountingApp.Controllers
             string OriginalModel = "";
             string UpdatedModel = "";
 
-            if (CurrentUser[0].Date_Modified != value.Date_Modified) {
-                Original.Add("Date Modified: " + CurrentUser[0].Date_Modified);
+            if (CurrentUser[0].DateModified != value.Date_Modified) {
+                Original.Add("Date Modified: " + CurrentUser[0].DateModified);
                 Updated.Add("Date Modified: " + value.Date_Modified);
             }
 
@@ -288,7 +288,7 @@ namespace AccountingApp.Controllers
             Original.Clear();
             Updated.Clear();
 
-            CurrentUser[0].Date_Modified = value.Date_Modified;
+            CurrentUser[0].DateModified = value.Date_Modified;
             CurrentUser[0].FirstName = value.FirstName;
             CurrentUser[0].LastName = value.LastName;
             CurrentUser[0].Email = value.Email;
@@ -330,7 +330,7 @@ namespace AccountingApp.Controllers
                     Role = CurrentUser[0].Role,
                     Phone = CurrentUser[0].Phone,
                     Email = CurrentUser[0].Email,
-                    Date_Modified = CurrentUser[0].Date_Modified,
+                    Date_Modified = CurrentUser[0].DateModified,
                     Active = CurrentUser[0].Active,
                     Address = CurrentUser[0].Address,
                     City = CurrentUser[0].City,
