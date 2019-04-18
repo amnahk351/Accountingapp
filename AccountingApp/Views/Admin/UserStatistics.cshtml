@@ -9,7 +9,7 @@
 <h2>User Statistics</h2>
 
 
-<table class="table">
+<table id="StatsTable" class="table">
     <tr>
         <th>            
             User ID
@@ -68,3 +68,25 @@
 }
 
 </table>
+
+
+<script>
+    window.onload = RemoveTimes();
+
+    function RemoveTimes()
+    {   //Removes all excess times from date created and date modified
+        var table = document.getElementById("StatsTable");
+
+        for (var i = 1; i < table.rows.length; i++) {
+            var Created = table.rows[i].cells[2].innerText;
+            var res = Created.split(" ");
+            table.rows[i].cells[2].innerText = res[0];
+
+            var Modified = table.rows[i].cells[3].innerText;
+            var res2 = Modified.split(" ");
+            table.rows[i].cells[3].innerText = res2[0];           
+
+        }        
+    }
+        
+</script>

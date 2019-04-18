@@ -82,9 +82,9 @@ namespace AccountingApp.Controllers
                 {
 
                     string sql = $"Insert into dbo.ChartOfAccounts (AccountNumber, AccountName, " +
-                        "AccountType, NormalSide, OriginalBalance, CurrentBalance, AccountDescription, CreatedBy, Active, Visibility)" +
+                        "AccountType, NormalSide, OriginalBalance, CurrentBalance, AccountDescription, CreatedBy, Active, DateCreated)" +
                         "values(@AccountNumber, @AccountName, @AccountType,@NormalSide,@OriginalBalance," +
-                        "@CurrentBalance,@AccountDescription,@CreatedBy,@Active,@Visibility)";
+                        "@CurrentBalance,@AccountDescription,@CreatedBy,@Active,@Date)";
                     db.Execute(sql, new
                     {
 
@@ -97,7 +97,7 @@ namespace AccountingApp.Controllers
                         AccountDescription = model.AccountDescription,
                         CreatedBy = sessionUser,
                         Active = model.Active,
-                        Visibility = "visible"
+                        Date = DateTime.Now
                     });
                 }
 
@@ -124,7 +124,7 @@ namespace AccountingApp.Controllers
             List<ChartOfAcc> listAccounts;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {                
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Visibility = @V", new { V = "visible" }).ToList();
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
             }
             return View(listAccounts);
         }

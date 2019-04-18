@@ -82,8 +82,6 @@ namespace AccountingApp.Controllers
 
             var result = JsonConvert.SerializeObject(names);
 
-            System.Diagnostics.Debug.WriteLine("json: " + result);
-
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -266,10 +264,7 @@ namespace AccountingApp.Controllers
             int EditedEntryID = Int32.Parse(id);
             var sessionUser = Session["Username"] as string;
             EventLogHandler Logger = new EventLogHandler();
-
-            System.Diagnostics.Debug.WriteLine("trans: " + transactions);
-            System.Diagnostics.Debug.WriteLine("id: " + id);
-
+            
             string type = "";
 
             if (transactions[0].Status == "pending")
@@ -293,8 +288,6 @@ namespace AccountingApp.Controllers
                     if (i == 0)
                     {
                         var DatetoUse = DateTime.Now;
-                        System.Diagnostics.Debug.WriteLine("Date Now: " + DatetoUse);
-                        System.Diagnostics.Debug.WriteLine("Date: " + transactions[i].DateSubmitted);
 
                         var TodayString = DatetoUse.ToString();
                         string[] Pieces = TodayString.Split(' ');
@@ -307,7 +300,6 @@ namespace AccountingApp.Controllers
 
                         if (JustDate != JustDate2)
                         {
-                            System.Diagnostics.Debug.WriteLine("Other date: " + (DateTime)transactions[i].DateSubmitted);
                             DatetoUse = (DateTime)transactions[i].DateSubmitted;
                         }
 
@@ -406,7 +398,6 @@ namespace AccountingApp.Controllers
 
 
             var result = JsonConvert.SerializeObject(EntryId + 1);
-            System.Diagnostics.Debug.WriteLine("json latest entry id: " + result);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -415,31 +406,96 @@ namespace AccountingApp.Controllers
         public ActionResult RequestAccount(int number, string name, string type, string side, string balance, string comment)
         {
             var sessionUser = Session["Username"] as string;
-            bool a = false;
-            string v = "requested";
+            string s = "requested";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
 
-                string sql = $"Insert into dbo.ChartOfAccounts (AccountNumber, AccountName, " +
-                    "AccountType, NormalSide, OriginalBalance, AccountDescription, CreatedBy, Active, Visibility)" +
-                    "values(@AccountNumber, @AccountName, @AccountType,@NormalSide,@OriginalBalance," +
-                    "@AccountDescription,@CreatedBy,@Active,@Visibility)";
+                string sql = $"Insert into dbo.UserRequestsTable (DateCreated, AccountNumber, AccountName, " +
+                    "AccountType, NormalSide, OriginalBalance, Description, CreatedBy, Type)" +
+                    "values(@Date, @AccountNumber, @AccountName, @AccountType, @NormalSide, @OriginalBalance," +
+                    "@Description,@CreatedBy,@Type)";
                 db.Execute(sql, new
                 {
+                    Date = DateTime.Now,
                     AccountNumber = number,
                     AccountName = name,
                     AccountType = type,
                     NormalSide = side,
                     OriginalBalance = balance,
-                    AccountDescription = comment,
+                    Description = comment,
                     CreatedBy = sessionUser,
-                    Active = a,
-                    Visibility = v
+                    Type = s
                 });
             }
 
-            return Json("Request Submitted.");
+            return Json("Account Request Submitted.");
+        }
+
+        [HttpGet]
+        public JsonResult GetAllAccountNames()
+        {
+            List<ChartOfAcc> listAccounts;
+            List<String> names = new List<String>();
+
+            bool t = true;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Active=@Value", new { Value = t }).ToList();
+            }
+            
+
+            for (int i = 0; i < listAccounts.Count; i++)
+            {
+                names.Add(listAccounts[i].AccountName);
+            }
+
+            var result = JsonConvert.SerializeObject(names);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public int GetAccountNameNumber(string name) {
+            int result;
+
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountName=@Value", new { Value = name }).ToList();
+            }
+
+            result = listAccounts[0].AccountNumber;
+
+            return result;
+        }
+
+        [HttpPost]
+        public ActionResult RequestAccountUpdate(string name, string comment)
+        {
+            var sessionUser = Session["Username"] as string;
+            string s = "update";
+            int AccNum = GetAccountNameNumber(name);
+
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.UserRequestsTable (DateCreated, AccountNumber, AccountName, " +
+                    "Description, CreatedBy, Type)" +
+                    "values(@Date, @AccountNumber, @AccountName," +
+                    "@Description,@CreatedBy,@Type)";
+                db.Execute(sql, new
+                {
+                    Date = DateTime.Now,
+                    AccountNumber = AccNum,
+                    AccountName = name,                    
+                    Description = comment,
+                    CreatedBy = sessionUser,
+                    Type = s
+                });
+            }
+
+            return Json("Update Request Submitted.");
         }
 
         [HttpGet]
@@ -454,7 +510,6 @@ namespace AccountingApp.Controllers
 
             string comment = transactionList[0].AccountantComment;
             var result = JsonConvert.SerializeObject(comment);
-            System.Diagnostics.Debug.WriteLine("json: " + result);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -640,7 +695,7 @@ namespace AccountingApp.Controllers
             List<ChartOfAcc> listAccounts;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Visibility = @V", new { V = "visible" }).ToList();
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
             }
             return View(listAccounts);
         }
