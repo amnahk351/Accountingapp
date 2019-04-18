@@ -326,7 +326,7 @@
                 <br />
                 <div>
                     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#RequestAccountModal">Request New Account</button>
-
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#RequestUpdateModal">Request Account Update</button>
                 </div>
                 <hr class="my-4" />
                 @if (TempData["Message"] != null)
@@ -391,7 +391,6 @@
                     <!-- Modal content-->
                     <div class="modal-content">
                         <div class="modal-header">
-                            @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
                             <h4 style="text-align:left" class="modal-title">Request New Account</h4>
                         </div>
                         <div class="modal-body">
@@ -412,7 +411,6 @@
                                 <label for="AccountType" class="control-label">Account Type</label>
                                 <select name="AccountType" class="form-control" id="AccountType">
                                     <option value="">Select..</option>
-
                                     <option value="Assets">Assets</option>
                                     <option value="Liabilities">Liabilities</option>
                                     <option value="Equity">Equity</option>
@@ -422,26 +420,22 @@
                                 </select>
                             </div>
 
-                            
+
                             <div id="AccountTypeError" class="text-danger">
 
                             </div>
-
 
 
                             <div class="form-group">
                                 <label for="NormalSide">Normal Side</label>
                                 <select class="cutom-select form-control" id="NormalSide" name="NormalSide">
                                     <option value="">Select..</option>
-
                                     <option value="Debit">Debit</option>
                                     <option value="Credit">Credit</option>
-
                                 </select>
-
                             </div>
 
-                            
+
                             <div id="AccountSideError" class="text-danger">
 
                             </div>
@@ -450,19 +444,10 @@
                             <div class="form-group">
                                 <label for="OriginalBalance">Original Balance</label>
                                 <input type="text" class="form-control text-right right-justified" id="OriginalBalance" placeholder="0.00" name="OriginalBalance" required>
-
                                 <div id="AccountOriginalBalanceError" class="text-danger">
 
                                 </div>
                             </div>
-
-                            @*<div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="Active" name="Active" required>
-                                <label class="form-check-label" for="Active" style="font-size:large; padding-left:0">
-                                    Active
-                                </label>
-
-                            </div>*@
 
                             <div>
                                 <label for="Description" class="control-label">Account Description</label>
@@ -475,6 +460,49 @@
                         <div class="modal-footer">
                             <button type="button" onclick="SubmitAccountRequest()" class="btn btn-success">Submit</button>
                             <button id="CloseModal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="RequestUpdateModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 style="text-align:left" class="modal-title">Request Account Update</h4>
+                        </div>
+                        <div class="modal-body">                            
+
+                            <div class="form-group">
+                                <label for="AccountSelect">Select an Account</label>
+                                <select class="cutom-select form-control" id="AccountSelect" name="AccountSelect">
+                                    <option value="">Select..</option>
+                                    <option value="Debit">Debit</option>
+                                    <option value="Credit">Credit</option>
+                                </select>
+                            </div>
+                            <div id="AccountSelectError" class="text-danger">
+
+                            </div>
+
+                            <br />
+                            <div>
+                                <label for="Description" class="control-label">Specify What Needs Updated</label>
+                                <textarea class="form-control" id="Description" name="Description" rows="3" placeholder="Optional"></textarea>
+                            </div>
+                            <div id="DescriptionError" class="text-danger">
+
+                            </div>                            
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="SubmitUpdateRequest()" class="btn btn-success">Submit</button>
+                            <button id="CloseUpdateModal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
 
