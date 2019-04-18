@@ -150,10 +150,10 @@ namespace AccountingApp.Controllers
             Trace.WriteLine(transaction.AccountNumber);
 
             List<ChartOfAcc> listAccounts;
+            bool t = true;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Active=@Value", new { Value = t }).ToList();
             }
             List<SelectListItem> sliAccountList = new List<SelectListItem>();
 
@@ -170,8 +170,6 @@ namespace AccountingApp.Controllers
             ViewBag.accountlist = sliAccountList;
             return View("~/Views/Accountant/AccountantIndex.cshtml");
         }
-
-
         
 
 
