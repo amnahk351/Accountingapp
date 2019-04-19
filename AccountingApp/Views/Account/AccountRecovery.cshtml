@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_Layout-Account.cshtml";
 }
 
+<link href="//use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet" />
+
 <style>
 
     .form-control.text-box.single-line {
@@ -15,22 +17,23 @@
         margin: 8px 0;
         padding-left: 10px;*/
         border: 2px solid dodgerblue;
+        width: 100%;
         border-radius: 6px;
     }
 
     .button_example {
-        width: 30%;
+        width: 100%;
     }
 
-    .container.body-content {
+    /*.container.body-content {
         padding-bottom: 5px;
-    }
+    }*/
 
     .text-danger {
         color: red;
         font-size: 14px;
     }
-
+    
     a {
         color: #0000ff;
         font-family: Arial;
@@ -44,35 +47,43 @@
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
-    <h1 style="font-size: 28px; color:dodgerblue;border-bottom: 4px solid dodgerblue;margin-bottom: 5px;padding: 5px">Account Recovery</h1>
+    <h1 style="font-size: 28px; color:dodgerblue;border-bottom: 4px solid dodgerblue;margin-bottom: 20px;padding: 5px">Account Recovery</h1>
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="form-group">
-
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
-        </div>
+    <div>
+        <i class="fas fa-user"></i>
+        @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label" })
     </div>
-
-    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="form-group">
-
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-        </div>
+    
+    @*<div class="form-group">*@
+    <div class="textbox" style="width: 100%;">
+        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form" } })
     </div>
+    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+    @*</div>*@
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
+    <br />
+    <div>
+        <i class="fas fa-envelope"></i>
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+    </div>
+    
+    @*<div class="form-group">*@
+
+    <div class="textbox" style="width: 100%;">
+        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form" } })
+    </div>
+    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    @*</div>*@
+
+
+    <div class="form-group" style="padding-top: 20px">
+        <div class="col-md-offset-2 col-md-10" style="margin-left: 0px">
             <input type="submit" value="Next" class="button_example" />
         </div>
     </div>
 
-    <br />
+    @*<br />*@
 
     <div class="text-danger">
         @ViewBag.Message
@@ -80,7 +91,6 @@
 </div>
 }
 
-<br />
 <div>
     @Html.ActionLink("🡐 Login", "Login")
 </div>
