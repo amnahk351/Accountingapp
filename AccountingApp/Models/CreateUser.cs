@@ -22,9 +22,9 @@ namespace AccountingApp.Models
         public string Password { get; set; }
         public string Role { get; set; }
         public string Phone { get; set; }
-        public Nullable<System.DateTime> Date_Created { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
         public bool Active { get; set; }
-        public Nullable<System.DateTime> Date_Modified { get; set; }
+        public Nullable<System.DateTime> DateModified { get; set; }
         public string Old_Passwords { get; set; }
         public string Address { get; set; }
         public string City { get; set; }

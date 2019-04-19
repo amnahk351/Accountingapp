@@ -1,0 +1,92 @@
+﻿@model IEnumerable<AccountingApp.Models.UserStatsModel>
+
+@{
+    ViewBag.Title = "User Statistics";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    //Layout = null;
+}
+
+<h2>User Statistics</h2>
+
+
+<table id="StatsTable" class="table">
+    <tr>
+        <th>            
+            User ID
+        </th>
+        <th>
+            Username
+        </th>
+        <th>
+            Date Created
+        </th>
+        <th>
+            Date Modified
+        </th>
+        <th>
+            Most Recent Login
+        </th>
+        <th>
+            Last Time Online
+        </th>
+        <th>
+            Total Login
+        </th>
+        <th>
+            Login Fails
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateModified)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastLogin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastSignout)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoginAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoginFails)
+        </td>        
+    </tr>
+}
+
+</table>
+
+
+<script>
+    window.onload = RemoveTimes();
+
+    function RemoveTimes()
+    {   //Removes all excess times from date created and date modified
+        var table = document.getElementById("StatsTable");
+
+        for (var i = 1; i < table.rows.length; i++) {
+            var Created = table.rows[i].cells[2].innerText;
+            var res = Created.split(" ");
+            table.rows[i].cells[2].innerText = res[0];
+
+            var Modified = table.rows[i].cells[3].innerText;
+            var res2 = Modified.split(" ");
+            table.rows[i].cells[3].innerText = res2[0];           
+
+        }        
+    }
+        
+</script>

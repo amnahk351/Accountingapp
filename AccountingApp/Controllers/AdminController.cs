@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace AccountingApp.Controllers
 {
@@ -17,8 +18,42 @@ namespace AccountingApp.Controllers
         // GET: Admin
         public ActionResult AdminIndex()
         {
+           
+
             return View();
         }
+
+
+        public ActionResult UserStatistics()
+        {
+            List<UserStatsModel> stats = new List<UserStatsModel>();
+
+            List<CreateUser> listUser;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                listUser = db.Query<CreateUser>($"Select * from dbo.UserTable").ToList();
+            }
+
+            for (int i = 0; i < listUser.Count; i++) {
+                UserStatsModel mod = new UserStatsModel();
+                mod.ID = listUser[i].ID;
+                mod.Username = listUser[i].Username;
+                mod.Date = listUser[i].Date;
+                mod.DateModified = listUser[i].DateModified;
+                mod.LastLogin = listUser[i].LastLogin;
+                mod.LastSignout = listUser[i].LastSignout;
+                mod.LoginAmount = listUser[i].LoginAmount;
+                mod.LoginFails = listUser[i].LoginFails;
+
+
+                stats.Add(mod);
+            }
+
+            return View(stats);
+        }
+
+
         public ActionResult NewAccount()
         {
             return View();
@@ -39,6 +74,7 @@ namespace AccountingApp.Controllers
             tb2.AccountDescription = model.AccountDescription;
             tb2.CreatedBy = sessionUser;
             tb2.Active = model.Active;
+            
 
             if (ModelState.IsValid)
             {
@@ -46,9 +82,9 @@ namespace AccountingApp.Controllers
                 {
 
                     string sql = $"Insert into dbo.ChartOfAccounts (AccountNumber, AccountName, " +
-                        "AccountType, NormalSide, OriginalBalance, CurrentBalance, AccountDescription, CreatedBy, Active)" +
+                        "AccountType, NormalSide, OriginalBalance, CurrentBalance, AccountDescription, CreatedBy, Active, DateCreated)" +
                         "values(@AccountNumber, @AccountName, @AccountType,@NormalSide,@OriginalBalance," +
-                        "@CurrentBalance,@AccountDescription,@CreatedBy,@Active)";
+                        "@CurrentBalance,@AccountDescription,@CreatedBy,@Active,@Date)";
                     db.Execute(sql, new
                     {
 
@@ -60,7 +96,8 @@ namespace AccountingApp.Controllers
                         CurrentBalance = model.CurrentBalance,
                         AccountDescription = model.AccountDescription,
                         CreatedBy = sessionUser,
-                        Active = model.Active
+                        Active = model.Active,
+                        Date = DateTime.Now
                     });
                 }
 
@@ -86,16 +123,12 @@ namespace AccountingApp.Controllers
         {
             List<ChartOfAcc> listAccounts;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-
+            {                
                 listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
             }
             return View(listAccounts);
-            //var item = db.ChartOfAccs.ToList();
-            //return View(item);
-
-
         }
+
 
         public ActionResult EditAccount(double id)
         {

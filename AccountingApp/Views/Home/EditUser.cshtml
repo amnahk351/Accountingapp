@@ -14,9 +14,9 @@
     @Styles.Render("~/Scripts/bootstrap-datetimepicker.min.css")
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
 
     @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -25,19 +25,6 @@
 
 
     <style>
-        /*body {
-            padding-top: 70px;
-            margin: 40px;
-            background-color: gainsboro;
-        }
-
-        .nav {
-            padding-right: 70px;
-        }
-
-        .navbar-header {
-            padding-left: 70px;
-        }*/
 
         .form_datetime {
             display: block;
@@ -55,93 +42,18 @@
             transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
         }
 
-        .navbar-text {
-            padding-right: 20px;
-        }
-
-        .container {
-            width: 100%;
-            margin-top: 2%;
-        }
-
-        .inner {
-            overflow: hidden;
-        }
-
-            .inner img {
-                transition: all 1.5s ease;
-            }
-
-            .inner:hover img {
-                transform: scale(1.5);
-            }
+       
     </style>
 </head>
 <body>
-    @*<div class="nav">
-            <nav class="navbar navbar-inverse navbar-fixed-top navbar-collapse navbar-nav">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="#">Objective Accounting</a>
-                    </div>
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-
-                        <li><a href="#">User Log</a></li>
-
-                        <li><a href="@Url.Action("ShowUserData","Home")">Users</a></li>
-
-                        <li><a href="#">Chart Of Accounts</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><span class="navbar-text"><span class="glyphicon glyphicon-user"></span> Welcome, Admin</span></li>
-                        <li><a href="#">SignOut</a></li>
-                    </ul>
-                </div>
-
-            </nav>
-        </div>*@
-
-
-    @*<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-light" style="background-color: silver">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <a class="navbar-brand" href="#">
-                <img src="~/img/Accounting Logo.PNG" width="150" height="40" />
-            </a>
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/Admin/AdminIndex">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-
-            </ul>*@
-    @*<form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>*@
-    @*<ul class="nav navbar-nav navbar-right">
-        <li><span id="LoggedName" class="navbar-text"><span class="glyphicon glyphicon-user"></span>Welcome, Admin</span></li>*@
-    @*<br />*@
-    @*<li class="nav-item">
-                        <a class="nav-link" href="/Account/Login">Sign Out</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>*@
-
-    <br />
+   <br />
 
 
     @*@using (Html.BeginForm())
         {*@
     <form method="post" id="accountform" class="needs-validation" novalidate>
 
-        <div class="container shadow" style="width:60%">
+        <div class="container shadow" style="width:60%; background-color:white">
 
             <div class="form-horizontal">
                 <h4>Edit User</h4>
@@ -186,7 +98,7 @@
 
                         <div class="form-group">
                             @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label" })
-                            @Html.TextBoxFor(model => model.Username, new { @readonly = "readonly", @class = "form-control", @required = "required" })
+                            @Html.TextBoxFor(model => model.Username, new { disabled = "disabled", @readonly = "readonly", @class = "form-control", @required = "required" })
                             @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -310,6 +222,7 @@
                     <div class="col-md-offset-2">
                         <div class="button">
                             <button class="btn btn-success margin-right"><span class="glyphicon glyphicon-save"></span>Update</button>
+
                             @Html.ActionLink("Back to List", "ShowUserData")
 
 
@@ -332,11 +245,11 @@
     @*<p> &copy; @DateTime.Now.Year - Objective Accounting</p>*@
 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 
@@ -388,35 +301,6 @@
             });
         }, false);
     })();
-
-</script>
-
-
-<script>
-
-    // Restricts input for the given textbox to the given inputFilter.
-    function setInputFilter(textbox, inputFilter) {
-        ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
-            textbox.addEventListener(event, function () {
-                if (inputFilter(this.value)) {
-                    this.oldValue = this.value;
-                    this.oldSelectionStart = this.selectionStart;
-                    this.oldSelectionEnd = this.selectionEnd;
-                } else if (this.hasOwnProperty("oldValue")) {
-                    this.value = this.oldValue;
-                    this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-                }
-            });
-        });
-    }
-
-    setInputFilter(document.getElementById("ZIP_Code"), function (value) {
-        return /^\d*$/.test(value);
-    });
-
-    setInputFilter(document.getElementById("Phone"), function (value) {
-        return /^\d*$/.test(value);
-    });
 
 </script>
 @*@section Scripts {

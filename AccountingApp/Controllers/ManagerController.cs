@@ -9,6 +9,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Dapper;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace AccountingApp.Controllers
 {
@@ -114,7 +116,62 @@ namespace AccountingApp.Controllers
             return View();
         }
 
+        public ActionResult Journalize()
+        {
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+            }
+            List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+
+            foreach (ChartOfAcc coa in listAccounts)
+            {
+                SelectListItem item = new SelectListItem
+                {
+                    Text = coa.AccountName,
+                    Value = coa.AccountNumber.ToString()
+                };
+                sliAccountList.Add(item);
+            }
+
+            ViewBag.accountlist = sliAccountList;
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Journalize(Transaction transaction)
+        {
+            Trace.WriteLine(transaction.Debit);
+            Trace.WriteLine(transaction.AccountNumber);
+
+            List<ChartOfAcc> listAccounts;
+            bool t = true;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Active=@Value", new { Value = t }).ToList();
+            }
+            List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+            foreach (ChartOfAcc coa in listAccounts)
+            {
+                SelectListItem item = new SelectListItem
+                {
+                    Text = coa.AccountName,
+                    Value = coa.AccountNumber.ToString()
+                };
+                sliAccountList.Add(item);
+            }
+
+            ViewBag.accountlist = sliAccountList;
+            return View("~/Views/Accountant/AccountantIndex.cshtml");
+        }
         
+
 
         public ActionResult GeneralJournal(string status)
         {
@@ -347,6 +404,46 @@ namespace AccountingApp.Controllers
             }
 
             return View(coa);
+        }
+
+        public ActionResult ShowUserData()
+        {
+            List<CreateUser> listUser;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                listUser = db.Query<CreateUser>($"Select * from dbo.Usertable").ToList();
+            }
+
+            return View(listUser);
+            //var item = db.CreateUsers.ToList();
+            //return View(item);
+        }
+        public ActionResult ChartOfAccounts()
+        {
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
+            }
+            return View(listAccounts);
+        }
+
+
+        //Broderick's code
+        public ActionResult EventLog()
+        {
+            List<Models.EventLog> events;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                events = db.Query<Models.EventLog>($"Select * from dbo.EventLogTable").ToList();
+            }
+
+            return View(events);
+            //Database1Entities6 db2 = new Database1Entities6();
+            //var events = db2.EventLogs.ToList();
+            //return View(events);
         }
     }
 }

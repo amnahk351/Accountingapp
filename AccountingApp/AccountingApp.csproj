@@ -237,6 +237,7 @@
     <Compile Include="Models\Extended\NewUserModel.cs" />
     <Compile Include="Models\Extended\ResetPasswordModel.cs" />
     <Compile Include="Models\Extended\SecurityQuestionsModel.cs" />
+    <Compile Include="Models\Extended\UserStatsModel.cs" />
     <Compile Include="Models\FileModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -434,6 +435,7 @@
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.filedrop.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -443,6 +445,7 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Views\Manager\Journalize.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -485,11 +488,26 @@
     <Content Include="Views\Shared\_Layout_Accountant.cshtml" />
     <Content Include="Views\Shared\_Layout_Admin.cshtml" />
     <Content Include="Views\Accountant\Journalize.cshtml" />
+    <Content Include="Views\Manager\Journalize.cshtml" />
     <Content Include="Views\Manager\IncomeStatement.cshtml" />
     <Content Include="Views\Manager\BalanceSheet.cshtml" />
     <Content Include="Views\Manager\RetainedEarnings.cshtml" />
     <Content Include="Views\Manager\PostClosingTrialBalance.cshtml" />
+    <Content Include="Views\Shared\_Layout_Manager.cshtml" />
+    <Content Include="Views\Manager\ShowUserData.cshtml" />
+    <Content Include="Views\Manager\ChartOfAccounts.cshtml" />
+    <Content Include="Views\Manager\EventLog.cshtml" />
+    <Content Include="Views\Accountant\ChartOfAccounts.cshtml" />
+    <Content Include="Views\Accountant\PostClosingTrialBalance.cshtml" />
+    <Content Include="Views\Accountant\RetainedEarnings.cshtml" />
+    <Content Include="Views\Accountant\BalanceSheet.cshtml" />
+    <Content Include="Views\Accountant\IncomeStatement.cshtml" />
+    <Content Include="Views\Accountant\TrialBalance.cshtml" />
     <Content Include="Views\Accountant\EditJournal.cshtml" />
+    <Content Include="Views\Accountant\Dashboard.cshtml" />
+    <Content Include="Views\Shared\_Layout_Journalize.cshtml" />
+    <Content Include="Views\Accountant\TransactionSummary.cshtml" />
+    <Content Include="Views\Admin\UserStatistics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />
