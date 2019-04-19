@@ -124,10 +124,55 @@ namespace AccountingApp.Controllers
 
             return View("NewAccount", new ChartOfAcc());
         }
-       
-     
 
-        
+
+        [HttpGet]
+        public JsonResult GetAllAccountNames()
+        {
+            List<ChartOfAcc> listAccounts;
+            List<String> names = new List<String>();
+
+            bool t = true;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Active=@Value", new { Value = t }).ToList();
+            }
+
+
+            for (int i = 0; i < listAccounts.Count; i++)
+            {
+                names.Add(listAccounts[i].AccountName);
+            }
+
+            var result = JsonConvert.SerializeObject(names);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetAllAccountNumbers()
+        {
+            List<ChartOfAcc> listAccounts;
+            List<int> nums = new List<int>();
+
+            bool t = true;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Active=@Value", new { Value = t }).ToList();
+            }
+
+
+            for (int i = 0; i < listAccounts.Count; i++)
+            {
+                nums.Add(listAccounts[i].AccountNumber);
+            }
+
+            var result = JsonConvert.SerializeObject(nums);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+
         public ActionResult ChartOfAccounts()
         {
             List<ChartOfAcc> listAccounts;

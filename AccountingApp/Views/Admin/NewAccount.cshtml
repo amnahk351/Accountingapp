@@ -5,6 +5,18 @@
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
     //Layout = null;
 }
+
+<style>
+
+
+    .errorMessage {
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 80%;
+        color: #dc3545;
+    }
+
+</style>
 <html>
 <head>
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">*@
@@ -31,21 +43,25 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
 
-                    <label for="AccountNumber validationTooltip01" class="control-label">Account Number</label>
-                    <input type="text" class="form-control" id="AccountNumber validationTooltip01" name="AccountNumber" required>
+                    <label for="AccountNumber" class="control-label">Account Number</label>
+                    <input type="text" class="form-control" onkeyup="CheckAccountNumber()" id="AccountNumber" name="AccountNumber" required>
                     @*@Html.ValidationMessageFor(m => m.AccountNumber, "", new { @class = "text-danger" })*@
                     <div id="AccountNumberError" class="invalid-feedback">
 
                     </div>
+
+                    <span id="AccountNumberExistsError" class="errorMessage"></span>
                 </div>
                 <div class="form-group col-md-6">
 
                     <label for="AccountName" class="control-label">Account Name</label>
-                    <input type="text" class="form-control" id="AccountName" name="AccountName" required pattern="[A-Za-z]{1,20}">
+                    <input type="text" class="form-control" onkeyup="CheckAccountName()" id="AccountName" name="AccountName" required>
                     @*@Html.ValidationMessageFor(m => m.AccountName, "", new { @class = "text-danger" })*@
                     <div id="AccountNameError" class="invalid-feedback">
 
                     </div>
+
+                    <span id="AccountNameExistsError" class="errorMessage"></span>
                 </div>
             </div>
             <div class="form-row">
@@ -161,6 +177,12 @@
                         if (form.checkValidity() === false) {
                             event.preventDefault();
                             event.stopPropagation();
+                            alert("It got here");
+                            
+                        } else if (document.getElementById("AccountNumberExistsError").innerText != "" || document.getElementById("AccountNameExistsError").innerText != "") {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            alert("Please fix all errors before submitting");
                         }
                         form.classList.add('was-validated');
                     }, false);
@@ -188,7 +210,7 @@
             });
         }
 
-        setInputFilter(document.getElementById("AccountNumber validationTooltip01"), function (value) {
+        setInputFilter(document.getElementById("AccountNumber"), function (value) {
             return /^\d*$/.test(value);
         });
 
@@ -226,6 +248,174 @@
                 if (r.text == '') return o.value.length
                 return o.value.lastIndexOf(r.text)
             } else return o.selectionStart
+        }
+
+
+        //$("btnsubmit").click(function (event) {
+
+        //    var E1 = document.getElementById("AccountNumberExistsError").innerText;
+        //    var E2 = document.getElementById("AccountNameExistsError").innerText;
+
+        //    if (E1 != "" || E2 != "") {
+        //        event.preventDefault();
+        //        alert("Please fix all errors on the page before submitting.");
+        //    }
+
+        //    alert("method called");
+
+        //});
+
+        
+        //$('#btnsubmit').bind('click', submit_click);
+
+        //function submit_click(event) {
+        //    event.preventDefault();
+        //    alert('clicked submit');
+        //}
+
+    </script>
+    
+    <script>
+
+        function CheckAccountNumber() {
+
+            //CheckAccountName();
+
+            var text = document.getElementById("AccountNumber").value;
+
+            var Query;
+
+            $.ajax(
+                {
+                    url: '/Admin/GetAllAccountNumbers/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    //data: { "id": Id },
+                    success: function (result) {
+                        //alert(result);
+                        Query = result;
+
+                    },
+                    error: function (error) {
+                        //alert(JSON.stringify(error));
+                    }
+                });
+
+            var Q1 = Query.replace("[", "");
+            var Q2 = Q1.replace("]", "");
+            var Q3 = Q2.replace(/"/g, "");
+            
+            var res = Q3.split(",");
+
+            var n = false;
+
+            for (var i = 0; i < res.length; i++) {
+
+                if (res[i] == text) {
+                    n = true;
+                    break;
+                }
+            }
+
+
+            //var btn = document.getElementById("btnsubmit");
+
+            //if (btn.disabled == true) {
+
+
+
+            //}
+
+            if (n==true)
+            {
+                //document.getElementById("btnsubmit").disabled = true;
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {                        
+                        //alert(data[56]);
+                        document.getElementById("AccountNumberExistsError").innerText = data[56];
+                        document.getElementById("AccountNumber").style.borderColor = "#dc3545";
+                    }
+                });
+
+            }            
+            else
+            {
+                document.getElementById("AccountNumberExistsError").innerText = "";
+
+                document.getElementById("AccountNumber").style.borderColor = "#28a745";
+                //document.getElementById("btnsubmit").disabled = false;
+            }
+        }
+
+        function CheckAccountName() {
+
+            //CheckAccountNumber();
+
+            var text0 = document.getElementById("AccountName").value;
+            var text = text0.replace(/\s+/g, ' ').trim();
+
+            var Query;
+
+            $.ajax(
+                {
+                    url: '/Admin/GetAllAccountNames/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    //data: { "id": Id },
+                    success: function (result) {
+                        //alert(result);
+                        Query = result;
+
+                    },
+                    error: function (error) {
+                        //alert(JSON.stringify(error));
+                    }
+                });
+
+            var Q1 = Query.replace("[", "");
+            var Q2 = Q1.replace("]", "");
+            var Q3 = Q2.replace(/"/g, "");
+
+            var res = Q3.split(",");
+
+            var n = false;
+
+            for (var i = 0; i < res.length; i++) {
+
+                if (res[i] == text) {
+                    n = true;
+                    break;
+                }
+            }
+
+
+            if (n == true) {
+                //document.getElementById("btnsubmit").disabled = true;
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        //alert(data[57]);
+                        document.getElementById("AccountNameExistsError").innerText = data[57];
+                        document.getElementById("AccountName").style.borderColor = "#dc3545";
+                    }
+                });
+
+            } else {
+                document.getElementById("AccountNameExistsError").innerText = "";
+                document.getElementById("AccountName").style.borderColor = "#28a745";
+                //document.getElementById("btnsubmit").disabled = false;
+            }
         }
 
     </script>
