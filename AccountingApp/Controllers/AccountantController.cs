@@ -406,7 +406,7 @@ namespace AccountingApp.Controllers
         public ActionResult RequestAccount(int number, string name, string type, string side, string balance, string comment)
         {
             var sessionUser = Session["Username"] as string;
-            string s = "requested";
+            string s = "Request";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -473,7 +473,7 @@ namespace AccountingApp.Controllers
         public ActionResult RequestAccountUpdate(string name, string comment)
         {
             var sessionUser = Session["Username"] as string;
-            string s = "update";
+            string s = "Update";
             int AccNum = GetAccountNameNumber(name);
 
 

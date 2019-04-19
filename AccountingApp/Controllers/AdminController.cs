@@ -24,6 +24,15 @@ namespace AccountingApp.Controllers
         }
 
 
+        public ActionResult AccountRequests() {
+            List<UserRequestsModel> items;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                items = db.Query<UserRequestsModel>($"Select * from dbo.UserRequestsTable").ToList();
+            }
+            return View(items);
+        }
+
         public ActionResult UserStatistics()
         {
             List<UserStatsModel> stats = new List<UserStatsModel>();

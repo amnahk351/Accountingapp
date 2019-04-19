@@ -237,6 +237,7 @@
     <Compile Include="Models\Extended\NewUserModel.cs" />
     <Compile Include="Models\Extended\ResetPasswordModel.cs" />
     <Compile Include="Models\Extended\SecurityQuestionsModel.cs" />
+    <Compile Include="Models\Extended\UserRequestsModel.cs" />
     <Compile Include="Models\Extended\UserStatsModel.cs" />
     <Compile Include="Models\FileModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -508,6 +509,7 @@
     <Content Include="Views\Shared\_Layout_Journalize.cshtml" />
     <Content Include="Views\Accountant\TransactionSummary.cshtml" />
     <Content Include="Views\Admin\UserStatistics.cshtml" />
+    <Content Include="Views\Admin\AccountRequests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />
