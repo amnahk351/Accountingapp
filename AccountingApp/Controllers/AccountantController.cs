@@ -619,10 +619,28 @@ namespace AccountingApp.Controllers
             return View(getAllEntriesOfStatus("pending"));
         }
 
+        public ActionResult Transactions()
+        {
+
+            return View(getAllEntriesOfStatus("all"));
+        }
+
+        public ActionResult SuspendedTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("suspended"));
+        }
+
         public ActionResult DisapprovedTransactions()
         {
 
             return View(getAllEntriesOfStatus("disapproved"));
+        }
+
+        public ActionResult ApprovedTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("approved"));
         }
 
         private Entries getAllEntriesOfStatus(string s)

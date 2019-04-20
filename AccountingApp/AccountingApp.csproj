@@ -476,6 +476,9 @@
     <Content Include="Views\Admin\AccountRequests.cshtml" />
     <Content Include="Views\Accountant\PendingTransactions.cshtml" />
     <Content Include="Views\Accountant\DisapprovedTransactions.cshtml" />
+    <Content Include="Views\Accountant\Transactions.cshtml" />
+    <Content Include="Views\Accountant\ApprovedTransactions.cshtml" />
+    <Content Include="Views\Accountant\SuspendedTransactions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />

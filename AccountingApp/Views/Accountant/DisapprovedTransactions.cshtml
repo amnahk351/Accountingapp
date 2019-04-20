@@ -1,7 +1,7 @@
 ﻿@model AccountingApp.Models.Entries
 
 @{
-    ViewBag.Title = "Pending Transactions";
+    ViewBag.Title = "Rejected Transactions";
     //Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
     Layout = null;
 
@@ -402,22 +402,22 @@
 
                 <h3 style="display:inline">Rejected Transactions</h3>
                 <div class="" style=" float:right" role="group" aria-label="Basic example">
-                    <a href="@Url.Action("AccountantIndex", new { status = "all"})" class="btn btn-success" role="button" aria-pressed="true">
+                    <a href="../Accountant/Transactions" class="btn btn-success" role="button" aria-pressed="true">
                         All
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "approved"})" class="btn btn-success" role="button" aria-pressed="true">
+                    <a href="../Accountant/ApprovedTransactions" class="btn btn-success" role="button" aria-pressed="true">
                         <i class="fas fa-check"></i>
                         Approved
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "disapproved"})" class="btn btn-danger" role="button" aria-pressed="true">
+                    <a href="../Accountant/DisapprovedTransactions" class="btn btn-danger" role="button" aria-pressed="true">
                         <i class="fas fa-times"></i>
                         Disapproved
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-warning" role="button" aria-pressed="true">
+                    <a href="../Accountant/PendingTransactions" class="btn btn-warning" role="button" aria-pressed="true">
                         <i class="fas fa-exclamation-circle" style="color:white"></i>
                         Pending
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "suspended"})" class="btn btn-info" role="button" aria-pressed="true">
+                    <a href="../Accountant/SuspendedTransactions" class="btn btn-info" role="button" aria-pressed="true">
                         Suspended
                     </a>
                 </div>
@@ -428,6 +428,7 @@
                     <table id="GeneralJournalTable" class="table table-responsive table-hover shadow" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                         <thead style="background-color:white" class="shadow">
                             <tr class="shadow">
+                                <th style="width:20%">Date Submitted</th>
                                 <th style="width:20%">Date Reviewed</th>
                                 <th style="width:20%">Manager Username & Comment</th>
                                 <th style="width:10%">Entry ID</th>
@@ -442,6 +443,7 @@
                             @for (int i = 0; i < Model.entries.Count; i++)
                             {
                             <tr>
+                                <td>@Model.entries[i].DateSubmitted</td>
                                 <td>@Model.entries[i].DateReviewed</td>
                                 <td>@Model.entries[i].ManagerUsername : @Model.entries[i].ManagerComment</td>
                                 <td>@Model.entries[i].entryID</td>
@@ -663,7 +665,7 @@
 
                     },
                     error: function (error) {
-                        alert(JSON.stringify(error));
+                        //alert(JSON.stringify(error));
                     }
                 });
 
