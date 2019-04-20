@@ -8,10 +8,19 @@ namespace AccountingApp.Models
 {
     public class Entry
     {
-        public List<Transaction> transactions { get; set; }
+        public List<TransactionTable> transactions { get; set; }
         public int entryID { get; set; }
         public string status { get; set; }
         public string comment { get; set; }
+
+        public string AccountantUsername { get; set; }
+        public string ManagerUsername { get; set; }
+        public string AccountantComment { get; set; }
+        public string ManagerComment { get; set; }
+        public int PostReference { get; set; }
+        public DateTime DateSubmitted { get; set; }
+        public DateTime DateReviewed { get; set; }
+
         public DateTime submitDate;
         public List<String> accountNames { get; set; }
         public List<Decimal> debits { get; set; }
@@ -21,7 +30,7 @@ namespace AccountingApp.Models
 
         public Entry()
         {
-            transactions = new List<Transaction>();
+            transactions = new List<TransactionTable>();
             accountNames = new List<String>();
             debits = new List<Decimal>();
             credits = new List<Decimal>();
@@ -35,7 +44,7 @@ namespace AccountingApp.Models
             this.status = status;
             this.submitDate = submitDate;
             this.comment = comment;
-            transactions = new List<Transaction>();
+            transactions = new List<TransactionTable>();
             accountNames = new List<String>();
             debits = new List<Decimal>();
             credits = new List<Decimal>();

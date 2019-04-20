@@ -115,7 +115,7 @@ namespace AccountingApp.Controllers
 
 
         [HttpPost]
-        public JsonResult InsertJournal(Transaction[] transactions)
+        public JsonResult InsertJournal(TransactionTable[] transactions)
         {
             int insertedRecords = 0;
             int NewEntryId = GetLatestEntryId();
@@ -213,7 +213,7 @@ namespace AccountingApp.Controllers
 
         public ActionResult TransactionSummary(int id) {
 
-            List<Transaction> transactionList;
+            List<TransactionTable> transactionList;
             Entry EnModel = new Entry();
             List<String> Names = new List<String>();
             List<Decimal> Debits = new List<Decimal>();
@@ -223,7 +223,7 @@ namespace AccountingApp.Controllers
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
             }
 
             EnModel.entryID = (int)transactionList[0].EntryId;
@@ -258,7 +258,7 @@ namespace AccountingApp.Controllers
 
 
         [HttpPost]
-        public JsonResult InsertEditedJournal(Transaction[] transactions, string id)
+        public JsonResult InsertEditedJournal(TransactionTable[] transactions, string id)
         {
             int insertedRecords = 0;
             int EditedEntryID = Int32.Parse(id);
@@ -501,11 +501,11 @@ namespace AccountingApp.Controllers
         [HttpGet]
         public ActionResult RetreiveComment(int id)
         {
-            List<Transaction> transactionList;
+            List<TransactionTable> transactionList;
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {                
-                transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryId=@ID", new { ID = id }).ToList();
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId=@ID", new { ID = id }).ToList();
             }
 
             string comment = transactionList[0].AccountantComment;
@@ -614,75 +614,99 @@ namespace AccountingApp.Controllers
             return View();
         }
 
+        public ActionResult PendingTransactions() {
 
+            return View(getAllEntriesOfStatus("pending"));
+        }
+
+        public ActionResult DisapprovedTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("disapproved"));
+        }
 
         private Entries getAllEntriesOfStatus(string s)
         {
 
-            List<Transaction> transactionList;
+            List<TransactionTable> transactionList;
             List<DocumentsTable> fileList = new List<DocumentsTable>();
-
 
 
             if (s == "all")
             {
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable").ToList();
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable").ToList();
                 }
             }
             else
             {
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
                 }
             }
 
 
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                fileList = db.Query<DocumentsTable>($"Select * From dbo.DocumentsTable").ToList();
-            }
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    fileList = db.Query<DocumentsTable>($"Select * From dbo.DocumentsTable").ToList();
+            //}
 
 
             Entries entries = new Entries();
             List<int> ids = new List<int>();
-            foreach (Transaction t in transactionList)
+            foreach (TransactionTable t in transactionList)
             {
                 int id = t.EntryId.Value;
-                string status = t.Status;
-                DateTime date = t.DateSubmitted.GetValueOrDefault();
-                string comment = t.AccountantComment;
+
+
+                //string status = t.Status;
+                //DateTime date = t.DateSubmitted.GetValueOrDefault();
+                //string comment = t.AccountantComment;
 
                 if (ids.Contains(id))
                     continue;
                 else
                     ids.Add(id);
 
-                Entry e = new Entry(id, status, date, comment);
+                //Entry e = new Entry(id, status, date, comment);
+
+                Entry NewE = new Entry();
+                NewE.entryID = id;
+                NewE.status = t.Status;
+                NewE.DateSubmitted = t.DateSubmitted.GetValueOrDefault();
+                NewE.DateReviewed = t.DateReviewed.GetValueOrDefault();
+                NewE.AccountantComment = t.AccountantComment;
+                NewE.ManagerComment = t.ManagerComment;
+                NewE.AccountantUsername = t.AccountantUsername;
+                NewE.ManagerUsername = t.ManagerUsername;
+                NewE.PostReference = t.PostReference.GetValueOrDefault();
 
 
-                foreach (Transaction t2 in transactionList)
+                foreach (TransactionTable t2 in transactionList)
                 {
                     if (t2.EntryId == id)
                     {
-                        for (int i = 0; i < fileList.Count; i++)
-                        {
+                        //for (int i = 0; i < fileList.Count; i++)
+                        //{
 
-                            if (fileList[i].FK_EntryId == t2.EntryId)
-                            {
-                                e.files.Add(fileList[i]);
-                            }
-                        }
+                        //    if (fileList[i].FK_EntryId == t2.EntryId)
+                        //    {
+                        //        e.files.Add(fileList[i]);
+                        //    }
+                        //}
 
+                        //e.accountNames.Add(t2.AccountName);
+                        //e.debits.Add(t2.Debit.GetValueOrDefault());
+                        //e.credits.Add(t2.Credit.GetValueOrDefault());
 
-                        e.accountNames.Add(t2.AccountName);
-                        e.debits.Add(t2.Debit.GetValueOrDefault());
-                        e.credits.Add(t2.Credit.GetValueOrDefault());
+                        NewE.accountNames.Add(t2.AccountName);
+                        NewE.debits.Add(t2.Debit.GetValueOrDefault());
+                        NewE.credits.Add(t2.Credit.GetValueOrDefault());
                     }
                 }
-                entries.entries.Add(e);
+                entries.entries.Add(NewE);
             }
 
             return entries;

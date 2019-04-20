@@ -37,13 +37,13 @@ namespace AccountingApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                List<Transaction> allTransactionsWithEntryID;
+                List<TransactionTable> allTransactionsWithEntryID;
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    allTransactionsWithEntryID = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryID = @EntryID", new { EntryID = id }).ToList();
+                    allTransactionsWithEntryID = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryID = @EntryID", new { EntryID = id }).ToList();
                 }
 
-                foreach (Transaction t in allTransactionsWithEntryID)
+                foreach (TransactionTable t in allTransactionsWithEntryID)
                 {
                     t.Status = "approved";
                     Trace.WriteLine("----------" + t.EntryId + ":" + t.Status);
@@ -95,13 +95,13 @@ namespace AccountingApp.Controllers
 
         public ActionResult DisapproveEntry(int? id)
         {
-            List<Transaction> allTransactionsWithEntryID;
+            List<TransactionTable> allTransactionsWithEntryID;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                allTransactionsWithEntryID = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryID = @EntryID", new { EntryID = id }).ToList();
+                allTransactionsWithEntryID = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryID = @EntryID", new { EntryID = id }).ToList();
             }
 
-            foreach (Transaction t in allTransactionsWithEntryID)
+            foreach (TransactionTable t in allTransactionsWithEntryID)
             {
                 t.Status = "disapproved";
 
@@ -144,10 +144,10 @@ namespace AccountingApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Journalize(Transaction transaction)
+        public ActionResult Journalize(TransactionTable transaction)
         {
             Trace.WriteLine(transaction.Debit);
-            Trace.WriteLine(transaction.AccountNumber);
+            //Trace.WriteLine(transaction.AccountNumber);
 
             List<ChartOfAcc> listAccounts;
             bool t = true;
@@ -311,27 +311,27 @@ namespace AccountingApp.Controllers
         private Entries getAllEntriesOfStatus(string s)
         {
 
-            List<Transaction> transactionList;
+            List<TransactionTable> transactionList;
 
             if (s == "all")
             {
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable").ToList();
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable").ToList();
                 }
             }
             else
             {
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
                 }
             }
 
 
             Entries entries = new Entries();
             List<int> ids = new List<int>();
-            foreach (Transaction t in transactionList)
+            foreach (TransactionTable t in transactionList)
             {
                 int id = t.EntryId.Value;
                 string status = t.Status;
@@ -344,7 +344,7 @@ namespace AccountingApp.Controllers
                     ids.Add(id);
 
                 Entry e = new Entry(id, status, date, comment);
-                foreach (Transaction t2 in transactionList)
+                foreach (TransactionTable t2 in transactionList)
                 {
                     if (t2.EntryId == id)
                     {
