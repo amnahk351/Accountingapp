@@ -540,7 +540,8 @@
     <script>
 
         function LoadAccountList() {
-
+            
+            document.getElementById("UpdateDescription").value = "";
             document.getElementById('DescriptionError').innerText = "";
 
             var Query;
@@ -751,6 +752,13 @@
             document.getElementById('AccountTypeError').innerText = "";
             document.getElementById('AccountSideError').innerText = "";
             document.getElementById('AccountOriginalBalanceError').innerText = "";
+
+            document.getElementById('AccountNumber').value = "";
+            document.getElementById('AccountName').value = "";
+            document.getElementById("AccountType").selectedIndex = "0";
+            document.getElementById("NormalSide").selectedIndex = "0";
+            document.getElementById('OriginalBalance').value = "";
+            document.getElementById('Description').value = "";
         }
     </script>
 

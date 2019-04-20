@@ -308,10 +308,88 @@ namespace AccountingApp.Controllers
             return View(coa);
         }
 
+        public ActionResult ApproveSpecifiedEntry(int id, string comment)
+        {
+            string s = "approved";
+            var sessionUser = Session["Username"] as string;
+
+            List<TransactionTable> transactionList;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            }
+
+
+            //POST REFERENCE LOGIC
+            for (int i = 0; i < transactionList.Count; i++) {
+
+                //get the account name at i
+
+                //query transaction table database and get all records with that account name and status is approved
+
+                //get post reference number at the selected query and put in a list<int>
+
+                //if list has null values, (this is first post reference for the account name)
+
+                    //query chart of accounts and get account number
+
+                    //take the account number and multiply it by 105 and set that as the first post reference number    
+
+                //else find the maximum from that list and return it
+
+                //update transaction table at i with the maximum + 1
+
+
+            }
+
+            //missing adding post reference, logic above
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
+                db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
+            }
+
+
+            return Json("Entry Approved.");
+        }
+
+        public ActionResult PendingTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("pending"));
+        }
+
+        public ActionResult Transactions()
+        {
+
+            return View(getAllEntriesOfStatus("all"));
+        }
+
+        public ActionResult SuspendedTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("suspended"));
+        }
+
+        public ActionResult DisapprovedTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("disapproved"));
+        }
+
+        public ActionResult ApprovedTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("approved"));
+        }
+
         private Entries getAllEntriesOfStatus(string s)
         {
 
             List<TransactionTable> transactionList;
+            //List<DocumentsTable> fileList = new List<DocumentsTable>();
+
 
             if (s == "all")
             {
@@ -329,31 +407,65 @@ namespace AccountingApp.Controllers
             }
 
 
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    fileList = db.Query<DocumentsTable>($"Select * From dbo.DocumentsTable").ToList();
+            //}
+
+
             Entries entries = new Entries();
             List<int> ids = new List<int>();
             foreach (TransactionTable t in transactionList)
             {
                 int id = t.EntryId.Value;
-                string status = t.Status;
-                string comment = t.AccountantComment;
-                DateTime date = t.DateSubmitted.GetValueOrDefault();
+
+
+                //string status = t.Status;
+                //DateTime date = t.DateSubmitted.GetValueOrDefault();
+                //string comment = t.AccountantComment;
 
                 if (ids.Contains(id))
                     continue;
                 else
                     ids.Add(id);
 
-                Entry e = new Entry(id, status, date, comment);
+                //Entry e = new Entry(id, status, date, comment);
+
+                Entry NewE = new Entry();
+                NewE.entryID = id;
+                NewE.status = t.Status;
+                NewE.DateSubmitted = t.DateSubmitted.GetValueOrDefault();
+                NewE.DateReviewed = t.DateReviewed.GetValueOrDefault();
+                NewE.AccountantComment = t.AccountantComment;
+                NewE.ManagerComment = t.ManagerComment;
+                NewE.AccountantUsername = t.AccountantUsername;
+                NewE.ManagerUsername = t.ManagerUsername;
+                NewE.PostReference = t.PostReference.GetValueOrDefault();
+
+
                 foreach (TransactionTable t2 in transactionList)
                 {
                     if (t2.EntryId == id)
                     {
-                        e.accountNames.Add(t2.AccountName);
-                        e.debits.Add(t2.Debit.GetValueOrDefault());
-                        e.credits.Add(t2.Credit.GetValueOrDefault());
+                        //for (int i = 0; i < fileList.Count; i++)
+                        //{
+
+                        //    if (fileList[i].FK_EntryId == t2.EntryId)
+                        //    {
+                        //        e.files.Add(fileList[i]);
+                        //    }
+                        //}
+
+                        //e.accountNames.Add(t2.AccountName);
+                        //e.debits.Add(t2.Debit.GetValueOrDefault());
+                        //e.credits.Add(t2.Credit.GetValueOrDefault());
+
+                        NewE.accountNames.Add(t2.AccountName);
+                        NewE.debits.Add(t2.Debit.GetValueOrDefault());
+                        NewE.credits.Add(t2.Credit.GetValueOrDefault());
                     }
                 }
-                entries.entries.Add(e);
+                entries.entries.Add(NewE);
             }
 
             return entries;

@@ -666,7 +666,7 @@ namespace AccountingApp.Controllers
         {
 
             List<TransactionTable> transactionList;
-            List<DocumentsTable> fileList = new List<DocumentsTable>();
+            //List<DocumentsTable> fileList = new List<DocumentsTable>();
 
 
             if (s == "all")
