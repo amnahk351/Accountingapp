@@ -650,26 +650,27 @@
                                                
 
                 $.ajax({
-                    url: "/Accountant/ApproveSpecifiedEntry",
+                    url: "/Manager/ApproveSpecifiedEntry",
                     contentType: "application/json; charset=utf-8",
                     data: "{'id':'" + id + "', 'comment':'" + de + "'}",
                     type: 'POST',
                     cache: false,
                     success: function (result) {
-                        alert(result);
+                        //alert(result);
+                    },
+                    error: function (e) {
+                        //alert(JSON.stringify(e));
                     }
                 });
 
-                location.reload();
 
-                //alert("Your update request has been submitted.");
+                alert("Entry Approved.");
+                document.getElementById('ApproveModalClose').click();
 
-                //Simulate button click to close modal
-                //document.getElementById('ApproveModalClose').click();
+                document.getElementById("ManagerApproveComment").value = "";
+                document.getElementById('ApproveCommentError').innerText = "";
 
-
-                //document.getElementById("ManagerApproveComment").value = "";
-                //document.getElementById('ApproveCommentError').innerText = "";
+                location.reload();                
 
             }
         }

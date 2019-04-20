@@ -308,8 +308,12 @@ namespace AccountingApp.Controllers
             return View(coa);
         }
 
+        [HttpPost]
         public ActionResult ApproveSpecifiedEntry(int id, string comment)
         {
+            System.Diagnostics.Debug.WriteLine("it got called");
+            System.Diagnostics.Debug.WriteLine("id " + id);
+            System.Diagnostics.Debug.WriteLine("comm " + comment);
             string s = "approved";
             var sessionUser = Session["Username"] as string;
 
@@ -325,25 +329,68 @@ namespace AccountingApp.Controllers
             for (int i = 0; i < transactionList.Count; i++) {
 
                 //get the account name at i
+                string AccountName = transactionList[i].AccountName;
+
+                List<TransactionTable> TempList;
 
                 //query transaction table database and get all records with that account name and status is approved
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    TempList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where AccountName = @Name And Status = @Stat", new { Name = AccountName, Stat = s }).ToList();
+                }                
 
                 //get post reference number at the selected query and put in a list<int>
+                List<int> ReferenceNumbers = new List<int>();
 
-                //if list has null values, (this is first post reference for the account name)
+                foreach (TransactionTable t in TempList) {
+                    ReferenceNumbers.Add(t.PostReference.GetValueOrDefault());
+                    System.Diagnostics.Debug.WriteLine("current post refere " + t.PostReference.GetValueOrDefault());
+                }
 
+                int biggest = 0;
+
+                if (ReferenceNumbers.Count != 0)
+                {
+                    biggest = ReferenceNumbers.Max();
+                }
+
+                
+                System.Diagnostics.Debug.WriteLine("biggest " + biggest);
+
+                int PostReference;
+
+                if (biggest == 0)
+                {
+                    //if list has null values, (this is first post reference for the account name)
                     //query chart of accounts and get account number
+                    List<ChartOfAcc> Chart;
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                    {
+                        Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @Name", new { Name = AccountName }).ToList();
+                    }
+
+                    int AccountNum = Chart[0].AccountNumber;
 
                     //take the account number and multiply it by 105 and set that as the first post reference number    
+                    PostReference = AccountNum * 105;
+                }
+                else {
+                    //take the maximum and add 1
+                    PostReference = biggest + 1;
+                }
 
-                //else find the maximum from that list and return it
+                System.Diagnostics.Debug.WriteLine("post ref " + PostReference);
 
-                //update transaction table at i with the maximum + 1
-
-
+                //update transaction table at i with the post reference
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    string sql = $"UPDATE dbo.TransactionTable SET PostReference = @Post WHERE EntryID = @entryID And AccountName = @AccName";
+                    db.Execute(sql, new { Post = PostReference, entryID = id, AccName = AccountName });
+                }
+                
             }
 
-            //missing adding post reference, logic above
+            
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
