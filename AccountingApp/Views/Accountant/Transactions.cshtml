@@ -434,7 +434,6 @@
                                 <th>Debit</th>
                                 <th>Credit</th>
                                 <th style="width:10%">Status</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody style="background-color:white; width:100%">
@@ -442,7 +441,7 @@
                             {
                                 <tr>
                                     <td>@Model.entries[i].DateSubmitted</td>
-                                    <td>@Model.entries[i].entryID</td>
+                                    <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model.entries[i].entryID</td>
                                     <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
@@ -471,19 +470,6 @@
 
                                             <span style="color:#17a2b8;">  @Model.entries[i].status</span>
                                         }
-                                    </td>
-                                    <td>
-                                        @if (@Model.entries[i].status == "suspended")
-                                        {
-                                            <a style="color: blue" href="@Url.Action("EditJournal", new { id = Model.entries[i].entryID})">
-                                                Edit
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="viewModal" onclick="PopulateEntryModal(this)" data-toggle="modal" data-target="#EntryModal">View</button>
-                                        }
-
                                     </td>
                                 </tr>
 
@@ -542,6 +528,9 @@
                             <table id="ModalFiles" style="color:blue"></table>
 
                         </div>
+                        @*@{Html.RenderAction("TransactionSummary", "Accountant");}*@
+                        @*@{Html.RenderAction("TransactionSummary", "Accountant", new { id = Model.id });}*@
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
@@ -589,18 +578,41 @@
 
     <script>
 
-        function PopulateEntryModal(button) {
+        function PopulateEntryModal(id) {
 
-            var row = $(button).closest('tr');
+
+            var ID = $(id).text();
+            //alert("Text is: " + String);
+
+            @*$.ajax({
+                url: "/Accountant/TransactionSummary",
+                contentType: "application/json; charset=utf-8",
+                data: "{'id':'" + ClickedText + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    alert(result);
+                }
+            });
+
+
+            var url = '@Url.Action("TransactionSummary", "Accountant")';
+            url += '/?id=' + ClickedText;
+            $("#ajaxresult").load(url);*@
+            //loa
+
+
+
+            var row = $(id).closest('tr');
             var table = document.getElementById("GeneralJournalTable");
 
-            var ID = table.rows[row[0].rowIndex].cells[1].innerText;
+            //var ID = table.rows[row[0].rowIndex].cells[1].innerText;
             var ModalID = document.getElementById("ModalEntryID");
             ModalID.innerHTML = "ID: " + ID;
 
             var Date = table.rows[row[0].rowIndex].cells[0].innerText;
             var ModalDate = document.getElementById("ModalDate");
-            ModalDate.innerHTML = "Date Created: " + Date;
+            ModalDate.innerHTML = "Date Submitted: " + Date;
 
             var Stat = table.rows[row[0].rowIndex].cells[5].innerText;
             var ModalStat = document.getElementById("ModalStatus");
@@ -670,9 +682,9 @@
             var ModalComm = document.getElementById("ModalComment");
 
             if (Query2 == "null") {
-                ModalComm.innerHTML = "Comment: N/A";
+                ModalComm.innerHTML = "Accountant Comment: N/A";
             } else {
-                ModalComm.innerHTML = "Comment: " + Query2;
+                ModalComm.innerHTML = "Accountant Comment: " + Query2;
             }
 
             $("#ModalFiles tr").remove();

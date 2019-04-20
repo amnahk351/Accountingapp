@@ -211,50 +211,69 @@ namespace AccountingApp.Controllers
             return Json(insertedRecords);
         }
 
+
+        //public int ModalID = 1002;
+
+        //[HttpPost]
+        //public ActionResult UpdateModalID(int id)
+        //{
+        //    ModalID = id;            
+
+        //    return Json("Value Updated To: " + ModalID);
+        //}
+
         public ActionResult TransactionSummary(int id) {
 
-            List<TransactionTable> transactionList;
-            Entry EnModel = new Entry();
-            List<String> Names = new List<String>();
-            List<Decimal> Debits = new List<Decimal>();
-            List<Decimal> Credits = new List<Decimal>();
-            List<DocumentsTable> files;
-            List<String> NamesofFiles = new List<String>();
+            //int ModalID = 1000;
 
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
-            }
 
-            EnModel.entryID = (int)transactionList[0].EntryId;
-            EnModel.status = transactionList[0].Status;
-            EnModel.comment = transactionList[0].AccountantComment;
-            EnModel.submitDate = (DateTime) transactionList[0].DateSubmitted;
+            //ModalID = id;
+
+            //List<TransactionTable> transactionList;
+            //Entry EnModel = new Entry();
+            //List<String> Names = new List<String>();
+            //List<Decimal> Debits = new List<Decimal>();
+            //List<Decimal> Credits = new List<Decimal>();
+            //List<DocumentsTable> files;
+            //List<String> NamesofFiles = new List<String>();
+
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            //}
+
+            //EnModel.entryID = (int)transactionList[0].EntryId;
+            //EnModel.status = transactionList[0].Status;
+            //EnModel.comment = transactionList[0].AccountantComment;
+            //EnModel.submitDate = (DateTime) transactionList[0].DateSubmitted;
+
+            //for (int i = 0; i < transactionList.Count; i++) {
+            //    Names.Add(transactionList[i].AccountName);
+            //    Debits.Add((Decimal)transactionList[i].Debit);
+            //    Credits.Add((Decimal)transactionList[i].Credit);
+            //}
+
+            //EnModel.accountNames = Names;
+            //EnModel.debits = Debits;
+            //EnModel.credits = Credits;
+
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    files = db.Query<DocumentsTable>($"Select FileName From dbo.DocumentsTable Where FK_EntryId = @ID", new { ID = id }).ToList();
+            //}
+
+            //for (int i = 0; i < files.Count; i++)
+            //{
+            //    NamesofFiles.Add(files[i].FileName);
+            //}
+
+            //EnModel.fileNames = NamesofFiles;
+            //System.Diagnostics.Debug.WriteLine("modalid " + ModalID);
             
-            for (int i = 0; i < transactionList.Count; i++) {
-                Names.Add(transactionList[i].AccountName);
-                Debits.Add((Decimal)transactionList[i].Debit);
-                Credits.Add((Decimal)transactionList[i].Credit);
-            }
-
-            EnModel.accountNames = Names;
-            EnModel.debits = Debits;
-            EnModel.credits = Credits;
-
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                files = db.Query<DocumentsTable>($"Select FileName From dbo.DocumentsTable Where FK_EntryId = @ID", new { ID = id }).ToList();
-            }
-
-            for (int i = 0; i < files.Count; i++)
-            {
-                NamesofFiles.Add(files[i].FileName);
-            }
-
-            EnModel.fileNames = NamesofFiles;
-
-            return View(EnModel);
+            return View(GetEntrySummary(id));
         }
+
+        
 
 
         [HttpPost]
@@ -730,7 +749,56 @@ namespace AccountingApp.Controllers
             return entries;
         }
 
-               
+
+        private Entry GetEntrySummary(int id)
+        {
+            System.Diagnostics.Debug.WriteLine("id passed " + id);
+
+            List<TransactionTable> transactionList;
+            List<DocumentsTable> fileList = new List<DocumentsTable>();
+            
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {                
+                fileList = db.Query<DocumentsTable>($"Select * From dbo.DocumentsTable Where FK_EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            System.Diagnostics.Debug.WriteLine("status error " + transactionList[0].Status);
+
+            Entry NewE = new Entry();
+            NewE.entryID = id;
+            NewE.status = transactionList[0].Status;
+            NewE.DateSubmitted = transactionList[0].DateSubmitted.GetValueOrDefault();
+            NewE.DateReviewed = transactionList[0].DateReviewed.GetValueOrDefault();
+            NewE.AccountantComment = transactionList[0].AccountantComment;
+            NewE.ManagerComment = transactionList[0].ManagerComment;
+            NewE.AccountantUsername = transactionList[0].AccountantUsername;
+            NewE.ManagerUsername = transactionList[0].ManagerUsername;
+            NewE.PostReference = transactionList[0].PostReference.GetValueOrDefault();
+
+
+            foreach (TransactionTable t in transactionList) {
+                NewE.accountNames.Add(t.AccountName);
+                NewE.debits.Add(t.Debit.GetValueOrDefault());
+                NewE.credits.Add(t.Credit.GetValueOrDefault());
+
+            }
+
+            foreach (DocumentsTable f in fileList)
+            {
+                NewE.fileNames.Add(f.FileName);
+
+            }
+
+            return NewE;
+        }
+
+
 
         public ActionResult ChartOfAccounts()
         {
