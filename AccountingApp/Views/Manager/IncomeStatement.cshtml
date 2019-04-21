@@ -25,8 +25,8 @@
 </head>
 
 <body>
-   
-    <div class="shadow container" style="width:60%; background-color:gainsboro;">
+
+    <div class="shadow container" id="printContent" style="width:60%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
@@ -104,7 +104,16 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <button id="cmd">Generate PDF</button>
+    <script>
+        $('#cmd').click(function () {
+            var printcontent = $('#printContent').clone();
+            $('body').empty().html(printcontent);
+            window.print();
+            location.reload()
 
+        });
+    </script>
     <script>
         $(document).ready(function () {
 
@@ -140,8 +149,8 @@
 
             }
             //alert("Got here 2");
-            for (var j = 1; j < table2.rows.length-2; j++) {
-                                
+            for (var j = 1; j < table2.rows.length - 2; j++) {
+
 
                 //var Dhtml = table2.rows[j].cells[1].innerText;
                 var Chtml = table2.rows[j].cells[1].innerText;
@@ -161,7 +170,7 @@
 
             var num = table2.rows.length - 1;
             var x = table2.rows[num].cells[1].innerText;
-            
+
             table2.rows[num].cells[1].innerText = formatMoney(x);
 
             //x.innerText =
