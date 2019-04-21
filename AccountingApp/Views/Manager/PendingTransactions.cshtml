@@ -513,7 +513,17 @@
 
                             <br />
 
-                            <div id="ModalComment">Comment: </div>
+                            <table>
+                                <tr>
+                                    <td>Accountant Username: &nbsp;</td>
+                                    <td id="ModalUsername">Username</td>
+                                </tr>
+                                <tr>
+                                    <td>Comment: &nbsp;</td>
+                                    <td id="ModalComment">Actual Comment</td>
+                                </tr>
+
+                            </table>
 
                             <br />
 
@@ -559,9 +569,39 @@
 
                             <br />
 
-                            <div id="ApproveModalComment">Comment: </div>
+                            <table>
+                                <tr>
+                                    <td>Accountant Username: &nbsp;</td>
+                                    <td id="ApproveModalUsername">Username</td>
+                                </tr>
+                                <tr>
+                                    <td>Comment: &nbsp;</td>
+                                    <td id="ApproveModalComment">Actual Comment</td>
+                                </tr>
+
+                            </table>
 
                             <br />
+
+                            <div>Accounts Affected</div>
+                            <br />
+                            <table id="ApproveModalAccountsTable">
+                                <thead>
+                                    <tr>
+                                        <td>Account Name</td>
+                                        <td>Balance</td>
+                                        <td>Active</td>
+                                    </tr>
+
+                                </thead>
+                                @*<tr>
+                                    <td>Account Name</td>
+                                    <td>Balance</td>
+                                    <td>Active</td>
+                                </tr>*@
+
+
+                            </table>
 
                             <div>Files: </div>
                             <table id="ApproveModalFiles" style="color:blue"></table>
@@ -679,6 +719,7 @@
 
             document.getElementById('ApproveCommentError').innerText = "";
             document.getElementById("ManagerApproveComment").value = "";
+            $("#ApproveModalAccountsTable tr").remove();
             
 
             var row = $(id).closest('tr');
@@ -739,7 +780,7 @@
 
             $.ajax(
                 {
-                    url: '/Accountant/RetreiveComment/',
+                    url: '/Accountant/RetrieveAccountantAndComment/',
                     type: "GET",
                     async: false,
                     dataType: "json",
@@ -754,20 +795,99 @@
                         //alert(JSON.stringify(error));
                     }
                 });
-
+                        
             var Query2 = Query.replace(/"/g, "");
+            var resul = Query2.split("|^|");
 
-            var ModalComm = document.getElementById("ApproveModalComment");
+            var Accountant = resul[0];
+            var AccountantComment = resul[1];
 
-            if (Query2 == "null") {
-                ModalComm.innerHTML = "Accountant Comment: N/A";
+            var ModalUser = document.getElementById("ApproveModalUsername");
+            var ModalComm = document.getElementById("ApproveModalComment");            
+
+            if (AccountantComment == "") {
+                ModalComm.innerText = "N/A";
             } else {
-                ModalComm.innerHTML = "Accountant Comment: " + Query2;
+                ModalComm.innerText = AccountantComment;
             }
+
+            ModalUser.innerText = Accountant;
+
+            var NewText = Accounts.replace(/\t/g, "");
+            var AllAccounts = NewText.split("\n");
+
+            var table = document.getElementById("ApproveModalAccountsTable");
+            var row = table.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerText = "Account";
+            cell2.innerText = "Balance";
+            cell3.innerText = "Active";
+            
+
+            for (i = 0; i < AllAccounts.length; i++) {
+
+                var CurrentAccountName = AllAccounts[i];
+                var newSt = CurrentAccountName.replace(/\s+/g, ' ').trim()
+                var Query;
+
+                $.ajax(
+                    {
+                        url: '/Manager/RetrieveAccountBalanceAndStatus/',
+                        type: "GET",
+                        async: false,
+                        dataType: "json",
+                        contentType: "application/json;",
+                        data: { "name": newSt },
+                        success: function (result) {
+                            //alert(result);
+                            Query = result;
+
+                        },
+                        error: function (error) {
+                            //alert(JSON.stringify(error));
+                        }
+                    });
+
+                //remove quotes and split
+                var Query2 = Query.replace(/"/g, "");
+                var resul = Query2.split("|^|");
+
+                var Money = formatMoney(resul[0]);
+                var Act = resul[1];
+
+                var table = document.getElementById("ApproveModalAccountsTable");
+                var row = table.insertRow();
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                cell1.innerText = newSt;
+                cell2.innerText = "$ " + Money;
+
+                if (Act == "True") {
+                    cell3.innerText = "Yes";
+                } else {
+                    cell3.innerText = "No";
+                }
+                
+            }
+
 
             $("#ModalFiles tr").remove();
             GetAllRelatedFiles(ID);
         }
+
+        function formatMoney(n, c, d, t) {
+            var c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
 
         function PopulateEntryModal(id) {
 
@@ -846,13 +966,13 @@
 
             var ModalCr = document.getElementById("Creds");
             ModalCr.innerHTML = finalCr;
-
+            
 
             var Query;
 
             $.ajax(
                 {
-                    url: '/Accountant/RetreiveComment/',
+                    url: '/Accountant/RetrieveAccountantAndComment/',
                     type: "GET",
                     async: false,
                     dataType: "json",
@@ -869,14 +989,21 @@
                 });
 
             var Query2 = Query.replace(/"/g, "");
+            var resul = Query2.split("|^|");
 
+            var Accountant = resul[0];
+            var AccountantComment = resul[1];
+
+            var ModalUser = document.getElementById("ModalUsername");
             var ModalComm = document.getElementById("ModalComment");
 
-            if (Query2 == "null") {
-                ModalComm.innerHTML = "Accountant Comment: N/A";
+            if (AccountantComment == "") {
+                ModalComm.innerText = "N/A";
             } else {
-                ModalComm.innerHTML = "Accountant Comment: " + Query2;
+                ModalComm.innerText = AccountantComment;
             }
+
+            ModalUser.innerText = Accountant;
 
             $("#ModalFiles tr").remove();
             GetAllRelatedFiles(ID);

@@ -308,6 +308,34 @@ namespace AccountingApp.Controllers
             return View(coa);
         }
 
+        [HttpGet]
+        public ActionResult RetrieveAccountBalanceAndStatus(string name)
+        {
+            System.Diagnostics.Debug.WriteLine("account name" + name);
+            //List<ChartOfAcc> SpecificAccount;
+            List<ChartOfAcc> Chart;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @N", new { N = name }).ToList();
+            }
+
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    SpecificAccount = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName=@Name", new { Name = name }).ToList();
+            //}
+
+
+            System.Diagnostics.Debug.WriteLine("count " + Chart.Count);
+            decimal Num = (decimal)Chart[0].CurrentBalance;
+            bool ActiveType = Chart[0].Active;
+            //string comment = AllAccounts[0].AccountantComment;
+            string split = "|^|";
+            string res = Num + split + ActiveType;
+            var result = JsonConvert.SerializeObject(res);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public ActionResult ApproveSpecifiedEntry(int id, string comment)
         {
@@ -324,12 +352,14 @@ namespace AccountingApp.Controllers
                 transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
             }
 
-
-            //POST REFERENCE LOGIC
+                        
             for (int i = 0; i < transactionList.Count; i++) {
 
+                //POST REFERENCE LOGIC
                 //get the account name at i
                 string AccountName = transactionList[i].AccountName;
+                decimal RowDebit = (decimal) transactionList[i].Debit.GetValueOrDefault();
+                decimal RowCredit = (decimal) transactionList[i].Credit.GetValueOrDefault();
 
                 List<TransactionTable> TempList;
 
@@ -344,7 +374,7 @@ namespace AccountingApp.Controllers
 
                 foreach (TransactionTable t in TempList) {
                     ReferenceNumbers.Add(t.PostReference.GetValueOrDefault());
-                    System.Diagnostics.Debug.WriteLine("current post refere " + t.PostReference.GetValueOrDefault());
+                    //System.Diagnostics.Debug.WriteLine("current post refere " + t.PostReference.GetValueOrDefault());
                 }
 
                 int biggest = 0;
@@ -353,41 +383,83 @@ namespace AccountingApp.Controllers
                 {
                     biggest = ReferenceNumbers.Max();
                 }
-
                 
-                System.Diagnostics.Debug.WriteLine("biggest " + biggest);
+                //System.Diagnostics.Debug.WriteLine("biggest " + biggest);
 
                 int PostReference;
+
+                List<ChartOfAcc> Chart;
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @Name", new { Name = AccountName }).ToList();
+                }
 
                 if (biggest == 0)
                 {
                     //if list has null values, (this is first post reference for the account name)
-                    //query chart of accounts and get account number
-                    List<ChartOfAcc> Chart;
-                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-                    {
-                        Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @Name", new { Name = AccountName }).ToList();
-                    }
-
                     int AccountNum = Chart[0].AccountNumber;
 
-                    //take the account number and multiply it by 105 and set that as the first post reference number    
-                    PostReference = AccountNum * 105;
+                    //take the account number and multiply it by 5055 and set that as the first post reference number    
+                    PostReference = AccountNum * 5055;
                 }
                 else {
                     //take the maximum and add 1
                     PostReference = biggest + 1;
                 }
 
-                System.Diagnostics.Debug.WriteLine("post ref " + PostReference);
+                //System.Diagnostics.Debug.WriteLine("post ref " + PostReference);
 
-                //update transaction table at i with the post reference
+                decimal CurrentAccountBalance = (decimal) Chart[0].CurrentBalance;
+                string NormalSide = Chart[0].NormalSide;
+
+                decimal NewBalance = CurrentAccountBalance;
+
+                if (RowCredit == 0 && NormalSide == "Debit")
+                {
+                    //Debit has a value, it is an asset or expense account
+                    //Debits increase asset and expense accounts.
+                    NewBalance += RowDebit;
+                }
+
+                if (RowCredit == 0 && NormalSide == "Credit")
+                {
+                    //Debit has a value, it is a liability, equity, or revenue account
+                    //Debits decrease liability, equity, and revenue accounts.
+                    NewBalance -= RowDebit;
+                }
+
+                if (RowDebit == 0 && NormalSide == "Debit")
+                {
+                    //Credit has a value, it is an asset or expense account
+                    //Credits decrease asset and expense accounts.
+                    NewBalance -= RowCredit;
+                }
+
+                if (RowDebit == 0 && NormalSide == "Credit")
+                {
+                    //Credit has a value, it is a liability, equity, or revenue account
+                    //Credits increase liability, equity, and revenue accounts.
+                    NewBalance += RowCredit;
+                }
+
+                System.Diagnostics.Debug.WriteLine("current account " + AccountName);
+                System.Diagnostics.Debug.WriteLine("new balance " + NewBalance);
+
+                //update transaction table at i with the post reference, add before balance and after balance
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    string sql = $"UPDATE dbo.TransactionTable SET PostReference = @Post WHERE EntryID = @entryID And AccountName = @AccName";
-                    db.Execute(sql, new { Post = PostReference, entryID = id, AccName = AccountName });
+                    string sql = $"UPDATE dbo.TransactionTable SET PostReference = @Post, BeforeBalance = @Be, AfterBalance = @Af WHERE EntryID = @entryID And AccountName = @AccName";
+                    db.Execute(sql, new { Post = PostReference, Be = CurrentAccountBalance, Af = NewBalance, entryID = id, AccName = AccountName });
                 }
-                
+
+
+                //update current balance in chart of accounts
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    string sql = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                    db.Execute(sql, new { Cu = NewBalance, AccName = AccountName });
+                }
+
             }
 
             

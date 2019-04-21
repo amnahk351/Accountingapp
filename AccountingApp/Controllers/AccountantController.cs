@@ -518,7 +518,7 @@ namespace AccountingApp.Controllers
         }
 
         [HttpGet]
-        public ActionResult RetreiveComment(int id)
+        public ActionResult RetrieveAccountantAndComment(int id)
         {
             List<TransactionTable> transactionList;
 
@@ -527,8 +527,11 @@ namespace AccountingApp.Controllers
                 transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId=@ID", new { ID = id }).ToList();
             }
 
+            string accountant = transactionList[0].AccountantUsername;
             string comment = transactionList[0].AccountantComment;
-            var result = JsonConvert.SerializeObject(comment);
+            string split = "|^|";
+            string res = accountant + split + comment;
+            var result = JsonConvert.SerializeObject(res);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }

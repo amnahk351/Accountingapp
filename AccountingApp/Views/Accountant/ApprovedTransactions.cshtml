@@ -524,7 +524,17 @@
 
                             <br />
 
-                            <div id="ModalComment">Comment: </div>
+                            <table>
+                                <tr>
+                                    <td>Accountant Username: &nbsp;</td>
+                                    <td id="ModalUsername">Username</td>
+                                </tr>
+                                <tr>
+                                    <td>Comment: &nbsp;</td>
+                                    <td id="ModalComment">Actual Comment</td>
+                                </tr>
+
+                            </table>
 
                             <br />
 
@@ -662,7 +672,7 @@
 
             $.ajax(
                 {
-                    url: '/Accountant/RetreiveComment/',
+                    url: '/Accountant/RetrieveAccountantAndComment/',
                     type: "GET",
                     async: false,
                     dataType: "json",
@@ -674,19 +684,26 @@
 
                     },
                     error: function (error) {
-                        alert(JSON.stringify(error));
+                        //alert(JSON.stringify(error));
                     }
                 });
 
             var Query2 = Query.replace(/"/g, "");
+            var resul = Query2.split("|^|");
 
+            var Accountant = resul[0];
+            var AccountantComment = resul[1];
+
+            var ModalUser = document.getElementById("ModalUsername");
             var ModalComm = document.getElementById("ModalComment");
 
-            if (Query2 == "null") {
-                ModalComm.innerHTML = "Accountant Comment: N/A";
+            if (AccountantComment == "") {
+                ModalComm.innerText = "N/A";
             } else {
-                ModalComm.innerHTML = "Accountant Comment: " + Query2;
+                ModalComm.innerText = AccountantComment;
             }
+
+            ModalUser.innerText = Accountant;
 
             $("#ModalFiles tr").remove();
             GetAllRelatedFiles(ID);
