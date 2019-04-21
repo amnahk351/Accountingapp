@@ -311,24 +311,15 @@ namespace AccountingApp.Controllers
         [HttpGet]
         public ActionResult RetrieveAccountBalanceAndStatus(string name)
         {
-            System.Diagnostics.Debug.WriteLine("account name" + name);
-            //List<ChartOfAcc> SpecificAccount;
             List<ChartOfAcc> Chart;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @N", new { N = name }).ToList();
             }
-
-            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            //{
-            //    SpecificAccount = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName=@Name", new { Name = name }).ToList();
-            //}
-
-
-            System.Diagnostics.Debug.WriteLine("count " + Chart.Count);
+            
             decimal Num = (decimal)Chart[0].CurrentBalance;
             bool ActiveType = Chart[0].Active;
-            //string comment = AllAccounts[0].AccountantComment;
+            
             string split = "|^|";
             string res = Num + split + ActiveType;
             var result = JsonConvert.SerializeObject(res);
@@ -337,11 +328,26 @@ namespace AccountingApp.Controllers
         }
 
         [HttpPost]
+        public ActionResult RejectSpecifiedEntry(int id, string comment) {
+
+            string s = "disapproved";
+            var sessionUser = Session["Username"] as string;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
+                db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
+            }
+
+            return Json("Entry Disapproved.");
+        }
+
+        [HttpPost]
         public ActionResult ApproveSpecifiedEntry(int id, string comment)
         {
-            System.Diagnostics.Debug.WriteLine("it got called");
-            System.Diagnostics.Debug.WriteLine("id " + id);
-            System.Diagnostics.Debug.WriteLine("comm " + comment);
+            //System.Diagnostics.Debug.WriteLine("it got called");
+            //System.Diagnostics.Debug.WriteLine("id " + id);
+            //System.Diagnostics.Debug.WriteLine("comm " + comment);
             string s = "approved";
             var sessionUser = Session["Username"] as string;
 
@@ -442,8 +448,8 @@ namespace AccountingApp.Controllers
                     NewBalance += RowCredit;
                 }
 
-                System.Diagnostics.Debug.WriteLine("current account " + AccountName);
-                System.Diagnostics.Debug.WriteLine("new balance " + NewBalance);
+                //System.Diagnostics.Debug.WriteLine("current account " + AccountName);
+                //System.Diagnostics.Debug.WriteLine("new balance " + NewBalance);
 
                 //update transaction table at i with the post reference, add before balance and after balance
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -560,6 +566,7 @@ namespace AccountingApp.Controllers
                 NewE.AccountantUsername = t.AccountantUsername;
                 NewE.ManagerUsername = t.ManagerUsername;
                 NewE.PostReference = t.PostReference.GetValueOrDefault();
+                NewE.Entry_Type = t.Entry_Type;
 
 
                 foreach (TransactionTable t2 in transactionList)

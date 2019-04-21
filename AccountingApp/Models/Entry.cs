@@ -17,6 +17,7 @@ namespace AccountingApp.Models
         public string ManagerUsername { get; set; }
         public string AccountantComment { get; set; }
         public string ManagerComment { get; set; }
+        public string Entry_Type { get; set; }
         public int PostReference { get; set; }
         public DateTime DateSubmitted { get; set; }
         public DateTime DateReviewed { get; set; }

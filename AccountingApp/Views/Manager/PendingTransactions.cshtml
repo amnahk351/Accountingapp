@@ -418,6 +418,7 @@
                             <tr class="shadow">
                                 <th style="width:20%">Date Submitted</th>
                                 <th style="width:10%">Entry ID</th>
+                                <th style="width:8%">Type</th>
                                 <th style="width:50%">Accounts Affected</th>
                                 <th>Debit</th>
                                 <th>Credit</th>
@@ -431,6 +432,7 @@
                                 <tr>
                                     <td>@Model.entries[i].DateSubmitted</td>
                                     <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model.entries[i].entryID</td>
+                                    <td>@Model.entries[i].Entry_Type</td>
                                     <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
@@ -462,7 +464,7 @@
                                     </td>
                                     <td style="text-align:center">
                                         <button type="button" class="btn btn-success" onclick="PopulateApproveModal(this)" style="margin-bottom: 5px;height:35px;width:80px" data-toggle="modal" data-target="#ApproveModal">Approve</button>
-                                        <button type="button" class="btn btn-danger" style="height:35px;width:80px" data-toggle="modal" data-target="#myModal">Reject</button>
+                                        <button type="button" class="btn btn-danger" onclick="PopulateRejectModal(this)" style="height:35px;width:80px" data-toggle="modal" data-target="#RejectModal">Reject</button>
                                     </td>
                                 </tr>
 
@@ -519,7 +521,7 @@
                                     <td id="ModalUsername">Username</td>
                                 </tr>
                                 <tr>
-                                    <td>Comment: &nbsp;</td>
+                                    <td style="text-align:right">Comment: &nbsp;</td>
                                     <td id="ModalComment">Actual Comment</td>
                                 </tr>
 
@@ -535,7 +537,6 @@
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -575,36 +576,32 @@
                                     <td id="ApproveModalUsername">Username</td>
                                 </tr>
                                 <tr>
-                                    <td>Comment: &nbsp;</td>
+                                    <td style="text-align:right">Comment: &nbsp;</td>
                                     <td id="ApproveModalComment">Actual Comment</td>
                                 </tr>
 
                             </table>
 
-                            <br />
+                            <br />                            
 
-                            <div>Accounts Affected</div>
+                            <div>Files: </div>
+                            <table id="ApproveModalFiles" style="color:blue"></table>
+
                             <br />
+                            <h5>Accounts Affected</h5>
+                            
+                            @*<br />*@
+
                             <table id="ApproveModalAccountsTable">
-                                <thead>
-                                    <tr>
-                                        <td>Account Name</td>
-                                        <td>Balance</td>
-                                        <td>Active</td>
-                                    </tr>
-
-                                </thead>
+                                
                                 @*<tr>
                                     <td>Account Name</td>
                                     <td>Balance</td>
                                     <td>Active</td>
                                 </tr>*@
 
-
                             </table>
-
-                            <div>Files: </div>
-                            <table id="ApproveModalFiles" style="color:blue"></table>
+                                                        
 
                             <br />
                             <div>
@@ -621,7 +618,87 @@
                             <button type="button" id="ApproveModalClose" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
+                </div>
+            </div>
 
+            <div class="modal fade" id="RejectModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+                            <h4 style="text-align:left" class="modal-title">Entry Details</h4>
+                        </div>
+                        <div id="RejectModalContent" class="modal-body">
+
+                            <div id="RejectModalEntryID">ID: </div>
+                            <div id="RejectModalDate">Date Created: </div>
+                            <div id="RejectModalStatus">Status: </div>
+                            <br />
+                            <table>
+                                <tr>
+                                    <th>Accounts</th>
+                                    <th>Debits</th>
+                                    <th>Credits</th>
+                                </tr>
+                                <tr>
+                                    <td id="RejectAccNames"></td>
+                                    <td id="RejectDebs" style="text-align:right"></td>
+                                    <td id="RejectCreds" style="text-align:right"></td>
+                                </tr>
+                            </table>
+
+                            <br />
+
+                            <table>
+                                <tr>
+                                    <td>Accountant Username: &nbsp;</td>
+                                    <td id="RejectModalUsername">Username</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:right">Comment: &nbsp;</td>
+                                    <td id="RejectModalComment">Actual Comment</td>
+                                </tr>
+
+                            </table>
+
+                            <br />                            
+
+                            <div>Files: </div>
+                            <table id="RejectModalFiles" style="color:blue"></table>
+
+                            <br />
+                            <h5>Accounts Affected</h5>
+                            
+                            @*<br />*@
+
+                            <table id="RejectModalAccountsTable">
+                                
+                                @*<tr>
+                                    <td>Account Name</td>
+                                    <td>Balance</td>
+                                    <td>Active</td>
+                                </tr>*@
+
+                            </table>
+                                                        
+
+                            <br />
+                            <div>
+                                <label for="ManagerRejectComment" class="control-label">Add a Comment</label>
+                                <textarea class="form-control" id="ManagerRejectComment" name="ManagerRejectComment" rows="3" placeholder="Reasoning"></textarea>
+                            </div>
+                            <div id="RejectCommentError" class="text-danger">
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="RejectEntrySubmit()" class="btn btn-danger">Submit Disapproval</button>
+                            <button type="button" id="RejectModalClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -659,6 +736,226 @@
         var username = '@Session["FirstNameofUser"]';
         document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
     };
+
+    </script>
+
+    <script>
+
+        function RejectEntrySubmit() {
+
+            var de = document.getElementById("ManagerRejectComment").value;
+
+            if (de == "") {
+
+                $.ajax({
+                    url: "/Account/GetErrors",
+                    method: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        document.getElementById('RejectCommentError').innerText = data[59];
+                    }
+                });
+
+                return;
+            } else {
+                //There is something to submit
+
+                //Get the id
+                var ModalID = document.getElementById("RejectModalEntryID");
+                var ID = ModalID.innerText;
+                var id = ID.replace("ID: ", "");
+
+
+                $.ajax({
+                    url: "/Manager/RejectSpecifiedEntry",
+                    contentType: "application/json; charset=utf-8",
+                    data: "{'id':'" + id + "', 'comment':'" + de + "'}",
+                    type: 'POST',
+                    cache: false,
+                    success: function (result) {
+                        //alert(result);
+                    },
+                    error: function (e) {
+                        //alert(JSON.stringify(e));
+                    }
+                });
+
+
+                alert("Entry Disapproved.");
+                document.getElementById('RejectModalClose').click();
+
+                document.getElementById("ManagerRejectComment").value = "";
+                document.getElementById('RejectCommentError').innerText = "";
+
+                location.reload();
+
+            }
+
+        }
+
+        function PopulateRejectModal(id) {
+
+            document.getElementById('RejectCommentError').innerText = "";
+            document.getElementById("ManagerRejectComment").value = "";
+            $("#RejectModalAccountsTable tr").remove();
+
+
+            var row = $(id).closest('tr');
+            var table = document.getElementById("GeneralJournalTable");
+
+            var ID = table.rows[row[0].rowIndex].cells[1].innerText;
+            var ModalID = document.getElementById("RejectModalEntryID");
+            ModalID.innerHTML = "ID: " + ID;
+
+            var Date = table.rows[row[0].rowIndex].cells[0].innerText;
+            var ModalDate = document.getElementById("RejectModalDate");
+            ModalDate.innerHTML = "Date Submitted: " + Date;
+
+            var Stat = table.rows[row[0].rowIndex].cells[6].innerText;
+            var ModalStat = document.getElementById("RejectModalStatus");
+            ModalStat.innerHTML = "Status: " + Stat;
+
+
+            var Accounts = table.rows[row[0].rowIndex].cells[3].innerText;
+            var text = Accounts.replace(/\t/g, "&nbsp;&nbsp;&nbsp;");
+            var res0 = text.split("\n");
+            var finalAcc = "";
+
+            for (i = 0; i < res0.length; i++) {
+
+                finalAcc += res0[i] + "<br>";
+            }
+
+            var ModalAcc = document.getElementById("RejectAccNames");
+            ModalAcc.innerHTML = finalAcc;
+
+
+            var De = table.rows[row[0].rowIndex].cells[4].innerText;
+            var res = De.split("\n");
+            var finalDe = "";
+
+            for (i = 0; i < res.length; i++) {
+                finalDe += res[i] + "<br>";
+            }
+
+            var ModalDe = document.getElementById("RejectDebs");
+            ModalDe.innerHTML = finalDe;
+
+
+            var Cr = table.rows[row[0].rowIndex].cells[5].innerText;
+            var res2 = Cr.split("\n");
+            var finalCr = "";
+
+            for (i = 0; i < res2.length; i++) {
+                finalCr += res2[i] + "<br>";
+            }
+
+            var ModalCr = document.getElementById("RejectCreds");
+            ModalCr.innerHTML = finalCr;
+
+
+            var Query;
+
+            $.ajax(
+                {
+                    url: '/Accountant/RetrieveAccountantAndComment/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    data: { "id": ID },
+                    success: function (result) {
+                        //alert(result);
+                        Query = result;
+
+                    },
+                    error: function (error) {
+                        //alert(JSON.stringify(error));
+                    }
+                });
+
+            var Query2 = Query.replace(/"/g, "");
+            var resul = Query2.split("|^|");
+
+            var Accountant = resul[0];
+            var AccountantComment = resul[1];
+
+            var ModalUser = document.getElementById("RejectModalUsername");
+            var ModalComm = document.getElementById("RejectModalComment");
+
+            if (AccountantComment == "") {
+                ModalComm.innerText = "N/A";
+            } else {
+                ModalComm.innerText = AccountantComment;
+            }
+
+            ModalUser.innerText = Accountant;
+
+            var NewText = Accounts.replace(/\t/g, "");
+            var AllAccounts = NewText.split("\n");
+
+            var table = document.getElementById("RejectModalAccountsTable");
+            var row = table.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerText = "Account";
+            cell2.innerText = "Balance";
+            cell3.innerText = "Active";
+
+
+            for (i = 0; i < AllAccounts.length; i++) {
+
+                var CurrentAccountName = AllAccounts[i];
+                var newSt = CurrentAccountName.replace(/\s+/g, ' ').trim()
+                var Query;
+
+                $.ajax(
+                    {
+                        url: '/Manager/RetrieveAccountBalanceAndStatus/',
+                        type: "GET",
+                        async: false,
+                        dataType: "json",
+                        contentType: "application/json;",
+                        data: { "name": newSt },
+                        success: function (result) {
+                            //alert(result);
+                            Query = result;
+
+                        },
+                        error: function (error) {
+                            //alert(JSON.stringify(error));
+                        }
+                    });
+
+                //remove quotes and split
+                var Query2 = Query.replace(/"/g, "");
+                var resul = Query2.split("|^|");
+
+                var Money = formatMoney(resul[0]);
+                var Act = resul[1];
+
+                var table = document.getElementById("RejectModalAccountsTable");
+                var row = table.insertRow();
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                cell1.innerText = newSt;
+                cell2.innerText = "$ " + Money;
+
+                if (Act == "True") {
+                    cell3.innerText = "Yes";
+                } else {
+                    cell3.innerText = "No";
+                }
+
+            }
+
+
+            $("#RejectModalFiles tr").remove();
+            GetAllRelatedFiles(ID, "RejectModalFiles");
+        }
+
 
     </script>
 
@@ -733,12 +1030,12 @@
             var ModalDate = document.getElementById("ApproveModalDate");
             ModalDate.innerHTML = "Date Submitted: " + Date;
 
-            var Stat = table.rows[row[0].rowIndex].cells[5].innerText;
+            var Stat = table.rows[row[0].rowIndex].cells[6].innerText;
             var ModalStat = document.getElementById("ApproveModalStatus");
             ModalStat.innerHTML = "Status: " + Stat;
 
 
-            var Accounts = table.rows[row[0].rowIndex].cells[2].innerText;
+            var Accounts = table.rows[row[0].rowIndex].cells[3].innerText;
             var text = Accounts.replace(/\t/g, "&nbsp;&nbsp;&nbsp;");
             var res0 = text.split("\n");
             var finalAcc = "";
@@ -752,7 +1049,7 @@
             ModalAcc.innerHTML = finalAcc;
 
 
-            var De = table.rows[row[0].rowIndex].cells[3].innerText;
+            var De = table.rows[row[0].rowIndex].cells[4].innerText;
             var res = De.split("\n");
             var finalDe = "";
 
@@ -764,7 +1061,7 @@
             ModalDe.innerHTML = finalDe;
 
 
-            var Cr = table.rows[row[0].rowIndex].cells[4].innerText;
+            var Cr = table.rows[row[0].rowIndex].cells[5].innerText;
             var res2 = Cr.split("\n");
             var finalCr = "";
 
@@ -874,8 +1171,8 @@
             }
 
 
-            $("#ModalFiles tr").remove();
-            GetAllRelatedFiles(ID);
+            $("#ApproveModalFiles tr").remove();
+            GetAllRelatedFiles(ID, "ApproveModalFiles");
         }
 
         function formatMoney(n, c, d, t) {
@@ -925,12 +1222,12 @@
             var ModalDate = document.getElementById("ModalDate");
             ModalDate.innerHTML = "Date Submitted: " + Date;
 
-            var Stat = table.rows[row[0].rowIndex].cells[5].innerText;
+            var Stat = table.rows[row[0].rowIndex].cells[6].innerText;
             var ModalStat = document.getElementById("ModalStatus");
             ModalStat.innerHTML = "Status: " + Stat;
 
 
-            var Accounts = table.rows[row[0].rowIndex].cells[2].innerText;
+            var Accounts = table.rows[row[0].rowIndex].cells[3].innerText;
             var text = Accounts.replace(/\t/g, "&nbsp;&nbsp;&nbsp;");
             var res0 = text.split("\n");
             var finalAcc = "";
@@ -944,7 +1241,7 @@
             ModalAcc.innerHTML = finalAcc;
 
 
-            var De = table.rows[row[0].rowIndex].cells[3].innerText;
+            var De = table.rows[row[0].rowIndex].cells[4].innerText;
             var res = De.split("\n");
             var finalDe = "";
 
@@ -956,7 +1253,7 @@
             ModalDe.innerHTML = finalDe;
 
 
-            var Cr = table.rows[row[0].rowIndex].cells[4].innerText;
+            var Cr = table.rows[row[0].rowIndex].cells[5].innerText;
             var res2 = Cr.split("\n");
             var finalCr = "";
 
@@ -1006,7 +1303,7 @@
             ModalUser.innerText = Accountant;
 
             $("#ModalFiles tr").remove();
-            GetAllRelatedFiles(ID);
+            GetAllRelatedFiles(ID, "ModalFiles");
 
         }
 
@@ -1014,7 +1311,7 @@
 
     <script>
 
-        function GetAllRelatedFiles(Id) {
+        function GetAllRelatedFiles(Id, ModalType) {
 
             var Query;
 
@@ -1044,7 +1341,7 @@
             for (var i = 0; i < res.length; i++) {
                 var file = res[i].replace(/"/g, "");
 
-                var table = document.getElementById("ModalFiles");
+                var table = document.getElementById(ModalType);
                 var row = table.insertRow();
                 var cell1 = row.insertCell(0);
                 // the ../ goes back one directory, needed to prevent calling Accountant twice

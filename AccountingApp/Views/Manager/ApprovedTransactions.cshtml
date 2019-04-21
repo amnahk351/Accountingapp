@@ -416,10 +416,10 @@
                     <table id="GeneralJournalTable" class="table table-responsive table-hover shadow" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                         <thead style="background-color:white" class="shadow">
                             <tr class="shadow">
-                                <th style="width:5%">Post Reference</th>
                                 <th style="width:20%">Date Reviewed</th>
                                 <th style="width:20%">Manager Username & Comment</th>
                                 <th style="width:10%">Entry ID</th>
+                                <th style="width:8%">Type</th>
                                 <th style="width:50%">Accounts Affected</th>
                                 <th>Debit</th>
                                 <th>Credit</th>
@@ -429,11 +429,11 @@
                         <tbody style="background-color:white; width:100%">
                             @for (int i = 0; i < Model.entries.Count; i++)
                             {
-                                <tr>
-                                    <td>@Model.entries[i].PostReference</td>
+                                <tr>                                    
                                     <td>@Model.entries[i].DateReviewed</td>
                                     <td>@Model.entries[i].ManagerUsername : @Model.entries[i].ManagerComment</td>
                                     <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model.entries[i].entryID</td>
+                                    <td>@Model.entries[i].Entry_Type</td>
                                     <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
@@ -518,7 +518,7 @@
                                     <td id="ModalUsername">Username</td>
                                 </tr>
                                 <tr>
-                                    <td>Comment: &nbsp;</td>
+                                    <td style="text-align:right">Comment: &nbsp;</td>
                                     <td id="ModalComment">Actual Comment</td>
                                 </tr>
 
@@ -609,7 +609,7 @@
             var ModalID = document.getElementById("ModalEntryID");
             ModalID.innerHTML = "ID: " + ID;
 
-            var Date = table.rows[row[0].rowIndex].cells[1].innerText;
+            var Date = table.rows[row[0].rowIndex].cells[0].innerText;
             var ModalDate = document.getElementById("ModalDate");
             ModalDate.innerHTML = "Date Reviewed: " + Date;
 

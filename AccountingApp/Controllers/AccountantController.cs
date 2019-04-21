@@ -722,6 +722,7 @@ namespace AccountingApp.Controllers
                 NewE.AccountantUsername = t.AccountantUsername;
                 NewE.ManagerUsername = t.ManagerUsername;
                 NewE.PostReference = t.PostReference.GetValueOrDefault();
+                NewE.Entry_Type = t.Entry_Type;
 
 
                 foreach (TransactionTable t2 in transactionList)
