@@ -50,11 +50,9 @@
                             <td style="text-align: left">
                                 Beg Retained Earnings,
                                 <script>
-                                    var date = new Date();
-                                    date.setFullYear(date.getFullYear() - 1);
-                                    document.write(date.toDateString());
+                                    var options = { year: 'numeric', month: 'long', day: 'numeric' };
 
-                                </script>
+                                    document.write(new Date().toLocaleDateString("en-US", options))</script>
                             </td>
                             <td style="text-align: right">$0.00</td>
                         </tr>
@@ -70,8 +68,9 @@
                             <td style="text-align: left">
                                 End Retained Earnings,
                                 <script>
-                                    document.write(new Date().toDateString());
-                                </script>
+                                    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+
+                                    document.write(new Date().toLocaleDateString("en-US", options))</script>
                             </td>
                             <td style="text-align: right; border-bottom: .4rem double;">$@ViewBag.NetIncome</td>
                         </tr>
