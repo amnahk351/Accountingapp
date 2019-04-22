@@ -17,17 +17,18 @@
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
-
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    @*<script src="https://code.highcharts.com/modules/export-data.js"></script>*@
     <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">*@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
@@ -36,6 +37,31 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
     <style>
+        .green-band {
+            fill: #55BF3B;
+            fill-opacity: 1;
+        }
+
+        .green {
+            fill: #55BF3B;
+            fill-opacity: 1;
+        }
+
+        .yellow-band {
+            fill: #DDDF0D;
+            fill-opacity: 1;
+        }
+
+        .red-band {
+            fill: #DF5353;
+            fill-opacity: 1;
+        }
+
+        .red {
+            fill: #DF5353;
+            fill-opacity: 1;
+        }
+
         #container {
             min-width: 310px;
             max-width: 800px;
@@ -350,19 +376,62 @@
                 </div>
             </nav>
             <div class=" body-content" style="width:100%; margin:0 auto; height:auto">
-                <h4 style="display:inline">Dashboard</h4>
+                <h2 style="display:inline">Dashboard</h2>
             </div>
             <hr class="my-4" />
             <br />
             <div class="row ">
-                <div class="column shadow" style="width:45%; margin-left:20px;">
-                    <div class="shadow" id="chart" style="width:100%"></div>
+                <div class="column shadow" style="width:22%; margin-left:20px; background-color:white">
+                    <div id="currentratio" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
                 </div>
-                <div class="column shadow" style="width:45%; margin-left:20px; ">
-                    <div class="shadow" id="graph" style="float:left;width:100%"></div>
+                <div class="column shadow" style="width:22%; margin-left:20px; background-color:white" ">
+                    <div id="quickratio" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
+
+                </div>
+                <div class="column shadow" style="width:22%; margin-left:20px; background-color:white">
+                    <div id="debtasset" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
+                </div>
+                <div class="column shadow" style="width:22%; margin-left:20px; background-color:white" ">
+                    <div id="debtequity" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
+
                 </div>
 
             </div>
+            <br />
+            <div class="row ">
+                
+                <div class="column " style="width:20%; margin-left:20px;">
+                    <div class="shadow" id="chart" style="width:100%"></div>
+                </div>
+                <div class="column " style="width:20%; margin-left:20px;">
+                    <div class="shadow" id="incomeandexpense" style="width:100%"></div>
+                </div>
+                <div class="column " style="width:49%; margin-left:20px;">
+                    <div class="shadow" id="capital" style="width:100%"></div>
+                </div>
+
+            </div>
+            <br />
+            <div class="row ">
+               
+                <div class="column shadow" style="width:91%; margin-left:20px; ">
+                    <div class="shadow" id="expenses" style=" height: 600px; width: 100%; margin: 0 auto"></div>
+                </div>
+
+            </div>
+            <br />
+
+            @*<div class="row ">
+            <div class="column shadow" style="width:45%; margin-left:20px; background-color:white">
+                <canvas id="brandChart" width="700" height="350"></canvas>
+
+            </div>
+            <div class="column shadow" style="width:45%; margin-left:20px; ">
+                <div class="shadow" id="graph" style="float:left;width:100%"></div>
+
+            </div>
+
+        </div>*@
             <br />
             <div class="row ">
 
@@ -416,10 +485,65 @@
         });
     </script>
     <script>
+        //working capital
+        var chart = Highcharts.chart('capital', {
+            chart: {
+                events: {
+                    load: function (event) {
+                        var total = 0; // get total of data
+                        for (var i = 0, len = this.series[0].yData.length; i < len; i++) {
+                            total += this.series[0].yData[i];
+                        }
+                        var text = this.renderer.text(
+                            'Working Capital: $' + total,
+                            this.plotLeft,
+                            this.plotTop +30,
 
+                        ).attr({
+                            zIndex: 5
+                        }).add() // write it to the upper left hand corner
+                    }
+                },
+                style: {
+                    
+                    fontSize: '38px'
+                }
+            },
+            title: {
+                text: ''
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: ['Working Capital']
+            },
+            plotOptions: {
+                series: {
+                    pointWidth: 45
+                }
+            },
+
+            series: [{
+                type: 'bar',
+                colorByPoint: true,
+                data: [
+                    { y: 16000, color: 'green' }
+                   ],
+                showInLegend: false,
+                
+            }]
+
+        });
+
+
+        //currentliabilities and assets
         var chart = Highcharts.chart('chart', {
             title: {
-                text: 'Current Assets And Current Liabilities'
+                text: 'Current Assets And Liabilities'
             },
             exporting: {
                 enabled: false
@@ -449,260 +573,261 @@
 
 
 
-
-
-
-
-
-
-
-
-        Highcharts.chart('graph', {
-
+        //incomeandexpense
+        var chart = Highcharts.chart('incomeandexpense', {
             title: {
-                text: 'Current Ratio and Quick Ratio'
+                text: 'Revenue And Expense'
             },
-
-
-
-            yAxis: {
-
-                categories: [0, 10, 20, 40, 80],
-
-                title: {
-                    text: 'Values'
-                }
+            exporting: {
+                enabled: false
             },
-
-            legend: {
-                layout: 'Vertical',
-                align: 'right',
-                verticalAlign: 'middle'
+            credits: {
+                enabled: false
             },
-            chart: {
-                width: null
+            xAxis: {
+                categories: ['Revenue', 'Expense']
             },
-
             plotOptions: {
                 series: {
-                    label: {
-                        connectorAllowed: false
-                    },
-                    pointStart: 2015
+                    pointWidth: 45
                 }
             },
-            exporting: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
-            series: [{
-                name: 'Current Ratio(Annual)',
-                data: [12.4, 17.8, 10.2, 8.8, 14.8]
-            }, {
-                name: 'Quick Ratio(Annual)',
-                data: [0.83, 15.8, 10.2, 9.2, 10.8,]
-            }],
 
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 800
-                    },
-                    chartOptions: {
-                        legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom'
-                        }
-                    }
-                }]
-            }
+            series: [{
+                type: 'column',
+                colorByPoint: true,
+                data: [
+                    { y: 6000, color: 'green' },
+                    { y: 2000, color: 'red' }],
+                showInLegend: false
+            }]
 
         });
 
-        //$(function () {
-        //    // Create the chart
-        //    chart = new Highcharts.Chart({
-        //        chart: {
-        //            renderTo: 'container',
-        //            type: 'pie'
-        //        },
-        //        title: {
-        //            text: ''
-        //        },
-        //        plotOptions: {
-        //            pie: {
-        //                shadow: false
-        //            }
-        //        },
-        //        series: [{
-        //            name: 'Browsers',
-        //            data: [["Total", 60], ["Empty", 40]],
-        //            size: '100%',
-        //            innerSize: '95%',
-        //            showInLegend: false,
-        //            dataLabels: {
-        //                enabled: false
-        //            }
-        //        }]
-        //    });
-        //});
 
 
-        //function renderIcons() {
-
-        //    // Move icon
-        //    if (!this.series[0].icon) {
-        //        this.series[0].icon = this.renderer.path(['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8])
-        //            .attr({
-        //                stroke: '#303030',
-        //                'stroke-linecap': 'round',
-        //                'stroke-linejoin': 'round',
-        //                'stroke-width': 2,
-        //                zIndex: 10
-        //            })
-        //            .add(this.series[2].group);
-        //    }
-        //    this.series[0].icon.translate(
-        //        this.chartWidth / 2 - 10,
-        //        this.plotHeight / 2 - this.series[0].points[0].shapeArgs.innerR -
-        //        (this.series[0].points[0].shapeArgs.r - this.series[0].points[0].shapeArgs.innerR) / 2
-        //    );
-
-        //    // Exercise icon
-        //    if (!this.series[1].icon) {
-        //        this.series[1].icon = this.renderer.path(
-        //            ['M', -8, 0, 'L', 8, 0, 'M', 0, -8, 'L', 8, 0, 0, 8,
-        //                'M', 8, -8, 'L', 16, 0, 8, 8]
-        //        )
-        //            .attr({
-        //                stroke: '#ffffff',
-        //                'stroke-linecap': 'round',
-        //                'stroke-linejoin': 'round',
-        //                'stroke-width': 2,
-        //                zIndex: 10
-        //            })
-        //            .add(this.series[2].group);
-        //    }
-        //    this.series[1].icon.translate(
-        //        this.chartWidth / 2 - 10,
-        //        this.plotHeight / 2 - this.series[1].points[0].shapeArgs.innerR -
-        //        (this.series[1].points[0].shapeArgs.r - this.series[1].points[0].shapeArgs.innerR) / 2
-        //    );
-
-        //    // Stand icon
-        //    if (!this.series[2].icon) {
-        //        this.series[2].icon = this.renderer.path(['M', 0, 8, 'L', 0, -8, 'M', -8, 0, 'L', 0, -8, 8, 0])
-        //            .attr({
-        //                stroke: '#303030',
-        //                'stroke-linecap': 'round',
-        //                'stroke-linejoin': 'round',
-        //                'stroke-width': 2,
-        //                zIndex: 10
-        //            })
-        //            .add(this.series[2].group);
-        //    }
-
-        //    this.series[2].icon.translate(
-        //        this.chartWidth / 2 - 10,
-        //        this.plotHeight / 2 - this.series[2].points[0].shapeArgs.innerR -
-        //        (this.series[2].points[0].shapeArgs.r - this.series[2].points[0].shapeArgs.innerR) / 2
-        //    );
-        //}
-
-        //Highcharts.chart('container', {
-
-        //    chart: {
-        //        type: 'solidgauge',
-        //        height: '110%',
-        //        events: {
-        //            render: renderIcons
-        //        }
-        //    },
-
-        //    title: {
-        //        text: 'Activity',
-        //        style: {
-        //            fontSize: '24px'
-        //        }
-        //    },
-
-        //    tooltip: {
-        //        borderWidth: 0,
-        //        backgroundColor: 'none',
-        //        shadow: false,
-        //        style: {
-        //            fontSize: '16px'
-        //        },
-        //        pointFormat: '{series.name}<br><span style="font-size:2em; color: {point.color}; font-weight: bold">{point.y}%</span>',
-        //        positioner: function (labelWidth) {
-        //            return {
-        //                x: (this.chart.chartWidth - labelWidth) / 2,
-        //                y: (this.chart.plotHeight / 2) + 15
-        //            };
-        //        }
-        //    },
-
-        //    pane: {
-        //        startAngle: 0,
-        //        endAngle: 360,
-        //        background: [{ // Track for Move
-        //            outerRadius: '112%',
-        //            innerRadius: '88%',
-        //            backgroundColor: Highcharts.Color(Highcharts.getOptions().colors[0])
-        //                .setOpacity(0.3)
-        //                .get(),
-        //            borderWidth: 0
-        //        }]
-        //    },
-
-        //    yAxis: {
-        //        min: 0,
-        //        max: 100,
-        //        lineWidth: 0,
-        //        tickPositions: []
-        //    },
-
-        //    plotOptions: {
-        //        solidgauge: {
-        //            dataLabels: {
-        //                enabled: false
-        //            },
-        //            linecap: 'round',
-        //            stickyTracking: false,
-        //            rounded: true
-        //        }
-        //    },
-
-        //    series: [{
-        //        name: 'Move',
-        //        data: [{
-        //            color: Highcharts.getOptions().colors[0],
-        //            radius: '112%',
-        //            innerRadius: '88%',
-        //            y: 80
-        //        }]
-        //    }]
-        //});
-
-
-
-
-
-
-
-
-        Highcharts.chart('equity', {
+        //expenses
+        var chart = Highcharts.chart('expenses', {
             chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
+                events: {
+                    load: function (event) {
+                        var total = 0; // get total of data
+                        for (var i = 0, len = this.series[0].yData.length; i < len; i++) {
+                            total += this.series[0].yData[i];
+                        }
+                        var text = this.renderer.text(
+                            'Expenses: $' + total,
+                            this.plotLeft,
+                            this.plotTop +40,
+
+                        ).attr({
+                            zIndex: 5
+                        }).add() // write it to the upper left hand corner
+                    }
+                },
+                style: {
+
+                    fontSize: '38px'
+                }
             },
             title: {
-                text: 'Return on Equity'
+                text:''
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            }, 
+            plotOptions: {
+                series: {
+                    pointWidth: 65
+                }
+            },
+
+            xAxis: {
+                categories: ['Rent Expense', 'Salaries Expense', 'Supplies Expense', 'Utilities Expense', 'Telephone Expene', 'Advertising Expense', 'Insurance Expense', 'Depriciation Expense']
+            },
+
+            series: [{
+                type: 'column',
+                colorByPoint: true,
+                data: [{ y: 60, color: '#3367A0' }, { y: 71, color: '#3367A0' }, { y: 106, color: '#3367A0' }, { y: 129, color: '#3367A0' }, { y: 144, color: '#3367A0' }, { y: 176, color: '#3367A0' }, { y: 135, color: '#3367A0' }, { y: 148, color: '#2B5F98' }],
+                showInLegend: false,
+            }]
+
+        });
+
+
+     
+
+        //current ratio
+        Highcharts.chart('currentratio', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+                events: {
+                    render: function () {
+                        var value = this.series[0].yData[0],
+                            color;
+
+                        if (value < 1) {
+                            color = '#DF5353';
+                        } else if (value < 1) {
+                            color = '#DDDF0D';
+                        } else {
+                            color = '#55BF3B';
+                        }
+
+                        this.title.css({
+                            color: color
+                        });
+                    }
+                }
+            },
+
+            title: {
+                text: 'Current Ratio'
+            },
+
+            pane: {
+                startAngle: -125,
+                endAngle: 125,
+                background: [{
+                    borderWidth: 0,
+                    backgroundColor: 'transparent'
+                }]
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },      
+            // the value axis
+            yAxis: {
+
+                min: 0,
+                max: 18,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 0,
+                minorTickLength: 10,
+                minorTickPosition: 'inside',
+                minorTickColor: '#666',
+                gridLineColor: 'transparent',
+
+
+                tickPixelInterval: 30,
+                tickWidth: 2,
+                tickPosition: 'inside',
+                tickLength: 0,
+                tickColor: '#666',
+                labels: {
+                    step: 2,
+                    rotation: 'auto'
+                },
+                title: {
+                    text: ''
+                },
+                plotBands: [{
+                    from: 0, 
+                    to: 1,
+                    color: '#DF5353',// red
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'red-band'
+                }, {
+                    from: 1,
+                    to: 18,
+                        color: '#55BF3B', // green
+                        innerRadius: '90%',
+                        outerRadius: '105%',
+                        className: 'green-band'
+                }]
+            },
+            xAxis: {
+                visible: false
+            },
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        borderColor: 'transparent'
+                    },
+                    dial: {
+                        radius: '75%',
+                        backgroundColor: '#666666',
+                        borderWidth: 0,
+                        baseWidth: 7,
+                        topWidth: 1,
+                        baseLength: '90%', // of radius
+                        rearLength: '0%'
+                    },
+                    pivot: {
+                        backgroundColor: '#666666',
+                        radius: 3
+                    }
+                }
+            },
+
+            series: [{
+                useHTML: true,
+                animation: false,
+
+                name: 'Current Ratio',
+                data: [10.4],
+                tooltip: {
+                   
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: '38px'
+                    }
+                }
+            }]
+
+        });
+
+
+
+
+        //quick ratio
+        Highcharts.chart('quickratio', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+                events: {
+                    render: function () {
+                        var value = this.series[0].yData[0],
+                            color;
+
+                        if (value < 1) {
+                            color = '#DF5353';
+                        } else if (value < 1) {
+                            color = '#DDDF0D';
+                        } else {
+                            color = '#55BF3B';
+                        }
+
+                        this.title.css({
+                            color: color
+                        });
+                    }
+                }
+            },
+
+            title: {
+                text: 'Quick Ratio'
             },
             exporting: {
                 enabled: false
@@ -710,34 +835,373 @@
             credits: {
                 enabled: false
             },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            pane: {
+                startAngle: -125,
+                endAngle: 125,
+                background: [{
+                    borderWidth: 0,
+                    backgroundColor: 'transparent'
+                }]
+            },
+
+            // the value axis
+            yAxis: {
+
+                min: 0,
+                max: 18,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 0,
+                minorTickLength: 10,
+                minorTickPosition: 'inside',
+                minorTickColor: '#666',
+                gridLineColor: 'transparent',
+
+
+                tickPixelInterval: 30,
+                tickWidth: 2,
+                tickPosition: 'inside',
+                tickLength: 0,
+                tickColor: '#666',
+                labels: {
+                    step: 2,
+                    rotation: 'auto'
+                },
+                title: {
+                    text: ''
+                },
+                plotBands: [{
+                    from: 0,
+                    to: 1,
+                    color: '#DF5353',
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'red-band'
+
+                }, {
+                    
+                    from: 1,
+                    to: 18,
+                        color: '#55BF3B', 
+                    innerRadius: '90%',
+                        outerRadius: '105%',
+                        className: 'green-band'
+
+                }]
+            },
+            xAxis: {
+                visible: false
             },
             plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
+                gauge: {
                     dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                        style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                        }
+                        borderColor: 'transparent'
+                    },
+                    dial: {
+                        radius: '75%',
+                        backgroundColor: '#666666',
+                        borderWidth: 0,
+                        baseWidth: 7,
+                        topWidth: 1,
+                        baseLength: '90%', // of radius
+                        rearLength: '0%'
+                    },
+                    pivot: {
+                        backgroundColor: '#666666',
+                        radius: 3
                     }
                 }
             },
-            series: [{
 
-                colorByPoint: true,
-                data: [{
-                    name: 'Equity',
-                    y: 30.00
-                }, {
-                    name: 'Net Income',
-                    y: 70.00, color: 'green'
-                }]
+            series: [{
+                animation: false,
+
+                name: 'Quick Ratio',
+                data: [10.2],
+                tooltip: {
+
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: '38px'
+                    }
+                }
             }]
+
         });
+
+
+        //debt asset ratio
+        Highcharts.chart('debtasset', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+                events: {
+                    render: function () {
+                        var value = this.series[0].yData[0],
+                            color;
+
+                        if (value < 1) {
+                            color = '#55BF3B'; 
+                        } else if (value < 1) {
+                            color = '#DDDF0D';
+                        } else {
+                            color = '#DF5353' ;
+                        }
+
+                        this.title.css({
+                            color: color
+                        });
+                    }
+                }
+            },
+
+            title: {
+                text: 'Debt Asset Ratio'
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            pane: {
+                startAngle: -125,
+                endAngle: 125,
+                background: [{
+                    borderWidth: 0,
+                    backgroundColor: 'transparent'
+                }]
+            },
+
+            // the value axis
+            yAxis: {
+
+                min: 0,
+                max: 2,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 0,
+                minorTickLength: 10,
+                minorTickPosition: 'inside',
+                minorTickColor: '#666',
+                gridLineColor: 'transparent',
+
+
+                tickPixelInterval: 30,
+                tickWidth: 2,
+                tickPosition: 'inside',
+                tickLength: 0,
+                tickColor: '#666',
+                labels: {
+                    step: 2,
+                    rotation: 'auto'
+                },
+                title: {
+                    text: ''
+                },
+                plotBands: [{
+                    from: 0,
+                    to: 1,
+                    color: '#55BF3B',// green
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'green'
+                }, {
+                    from: 1,
+                    to: 2,
+                    color: '#DF5353', // red
+                    innerRadius: '90%',
+                        outerRadius: '105%',
+                        className: 'red'
+
+                }]
+            },
+            xAxis: {
+                visible: false
+            },
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        borderColor: 'transparent'
+                    },
+                    dial: {
+                        radius: '75%',
+                        backgroundColor: '#666666',
+                        borderWidth: 0,
+                        baseWidth: 7,
+                        topWidth: 1,
+                        baseLength: '90%', // of radius
+                        rearLength: '0%'
+                    },
+                    pivot: {
+                        backgroundColor: '#666666',
+                        radius: 3
+                    }
+                }
+            },
+
+            series: [{
+                animation: false,
+
+                name: 'Debt Asset Ratio',
+                data: [1.2],
+                tooltip: {
+
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: '38px'
+                    }
+                }
+            }]
+
+        });
+
+
+
+        //debt equity ratio
+        Highcharts.chart('debtequity', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+                events: {
+                    render: function () {
+                        var value = this.series[0].yData[0],
+                            color;
+
+                        if (value < 1) {
+                            color = '#55BF3B';
+                        } else if (value < 1) {
+                            color = '#DDDF0D';
+                        } else {
+                            color = '#DF5353';
+                        }
+
+                        this.title.css({
+                            color: color
+                        });
+                    }
+                }
+            },
+
+            title: {
+                text: 'Debt Equity Ratio'
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            pane: {
+                startAngle: -125,
+                endAngle: 125,
+                background: [{
+                    borderWidth: 0,
+                    backgroundColor: 'transparent'
+                }]
+            },
+
+            // the value axis
+            yAxis: {
+
+                min: 0,
+                max: 2,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 0,
+                minorTickLength: 10,
+                minorTickPosition: 'inside',
+                minorTickColor: '#666',
+                gridLineColor: 'transparent',
+
+
+                tickPixelInterval: 30,
+                tickWidth: 2,
+                tickPosition: 'inside',
+                tickLength: 0,
+                tickColor: '#666',
+                labels: {
+                    step: 2,
+                    rotation: 'auto'
+                },
+                title: {
+                    text: ''
+                },
+                plotBands: [{
+                    from: 0,
+                    to: 1,
+                    color: '#55BF3B',// green
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'green'
+
+                }, {
+                    from: 1,
+                    to: 2,
+                    color: '#DF5353', // red
+                    innerRadius: '90%',
+                        outerRadius: '105%',
+                        className: 'red'
+
+                }]
+            },
+            xAxis: {
+                visible: false
+            },
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        borderColor: 'transparent'
+                    },
+                    dial: {
+                        radius: '75%',
+                        backgroundColor: '#666666',
+                        borderWidth: 0,
+                        baseWidth: 7,
+                        topWidth: 1,
+                        baseLength: '90%', // of radius
+                        rearLength: '0%'
+                    },
+                    pivot: {
+                        backgroundColor: '#666666',
+                        radius: 3
+                    }
+                }
+            },
+
+            series: [{
+                animation: false,
+
+                name: 'Debt Equity Ratio',
+                data: [0.5],
+                tooltip: {
+
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: '38px'
+                    }
+                }
+            }]
+
+        });
+       
     </script>
     @*@Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")*@
