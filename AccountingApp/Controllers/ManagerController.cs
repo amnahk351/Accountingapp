@@ -505,8 +505,15 @@ namespace AccountingApp.Controllers
 
         public ActionResult ApprovedTransactions()
         {
+            List<TransactionTable> transactionList;
+            string s = "approved";            
 
-            return View(getAllEntriesOfStatus("approved"));
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
+            }            
+
+            return View(transactionList);
         }
 
         private Entries getAllEntriesOfStatus(string s)

@@ -1872,18 +1872,6 @@
             var Number = str.replace("/Accountant/EditJournal/", "");
             
 
-            $.ajax({
-                url: "/Accountant/DeleteEntriesforEdit",
-                contentType: "application/json; charset=utf-8",
-                data: "{'id': '" + Number + "'}",
-                type: 'POST',
-                cache: false,
-                success: function (result) {
-                    //alert(result);
-                }
-            });
-
-
             //Send the JSON array to Controller using AJAX.
             $.ajax({
                 type: "POST",
@@ -2096,18 +2084,7 @@
             var str = window.location.pathname;
             var Number = str.replace("/Accountant/EditJournal/", "");
 
-            $.ajax({
-                url: "/Accountant/DeleteEntriesforEdit",
-                contentType: "application/json; charset=utf-8",
-                data: "{'id': '" + Number + "'}",
-                type: 'POST',
-                cache: false,
-                success: function (result) {
-                    //alert(result);
-                }
-            });
-
-
+            
             //Send the JSON array to Controller using AJAX.
             $.ajax({
                 type: "POST",
@@ -2127,8 +2104,7 @@
 
             window.location.href = '../../Accountant/AccountantIndex';
             //ResetFunction();
-            //location.reload();
-            
+            //location.reload();            
 
         });
 

@@ -273,6 +273,56 @@ namespace AccountingApp.Controllers
             return View(GetEntrySummary(id));
         }
 
+
+        public string GenerateEventLogTransactionDetail(int id) {
+            var sessionUser = Session["Username"] as string;
+            List<TransactionTable> transactionList;
+            List<string> Entries = new List<string>();
+            List<string> TotalList = new List<string>();
+            string AllEntries = "";
+            string Resultant = "";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            TotalList.Add(sessionUser + " Edited Journal " + transactionList[0].EntryId);
+            TotalList.Add("Status: " + transactionList[0].Status);
+            TotalList.Add("Type: " + transactionList[0].Entry_Type);
+
+            for (int i = 0; i < transactionList.Count; i++)
+            {
+
+                string EntryAccountName = transactionList[i].AccountName;
+                decimal DebitAmount = transactionList[i].Debit.GetValueOrDefault();
+                decimal CreditAmount = transactionList[i].Credit.GetValueOrDefault();
+
+                string line = "";
+
+                if (CreditAmount == 0)
+                {
+                    //This line is a debit
+                    line = EntryAccountName + "-Debit-" + DebitAmount;
+                    Entries.Add(line);
+                }
+
+                if (DebitAmount == 0)
+                {
+                    //This line is a credit
+                    line = EntryAccountName + "-Credit-" + CreditAmount;
+                    Entries.Add(line);
+                }
+
+            }
+
+            AllEntries = String.Join(",", Entries);
+            TotalList.Add(AllEntries);
+            TotalList.Add("Comment: " + transactionList[0].AccountantComment);
+            Resultant = String.Join(";", TotalList);
+
+            return Resultant;
+        }
         
 
 
@@ -284,16 +334,32 @@ namespace AccountingApp.Controllers
             var sessionUser = Session["Username"] as string;
             EventLogHandler Logger = new EventLogHandler();
             
-            string type = "";
+            //string type = "";
 
-            if (transactions[0].Status == "pending")
+            //if (transactions[0].Status == "pending")
+            //{
+            //    type = "Submitted";
+            //}
+            //else
+            //{
+            //    type = "Suspended";
+            //}
+
+
+            string EventLogFrom = GenerateEventLogTransactionDetail(EditedEntryID);
+
+            //delete old entries here
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                type = "Submitted";
+                string sql = $"DELETE FROM dbo.TransactionTable WHERE EntryId=@ID";
+
+                db.Execute(sql, new
+                {
+                    ID = EditedEntryID
+                });
+
             }
-            else
-            {
-                type = "Suspended";
-            }
+
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -366,11 +432,13 @@ namespace AccountingApp.Controllers
                         insertedRecords++;
 
                     }
-                }
-
-                Logger.LogEditedJournalEntry(sessionUser, EditedEntryID.ToString(), type);
+                }                
 
             }
+
+            string EventLogTo = GenerateEventLogTransactionDetail(EditedEntryID);
+
+            Logger.LogEditedJournalEntry(sessionUser, EventLogFrom, EventLogTo);
 
             return Json(insertedRecords);
         }
@@ -556,24 +624,7 @@ namespace AccountingApp.Controllers
 
             return Json("File, " + file + ", Deleted!");
         }
-
-        [HttpPost]
-        public ActionResult DeleteEntriesforEdit(string id)
-        {
-            int x = Int32.Parse(id);
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                string sql = $"DELETE FROM dbo.TransactionTable WHERE EntryId=@ID";
-
-                db.Execute(sql, new
-                {
-                    ID = x
-                });
-
-            }
-
-            return Json("Entries Deleted!");
-        }
+        
 
         //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html
 
@@ -661,8 +712,15 @@ namespace AccountingApp.Controllers
 
         public ActionResult ApprovedTransactions()
         {
+            List<TransactionTable> transactionList;
+            string s = "approved";
 
-            return View(getAllEntriesOfStatus("approved"));
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
+            }
+
+            return View(transactionList);
         }
 
         private Entries getAllEntriesOfStatus(string s)
