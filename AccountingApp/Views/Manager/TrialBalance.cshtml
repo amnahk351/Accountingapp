@@ -27,8 +27,8 @@
 <body>
     <div class="shadow container" style="width:60%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
-            <div class="card" style="text-align:center;">
-                <div class="card-body" style="display:inline-block;">
+            <div class="card" id="printContent" style="text-align:center;">
+                <div class="card-body" id="content" style="display:inline-block;">
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Trial Balance</h4>
 
@@ -40,7 +40,7 @@
                     </h4>
 
                     <hr style="border-width: 2px; border-color: black" />
-                    <table id="trialTable" class="table-striped" style="width:510px;">
+                    <table id="trialTable" class="table-striped" align="center" style="width:510px;">
 
                         <tr class="titleRow">
                             <th style="text-align:center">Account</th>
@@ -81,12 +81,19 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
+    <script src="~/Scripts/html2pdf.bundle.min.js"></script>
+    <button id="cmd">Generate PDF</button>
+    <script>
+        $('#cmd').click(function () {
+            var element = document.getElementById('printContent');
+            html2pdf().from(element).save("TrailBalance");
+        });
+    </script>
 
 
     <script>
         $(document).ready(function () {
-            
+
             FormatTableAmounts();
 
             PlaceDollarSigns();

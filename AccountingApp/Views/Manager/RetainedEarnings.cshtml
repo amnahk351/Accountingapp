@@ -26,24 +26,25 @@
 </head>
 
 <body>
-   
+
 
     @*Amnah*@
     <div class="shadow container" style="width:60%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
-            <div class="card" style="text-align:center;">
+            <div class="card" id="printContent" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Statement of Retained Earnings</h4>
 
-                    <h4 style="padding: 0px; margin: 0px;"> @*style="padding-bottom: 20px" <- this was here if we wanted to increase vertical blank space*@
+                    <h4 style="padding: 0px; margin: 0px;">
+                        @*style="padding-bottom: 20px" <- this was here if we wanted to increase vertical blank space*@
                         For the Period Ending
                         <script>
                             document.write(new Date().toDateString());
                         </script>
                     </h4>
                     <hr style="border-width: 2px; border-color: black" />
-                    <table id="retainedEarningsTable" class="table-striped" style="width:510px">
+                    <table id="retainedEarningsTable" align="center" class="table-striped" style="width:510px">
                         <tr class="titleRow">
                             <td style="text-align: left">
                                 Beg Retained Earnings,
@@ -56,17 +57,17 @@
                             </td>
                             <td style="text-align: right">$0.00</td>
                         </tr>
-                        <tr class="titleRow" >
+                        <tr class="titleRow">
                             <td style="text-align: left">Add: Net Income</td>
                             <td style="float:right">@ViewBag.NetIncome</td>
                         </tr>
-                        <tr class="titleRow" >
+                        <tr class="titleRow">
                             <td style="text-align: left">Less: Dividents Paid</td>
                             <td style="text-align: right; border-bottom: .15rem solid">0.00</td>
                         </tr>
-                        <tr class="titleRow" >
+                        <tr class="titleRow">
                             <td style="text-align: left">
-                                 End Retained Earnings,
+                                End Retained Earnings,
                                 <script>
                                     document.write(new Date().toDateString());
                                 </script>
@@ -83,7 +84,14 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
+    <script src="~/Scripts/html2pdf.bundle.min.js"></script>
+    <button id="cmd">Generate PDF</button>
+    <script>
+        $('#cmd').click(function () {
+            var element = document.getElementById('printContent');
+            html2pdf().from(element).save("RetainedEarnings");
+        });
+    </script>
     <script>
         $(document).ready(function () {
             var table = document.getElementById("retainedEarningsTable");

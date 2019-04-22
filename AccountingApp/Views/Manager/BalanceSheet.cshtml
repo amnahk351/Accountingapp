@@ -26,12 +26,12 @@
 </head>
 
 <body>
-   
+
 
     @*Amnah*@
     <div class="shadow container" style="width:60%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
-            <div class="card" style="text-align:center;">
+            <div class="card" id="printContent" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Balance Sheet</h4>
@@ -44,6 +44,7 @@
                     </h4>
                     @*<br />*@
                     <hr style="border-width: 2px; border-color: black" />
+                    <div align="center">
                     <table id="assetsTable" class="table-striped" style="width:510px;">
 
                         <tr class="titleRow">
@@ -100,33 +101,33 @@
                         }
                         @*tried rewrite the method above to fix the horizontal rows that were the same colors*@
                         @*@for (int i = 0; i < Model.Count; i++)
-                        {
-
-                            if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
                             {
-                                @*<tr>
-                                    <td align="left" style="text-indent: 8%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                </tr>*@
-                                @*if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
-                                    {
-                                        <tr>
-                                            <td>@Model[i].CurrentBalance</td>
-                                            <td> </td>
-                                        </tr>
-                                    }
-                                else
+
+                                if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
+                                {
+                                    @*<tr>
+                                        <td align="left" style="text-indent: 8%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                    </tr>*@
+                        @*if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                 {
                                     <tr>
-                                        <td style="border-bottom: .15rem solid">(@Model[i].CurrentBalance)</td>
+                                        <td>@Model[i].CurrentBalance</td>
                                         <td> </td>
                                     </tr>
-                                }*@
-                                   @*<td> </td>
-                                   </tr>*@
-                            @*}
+                                }
+                            else
+                            {
+                                <tr>
+                                    <td style="border-bottom: .15rem solid">(@Model[i].CurrentBalance)</td>
+                                    <td> </td>
+                                </tr>
+                            }*@
+                        @*<td> </td>
+                            </tr>*@
+                        @*}
 
 
-                        }*@
+                            }*@
 
                         <tr>
                             <th class="text-left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Property Plant & Equipment, Net</th>
@@ -175,7 +176,7 @@
                                 else if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                 {
                                     <tr>
-                                        <td align= "left" style="text-indent:4%;"><b>&nbsp;&nbsp;&nbsp;@Model[i].AccountName</b></td>
+                                        <td align="left" style="text-indent:4%;"><b>&nbsp;&nbsp;&nbsp;@Model[i].AccountName</b></td>
                                         <td align="right" style="border-bottom: .15rem solid">@Model[i].CurrentBalance</td>
                                         <td></td>
                                     </tr>
@@ -233,6 +234,7 @@
                             <td style="border-bottom: .4rem double">@ViewBag.totalLiabilitesStockEquity</td>
                         </tr>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -241,7 +243,14 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
+    <script src="~/Scripts/html2pdf.bundle.min.js"></script>
+    <button id="cmd">Generate PDF</button>
+    <script>
+        $('#cmd').click(function () {
+            var element = document.getElementById('printContent');
+            html2pdf().from(element).save("BalanceSheet");
+        });
+    </script> 
     <script>
         $(document).ready(function () {
 
@@ -259,7 +268,7 @@
 
             //var rows = document.getElementById("assetsTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
             var rowCount = $('#assetsTable tr').length;
-            
+
             alert(table.rows[8].cells[1].innerText);
             //alert(table[1].innerText);
 
