@@ -45,102 +45,100 @@
                     @*<br />*@
                     <hr style="border-width: 2px; border-color: black" />
                     <div align="center">
-                    <table id="assetsTable" class="table-striped" style="width:510px;">
+                        <table id="assetsTable" class="table-striped" style="width:510px;">
 
-                        <tr class="titleRow">
-                            <th class="text-left" colspan="3">Assets</th>
-                        </tr>
+                            <tr class="titleRow">
+                                <th class="text-left" colspan="3">Assets</th>
+                            </tr>
 
-                        <tr>
-                            <th class="text-left" colspan="3" style="text-indent: 2%">&nbsp;&nbsp;&nbsp; Current Assets</th>
-                        </tr>
+                            <tr>
+                                <th class="text-left" colspan="3" style="text-indent: 2%">&nbsp;&nbsp;&nbsp; Current Assets</th>
+                            </tr>
 
 
-                        @for (int i = 0; i < Model.Count; i++)
-                        {
-                            if (Model[i].AccountType.ToLower() == "assets")
+                            @for (int i = 0; i < Model.Count; i++)
                             {
-                                if (Model[i].AccountName.ToLower() != "office supplies")
+                                if (Model[i].AccountType.ToLower() == "assets")
+                                {
+                                    if (Model[i].AccountName.ToLower() != "office supplies")
+                                    {
+                                        <tr>
+                                            <td align="left" style="text-indent: 8%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                            <td style="text-align: right">@Model[i].CurrentBalance</td>
+                                            <td> </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                            <tr>
+                                <th class="text-left" style="text-indent: 4%">&nbsp;&nbsp;&nbsp;Total Current Assets</th>
+                                <td style="border-top: .15rem solid"> </td>
+                                <td style="border-bottom: .4rem double; text-align: right">@ViewBag.totalCurrentAssets</td>
+                            </tr>
+
+                            <tr>
+                                <th class="text-left" colspan="3" style="text-indent: 3%">&nbsp;&nbsp;&nbsp;Property Plant & Equipment</th>
+                            </tr>
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
                                 {
                                     <tr>
-                                        <td align="left" style="text-indent: 8%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                        <td>@Model[i].CurrentBalance</td>
+                                        <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                        @if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
+                                        {
+                                        <td style="text-align: right">@Model[i].CurrentBalance</td>
+                                        }
+                                        else
+                                        {
+                                        <td style="border-bottom: .15rem solid; text-align: right">(@Model[i].CurrentBalance)</td>
+                                        }
                                         <td> </td>
                                     </tr>
                                 }
                             }
-                        }
-                        <tr>
-                            <th class="text-left" style="text-indent: 4%">&nbsp;&nbsp;&nbsp;Total Current Assets</th>
-                            <td style="border-top: .15rem solid"> </td>
-                            <td>@ViewBag.totalCurrentAssets</td>
-                        </tr>
+                            @*tried rewrite the method above to fix the horizontal rows that were the same colors*@
+                            @*@for (int i = 0; i < Model.Count; i++)
+        {
 
-                        <tr>
-                            <th class="text-left" colspan="3" style="text-indent: 3%">&nbsp;&nbsp;&nbsp;Property Plant & Equipment</th>
-                        </tr>
-                        @for (int i = 0; i < Model.Count; i++)
-                        {
+            if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
+            {
+                @*<tr>
+                    <td align="left" style="text-indent: 8%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                </tr>*@
+                            @*if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
+            {
+                <tr>
+                    <td>@Model[i].CurrentBalance</td>
+                    <td> </td>
+                </tr>
+            }
+        else
+        {
+            <tr>
+                <td style="border-bottom: .15rem solid">(@Model[i].CurrentBalance)</td>
+                <td> </td>
+            </tr>
+        }*@
+                            @*<td> </td>
+        </tr>*@
+                            @*}
+
+
+        }*@
 
                             <tr>
-                                @if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
-                                {
-                                    <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                    if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
-                                    {
-                                        <td>@Model[i].CurrentBalance</td>
-                                    }
-                                    else
-                                    {
-                                        <td style="border-bottom: .15rem solid">(@Model[i].CurrentBalance)</td>
-                                    }
-                                    <td> </td>
-                                }
-
+                                <th class="text-left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Property Plant & Equipment, Net</th>
+                                <td></td>
+                                <td style="text-align: right">@ViewBag.propPlanEquipNet</td>
                             </tr>
-                        }
-                        @*tried rewrite the method above to fix the horizontal rows that were the same colors*@
-                        @*@for (int i = 0; i < Model.Count; i++)
-                            {
 
-                                if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
-                                {
-                                    @*<tr>
-                                        <td align="left" style="text-indent: 8%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                    </tr>*@
-                        @*if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
-                                {
-                                    <tr>
-                                        <td>@Model[i].CurrentBalance</td>
-                                        <td> </td>
-                                    </tr>
-                                }
-                            else
-                            {
-                                <tr>
-                                    <td style="border-bottom: .15rem solid">(@Model[i].CurrentBalance)</td>
-                                    <td> </td>
-                                </tr>
-                            }*@
-                        @*<td> </td>
-                            </tr>*@
-                        @*}
-
-
-                            }*@
-
-                        <tr>
-                            <th class="text-left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Property Plant & Equipment, Net</th>
-                            <td></td>
-                            <td>@ViewBag.propPlanEquipNet</td>
-                        </tr>
-
-                        <tr>
-                            <th class="text-left">Total Asset</th>
-                            <td> </td>
-                            <td style="border-top: .15rem solid; border-bottom: .4rem double">@ViewBag.totalAssets</td>
-                        </tr>
-                    </table>
+                            <tr>
+                                <th class="text-left">Total Asset</th>
+                                <td> </td>
+                                <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right">@ViewBag.totalAssets</td>
+                            </tr>
+                        </table>
 
                     <br />
 
@@ -192,7 +190,7 @@
                         <tr>
                             <td align="left"><b>Total Liabilities</b></td>
                             <td> </td>
-                            <td style="border-top: .15rem solid; border-bottom: .15rem solid; text-align: right">@ViewBag.totalLiabilities</td>
+                            <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right">@ViewBag.totalLiabilities</td>
                         </tr>
                         <tr height=20px></tr>
                         <tr>
@@ -209,7 +207,7 @@
 
                                     <td align="left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
                                     <td></td>
-                                    <td>@Model[i].CurrentBalance</td>
+                                    <td style="text-align: right">@Model[i].CurrentBalance</td>
 
 
                                 </tr>
@@ -219,19 +217,19 @@
                         <tr>
                             <td align="left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Retained Earnings</td>
                             <td> </td>
-                            <td>@ViewBag.retainedEarnings</td>
+                            <td style="text-align: right">@ViewBag.retainedEarnings</td>
                         </tr>
 
                         <tr>
                             <th class="text-left">Total Stockholders' Equity</th>
                             <td> </td>
-                            <td style="border-top: .15rem solid; border-bottom: .15rem solid">@ViewBag.totalStockHolderEquity</td>
+                            <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right">@ViewBag.totalStockHolderEquity</td>
                         </tr>
                         <tr height=20px></tr>
                         <tr>
                             <th class="text-left">Total Liabilities & Stockholders' Equity</th>
                             <td> </td>
-                            <td style="border-bottom: .4rem double">@ViewBag.totalLiabilitesStockEquity</td>
+                            <td style="border-bottom: .4rem double; text-align: right">@ViewBag.totalLiabilitesStockEquity</td>
                         </tr>
                     </table>
                     </div>
