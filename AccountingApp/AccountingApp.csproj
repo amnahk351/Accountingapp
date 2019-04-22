@@ -429,6 +429,7 @@
       <DependentUpon>TransactionTableModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\html2pdf.bundle.min.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
