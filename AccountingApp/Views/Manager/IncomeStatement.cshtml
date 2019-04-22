@@ -36,8 +36,9 @@
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">
                         For the Period Ending
                         <script>
-                            document.write(new Date().toDateString());
-                        </script>
+                            var options = { year: 'numeric', month: 'long', day: 'numeric' };
+
+                            document.write(new Date().toLocaleDateString("en-US", options))                        </script>
                     </h4>
                     @*<br />*@
                     <hr style="border-width: 2px; border-color: black" />
