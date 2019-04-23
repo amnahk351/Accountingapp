@@ -235,71 +235,55 @@
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
-
                 </li>
                 <li>
-
-                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <a href="/Accountant/ChartOfAccounts">
                         <i class="fas fa-list" style="margin-right:10px;"></i>
-
                         Chart Of Accounts
                     </a>
-                    <ul class="collapse list-unstyled" id="accountSubmenu">
-                        <li>
-                            <a href="/Accountant/ChartOfAccounts">Chart of Accounts</a>
-                        </li>
 
-                    </ul>
                 </li>
+                @*<li>
+
+        <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+            <i class="fas fa-list" style="margin-right:10px;"></i>
+            Chart Of Accounts
+        </a>
+        <ul class="collapse list-unstyled" id="accountSubmenu">
+            <li>
+                <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
+            </li>
+        </ul>
+        </li>*@
                 <li>
 
                     <a href="/Accountant/Journalize">
                         <i class="far fa-edit" style="margin-right:10px"></i>
-
-
                         Journalize
                     </a>
                 </li>
-                <li>
 
-                    <a href="/Accountant/GeneralLedger">
-                        <i class="fas fa-book" style="margin-right:10px"></i>
-
-
-
-                        General Ledger
-                    </a>
-                </li>
-                <li>
-
-                    <a href="/Accountant/AccountantIndex">
-                        <i class="fas fa-book" style="margin-right:10px"></i>
-
-
-
-                        General Journal
-                    </a>
-                </li>
                 <li>
 
                     <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
-
-
                         Transactions
                     </a>
                     <ul class="collapse list-unstyled" id="transactionSubmenu">
                         <li>
-                            <a href="/Accountant/ManagerApproval">Pending Transactions</a>
+                            <a href="/Accountant/Transactions">All Transactions</a>
                         </li>
                         <li>
-                            <a href="">Posted Transactions</a>
+                            <a href="/Accountant/ApprovedTransactions">Approved Transactions</a>
                         </li>
                         <li>
-                            <a href="">Rejected Transactions</a>
+                            <a href="/Accountant/DisapprovedTransactions">Rejected Transactions</a>
                         </li>
                         <li>
-                            <a href="">Suspended Transactions</a>
+                            <a href="/Accountant/PendingTransactions">Pending Transactions</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/SuspendedTransactions">Suspended Transactions</a>
                         </li>
 
                     </ul>
@@ -308,8 +292,6 @@
 
                     <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="far fa-chart-bar" style="margin-right:10px"></i>
-
-
                         Reports
                     </a>
                     <ul class="collapse list-unstyled" id="reportSubmenu">
@@ -325,12 +307,15 @@
                         <li>
                             <a href="/Accountant/BalanceSheet">Balance Sheet</a>
                         </li>
-                        <li>
-                            <a href="/Accountant/PostClosingTrialBalance">Post Closing Trial Balance</a>
-                        </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="/Accountant/EventLog">
+                        <i class="fas fa-briefcase" style="margin-right:10px;"></i>
+                        Event Log
+                    </a>
 
+                </li>
             </ul>
 
         </nav>

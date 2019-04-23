@@ -540,7 +540,7 @@ namespace AccountingApp.Controllers
             bool t = true;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Active=@Value", new { Value = t }).ToList();
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Active=@Value Order By AccountName", new { Value = t }).ToList();
             }
             
 

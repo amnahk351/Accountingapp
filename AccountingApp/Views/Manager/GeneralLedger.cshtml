@@ -1,7 +1,7 @@
-﻿@model AccountingApp.Models.Entries
+﻿@model List<AccountingApp.Models.TransactionTable>
 
 @{
-    ViewBag.Title = "Transactions";
+    ViewBag.Title = "General Ledger";
     //Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
     Layout = null;
 
@@ -40,6 +40,22 @@
 
 
     <style>
+
+        .Account-Select {
+            display: block;
+            /*text-align:right;*/
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+
         .navbar-text {
             padding-right: 20px;
         }
@@ -183,7 +199,7 @@
             color: inherit;
             text-decoration: none;
             transition: all 0.3s;
-        }
+        }        
 
         #sidebar {
             background: #3e547f;
@@ -389,82 +405,67 @@
             <div style="width:100%; margin:0 auto">
 
 
-                <h3 style="display:inline">All Transactions</h3>
-                <div class="" style=" float:right" role="group" aria-label="Basic example">
-                    <a href="../Manager/Transactions" class="btn btn-success" role="button" aria-pressed="true">
-                        All
-                    </a>
-                    <a href="../Manager/ApprovedTransactions" class="btn btn-success" role="button" aria-pressed="true">
-                        <i class="fas fa-check"></i>
-                        Approved
-                    </a>
-                    <a href="../Manager/DisapprovedTransactions" class="btn btn-danger" role="button" aria-pressed="true">
-                        <i class="fas fa-times"></i>
-                        Disapproved
-                    </a>
-                    <a href="../Manager/PendingTransactions" class="btn btn-warning" role="button" aria-pressed="true">
-                        <i class="fas fa-exclamation-circle" style="color:white"></i>
-                        Pending
-                    </a>
-                    <a href="../Manager/SuspendedTransactions" class="btn btn-info" role="button" aria-pressed="true">
-                        Suspended
-                    </a>
+                <h3 style="display:inline">General Ledger</h3>
+
+                <div style="float: right">
+                    @Html.DropDownList("AccountName", (List<SelectListItem>)ViewBag.accountList, new { @class = "Account-Select", @name = "AccountNumber[]", @onchange = "ChangeAccountPage();" })
                 </div>
                 <br />
                 <br />
+
+
+                <div style="clear: both">
+                    <h4 style="float: left">@ViewBag.AccountName</h4>
+                    <h4 id="CurrentAcccountBalance" style="float: right">@ViewBag.AccountBalance</h4>
+                    <h4 style="float: right; margin-right: 45%">@ViewBag.AccountNumber</h4>
+
+                </div>
+                <br />
+
                 <hr />
                 <div>
                     <table id="GeneralJournalTable" class="table table-responsive table-hover shadow" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                         <thead style="background-color:white" class="shadow">
                             <tr class="shadow">
-                                <th style="width:20%">Date Submitted</th>
-                                <th style="width:10%">Entry ID</th>
-                                <th style="width:8%">Type</th>
-                                <th style="width:50%">Accounts Affected</th>
+                                <th style="width:20%">Date</th>
+                                <th style="width:10%">Description</th>
+                                <th style="width:10%">Post Reference</th>
                                 <th>Debit</th>
                                 <th>Credit</th>
-                                <th style="width:10%">Status</th>
+
+                                @*<th style="width:10%">Entry ID</th>
+                        <th style="width:8%">Type</th>*@
+
+
+                                <th>Before Balance</th>
+                                <th>After Balance</th>
                             </tr>
                         </thead>
                         <tbody style="background-color:white; width:100%">
-                            @for (int i = 0; i < Model.entries.Count; i++)
+                            @if (Model != null) {
+                            
+                            for (int i = 0; i < Model.Count; i++)
                             {
                                 <tr>
-                                    <td>@Model.entries[i].DateSubmitted</td>
-                                    <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model.entries[i].entryID</td>
-                                    <td>@Model.entries[i].Entry_Type</td>
-                                    <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
-                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                                    <td>
-                                        @*@Model.entries[i].status*@
-                                        @if (@Model.entries[i].status == "approved")
-                                        {<i class="fas fa-check" style="color: limegreen;"></i>
+                                    <td>@Model[i].DateReviewed</td>
+                                    <td>@Model[i].AccountantComment</td>
+                                    <td>@Model[i].PostReference</td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model[i].Debit</td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model[i].Credit</td>
 
-                                            <span style="color: limegreen;">@Model.entries[i].status</span>
-
-                                        }
-                                        else if (@Model.entries[i].status == "disapproved")
-                                        { <i class="fas fa-times" style="color: red;"></i>
-
-                                            <span style="color: red;">  @Model.entries[i].status</span>
-                                        }
-                                        else if (@Model.entries[i].status == "pending")
-                                        { <i class="fas fa-exclamation-circle" style="color:darkorange"></i>
-
-                                            <span style="color: darkorange;">  @Model.entries[i].status</span>
-
-                                        }
-                                        else
-                                        {<i class="fas fa-exclamation" style="color:#17a2b8;"></i>
+                                    @*<td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model[i].EntryId</td>
+                <td>@Model[i].Entry_Type</td>*@
 
 
-                                            <span style="color:#17a2b8;">  @Model.entries[i].status</span>
-                                        }
-                                    </td>
+                                    <td>@Model[i].BeforeBalance</td>
+                                    <td>@Model[i].AfterBalance</td>
+
+
                                 </tr>
 
                             }
+                            }
+
                         </tbody>
                     </table>
                 </div>
@@ -529,9 +530,6 @@
                             <table id="ModalFiles" style="color:blue"></table>
 
                         </div>
-                        @*@{Html.RenderAction("TransactionSummary", "Accountant");}*@
-                        @*@{Html.RenderAction("TransactionSummary", "Accountant", new { id = Model.id });}*@
-
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
@@ -585,7 +583,7 @@
             var ID = $(id).text();
             //alert("Text is: " + String);
 
-            @*$.ajax({
+            @* $.ajax({
                 url: "/Accountant/TransactionSummary",
                 contentType: "application/json; charset=utf-8",
                 data: "{'id':'" + ClickedText + "'}",
@@ -608,19 +606,20 @@
             var table = document.getElementById("GeneralJournalTable");
 
             //var ID = table.rows[row[0].rowIndex].cells[1].innerText;
+            var PostNum = table.rows[row[0].rowIndex].cells[0].innerText;
             var ModalID = document.getElementById("ModalEntryID");
-            ModalID.innerHTML = "ID: " + ID;
+            ModalID.innerHTML = "Post Reference: " + PostNum;
 
-            var Date = table.rows[row[0].rowIndex].cells[0].innerText;
+            var Date = table.rows[row[0].rowIndex].cells[1].innerText;
             var ModalDate = document.getElementById("ModalDate");
-            ModalDate.innerHTML = "Date Submitted: " + Date;
+            ModalDate.innerHTML = "Date Reviewed: " + Date;
 
-            var Stat = table.rows[row[0].rowIndex].cells[6].innerText;
+            var Stat = table.rows[row[0].rowIndex].cells[10].innerText;
             var ModalStat = document.getElementById("ModalStatus");
             ModalStat.innerHTML = "Status: " + Stat;
 
 
-            var Accounts = table.rows[row[0].rowIndex].cells[3].innerText;
+            var Accounts = table.rows[row[0].rowIndex].cells[5].innerText;
             var text = Accounts.replace(/\t/g, "&nbsp;&nbsp;&nbsp;");
             var res0 = text.split("\n");
             var finalAcc = "";
@@ -634,7 +633,7 @@
             ModalAcc.innerHTML = finalAcc;
 
 
-            var De = table.rows[row[0].rowIndex].cells[4].innerText;
+            var De = table.rows[row[0].rowIndex].cells[6].innerText;
             var res = De.split("\n");
             var finalDe = "";
 
@@ -646,7 +645,7 @@
             ModalDe.innerHTML = finalDe;
 
 
-            var Cr = table.rows[row[0].rowIndex].cells[5].innerText;
+            var Cr = table.rows[row[0].rowIndex].cells[7].innerText;
             var res2 = Cr.split("\n");
             var finalCr = "";
 
@@ -766,6 +765,79 @@
         }
 
     </script>
+    <script>
+
+        function ChangeAccountPage() {
+            
+            var skillsSelect = document.getElementById("AccountName");
+            var selectedText = skillsSelect.options[skillsSelect.selectedIndex].text;
+            window.location.href = '../Manager/GeneralLedger?name=' + selectedText;
+        }
+
+        window.onload = function () {
+            FixPage();
+        };
+
+        function FixPage() {
+            var bal = document.getElementById("CurrentAcccountBalance").innerText;
+
+            var num = bal.replace("Balance: ", "");
+            var numFixed = formatMoney(num);
+
+            document.getElementById("CurrentAcccountBalance").innerText = "Balance: $ " + numFixed;
+
+            //var str = window.location.pathname;
+            var str = window.location.href;
+            var items = str.split("GeneralLedger");
+            var UrlEnd = items[1];
+
+            if (UrlEnd != "") {
+                //There is an account name
+
+                var AccountName = UrlEnd.replace("?name=", "");
+                //Add spaces
+                var finalAccountName = AccountName.replace("%20", " ");
+
+                //Set the drop down equal to the text
+                var dd = document.getElementById('AccountName');
+                for (var i = 0; i < dd.options.length; i++) {
+                    if (dd.options[i].text === finalAccountName) {
+                        dd.selectedIndex = i;
+                        break;
+                    }
+                }
+
+            } else {
+                //There is no account specified
+
+                //Add please select to drop down
+                var x = document.getElementById("AccountName");
+                var option = document.createElement("option");
+                option.text = "Please Select an Account";
+                x.add(option, 0);
+                x.selectedIndex = 0;
+
+            }
+
+            //alert(items[0]);
+            //alert(items[1]);
+            //var newstr = str.replace("/Accountant/EditJournal/", "");
+            //alert(str);
+        }
+
+        function formatMoney(n, c, d, t) {
+            var c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
+    </script>
+
     <script>
         $(document).ready(function () {
 
