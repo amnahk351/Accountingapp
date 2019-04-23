@@ -11,7 +11,7 @@
 
 <table id="StatsTable" class="table">
     <tr>
-        <th>            
+        <th>
             User ID
         </th>
         <th>
@@ -38,34 +38,35 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Username)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateModified)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastLogin)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastSignout)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LoginAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LoginFails)
-        </td>        
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateModified)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastLogin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastSignout)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoginAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoginFails)
+            </td>
+        </tr>
+    }
 
 </table>
 
@@ -73,8 +74,7 @@
 <script>
     window.onload = RemoveTimes();
 
-    function RemoveTimes()
-    {   //Removes all excess times from date created and date modified
+    function RemoveTimes() {   //Removes all excess times from date created and date modified
         var table = document.getElementById("StatsTable");
 
         for (var i = 1; i < table.rows.length; i++) {
@@ -84,9 +84,9 @@
 
             var Modified = table.rows[i].cells[3].innerText;
             var res2 = Modified.split(" ");
-            table.rows[i].cells[3].innerText = res2[0];           
+            table.rows[i].cells[3].innerText = res2[0];
 
-        }        
+        }
     }
-        
+
 </script>

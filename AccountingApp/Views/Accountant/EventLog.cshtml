@@ -1,20 +1,45 @@
-﻿@model List<AccountingApp.Models.ChartOfAcc>
+﻿@model IEnumerable<AccountingApp.Models.EventLog>
 
 @{
-    ViewBag.Title = "ChartOfAccounts";
+    ViewBag.Title = "Event Log";
     //Layout = "~/Views/Shared/_Layout_Admin.cshtml";
     Layout = null;
 }
 <html>
 <head>
+
+
+    @*<p>
+            @Html.ActionLink("Create New", "Create")
+        </p>*@
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">*@
+
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS -->
+    @*
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
+    @*
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
-   
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">*@
@@ -177,7 +202,7 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar">
+        <nav id="sidebar" class="fixed-left">
 
             <div class="sidebar-header">
                 <h5>Menu</h5>
@@ -185,7 +210,7 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Admin/AdminIndex">
+                    <a href="/Accountant/Dashboard">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
@@ -195,42 +220,84 @@
 
                     <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-list" style="margin-right:10px;"></i>
-
                         Chart Of Accounts
                     </a>
                     <ul class="collapse list-unstyled" id="accountSubmenu">
                         <li>
-                            <a href="/Admin/ChartOfAccounts">Chart of Accounts</a>
+                            <a href="/Accountant/ChartOfAccounts">Chart of Accounts</a>
                         </li>
-                        <li>
-                            <a href="/Admin/NewAccount">Create New Account</a>
-                        </li>
-
                     </ul>
-                    <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-users" style="margin-right:10px;"></i>
-
-
-                        Users
-                    </a>
-                    <ul class="collapse list-unstyled" id="userSubmenu">
-                        <li>
-                            <a href="/Admin/AllUsers">User List</a>
-                        </li>
-                        <li>
-                            <a href="/Admin/UserStatistics">User Statistics</a>
-                        </li>
-                        <li>
-                            <a href="/Admin/NewUser">Create New User</a>
-                        </li>
-
-                    </ul>
-                    <a href="/Admin/EventLog">
-                        <i class="fas fa-briefcase" style="margin-right:10px;"></i>
-                        Event Log
-                    </a>
-
                 </li>
+                <li>
+
+                    <a href="/Accountant/Journalize">
+                        <i class="far fa-edit" style="margin-right:10px"></i>
+                        Journalize
+                    </a>
+                </li>
+                <li>
+
+                    <a href="">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+                        General Ledger
+                    </a>
+                </li>
+                <li>
+
+                    <a href="/Accountant/AccountantIndex">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+                        General Journal
+                    </a>
+                </li>
+                <li>
+
+                    <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
+                        Transactions
+                    </a>
+                    <ul class="collapse list-unstyled" id="transactionSubmenu">
+                        <li>
+                            <a href="/Accountant/ManagerApproval">Pending Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Posted Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Rejected Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Suspended Transactions</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li>
+
+                    <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="far fa-chart-bar" style="margin-right:10px"></i>
+
+
+                        Reports
+                    </a>
+                    <ul class="collapse list-unstyled" id="reportSubmenu">
+                        <li>
+                            <a href="/Accountant/TrialBalance">Trial Balance</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/IncomeStatement">Income Statement</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/RetainedEarnings">Statement Of Retained Earnings</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/BalanceSheet">Balance Sheet</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/PostClosingTrialBalance">Post Closing Trial Balance</a>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
 
         </nav>
@@ -271,153 +338,124 @@
 
                                 </button>
                             </li>
+
                         </ul>
                     </div>
                 </div>
-
             </nav>
 
 
-            @*<div class=" body-content" style="width:85%; margin:0 auto">
-                <hr class="my-4" />
-                @if (TempData["Message"] != null)
-                {
-                    <div class="alert alert-success alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        @TempData["Message"]
-                    </div>
-                }
+            <h4>Event Log</h4>
+            <hr />
+            <div>
+                <table class="table table-responsive table-hover shadow " id="Events" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
+                    <thead class="shadow" style="background-color:white; ">
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.Event_ID)*@
+                        Event ID
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.User_ID)*@
+                        User ID
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.From)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.To)
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.IP_Address)*@
+                        IP Address
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Screen)
+                    </th>
 
-
-                <a href="@Url.Action("NewAccount")" class="btn btn-success icon" role="button" aria-pressed="true">
-                    Create Account
-                </a>*@
-
-                <br />
-    
-
-                <div class="body-content" style="width:100%; margin:0 auto">
-
-
-                    <div>
-                        <h4 style="display:inline">Chart Of Accounts</h4>
-                        <a type="button" class="btn btn-success btn-lg" href="@Url.Action("NewAccount")" role="button" aria-pressed="true" style="float:right">
-                            <i class="fas fa-plus"></i>
-
-                            Create New Account
-                        </a>
-                    </div>
-                    <br />
-                    <hr class="my-4" />
-                    @if (TempData["Message"] != null)
-                    {
-                        <div class="alert alert-success alert-dismissible" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            @TempData["Message"]
-                        </div>
-                    }
-
-                    <table id="Accountstable" class="table table-responsive table-hover shadow " style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
-                        <thead class="shadow" style="background-color:white; ">
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
                             <tr>
-                                <th style="width:10%">Account Number</th>
-                                <th style="width:20%">Account Name</th>
-                                <th style="width:10%">Account Type</th>
-                                <th style="width:10%">Normal Side</th>
-                                <th style="width:10%">Original Balance</th>
-                                <th style="width:10%">Current Balance</th>
-                                <th style="width:10%">Account Description</th>
-                                <th style="width:10%">Active</th>
-                                <th style="width:10%">Created By</th>
-                                <th style="width:10%">Edit</th>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EventID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.From)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.To)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IPAddress)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Screen)
+                                </td>
 
                             </tr>
-                        </thead>
-                        <tbody>
+                        }
+                    </tbody>
+                </table>
 
-                            @for (int i = 0; i < Model.Count(); i++)
-                            {
-                                <tr>
-                                    <td>@Model[i].AccountNumber</td>
-                                    <td>   <a href="#" style="color:blue">@Model[i].AccountName</a></td>
-                                    <td>@Model[i].AccountType</td>
-                                    <td>@Model[i].NormalSide</td>
-                                    <td style="text-align:end">@Model[i].OriginalBalance</td>
-                                    <td style="text-align:end">@Model[i].CurrentBalance</td>
-                                    <td>@Model[i].AccountDescription</td>
-                                    <td>@(Model[i].Active ? "Y" : "N")</td>
-                                    <td>@Model[i].CreatedBy</td>
-                                    <td>
+            </div>
+            <div class="container body-content">
 
-                                        <a href="@Url.Action("EditAccount", new { id = Model[i].AccountNumber})">
-                                            <i class="fas fa-edit" style="color:#3e547f"></i>
-
-                                        </a>
-
-                                        @*<a href="@Url.Action("Delete", new { id = Model[i].AccountNumber})">
-                                <i class="fas fa-user-edit"></i>
-                                Delete
-                            </a>*@
-                                    </td>
-
-
-
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <hr />
-
-                </div>
-                <div class="container body-content">
-
-                    <footer align="center">
-                        <p>
-                            &copy; @DateTime.Now.Year - Objective Accounting
-                            Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
-                        </p>
-                    </footer>
-                </div>
-
+                <hr />
+                <footer align="center">
+                    <p>
+                        &copy; @DateTime.Now.Year - Objective Accounting
+                        Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
+                    </p>
+                </footer>
+            </div>
         </div>
+
     </div>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-        <script type="text/javascript">
+    <script type="text/javascript">
 
     window.onload = function () {
         var username = '@Session["FirstNameofUser"]';
         document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
     };
 
-        </script>
-        <script>
-            $(document).ready(function () {
+    </script>
+    <script>
+        $(document).ready(function () {
 
-                $('#sidebarCollapse').on('click', function () {
-                    $('#sidebar').toggleClass('active');
-                });
-
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
             });
-        </script>
 
-        <script>
-            $(document).ready(function () {
-                $('#Accountstable').DataTable();
-            });
-        </script>
+        });
+        @Styles.Render("~/Content/dataTables")
+    @Scripts.Render("~/bundles/dataTables")
+    </script>
 
-        <script>
+    <script>
+        $(document).ready(function () {
+            $('#Events').DataTable();
+        });
+    </script>
+
+    <script>
 
         function LogOutUser() {
 
@@ -437,7 +475,7 @@
             window.location.href = '../../Account/Login';
         }
 
-        </script>
+    </script>
 
-    </body>
+</body>
 </html>

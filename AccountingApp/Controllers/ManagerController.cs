@@ -675,7 +675,7 @@ namespace AccountingApp.Controllers
         }
 
 
-        //Broderick's code
+        
         public ActionResult EventLog()
         {
             List<Models.EventLog> events;
@@ -686,9 +686,6 @@ namespace AccountingApp.Controllers
             }
 
             return View(events);
-            //Database1Entities6 db2 = new Database1Entities6();
-            //var events = db2.EventLogs.ToList();
-            //return View(events);
         }
     }
 }
