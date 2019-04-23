@@ -785,11 +785,12 @@ namespace AccountingApp.Controllers
 
         public ActionResult EventLog()
         {
+            string access = "All";
             List<Models.EventLog> events;
+
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-
-                events = db.Query<Models.EventLog>($"Select * from dbo.EventLogTable").ToList();
+                events = db.Query<Models.EventLog>($"Select * From dbo.EventLogTable Where AccessLevel = @Acc", new { Acc = access }).ToList();
             }
 
             return View(events);
