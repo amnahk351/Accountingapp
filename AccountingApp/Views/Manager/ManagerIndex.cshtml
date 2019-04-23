@@ -19,8 +19,12 @@
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    @*<script src="https://code.highcharts.com/modules/export-data.js"></script>*@
+    <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 
 
 
@@ -45,7 +49,7 @@
             height: 400px;
             margin: 0 auto
         }
-        
+
         a,
         a:hover,
         a:focus {
@@ -440,25 +444,45 @@
                 </div>
                 <br />
                 <div class="row ">
-                    <div class="column shadow" style="width:45%; margin-left:20px;">
-                        <div class="shadow" id="chart" style="width:100%"></div>
+                    <div class="column shadow" style="width:22%; margin-left:20px; background-color:white">
+                        <div id="currentratio" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
                     </div>
-                    <div class="column shadow" style="width:45%; margin-left:20px; ">
-                        <div class="shadow" id="graph" style="float:left;width:100%"></div>
+                    <div class="column shadow" style="width:22%; margin-left:20px; background-color:white" ">
+                        <div id="quickratio" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
+
+                    </div>
+                    <div class="column shadow" style="width:22%; margin-left:20px; background-color:white">
+                        <div id="debtasset" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
+                    </div>
+                    <div class="column shadow" style="width:22%; margin-left:20px; background-color:white" ">
+                        <div id="debtequity" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
+
                     </div>
 
                 </div>
                 <br />
                 <div class="row ">
-                    <div class="column shadow" style="width:45%; margin-left:20px;">
-                        <div class="shadow" id="profitloss" style="width:100%"></div>
+
+                    <div class="column " style="width:20%; margin-left:20px;">
+                        <div class="shadow" id="chart" style="width:100%"></div>
                     </div>
-                    <div class="column shadow" style="width:45%; margin-left:20px; ">
-                        <div class="shadow" id="equity" style="float:left;width:100%"></div>
+                    <div class="column " style="width:20%; margin-left:20px;">
+                        <div class="shadow" id="incomeandexpense" style="width:100%"></div>
+                    </div>
+                    <div class="column " style="width:49%; margin-left:20px;">
+                        <div class="shadow" id="capital" style="width:100%"></div>
                     </div>
 
                 </div>
-                <hr />
+                <br />
+                <div class="row ">
+
+                    <div class="column shadow" style="width:91%; margin-left:20px; ">
+                        <div class="shadow" id="expenses" style=" height: 600px; width: 100%; margin: 0 auto"></div>
+                    </div>
+
+                </div>
+                <br />
 
             </div>
             <div class="container body-content">
@@ -508,10 +532,65 @@
 
 
     <script>
+        //working capital
+        var chart = Highcharts.chart('capital', {
+            chart: {
+                events: {
+                    load: function (event) {
+                        var total = 0; // get total of data
+                        for (var i = 0, len = this.series[0].yData.length; i < len; i++) {
+                            total += this.series[0].yData[i];
+                        }
+                        var text = this.renderer.text(
+                            'Working Capital: $' + total,
+                            this.plotLeft,
+                            this.plotTop + 30,
 
+                        ).attr({
+                            zIndex: 5
+                        }).add() // write it to the upper left hand corner
+                    }
+                },
+                style: {
+
+                    fontSize: '38px'
+                }
+            },
+            title: {
+                text: ''
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: ['Working Capital']
+            },
+            plotOptions: {
+                series: {
+                    pointWidth: 45
+                }
+            },
+
+            series: [{
+                type: 'bar',
+                colorByPoint: true,
+                data: [
+                    { y: 16000, color: 'green' }
+                ],
+                showInLegend: false,
+
+            }]
+
+        });
+
+
+        //currentliabilities and assets
         var chart = Highcharts.chart('chart', {
             title: {
-                text: 'Current Assets And Current Liabilities'
+                text: 'Current Assets And Liabilities'
             },
             exporting: {
                 enabled: false
@@ -532,92 +611,19 @@
                 type: 'column',
                 colorByPoint: true,
                 data: [
-                { y: 6000, color: 'green' },
-                { y: 2000, color: 'orange' }],
+                    { y: 6000, color: 'green' },
+                    { y: 2000, color: 'orange' }],
                 showInLegend: false
             }]
 
         });
 
 
-       
-      
-       
 
-
-
-
-
-
-        Highcharts.chart('graph', {
-
+        //incomeandexpense
+        var chart = Highcharts.chart('incomeandexpense', {
             title: {
-                text: 'Current Ratio and Quick Ratio'
-            },
-
-           
-
-            yAxis: {
-               
-                categories: [0, 10, 20, 40, 80],
-            
-                title: {
-                    text: 'Values'
-                }
-            },
-           
-            legend: {
-                layout: 'Vertical',
-                align: 'right',
-                verticalAlign: 'middle'
-            },
-            chart: {
-                width: null
-            },
-
-            plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
-                    },
-                    pointStart: 2015
-                }
-            },
-            exporting: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
-            series: [{
-                name: 'Current Ratio(Annual)',
-                data: [12.4, 17.8, 10.2, 8.8,14.8]
-            },  {name: 'Quick Ratio(Annual)',
-                    data: [ 0.83, 15.8, 10.2, 9.2, 10.8,  ]
-            }],
-
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 800
-                    },
-                    chartOptions: {
-                        legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom'
-                        }
-                    }
-                }]
-            }
-
-        });
-
-
-        var chart = Highcharts.chart('profitloss', {
-
-            title: {
-                text: 'Net Income'
+                text: 'Revenue And Expense'
             },
             exporting: {
                 enabled: false
@@ -626,25 +632,20 @@
                 enabled: false
             },
             xAxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                categories: ['Revenue', 'Expense']
+            },
+            plotOptions: {
+                series: {
+                    pointWidth: 45
+                }
             },
 
             series: [{
-                name: 'Net Income',
-
                 type: 'column',
                 colorByPoint: true,
-                data: [{ y: 6000, color: 'green' },
-                    { y: 2000, color: 'green' },
-                    { y: 3000, color: 'green' },
+                data: [
                     { y: 6000, color: 'green' },
-                    { y: 7000, color: 'green' },
-                    { y: 6000, color: 'green' }, { y: 6000, color: 'green' },
-                    { y: 4000, color: 'green' },
-                    { y: 3000, color: 'green' },
-                    { y: -2000, color: 'red' },
-                    { y: 6000, color: 'green' },
-                    { y: 6000, color: 'green' }],
+                    { y: 2000, color: 'red' }],
                 showInLegend: false
             }]
 
@@ -652,18 +653,32 @@
 
 
 
-
-
-
-        Highcharts.chart('equity', {
+        //expenses
+        var chart = Highcharts.chart('expenses', {
             chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
+                events: {
+                    load: function (event) {
+                        var total = 0; // get total of data
+                        for (var i = 0, len = this.series[0].yData.length; i < len; i++) {
+                            total += this.series[0].yData[i];
+                        }
+                        var text = this.renderer.text(
+                            'Expenses: $' + total,
+                            this.plotLeft,
+                            this.plotTop + 40,
+
+                        ).attr({
+                            zIndex: 5
+                        }).add() // write it to the upper left hand corner
+                    }
+                },
+                style: {
+
+                    fontSize: '38px'
+                }
             },
             title: {
-                text: 'Return on Equity'
+                text: ''
             },
             exporting: {
                 enabled: false
@@ -671,34 +686,569 @@
             credits: {
                 enabled: false
             },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-            },
             plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                        style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                series: {
+                    pointWidth: 65
+                }
+            },
+
+            xAxis: {
+                categories: ['Rent Expense', 'Salaries Expense', 'Supplies Expense', 'Utilities Expense', 'Telephone Expene', 'Advertising Expense', 'Insurance Expense', 'Depriciation Expense']
+            },
+
+            series: [{
+                type: 'column',
+                colorByPoint: true,
+                data: [{ y: 60, color: '#3367A0' }, { y: 71, color: '#3367A0' }, { y: 106, color: '#3367A0' }, { y: 129, color: '#3367A0' }, { y: 144, color: '#3367A0' }, { y: 176, color: '#3367A0' }, { y: 135, color: '#3367A0' }, { y: 148, color: '#2B5F98' }],
+                showInLegend: false,
+            }]
+
+        });
+
+
+
+
+        //current ratio
+        Highcharts.chart('currentratio', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+                events: {
+                    render: function () {
+                        var value = this.series[0].yData[0],
+                            color;
+
+                        if (value < 1) {
+                            color = '#DF5353';
+                        } else if (value < 1) {
+                            color = '#DDDF0D';
+                        } else {
+                            color = '#55BF3B';
                         }
+
+                        this.title.css({
+                            color: color
+                        });
                     }
                 }
             },
-            series: [{
-                
-                colorByPoint: true,
-                data: [{
-                    name: 'Equity',
-                    y: 30.00
-                }, {
-                    name: 'Net Income',
-                     y: 70.00, color: 'green' 
+
+            title: {
+                text: 'Current Ratio'
+            },
+
+            pane: {
+                startAngle: -125,
+                endAngle: 125,
+                background: [{
+                    borderWidth: 0,
+                    backgroundColor: 'transparent'
                 }]
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            // the value axis
+            yAxis: {
+
+                min: 0,
+                max: 18,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 0,
+                minorTickLength: 10,
+                minorTickPosition: 'inside',
+                minorTickColor: '#666',
+                gridLineColor: 'transparent',
+
+
+                tickPixelInterval: 30,
+                tickWidth: 2,
+                tickPosition: 'inside',
+                tickLength: 0,
+                tickColor: '#666',
+                labels: {
+                    step: 2,
+                    rotation: 'auto'
+                },
+                title: {
+                    text: ''
+                },
+                plotBands: [{
+                    from: 0,
+                    to: 1,
+                    color: '#DF5353',// red
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'red-band'
+                }, {
+                    from: 1,
+                    to: 18,
+                    color: '#55BF3B', // green
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'green-band'
+                }]
+            },
+            xAxis: {
+                visible: false
+            },
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        borderColor: 'transparent'
+                    },
+                    dial: {
+                        radius: '75%',
+                        backgroundColor: '#666666',
+                        borderWidth: 0,
+                        baseWidth: 7,
+                        topWidth: 1,
+                        baseLength: '90%', // of radius
+                        rearLength: '0%'
+                    },
+                    pivot: {
+                        backgroundColor: '#666666',
+                        radius: 3
+                    }
+                }
+            },
+
+            series: [{
+                useHTML: true,
+                animation: false,
+
+                name: 'Current Ratio',
+                data: [10.4],
+                tooltip: {
+
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: '38px'
+                    }
+                }
             }]
+
         });
+
+
+
+
+        //quick ratio
+        Highcharts.chart('quickratio', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+                events: {
+                    render: function () {
+                        var value = this.series[0].yData[0],
+                            color;
+
+                        if (value < 1) {
+                            color = '#DF5353';
+                        } else if (value < 1) {
+                            color = '#DDDF0D';
+                        } else {
+                            color = '#55BF3B';
+                        }
+
+                        this.title.css({
+                            color: color
+                        });
+                    }
+                }
+            },
+
+            title: {
+                text: 'Quick Ratio'
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            pane: {
+                startAngle: -125,
+                endAngle: 125,
+                background: [{
+                    borderWidth: 0,
+                    backgroundColor: 'transparent'
+                }]
+            },
+
+            // the value axis
+            yAxis: {
+
+                min: 0,
+                max: 18,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 0,
+                minorTickLength: 10,
+                minorTickPosition: 'inside',
+                minorTickColor: '#666',
+                gridLineColor: 'transparent',
+
+
+                tickPixelInterval: 30,
+                tickWidth: 2,
+                tickPosition: 'inside',
+                tickLength: 0,
+                tickColor: '#666',
+                labels: {
+                    step: 2,
+                    rotation: 'auto'
+                },
+                title: {
+                    text: ''
+                },
+                plotBands: [{
+                    from: 0,
+                    to: 1,
+                    color: '#DF5353',
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'red-band'
+
+                }, {
+
+                    from: 1,
+                    to: 18,
+                    color: '#55BF3B',
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'green-band'
+
+                }]
+            },
+            xAxis: {
+                visible: false
+            },
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        borderColor: 'transparent'
+                    },
+                    dial: {
+                        radius: '75%',
+                        backgroundColor: '#666666',
+                        borderWidth: 0,
+                        baseWidth: 7,
+                        topWidth: 1,
+                        baseLength: '90%', // of radius
+                        rearLength: '0%'
+                    },
+                    pivot: {
+                        backgroundColor: '#666666',
+                        radius: 3
+                    }
+                }
+            },
+
+            series: [{
+                animation: false,
+
+                name: 'Quick Ratio',
+                data: [10.2],
+                tooltip: {
+
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: '38px'
+                    }
+                }
+            }]
+
+        });
+
+
+        //debt asset ratio
+        Highcharts.chart('debtasset', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+                events: {
+                    render: function () {
+                        var value = this.series[0].yData[0],
+                            color;
+
+                        if (value < 1) {
+                            color = '#55BF3B';
+                        } else if (value < 1) {
+                            color = '#DDDF0D';
+                        } else {
+                            color = '#DF5353';
+                        }
+
+                        this.title.css({
+                            color: color
+                        });
+                    }
+                }
+            },
+
+            title: {
+                text: 'Debt Asset Ratio'
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            pane: {
+                startAngle: -125,
+                endAngle: 125,
+                background: [{
+                    borderWidth: 0,
+                    backgroundColor: 'transparent'
+                }]
+            },
+
+            // the value axis
+            yAxis: {
+
+                min: 0,
+                max: 2,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 0,
+                minorTickLength: 10,
+                minorTickPosition: 'inside',
+                minorTickColor: '#666',
+                gridLineColor: 'transparent',
+
+
+                tickPixelInterval: 30,
+                tickWidth: 2,
+                tickPosition: 'inside',
+                tickLength: 0,
+                tickColor: '#666',
+                labels: {
+                    step: 2,
+                    rotation: 'auto'
+                },
+                title: {
+                    text: ''
+                },
+                plotBands: [{
+                    from: 0,
+                    to: 1,
+                    color: '#55BF3B',// green
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'green'
+                }, {
+                    from: 1,
+                    to: 2,
+                    color: '#DF5353', // red
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'red'
+
+                }]
+            },
+            xAxis: {
+                visible: false
+            },
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        borderColor: 'transparent'
+                    },
+                    dial: {
+                        radius: '75%',
+                        backgroundColor: '#666666',
+                        borderWidth: 0,
+                        baseWidth: 7,
+                        topWidth: 1,
+                        baseLength: '90%', // of radius
+                        rearLength: '0%'
+                    },
+                    pivot: {
+                        backgroundColor: '#666666',
+                        radius: 3
+                    }
+                }
+            },
+
+            series: [{
+                animation: false,
+
+                name: 'Debt Asset Ratio',
+                data: [1.2],
+                tooltip: {
+
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: '38px'
+                    }
+                }
+            }]
+
+        });
+
+
+
+        //debt equity ratio
+        Highcharts.chart('debtequity', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false,
+                events: {
+                    render: function () {
+                        var value = this.series[0].yData[0],
+                            color;
+
+                        if (value < 1) {
+                            color = '#55BF3B';
+                        } else if (value < 1) {
+                            color = '#DDDF0D';
+                        } else {
+                            color = '#DF5353';
+                        }
+
+                        this.title.css({
+                            color: color
+                        });
+                    }
+                }
+            },
+
+            title: {
+                text: 'Debt Equity Ratio'
+            },
+            exporting: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            pane: {
+                startAngle: -125,
+                endAngle: 125,
+                background: [{
+                    borderWidth: 0,
+                    backgroundColor: 'transparent'
+                }]
+            },
+
+            // the value axis
+            yAxis: {
+
+                min: 0,
+                max: 2,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 0,
+                minorTickLength: 10,
+                minorTickPosition: 'inside',
+                minorTickColor: '#666',
+                gridLineColor: 'transparent',
+
+
+                tickPixelInterval: 30,
+                tickWidth: 2,
+                tickPosition: 'inside',
+                tickLength: 0,
+                tickColor: '#666',
+                labels: {
+                    step: 2,
+                    rotation: 'auto'
+                },
+                title: {
+                    text: ''
+                },
+                plotBands: [{
+                    from: 0,
+                    to: 1,
+                    color: '#55BF3B',// green
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'green'
+
+                }, {
+                    from: 1,
+                    to: 2,
+                    color: '#DF5353', // red
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'red'
+
+                }]
+            },
+            xAxis: {
+                visible: false
+            },
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        borderColor: 'transparent'
+                    },
+                    dial: {
+                        radius: '75%',
+                        backgroundColor: '#666666',
+                        borderWidth: 0,
+                        baseWidth: 7,
+                        topWidth: 1,
+                        baseLength: '90%', // of radius
+                        rearLength: '0%'
+                    },
+                    pivot: {
+                        backgroundColor: '#666666',
+                        radius: 3
+                    }
+                }
+            },
+
+            series: [{
+                animation: false,
+
+                name: 'Debt Equity Ratio',
+                data: [0.5],
+                tooltip: {
+
+                },
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: '38px'
+                    }
+                }
+            }]
+
+        });
+
     </script>
 </body>
 </html>
