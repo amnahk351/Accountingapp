@@ -214,72 +214,62 @@
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
-
                 </li>
                 <li>
-
-                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <a href="/Manager/ChartOfAccounts">
                         <i class="fas fa-list" style="margin-right:10px;"></i>
-
                         Chart Of Accounts
                     </a>
-                    <ul class="collapse list-unstyled" id="accountSubmenu">
-                        <li>
-                            <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
-                        </li>
 
-
-                    </ul>
                 </li>
+                @*<li>
+
+                <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                    <i class="fas fa-list" style="margin-right:10px;"></i>
+                    Chart Of Accounts
+                </a>
+                <ul class="collapse list-unstyled" id="accountSubmenu">
+                    <li>
+                        <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
+                    </li>
+                </ul>
+                </li>*@
                 <li>
 
                     <a href="/Manager/Journalize">
                         <i class="far fa-edit" style="margin-right:10px"></i>
-
-
                         Journalize
                     </a>
                 </li>
                 <li>
 
-                    <a href="#">
+                    <a href="/Manager/GeneralLedger">
                         <i class="fas fa-book" style="margin-right:10px"></i>
-
-
-
                         General Ledger
                     </a>
                 </li>
-                <li>
 
-                    <a href="@Url.Action("GeneralJournal")">
-                        <i class="fas fa-book" style="margin-right:10px"></i>
-
-
-
-                        General Journal
-                    </a>
-                </li>
                 <li>
 
                     <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
-
-
                         Transactions
                     </a>
                     <ul class="collapse list-unstyled" id="transactionSubmenu">
                         <li>
-                            <a href="@Url.Action("ManagerApproval")">Pending Transactions</a>
+                            <a href="/Manager/Transactions">All Transactions</a>
                         </li>
                         <li>
-                            <a href="">Posted Transactions</a>
+                            <a href="/Manager/ApprovedTransactions">Approved Transactions</a>
                         </li>
                         <li>
-                            <a href="">Rejected Transactions</a>
+                            <a href="/Manager/DisapprovedTransactions">Rejected Transactions</a>
                         </li>
                         <li>
-                            <a href="">Suspended Transactions</a>
+                            <a href="/Manager/PendingTransactions">Pending Transactions</a>
+                        </li>
+                        <li>
+                            <a href="/Manager/SuspendedTransactions">Suspended Transactions</a>
                         </li>
 
                     </ul>
@@ -288,8 +278,6 @@
 
                     <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="far fa-chart-bar" style="margin-right:10px"></i>
-
-
                         Reports
                     </a>
                     <ul class="collapse list-unstyled" id="reportSubmenu">
@@ -305,25 +293,9 @@
                         <li>
                             <a href="/Manager/BalanceSheet">Balance Sheet</a>
                         </li>
-                        <li>
-                            <a href="/Manager/PostClosingTrialBalance">Post Closing Trial Balance</a>
-                        </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-users" style="margin-right:10px;"></i>
-
-
-                        Users
-                    </a>
-                    <ul class="collapse list-unstyled" id="userSubmenu">
-                        <li>
-                            <a href="/Manager/ShowUserData">User List</a>
-                        </li>
-
-
-                    </ul>
                     <a href="/Manager/EventLog">
                         <i class="fas fa-briefcase" style="margin-right:10px;"></i>
                         Event Log
