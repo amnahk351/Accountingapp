@@ -484,6 +484,11 @@
     <Content Include="Views\Manager\DisapprovedTransactions.cshtml" />
     <Content Include="Views\Manager\PendingTransactions.cshtml" />
     <Content Include="Views\Manager\SuspendedTransactions.cshtml" />
+    <Content Include="Views\Accountant\EventLog.cshtml" />
+    <Content Include="Views\Admin\EventLog.cshtml" />
+    <Content Include="Views\Admin\NewUser.cshtml" />
+    <Content Include="Views\Admin\EditUser.cshtml" />
+    <Content Include="Views\Admin\AllUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />

@@ -1,11 +1,44 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@model IEnumerable<AccountingApp.Models.EventLog>
 
+@{
+    ViewBag.Title = "Event Log";
+    //Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    Layout = null;
+}
+<html>
 <head>
+
+
+    @*<p>
+            @Html.ActionLink("Create New", "Create")
+        </p>*@
+
     <meta charset="utf-8">
-    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS -->
+    @*
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
+    @*
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
@@ -177,7 +210,7 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Admin/AdminIndex">
+                    <a href="/Accountant/Dashboard">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
@@ -187,44 +220,84 @@
 
                     <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-list" style="margin-right:10px;"></i>
-
                         Chart Of Accounts
                     </a>
                     <ul class="collapse list-unstyled" id="accountSubmenu">
                         <li>
-                            <a href="/Admin/ChartOfAccounts">Chart of Accounts</a>
-                        </li>
-                        <li>
-                            <a href="/Admin/NewAccount">Create New Account</a>
-                        </li>
-                        <li>
-                            <a href="/Admin/AccountRequests">View Requests</a>
-                        </li>
-
-                    </ul>
-                    <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-users" style="margin-right:10px;"></i>
-
-
-                        Users
-                    </a>
-                    <ul class="collapse list-unstyled" id="userSubmenu">
-                        <li>
-                            <a href="/Admin/AllUsers">User List</a>
-                        </li>
-                        <li>
-                            <a href="/Admin/UserStatistics">User Statistics</a>
-                        </li>
-                        <li>
-                            <a href="/Admin/NewUser">Create New User</a>
+                            <a href="/Accountant/ChartOfAccounts">Chart of Accounts</a>
                         </li>
                     </ul>
-                    <a href="/Admin/EventLog">
-                        <i class="fas fa-briefcase" style="margin-right:10px;"></i>
-                        Event Log
-                    </a>
-
                 </li>
+                <li>
+
+                    <a href="/Accountant/Journalize">
+                        <i class="far fa-edit" style="margin-right:10px"></i>
+                        Journalize
+                    </a>
+                </li>
+                <li>
+
+                    <a href="">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+                        General Ledger
+                    </a>
+                </li>
+                <li>
+
+                    <a href="/Accountant/AccountantIndex">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+                        General Journal
+                    </a>
+                </li>
+                <li>
+
+                    <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
+                        Transactions
+                    </a>
+                    <ul class="collapse list-unstyled" id="transactionSubmenu">
+                        <li>
+                            <a href="/Accountant/ManagerApproval">Pending Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Posted Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Rejected Transactions</a>
+                        </li>
+                        <li>
+                            <a href="">Suspended Transactions</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li>
+
+                    <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="far fa-chart-bar" style="margin-right:10px"></i>
+
+
+                        Reports
+                    </a>
+                    <ul class="collapse list-unstyled" id="reportSubmenu">
+                        <li>
+                            <a href="/Accountant/TrialBalance">Trial Balance</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/IncomeStatement">Income Statement</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/RetainedEarnings">Statement Of Retained Earnings</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/BalanceSheet">Balance Sheet</a>
+                        </li>
+                        <li>
+                            <a href="/Accountant/PostClosingTrialBalance">Post Closing Trial Balance</a>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
 
         </nav>
@@ -271,8 +344,71 @@
                 </div>
             </nav>
 
+
+            <h4>Event Log</h4>
+            <hr />
+            <div>
+                <table class="table table-responsive table-hover shadow " id="Events" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
+                    <thead class="shadow" style="background-color:white; ">
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.Event_ID)*@
+                        Event ID
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.User_ID)*@
+                        User ID
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.From)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.To)
+                    </th>
+                    <th>
+                        @*@Html.DisplayNameFor(model => model.IP_Address)*@
+                        IP Address
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Screen)
+                    </th>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EventID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.From)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.To)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IPAddress)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Screen)
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
             <div class="container body-content">
-                @RenderBody()
 
                 <hr />
                 <footer align="center">
@@ -283,8 +419,8 @@
                 </footer>
             </div>
         </div>
-    </div>
 
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -308,6 +444,14 @@
                 $('#sidebar').toggleClass('active');
             });
 
+        });
+        @Styles.Render("~/Content/dataTables")
+    @Scripts.Render("~/bundles/dataTables")
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#Events').DataTable();
         });
     </script>
 
@@ -333,8 +477,5 @@
 
     </script>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
 </body>
 </html>

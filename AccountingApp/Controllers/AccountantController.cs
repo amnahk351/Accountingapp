@@ -94,7 +94,19 @@ namespace AccountingApp.Controllers
                 return View(getAllEntriesOfStatus(status));
         }
 
-        
+
+        public ActionResult EventLog()
+        {
+            List<Models.EventLog> events;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                events = db.Query<Models.EventLog>($"Select * from dbo.EventLogTable").ToList();
+            }
+
+            return View(events);
+        }
+
 
 
         public int GetLatestEntryId()
@@ -873,21 +885,7 @@ namespace AccountingApp.Controllers
         }
 
 
-        //broderick's
-        public ActionResult EventLog()
-        {
-            List<Models.EventLog> events;
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-
-                events = db.Query<Models.EventLog>($"Select * from dbo.EventLogTable").ToList();
-            }
-
-            return View(events);
-            //Database1Entities6 db2 = new Database1Entities6();
-            //var events = db2.EventLogs.ToList();
-            //return View(events);
-        }
+        
 
         //colt's code
         public ActionResult TrialBalance()
