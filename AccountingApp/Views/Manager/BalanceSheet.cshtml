@@ -15,13 +15,12 @@
 
     <!-- Bootstrap CSS -->
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
     <style>
-       
     </style>
 </head>
 
@@ -29,7 +28,7 @@
 
 
     @*Amnah*@
-    <div class="shadow container" style="width:60%; background-color:gainsboro;">
+    <div class="shadow container" style="width:80%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" id="printContent" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
@@ -41,12 +40,12 @@
                         <script>
                             var options = { year: 'numeric', month: 'long', day: 'numeric' };
 
-                            document.write(new Date().toLocaleDateString("en-US", options))                        </script>
+                            document.write(new Date().toLocaleDateString("en-US", options))</script>
                     </h4>
                     @*<br />*@
                     <hr style="border-width: 2px; border-color: black" />
                     <div align="center">
-                        <table id="assetsTable" class="table-striped" style="width:510px;">
+                        <table id="assetsTable" class="table-striped" style="width:600px;">
 
                             <tr class="titleRow">
                                 <th class="text-left" colspan="3">Assets</th>
@@ -78,7 +77,9 @@
                             </tr>
 
                             <tr>
-                                <th class="text-left" colspan="3" style="text-indent: 3%">&nbsp;&nbsp;&nbsp;Property Plant & Equipment</th>
+                                <th class="text-left" style="text-indent: 3%">&nbsp;&nbsp;&nbsp;Property Plant & Equipment</th>
+                                <td></td>
+                                <td></td>
                             </tr>
                             @for (int i = 0; i < Model.Count; i++)
                             {
@@ -88,45 +89,16 @@
                                         <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
                                         @if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                         {
-                                        <td style="text-align: right">@Model[i].CurrentBalance</td>
+                                            <td style="text-align: right">@Model[i].CurrentBalance</td>
                                         }
                                         else
                                         {
-                                        <td style="border-bottom: .15rem solid; text-align: right">(@Model[i].CurrentBalance)</td>
+                                            <td style="border-bottom: .15rem solid; text-align: right">(@Model[i].CurrentBalance)</td>
                                         }
                                         <td> </td>
                                     </tr>
                                 }
                             }
-                            @*tried rewrite the method above to fix the horizontal rows that were the same colors*@
-                            @*@for (int i = 0; i < Model.Count; i++)
-        {
-
-            if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
-            {
-                @*<tr>
-                    <td align="left" style="text-indent: 8%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                </tr>*@
-                            @*if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
-            {
-                <tr>
-                    <td>@Model[i].CurrentBalance</td>
-                    <td> </td>
-                </tr>
-            }
-        else
-        {
-            <tr>
-                <td style="border-bottom: .15rem solid">(@Model[i].CurrentBalance)</td>
-                <td> </td>
-            </tr>
-        }*@
-                            @*<td> </td>
-        </tr>*@
-                            @*}
-
-
-        }*@
 
                             <tr>
                                 <th class="text-left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Property Plant & Equipment, Net</th>
@@ -141,98 +113,106 @@
                             </tr>
                         </table>
 
-                    <br />
+                        <br />
 
-                    <table id="liabilitiesTable" class="table-striped" style="width:510px;">
+                        <table id="liabilitiesTable" class="table-striped" style="width:600px;">
 
-                        <tr class="titleRow">
-                            <th class="text-left">Liabilities & Stockholder's Equity</th>
-                            <th> </th>
-                            <th> </th>
-                        </tr>
+                            <tr class="titleRow">
+                                <th class="text-left">Liabilities & Stockholder's Equity</th>
+                                <th> </th>
+                                <th> </th>
+                            </tr>
 
-                        <tr>
-                            <th class="text-left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Current Liabilities</th>
-                            <th> </th>
-                            <th> </th>
-                        </tr>
+                            <tr>
+                                <th class="text-left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Current Liabilities</th>
+                                <th> </th>
+                                <th> </th>
+                            </tr>
 
 
-                        @for (int i = 0; i < Model.Count; i++)
-                        {
-                            if (Model[i].AccountType.ToLower() == "liabilities")
+                            @for (int i = 0; i < Model.Count; i++)
                             {
-
-                                if (Model[i].AccountName.ToLower() != "unearned revenue" && Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
+                                if (Model[i].AccountType.ToLower() == "liabilities")
                                 {
-                                    <tr>
-                                        <td align="left" style="text-indent: 8%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                        <td align="right">@Model[i].CurrentBalance</td>
-                                        <td> </td>
-                                    </tr>
+
+                                    if (Model[i].AccountName.ToLower() != "unearned revenue" && Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
+                                    {
+                                        <tr>
+                                            <td align="left" style="text-indent: 8%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                            <td align="right">@Model[i].CurrentBalance</td>
+                                            <td> </td>
+                                        </tr>
+                                    }
+
+                                    else if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
+                                    {
+                                        <tr>
+                                            <td align="left" style="text-indent:4%;"><b>&nbsp;&nbsp;&nbsp;@Model[i].AccountName</b></td>
+                                            <td align="right" style="border-bottom: .15rem solid">@Model[i].CurrentBalance</td>
+                                            <td></td>
+                                        </tr>
+                                    }
+
                                 }
+                            }
+                            <tr>
+                                <td align="left" style="text-indent: 4%;"><b>&nbsp;&nbsp;&nbsp;Total Current Liabilities</b></td>
+                                <td> </td>
+                                <td align="right">@ViewBag.totalCurrentLiabilities</td>
+                            </tr>
+                            <tr>
+                                <td align="left"><b>Total Liabilities</b></td>
+                                <td> </td>
+                                <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right">@ViewBag.totalLiabilities</td>
+                            </tr>
+                            <tr height=20px>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th class="text-left">Stockholders' Equity</th>
+                                <td></td>
+                                <td></td>
+                            </tr>
 
-                                else if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                if (Model[i].AccountName.ToLower() == "contributed capital")
                                 {
                                     <tr>
-                                        <td align="left" style="text-indent:4%;"><b>&nbsp;&nbsp;&nbsp;@Model[i].AccountName</b></td>
-                                        <td align="right" style="border-bottom: .15rem solid">@Model[i].CurrentBalance</td>
+
+                                        <td align="left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
                                         <td></td>
+                                        <td style="text-align: right">@Model[i].CurrentBalance</td>
+
+
                                     </tr>
                                 }
-
                             }
-                        }
-                        <tr>
-                            <td align="left" style="text-indent: 4%;"><b>&nbsp;&nbsp;&nbsp;Total Current Liabilities</b></td>
-                            <td> </td>
-                            <td align="right">@ViewBag.totalCurrentLiabilities</td>
-                        </tr>
-                        <tr>
-                            <td align="left"><b>Total Liabilities</b></td>
-                            <td> </td>
-                            <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right">@ViewBag.totalLiabilities</td>
-                        </tr>
-                        <tr height=20px></tr>
-                        <tr>
-                            <th class="text-left">Stockholders' Equity</th>
-                            <td></td>
-                            <td></td>
-                        </tr>
 
-                        @for (int i = 0; i < Model.Count; i++)
-                        {
-                            if (Model[i].AccountName.ToLower() == "contributed capital")
-                            {
-                                <tr>
+                            <tr>
+                                <td align="left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Retained Earnings</td>
+                                <td> </td>
+                                <td style="text-align: right">@ViewBag.retainedEarnings</td>
+                            </tr>
 
-                                    <td align="left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                    <td></td>
-                                    <td style="text-align: right">@Model[i].CurrentBalance</td>
-
-
-                                </tr>
-                            }
-                        }
-
-                        <tr>
-                            <td align="left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Retained Earnings</td>
-                            <td> </td>
-                            <td style="text-align: right">@ViewBag.retainedEarnings</td>
-                        </tr>
-
-                        <tr>
-                            <th class="text-left">Total Stockholders' Equity</th>
-                            <td> </td>
-                            <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right">@ViewBag.totalStockHolderEquity</td>
-                        </tr>
-                        <tr height=20px></tr>
-                        <tr>
-                            <th class="text-left">Total Liabilities & Stockholders' Equity</th>
-                            <td> </td>
-                            <td style="border-bottom: .4rem double; text-align: right">@ViewBag.totalLiabilitesStockEquity</td>
-                        </tr>
-                    </table>
+                            <tr>
+                                <th class="text-left">Total Stockholders' Equity</th>
+                                <td> </td>
+                                <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right">@ViewBag.totalStockHolderEquity</td>
+                            </tr>
+                            <tr height=20px>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th class="text-left">Total Liabilities & Stockholders' Equity</th>
+                                <td> </td>
+                                <td style="border-bottom: .4rem double; text-align: right">@ViewBag.totalLiabilitesStockEquity</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -249,7 +229,7 @@
             var element = document.getElementById('printContent');
             html2pdf().from(element).save("BalanceSheet");
         });
-    </script> 
+    </script>
     <script>
         $(document).ready(function () {
 
@@ -265,49 +245,40 @@
             var table = document.getElementById("assetsTable");
             var table2 = document.getElementById("liabilitiesTable");
 
-            //var rows = document.getElementById("assetsTable").getElementsByTagName("tbody")[0].getElementsByTagName("tr").length;
-            var rowCount = $('#assetsTable tr').length;
-
-            alert(table.rows[8].cells[1].innerText);
-            //alert(table[1].innerText);
-
-            //alert("rows1 " + rowCount);
-            alert("rows1 " + table.rows.length);
-            for (var i = 1; i < table.rows.length; i++) {
+            for (var i = 2; i < table.rows.length; i++) {
                 var Dhtml = table.rows[i].cells[1].innerText;
-                //var Chtml = table.rows[i].cells[2].innerText;
+                var Chtml = table.rows[i].cells[2].innerText;
 
                 var newDhtml = Dhtml.replace("$", "");
-                //var newChtml = Chtml.replace("$", "");
+                var newChtml = Chtml.replace("$", "");
 
                 if (newDhtml != "") {
                     table.rows[i].cells[1].innerText = formatMoney(newDhtml);
                 }
 
-                //if (newChtml != "") {
-                //    table.rows[i].cells[2].innerText = formatMoney(newChtml);
-                //}
+                if (newChtml != "") {
+                    table.rows[i].cells[2].innerText = formatMoney(newChtml);
+                }
 
             }
-            alert("Got here 2");
-            for (var j = 1; j < table2.rows.length; j++) {
+
+
+            for (var j = 2; j < table2.rows.length; j++) {
                 var Dhtml = table2.rows[j].cells[1].innerText;
-                //var Chtml = table.rows[i].cells[2].innerText;
+                var Chtml = table2.rows[j].cells[2].innerText;
 
                 var newDhtml = Dhtml.replace("$", "");
-                //var newChtml = Chtml.replace("$", "");
+                var newChtml = Chtml.replace("$", "");
 
                 if (newDhtml != "") {
                     table2.rows[j].cells[1].innerText = formatMoney(newDhtml);
                 }
 
-                //if (newChtml != "") {
-                //    table.rows[i].cells[2].innerText = formatMoney(newChtml);
-                //}
+                if (newChtml != "") {
+                    table2.rows[j].cells[2].innerText = formatMoney(newChtml);
+                }
 
             }
-
-            alert("Got here 3");
 
         }
 
@@ -323,11 +294,10 @@
         };
 
         function PlaceDollarSigns() {
-            var table = document.getElementById("liabilitiesTable");
-            var rowsNum = table.rows.length;
+            var table = document.getElementById("assetsTable");
 
             //Place dollar sign for debit
-            for (var i = 1; i < rowsNum; i++) {
+            for (var i = 2; i < table.rows.length; i++) {
                 var Dhtml = table.rows[i].cells[1].innerText;
 
                 if (Dhtml != "") {
@@ -341,7 +311,7 @@
             }
 
             //Place dollar sign for credit
-            for (var i = 1; i < rowsNum; i++) {
+            for (var i = 2; i < table.rows.length; i++) {
                 var Chtml = table.rows[i].cells[2].innerText;
 
 
@@ -354,12 +324,47 @@
                 }
             }
 
-            var TotalDebit = table.rows[rowsNum - 1].cells[1].innerText;
-            var TotalCredit = table.rows[rowsNum - 1].cells[2].innerText;
+            //var TotalDebit = table.rows[rowsNum - 1].cells[1].innerText;
+            var TotalCredit = table.rows[table.rows.length - 1].cells[2].innerText;
 
-            table.rows[rowsNum - 1].cells[1].innerText = "$ " + TotalDebit;
-            table.rows[rowsNum - 1].cells[2].innerText = "$ " + TotalCredit;
+            //table.rows[rowsNum - 1].cells[1].innerText = "$ " + TotalDebit;
+            table.rows[table.rows.length - 1].cells[2].innerText = "$ " + TotalCredit;
 
+            var table2 = document.getElementById("liabilitiesTable");
+
+            //Place dollar sign for debit
+            for (var i = 2; i < table2.rows.length; i++) {
+                var Dhtml = table2.rows[i].cells[1].innerText;
+
+                if (Dhtml != "") {
+
+                    table2.rows[i].cells[1].innerText = "$ " + Dhtml;
+
+
+                    break;
+                }
+
+            }
+
+            //Place dollar sign for credit
+            for (var i = 2; i < table2.rows.length; i++) {
+                var Chtml = table2.rows[i].cells[2].innerText;
+
+
+                if (Chtml != "") {
+
+                    table2.rows[i].cells[2].innerText = "$ " + Chtml;
+
+
+                    break;
+                }
+            }
+
+            //var TotalDebit = table.rows[rowsNum - 1].cells[1].innerText;
+            var TotalCredit = table2.rows[table2.rows.length - 1].cells[2].innerText;
+
+            //table.rows[rowsNum - 1].cells[1].innerText = "$ " + TotalDebit;
+            table2.rows[table2.rows.length - 1].cells[2].innerText = "$ " + TotalCredit;
         }
 
     </script>
