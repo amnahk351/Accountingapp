@@ -1,0 +1,76 @@
+﻿@model IEnumerable<AccountingApp.Models.UserRequestsModel>
+
+@{
+    ViewBag.Title = "Account Requests";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+<h2>Account Requests</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Date Created
+        </th>
+        <th>
+            Account Number
+        </th>
+        <th>
+            Account Name
+        </th>
+        <th>
+            Account Type
+        </th>
+        <th>
+            Normal Side
+        </th>
+        <th>
+            Original Balance
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Created By
+        </th>
+        <th>
+            Classification
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCreated)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NormalSide)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OriginalBalance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        
+    </tr>
+}
+
+</table>

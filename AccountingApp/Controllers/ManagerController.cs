@@ -37,13 +37,13 @@ namespace AccountingApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                List<Transaction> allTransactionsWithEntryID;
+                List<TransactionTable> allTransactionsWithEntryID;
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    allTransactionsWithEntryID = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryID = @EntryID", new { EntryID = id }).ToList();
+                    allTransactionsWithEntryID = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryID = @EntryID", new { EntryID = id }).ToList();
                 }
 
-                foreach (Transaction t in allTransactionsWithEntryID)
+                foreach (TransactionTable t in allTransactionsWithEntryID)
                 {
                     t.Status = "approved";
                     Trace.WriteLine("----------" + t.EntryId + ":" + t.Status);
@@ -95,13 +95,13 @@ namespace AccountingApp.Controllers
 
         public ActionResult DisapproveEntry(int? id)
         {
-            List<Transaction> allTransactionsWithEntryID;
+            List<TransactionTable> allTransactionsWithEntryID;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                allTransactionsWithEntryID = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryID = @EntryID", new { EntryID = id }).ToList();
+                allTransactionsWithEntryID = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryID = @EntryID", new { EntryID = id }).ToList();
             }
 
-            foreach (Transaction t in allTransactionsWithEntryID)
+            foreach (TransactionTable t in allTransactionsWithEntryID)
             {
                 t.Status = "disapproved";
 
@@ -144,10 +144,10 @@ namespace AccountingApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Journalize(Transaction transaction)
+        public ActionResult Journalize(TransactionTable transaction)
         {
             Trace.WriteLine(transaction.Debit);
-            Trace.WriteLine(transaction.AccountNumber);
+            //Trace.WriteLine(transaction.AccountNumber);
 
             List<ChartOfAcc> listAccounts;
             bool t = true;
@@ -308,52 +308,297 @@ namespace AccountingApp.Controllers
             return View(coa);
         }
 
+        [HttpGet]
+        public ActionResult RetrieveAccountBalanceAndStatus(string name)
+        {
+            List<ChartOfAcc> Chart;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @N", new { N = name }).ToList();
+            }
+            
+            decimal Num = (decimal)Chart[0].CurrentBalance;
+            bool ActiveType = Chart[0].Active;
+            
+            string split = "|^|";
+            string res = Num + split + ActiveType;
+            var result = JsonConvert.SerializeObject(res);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult RejectSpecifiedEntry(int id, string comment) {
+
+            string s = "disapproved";
+            var sessionUser = Session["Username"] as string;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
+                db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
+            }
+
+            return Json("Entry Disapproved.");
+        }
+
+        [HttpPost]
+        public ActionResult ApproveSpecifiedEntry(int id, string comment)
+        {
+            //System.Diagnostics.Debug.WriteLine("it got called");
+            //System.Diagnostics.Debug.WriteLine("id " + id);
+            //System.Diagnostics.Debug.WriteLine("comm " + comment);
+            string s = "approved";
+            var sessionUser = Session["Username"] as string;
+
+            List<TransactionTable> transactionList;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            }
+
+                        
+            for (int i = 0; i < transactionList.Count; i++) {
+
+                //POST REFERENCE LOGIC
+                //get the account name at i
+                string AccountName = transactionList[i].AccountName;
+                decimal RowDebit = (decimal) transactionList[i].Debit.GetValueOrDefault();
+                decimal RowCredit = (decimal) transactionList[i].Credit.GetValueOrDefault();
+
+                List<TransactionTable> TempList;
+
+                //query transaction table database and get all records with that account name and status is approved
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    TempList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where AccountName = @Name And Status = @Stat", new { Name = AccountName, Stat = s }).ToList();
+                }                
+
+                //get post reference number at the selected query and put in a list<int>
+                List<int> ReferenceNumbers = new List<int>();
+
+                foreach (TransactionTable t in TempList) {
+                    ReferenceNumbers.Add(t.PostReference.GetValueOrDefault());
+                    //System.Diagnostics.Debug.WriteLine("current post refere " + t.PostReference.GetValueOrDefault());
+                }
+
+                int biggest = 0;
+
+                if (ReferenceNumbers.Count != 0)
+                {
+                    biggest = ReferenceNumbers.Max();
+                }
+                
+                //System.Diagnostics.Debug.WriteLine("biggest " + biggest);
+
+                int PostReference;
+
+                List<ChartOfAcc> Chart;
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @Name", new { Name = AccountName }).ToList();
+                }
+
+                if (biggest == 0)
+                {
+                    //if list has null values, (this is first post reference for the account name)
+                    int AccountNum = Chart[0].AccountNumber;
+
+                    //take the account number and multiply it by 5055 and set that as the first post reference number    
+                    PostReference = AccountNum * 5055;
+                }
+                else {
+                    //take the maximum and add 1
+                    PostReference = biggest + 1;
+                }
+
+                //System.Diagnostics.Debug.WriteLine("post ref " + PostReference);
+
+                decimal CurrentAccountBalance = (decimal) Chart[0].CurrentBalance;
+                string NormalSide = Chart[0].NormalSide;
+
+                decimal NewBalance = CurrentAccountBalance;
+
+                if (RowCredit == 0 && NormalSide == "Debit")
+                {
+                    //Debit has a value, it is an asset or expense account
+                    //Debits increase asset and expense accounts.
+                    NewBalance += RowDebit;
+                }
+
+                if (RowCredit == 0 && NormalSide == "Credit")
+                {
+                    //Debit has a value, it is a liability, equity, or revenue account
+                    //Debits decrease liability, equity, and revenue accounts.
+                    NewBalance -= RowDebit;
+                }
+
+                if (RowDebit == 0 && NormalSide == "Debit")
+                {
+                    //Credit has a value, it is an asset or expense account
+                    //Credits decrease asset and expense accounts.
+                    NewBalance -= RowCredit;
+                }
+
+                if (RowDebit == 0 && NormalSide == "Credit")
+                {
+                    //Credit has a value, it is a liability, equity, or revenue account
+                    //Credits increase liability, equity, and revenue accounts.
+                    NewBalance += RowCredit;
+                }
+
+                //System.Diagnostics.Debug.WriteLine("current account " + AccountName);
+                //System.Diagnostics.Debug.WriteLine("new balance " + NewBalance);
+
+                //update transaction table at i with the post reference, add before balance and after balance
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    string sql = $"UPDATE dbo.TransactionTable SET PostReference = @Post, BeforeBalance = @Be, AfterBalance = @Af WHERE EntryID = @entryID And AccountName = @AccName";
+                    db.Execute(sql, new { Post = PostReference, Be = CurrentAccountBalance, Af = NewBalance, entryID = id, AccName = AccountName });
+                }
+
+
+                //update current balance in chart of accounts
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    string sql = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                    db.Execute(sql, new { Cu = NewBalance, AccName = AccountName });
+                }
+
+            }
+
+            
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
+                db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
+            }
+
+
+            return Json("Entry Approved.");
+        }
+
+        public ActionResult PendingTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("pending"));
+        }
+
+        public ActionResult Transactions()
+        {
+
+            return View(getAllEntriesOfStatus("all"));
+        }
+
+        public ActionResult SuspendedTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("suspended"));
+        }
+
+        public ActionResult DisapprovedTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("disapproved"));
+        }
+
+        public ActionResult ApprovedTransactions()
+        {
+            List<TransactionTable> transactionList;
+            string s = "approved";            
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
+            }            
+
+            return View(transactionList);
+        }
+
         private Entries getAllEntriesOfStatus(string s)
         {
 
-            List<Transaction> transactionList;
+            List<TransactionTable> transactionList;
+            //List<DocumentsTable> fileList = new List<DocumentsTable>();
+
 
             if (s == "all")
             {
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable").ToList();
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable").ToList();
                 }
             }
             else
             {
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
                 }
             }
 
 
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    fileList = db.Query<DocumentsTable>($"Select * From dbo.DocumentsTable").ToList();
+            //}
+
+
             Entries entries = new Entries();
             List<int> ids = new List<int>();
-            foreach (Transaction t in transactionList)
+            foreach (TransactionTable t in transactionList)
             {
                 int id = t.EntryId.Value;
-                string status = t.Status;
-                string comment = t.AccountantComment;
-                DateTime date = t.DateSubmitted.GetValueOrDefault();
+
+
+                //string status = t.Status;
+                //DateTime date = t.DateSubmitted.GetValueOrDefault();
+                //string comment = t.AccountantComment;
 
                 if (ids.Contains(id))
                     continue;
                 else
                     ids.Add(id);
 
-                Entry e = new Entry(id, status, date, comment);
-                foreach (Transaction t2 in transactionList)
+                //Entry e = new Entry(id, status, date, comment);
+
+                Entry NewE = new Entry();
+                NewE.entryID = id;
+                NewE.status = t.Status;
+                NewE.DateSubmitted = t.DateSubmitted.GetValueOrDefault();
+                NewE.DateReviewed = t.DateReviewed.GetValueOrDefault();
+                NewE.AccountantComment = t.AccountantComment;
+                NewE.ManagerComment = t.ManagerComment;
+                NewE.AccountantUsername = t.AccountantUsername;
+                NewE.ManagerUsername = t.ManagerUsername;
+                NewE.PostReference = t.PostReference.GetValueOrDefault();
+                NewE.Entry_Type = t.Entry_Type;
+
+
+                foreach (TransactionTable t2 in transactionList)
                 {
                     if (t2.EntryId == id)
                     {
-                        e.accountNames.Add(t2.AccountName);
-                        e.debits.Add(t2.Debit.GetValueOrDefault());
-                        e.credits.Add(t2.Credit.GetValueOrDefault());
+                        //for (int i = 0; i < fileList.Count; i++)
+                        //{
+
+                        //    if (fileList[i].FK_EntryId == t2.EntryId)
+                        //    {
+                        //        e.files.Add(fileList[i]);
+                        //    }
+                        //}
+
+                        //e.accountNames.Add(t2.AccountName);
+                        //e.debits.Add(t2.Debit.GetValueOrDefault());
+                        //e.credits.Add(t2.Credit.GetValueOrDefault());
+
+                        NewE.accountNames.Add(t2.AccountName);
+                        NewE.debits.Add(t2.Debit.GetValueOrDefault());
+                        NewE.credits.Add(t2.Credit.GetValueOrDefault());
                     }
                 }
-                entries.entries.Add(e);
+                entries.entries.Add(NewE);
             }
 
             return entries;

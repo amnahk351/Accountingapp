@@ -73,7 +73,7 @@ namespace AccountingApp.Controllers
             model.To = Username + " just logged in to Objective Accounting.";
             model.IPAddress = ip;
             model.Screen = "Login";
-            model.Access_Level = "All";
+            model.Access_Level = "Admin";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -108,7 +108,7 @@ namespace AccountingApp.Controllers
             model.To = Updated;
             model.IPAddress = ip;
             model.Screen = "EditUser";
-            model.Access_Level = "All";
+            model.Access_Level = "Admin";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -159,7 +159,7 @@ namespace AccountingApp.Controllers
             model.To = "Requested Password Reset Link to: " + Email;
             model.IPAddress = ip;
             model.Screen = "ForgotPassword";
-            model.Access_Level = "All";
+            model.Access_Level = "Admin";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -195,7 +195,7 @@ namespace AccountingApp.Controllers
             model.To = "Password Reset for: " + Username;
             model.IPAddress = ip;
             model.Screen = "ResetPassword";
-            model.Access_Level = "All";
+            model.Access_Level = "Admin";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -233,7 +233,7 @@ namespace AccountingApp.Controllers
             model.To = "Password Changed for: " + sessionUsername;
             model.IPAddress = ip;
             model.Screen = "ChangePassword";
-            model.Access_Level = "All";
+            model.Access_Level = "Admin";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -269,7 +269,7 @@ namespace AccountingApp.Controllers
             model.To = "Account Locked for: " + Username;
             model.IPAddress = ip;
             model.Screen = "Login";
-            model.Access_Level = "All";
+            model.Access_Level = "Admin";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -305,7 +305,7 @@ namespace AccountingApp.Controllers
             model.To = "Account Unlocked for: " + Username;
             model.IPAddress = ip;
             model.Screen = "AnswerQuestions";
-            model.Access_Level = "All";
+            model.Access_Level = "Admin";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -367,7 +367,7 @@ namespace AccountingApp.Controllers
         }
 
 
-        public void LogEditedJournalEntry(string Username, string EntryID, string type)
+        public void LogEditedJournalEntry(string Username, string From, string To)
         {
             string ip = HttpContext.Current.Request.UserHostAddress;
             EventLog model = new EventLog();
@@ -375,8 +375,8 @@ namespace AccountingApp.Controllers
 
             model.Date = DateTime.Now;
             model.UserID = FindUserId(Username);
-            model.From = "";
-            model.To = Username + " " + type + " Journal Entry, " + EntryID;
+            model.From = From;
+            model.To = To;
             model.IPAddress = ip;
             model.Screen = "EditJournal";
             model.Access_Level = "All";

@@ -1,9 +1,39 @@
-﻿@model IEnumerable<AccountingApp.Models.Entry>
+﻿@*@model IEnumerable<AccountingApp.Models.Entry>*@
 
-<p>
+@model AccountingApp.Models.Entry
+
+@{
+    ViewBag.Title = "Transactions";
+    //Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
+    Layout = null;
+
+}
+@*<p>
     @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
+</p>*@
+
+
+<div>
+    @Model.entryID
+</div>
+
+<div>
+    @Model.DateSubmitted
+</div>
+
+<div>
+    @Model.AccountantUsername
+</div>
+
+<div>
+    @Model.AccountantComment
+</div>
+
+<div>
+    @Model.DateReviewed
+</div>
+
+@*<table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.status)
@@ -11,23 +41,66 @@
         <th>
             @Html.DisplayNameFor(model => model.comment)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountantUsername)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ManagerUsername)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountantComment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ManagerComment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PostReference)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateSubmitted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateReviewed)
+        </th>
         <th></th>
-    </tr>
+    </tr>*@
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.comment)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.entryID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.entryID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.entryID })
-        </td>
-    </tr>
-}
+    @*@foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.comment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountantUsername)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ManagerUsername)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AccountantComment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ManagerComment)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostReference)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateSubmitted)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateReviewed)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.entryID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.entryID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.entryID })
+                </td>
+            </tr>
+        }*@
 
-</table>
+@*</table>*@

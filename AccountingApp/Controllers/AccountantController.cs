@@ -115,7 +115,7 @@ namespace AccountingApp.Controllers
 
 
         [HttpPost]
-        public JsonResult InsertJournal(Transaction[] transactions)
+        public JsonResult InsertJournal(TransactionTable[] transactions)
         {
             int insertedRecords = 0;
             int NewEntryId = GetLatestEntryId();
@@ -211,70 +211,155 @@ namespace AccountingApp.Controllers
             return Json(insertedRecords);
         }
 
+
+        //public int ModalID = 1002;
+
+        //[HttpPost]
+        //public ActionResult UpdateModalID(int id)
+        //{
+        //    ModalID = id;            
+
+        //    return Json("Value Updated To: " + ModalID);
+        //}
+
         public ActionResult TransactionSummary(int id) {
 
-            List<Transaction> transactionList;
-            Entry EnModel = new Entry();
-            List<String> Names = new List<String>();
-            List<Decimal> Debits = new List<Decimal>();
-            List<Decimal> Credits = new List<Decimal>();
-            List<DocumentsTable> files;
-            List<String> NamesofFiles = new List<String>();
+            //int ModalID = 1000;
 
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
-            }
 
-            EnModel.entryID = (int)transactionList[0].EntryId;
-            EnModel.status = transactionList[0].Status;
-            EnModel.comment = transactionList[0].AccountantComment;
-            EnModel.submitDate = (DateTime) transactionList[0].DateSubmitted;
+            //ModalID = id;
+
+            //List<TransactionTable> transactionList;
+            //Entry EnModel = new Entry();
+            //List<String> Names = new List<String>();
+            //List<Decimal> Debits = new List<Decimal>();
+            //List<Decimal> Credits = new List<Decimal>();
+            //List<DocumentsTable> files;
+            //List<String> NamesofFiles = new List<String>();
+
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            //}
+
+            //EnModel.entryID = (int)transactionList[0].EntryId;
+            //EnModel.status = transactionList[0].Status;
+            //EnModel.comment = transactionList[0].AccountantComment;
+            //EnModel.submitDate = (DateTime) transactionList[0].DateSubmitted;
+
+            //for (int i = 0; i < transactionList.Count; i++) {
+            //    Names.Add(transactionList[i].AccountName);
+            //    Debits.Add((Decimal)transactionList[i].Debit);
+            //    Credits.Add((Decimal)transactionList[i].Credit);
+            //}
+
+            //EnModel.accountNames = Names;
+            //EnModel.debits = Debits;
+            //EnModel.credits = Credits;
+
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    files = db.Query<DocumentsTable>($"Select FileName From dbo.DocumentsTable Where FK_EntryId = @ID", new { ID = id }).ToList();
+            //}
+
+            //for (int i = 0; i < files.Count; i++)
+            //{
+            //    NamesofFiles.Add(files[i].FileName);
+            //}
+
+            //EnModel.fileNames = NamesofFiles;
+            //System.Diagnostics.Debug.WriteLine("modalid " + ModalID);
             
-            for (int i = 0; i < transactionList.Count; i++) {
-                Names.Add(transactionList[i].AccountName);
-                Debits.Add((Decimal)transactionList[i].Debit);
-                Credits.Add((Decimal)transactionList[i].Credit);
-            }
-
-            EnModel.accountNames = Names;
-            EnModel.debits = Debits;
-            EnModel.credits = Credits;
-
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                files = db.Query<DocumentsTable>($"Select FileName From dbo.DocumentsTable Where FK_EntryId = @ID", new { ID = id }).ToList();
-            }
-
-            for (int i = 0; i < files.Count; i++)
-            {
-                NamesofFiles.Add(files[i].FileName);
-            }
-
-            EnModel.fileNames = NamesofFiles;
-
-            return View(EnModel);
+            return View(GetEntrySummary(id));
         }
 
 
+        public string GenerateEventLogTransactionDetail(int id) {
+            var sessionUser = Session["Username"] as string;
+            List<TransactionTable> transactionList;
+            List<string> Entries = new List<string>();
+            List<string> TotalList = new List<string>();
+            string AllEntries = "";
+            string Resultant = "";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            TotalList.Add(sessionUser + " Edited Journal " + transactionList[0].EntryId);
+            TotalList.Add("Status: " + transactionList[0].Status);
+            TotalList.Add("Type: " + transactionList[0].Entry_Type);
+
+            for (int i = 0; i < transactionList.Count; i++)
+            {
+
+                string EntryAccountName = transactionList[i].AccountName;
+                decimal DebitAmount = transactionList[i].Debit.GetValueOrDefault();
+                decimal CreditAmount = transactionList[i].Credit.GetValueOrDefault();
+
+                string line = "";
+
+                if (CreditAmount == 0)
+                {
+                    //This line is a debit
+                    line = EntryAccountName + "-Debit-" + DebitAmount;
+                    Entries.Add(line);
+                }
+
+                if (DebitAmount == 0)
+                {
+                    //This line is a credit
+                    line = EntryAccountName + "-Credit-" + CreditAmount;
+                    Entries.Add(line);
+                }
+
+            }
+
+            AllEntries = String.Join(",", Entries);
+            TotalList.Add(AllEntries);
+            TotalList.Add("Comment: " + transactionList[0].AccountantComment);
+            Resultant = String.Join(";", TotalList);
+
+            return Resultant;
+        }
+        
+
+
         [HttpPost]
-        public JsonResult InsertEditedJournal(Transaction[] transactions, string id)
+        public JsonResult InsertEditedJournal(TransactionTable[] transactions, string id)
         {
             int insertedRecords = 0;
             int EditedEntryID = Int32.Parse(id);
             var sessionUser = Session["Username"] as string;
             EventLogHandler Logger = new EventLogHandler();
             
-            string type = "";
+            //string type = "";
 
-            if (transactions[0].Status == "pending")
+            //if (transactions[0].Status == "pending")
+            //{
+            //    type = "Submitted";
+            //}
+            //else
+            //{
+            //    type = "Suspended";
+            //}
+
+
+            string EventLogFrom = GenerateEventLogTransactionDetail(EditedEntryID);
+
+            //delete old entries here
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                type = "Submitted";
+                string sql = $"DELETE FROM dbo.TransactionTable WHERE EntryId=@ID";
+
+                db.Execute(sql, new
+                {
+                    ID = EditedEntryID
+                });
+
             }
-            else
-            {
-                type = "Suspended";
-            }
+
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -347,11 +432,13 @@ namespace AccountingApp.Controllers
                         insertedRecords++;
 
                     }
-                }
-
-                Logger.LogEditedJournalEntry(sessionUser, EditedEntryID.ToString(), type);
+                }                
 
             }
+
+            string EventLogTo = GenerateEventLogTransactionDetail(EditedEntryID);
+
+            Logger.LogEditedJournalEntry(sessionUser, EventLogFrom, EventLogTo);
 
             return Json(insertedRecords);
         }
@@ -406,7 +493,7 @@ namespace AccountingApp.Controllers
         public ActionResult RequestAccount(int number, string name, string type, string side, string balance, string comment)
         {
             var sessionUser = Session["Username"] as string;
-            string s = "requested";
+            string s = "Request";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -473,7 +560,7 @@ namespace AccountingApp.Controllers
         public ActionResult RequestAccountUpdate(string name, string comment)
         {
             var sessionUser = Session["Username"] as string;
-            string s = "update";
+            string s = "Update";
             int AccNum = GetAccountNameNumber(name);
 
 
@@ -499,17 +586,20 @@ namespace AccountingApp.Controllers
         }
 
         [HttpGet]
-        public ActionResult RetreiveComment(int id)
+        public ActionResult RetrieveAccountantAndComment(int id)
         {
-            List<Transaction> transactionList;
+            List<TransactionTable> transactionList;
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {                
-                transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where EntryId=@ID", new { ID = id }).ToList();
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId=@ID", new { ID = id }).ToList();
             }
 
+            string accountant = transactionList[0].AccountantUsername;
             string comment = transactionList[0].AccountantComment;
-            var result = JsonConvert.SerializeObject(comment);
+            string split = "|^|";
+            string res = accountant + split + comment;
+            var result = JsonConvert.SerializeObject(res);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -534,24 +624,7 @@ namespace AccountingApp.Controllers
 
             return Json("File, " + file + ", Deleted!");
         }
-
-        [HttpPost]
-        public ActionResult DeleteEntriesforEdit(string id)
-        {
-            int x = Int32.Parse(id);
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                string sql = $"DELETE FROM dbo.TransactionTable WHERE EntryId=@ID";
-
-                db.Execute(sql, new
-                {
-                    ID = x
-                });
-
-            }
-
-            return Json("Entries Deleted!");
-        }
+        
 
         //http://20fingers2brains.blogspot.com/2014/07/upload-multiple-files-to-database-using.html
 
@@ -614,81 +687,180 @@ namespace AccountingApp.Controllers
             return View();
         }
 
+        public ActionResult PendingTransactions() {
 
+            return View(getAllEntriesOfStatus("pending"));
+        }
+
+        public ActionResult Transactions()
+        {
+
+            return View(getAllEntriesOfStatus("all"));
+        }
+
+        public ActionResult SuspendedTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("suspended"));
+        }
+
+        public ActionResult DisapprovedTransactions()
+        {
+
+            return View(getAllEntriesOfStatus("disapproved"));
+        }
+
+        public ActionResult ApprovedTransactions()
+        {
+            List<TransactionTable> transactionList;
+            string s = "approved";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
+            }
+
+            return View(transactionList);
+        }
 
         private Entries getAllEntriesOfStatus(string s)
         {
 
-            List<Transaction> transactionList;
-            List<DocumentsTable> fileList = new List<DocumentsTable>();
-
+            List<TransactionTable> transactionList;
+            //List<DocumentsTable> fileList = new List<DocumentsTable>();
 
 
             if (s == "all")
             {
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable").ToList();
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable").ToList();
                 }
             }
             else
             {
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    transactionList = db.Query<Transaction>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
                 }
             }
 
 
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                fileList = db.Query<DocumentsTable>($"Select * From dbo.DocumentsTable").ToList();
-            }
+            //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //{
+            //    fileList = db.Query<DocumentsTable>($"Select * From dbo.DocumentsTable").ToList();
+            //}
 
 
             Entries entries = new Entries();
             List<int> ids = new List<int>();
-            foreach (Transaction t in transactionList)
+            foreach (TransactionTable t in transactionList)
             {
                 int id = t.EntryId.Value;
-                string status = t.Status;
-                DateTime date = t.DateSubmitted.GetValueOrDefault();
-                string comment = t.AccountantComment;
+
+
+                //string status = t.Status;
+                //DateTime date = t.DateSubmitted.GetValueOrDefault();
+                //string comment = t.AccountantComment;
 
                 if (ids.Contains(id))
                     continue;
                 else
                     ids.Add(id);
 
-                Entry e = new Entry(id, status, date, comment);
+                //Entry e = new Entry(id, status, date, comment);
+
+                Entry NewE = new Entry();
+                NewE.entryID = id;
+                NewE.status = t.Status;
+                NewE.DateSubmitted = t.DateSubmitted.GetValueOrDefault();
+                NewE.DateReviewed = t.DateReviewed.GetValueOrDefault();
+                NewE.AccountantComment = t.AccountantComment;
+                NewE.ManagerComment = t.ManagerComment;
+                NewE.AccountantUsername = t.AccountantUsername;
+                NewE.ManagerUsername = t.ManagerUsername;
+                NewE.PostReference = t.PostReference.GetValueOrDefault();
+                NewE.Entry_Type = t.Entry_Type;
 
 
-                foreach (Transaction t2 in transactionList)
+                foreach (TransactionTable t2 in transactionList)
                 {
                     if (t2.EntryId == id)
                     {
-                        for (int i = 0; i < fileList.Count; i++)
-                        {
+                        //for (int i = 0; i < fileList.Count; i++)
+                        //{
 
-                            if (fileList[i].FK_EntryId == t2.EntryId)
-                            {
-                                e.files.Add(fileList[i]);
-                            }
-                        }
+                        //    if (fileList[i].FK_EntryId == t2.EntryId)
+                        //    {
+                        //        e.files.Add(fileList[i]);
+                        //    }
+                        //}
 
+                        //e.accountNames.Add(t2.AccountName);
+                        //e.debits.Add(t2.Debit.GetValueOrDefault());
+                        //e.credits.Add(t2.Credit.GetValueOrDefault());
 
-                        e.accountNames.Add(t2.AccountName);
-                        e.debits.Add(t2.Debit.GetValueOrDefault());
-                        e.credits.Add(t2.Credit.GetValueOrDefault());
+                        NewE.accountNames.Add(t2.AccountName);
+                        NewE.debits.Add(t2.Debit.GetValueOrDefault());
+                        NewE.credits.Add(t2.Credit.GetValueOrDefault());
                     }
                 }
-                entries.entries.Add(e);
+                entries.entries.Add(NewE);
             }
 
             return entries;
         }
 
-               
+
+        private Entry GetEntrySummary(int id)
+        {
+            System.Diagnostics.Debug.WriteLine("id passed " + id);
+
+            List<TransactionTable> transactionList;
+            List<DocumentsTable> fileList = new List<DocumentsTable>();
+            
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {                
+                fileList = db.Query<DocumentsTable>($"Select * From dbo.DocumentsTable Where FK_EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            System.Diagnostics.Debug.WriteLine("status error " + transactionList[0].Status);
+
+            Entry NewE = new Entry();
+            NewE.entryID = id;
+            NewE.status = transactionList[0].Status;
+            NewE.DateSubmitted = transactionList[0].DateSubmitted.GetValueOrDefault();
+            NewE.DateReviewed = transactionList[0].DateReviewed.GetValueOrDefault();
+            NewE.AccountantComment = transactionList[0].AccountantComment;
+            NewE.ManagerComment = transactionList[0].ManagerComment;
+            NewE.AccountantUsername = transactionList[0].AccountantUsername;
+            NewE.ManagerUsername = transactionList[0].ManagerUsername;
+            NewE.PostReference = transactionList[0].PostReference.GetValueOrDefault();
+
+
+            foreach (TransactionTable t in transactionList) {
+                NewE.accountNames.Add(t.AccountName);
+                NewE.debits.Add(t.Debit.GetValueOrDefault());
+                NewE.credits.Add(t.Credit.GetValueOrDefault());
+
+            }
+
+            foreach (DocumentsTable f in fileList)
+            {
+                NewE.fileNames.Add(f.FileName);
+
+            }
+
+            return NewE;
+        }
+
+
 
         public ActionResult ChartOfAccounts()
         {

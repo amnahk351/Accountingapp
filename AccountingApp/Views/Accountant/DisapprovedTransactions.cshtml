@@ -1,7 +1,7 @@
 ﻿@model AccountingApp.Models.Entries
 
 @{
-    ViewBag.Title = "AccountantIndex";
+    ViewBag.Title = "Rejected Transactions";
     //Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
     Layout = null;
 
@@ -400,24 +400,24 @@
             <div style="width:100%; margin:0 auto">
 
 
-                <h3 style="display:inline">General Journal</h3>
+                <h3 style="display:inline">Rejected Transactions</h3>
                 <div class="" style=" float:right" role="group" aria-label="Basic example">
-                    <a href="@Url.Action("AccountantIndex", new { status = "all"})" class="btn btn-success" role="button" aria-pressed="true">
+                    <a href="../Accountant/Transactions" class="btn btn-success" role="button" aria-pressed="true">
                         All
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "approved"})" class="btn btn-success" role="button" aria-pressed="true">
+                    <a href="../Accountant/ApprovedTransactions" class="btn btn-success" role="button" aria-pressed="true">
                         <i class="fas fa-check"></i>
                         Approved
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "disapproved"})" class="btn btn-danger" role="button" aria-pressed="true">
+                    <a href="../Accountant/DisapprovedTransactions" class="btn btn-danger" role="button" aria-pressed="true">
                         <i class="fas fa-times"></i>
                         Disapproved
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-warning" role="button" aria-pressed="true">
+                    <a href="../Accountant/PendingTransactions" class="btn btn-warning" role="button" aria-pressed="true">
                         <i class="fas fa-exclamation-circle" style="color:white"></i>
                         Pending
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "suspended"})" class="btn btn-info" role="button" aria-pressed="true">
+                    <a href="../Accountant/SuspendedTransactions" class="btn btn-info" role="button" aria-pressed="true">
                         Suspended
                     </a>
                 </div>
@@ -428,23 +428,24 @@
                     <table id="GeneralJournalTable" class="table table-responsive table-hover shadow" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                         <thead style="background-color:white" class="shadow">
                             <tr class="shadow">
-                                <th style="width:20%">Manager Comment</th>
-                                <th style="width:20%">Date</th>
+                                <th style="width:20%">Date Submitted</th>
+                                <th style="width:20%">Date Reviewed</th>
+                                <th style="width:20%">Manager Username & Comment</th>
                                 <th style="width:10%">Entry ID</th>
                                 <th style="width:50%">Accounts Affected</th>
                                 <th>Debit</th>
                                 <th>Credit</th>
                                 <th style="width:10%">Status</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody  class="" style="background-color:white; width:100%">
+                        <tbody style="background-color:white; width:100%">
                             @for (int i = 0; i < Model.entries.Count; i++)
                             {
                             <tr>
-                                <td>@Model.entries[i].comment</td>
-                                <td>@Model.entries[i].submitDate</td>
-                                <td>@Model.entries[i].entryID</td>
+                                <td>@Model.entries[i].DateSubmitted</td>
+                                <td>@Model.entries[i].DateReviewed</td>
+                                <td>@Model.entries[i].ManagerUsername : @Model.entries[i].ManagerComment</td>
+                                <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model.entries[i].entryID</td>
                                 <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
                                 <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
                                 <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
@@ -473,19 +474,6 @@
 
                                         <span style="color:#17a2b8;">  @Model.entries[i].status</span>
                                     }
-                                </td>
-                                <td>
-                                    @if (@Model.entries[i].status == "suspended")
-                                    {
-                                        <a style="color: blue" href="@Url.Action("EditJournal", new { id = Model.entries[i].entryID})">
-                                            Edit
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <button type="button" class="viewModal" onclick="PopulateEntryModal(this)" data-toggle="modal" data-target="#EntryModal">View</button>
-                                    }
-
                                 </td>
                             </tr>
 
@@ -518,7 +506,8 @@
                         <div id="EntryModalContent" class="modal-body">
 
                             <div id="ModalEntryID">ID: </div>
-                            <div id="ModalDate">Date Created: </div>
+                            <div id="ModalDate">Date Submitted: </div>
+                            <div id="ModalDate2">Date Reviewed: </div>
                             <div id="ModalStatus">Status: </div>
                             <br />
                             <table>
@@ -601,31 +590,58 @@
 
     <script>
 
-        function PopulateEntryModal(button) {
+        function PopulateEntryModal(id) {
 
-            var row = $(button).closest('tr');
+
+            var ID = $(id).text();
+            //alert("Text is: " + String);
+
+            @* $.ajax({
+                url: "/Accountant/TransactionSummary",
+                contentType: "application/json; charset=utf-8",
+                data: "{'id':'" + ClickedText + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    alert(result);
+                }
+            });
+
+
+            var url = '@Url.Action("TransactionSummary", "Accountant")';
+            url += '/?id=' + ClickedText;
+            $("#ajaxresult").load(url);*@
+            //loa
+
+
+
+            var row = $(id).closest('tr');
             var table = document.getElementById("GeneralJournalTable");
 
-            var ID = table.rows[row[0].rowIndex].cells[1].innerText;
+            //var ID = table.rows[row[0].rowIndex].cells[1].innerText;
             var ModalID = document.getElementById("ModalEntryID");
             ModalID.innerHTML = "ID: " + ID;
 
             var Date = table.rows[row[0].rowIndex].cells[0].innerText;
             var ModalDate = document.getElementById("ModalDate");
-            ModalDate.innerHTML = "Date Created: " + Date;
+            ModalDate.innerHTML = "Date Submitted: " + Date;
 
-            var Stat = table.rows[row[0].rowIndex].cells[5].innerText;
+            var Date = table.rows[row[0].rowIndex].cells[1].innerText;
+            var ModalDate = document.getElementById("ModalDate2");
+            ModalDate.innerHTML = "Date Reviewed: " + Date;
+
+            var Stat = table.rows[row[0].rowIndex].cells[7].innerText;
             var ModalStat = document.getElementById("ModalStatus");
             ModalStat.innerHTML = "Status: " + Stat;
 
 
-            var Accounts = table.rows[row[0].rowIndex].cells[2].innerText;            
+            var Accounts = table.rows[row[0].rowIndex].cells[4].innerText;
             var text = Accounts.replace(/\t/g, "&nbsp;&nbsp;&nbsp;");
             var res0 = text.split("\n");
             var finalAcc = "";
 
             for (i = 0; i < res0.length; i++) {
-                
+
                 finalAcc += res0[i] + "<br>";
             }
 
@@ -633,7 +649,7 @@
             ModalAcc.innerHTML = finalAcc;
 
 
-            var De = table.rows[row[0].rowIndex].cells[3].innerText;
+            var De = table.rows[row[0].rowIndex].cells[5].innerText;
             var res = De.split("\n");
             var finalDe = "";
 
@@ -645,7 +661,7 @@
             ModalDe.innerHTML = finalDe;
 
 
-            var Cr = table.rows[row[0].rowIndex].cells[4].innerText;
+            var Cr = table.rows[row[0].rowIndex].cells[6].innerText;
             var res2 = Cr.split("\n");
             var finalCr = "";
 
@@ -656,7 +672,7 @@
             var ModalCr = document.getElementById("Creds");
             ModalCr.innerHTML = finalCr;
 
-            
+
             var Query;
 
             $.ajax(
@@ -694,9 +710,9 @@
 
             ModalUser.innerText = Accountant;
 
-            $("#ModalFiles tr").remove(); 
+            $("#ModalFiles tr").remove();
             GetAllRelatedFiles(ID);
-           
+
         }
 
     </script>
@@ -715,7 +731,7 @@
                     dataType: "json",
                     contentType: "application/json;",
                     data: { "id": Id },
-                    success: function (result) {                        
+                    success: function (result) {
                         Query = result;
 
                     },
@@ -725,13 +741,13 @@
                 });
 
 
-            
+
             var Q1 = Query.replace("[", "");
-            var Q2 = Q1.replace("]", "");            
+            var Q2 = Q1.replace("]", "");
             var res = Q2.split("\",\"");
 
             for (var i = 0; i < res.length; i++) {
-                var file = res[i].replace(/"/g, "");                
+                var file = res[i].replace(/"/g, "");
 
                 var table = document.getElementById("ModalFiles");
                 var row = table.insertRow();

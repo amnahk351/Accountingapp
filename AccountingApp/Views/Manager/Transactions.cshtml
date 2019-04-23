@@ -1,7 +1,7 @@
 ﻿@model AccountingApp.Models.Entries
 
 @{
-    ViewBag.Title = "AccountantIndex";
+    ViewBag.Title = "Transactions";
     //Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
     Layout = null;
 
@@ -251,33 +251,27 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Accountant/Dashboard">
+                    <a href="/Manager/ManagerIndex">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
-
                 </li>
                 <li>
 
                     <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-list" style="margin-right:10px;"></i>
-
                         Chart Of Accounts
                     </a>
                     <ul class="collapse list-unstyled" id="accountSubmenu">
                         <li>
-                            <a href="/Accountant/ChartOfAccounts">Chart of Accounts</a>
+                            <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
                         </li>
-
-
                     </ul>
                 </li>
                 <li>
 
-                    <a href="/Accountant/Journalize">
+                    <a href="/Manager/Journalize">
                         <i class="far fa-edit" style="margin-right:10px"></i>
-
-
                         Journalize
                     </a>
                 </li>
@@ -285,19 +279,13 @@
 
                     <a href="">
                         <i class="fas fa-book" style="margin-right:10px"></i>
-
-
-
                         General Ledger
                     </a>
                 </li>
                 <li>
 
-                    <a href="/Accountant/AccountantIndex">
+                    <a href="/Manager/GeneralJournal">
                         <i class="fas fa-book" style="margin-right:10px"></i>
-
-
-
                         General Journal
                     </a>
                 </li>
@@ -305,13 +293,11 @@
 
                     <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
-
-
                         Transactions
                     </a>
                     <ul class="collapse list-unstyled" id="transactionSubmenu">
                         <li>
-                            <a href="/Accountant/ManagerApproval">Pending Transactions</a>
+                            <a href="/Manager/ManagerApproval">Pending Transactions</a>
                         </li>
                         <li>
                             <a href="">Posted Transactions</a>
@@ -329,29 +315,33 @@
 
                     <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="far fa-chart-bar" style="margin-right:10px"></i>
-
-
                         Reports
                     </a>
                     <ul class="collapse list-unstyled" id="reportSubmenu">
                         <li>
-                            <a href="/Accountant/TrialBalance">Trial Balance</a>
+                            <a href="/Manager/TrialBalance">Trial Balance</a>
                         </li>
                         <li>
-                            <a href="/Accountant/IncomeStatement">Income Statement</a>
+                            <a href="/Manager/IncomeStatement">Income Statement</a>
                         </li>
                         <li>
-                            <a href="/Accountant/RetainedEarnings">Statement Of Retained Earnings</a>
+                            <a href="/Manager/RetainedEarnings">Statement Of Retained Earnings</a>
                         </li>
                         <li>
-                            <a href="/Accountant/BalanceSheet">Balance Sheet</a>
+                            <a href="/Manager/BalanceSheet">Balance Sheet</a>
                         </li>
                         <li>
-                            <a href="/Accountant/PostClosingTrialBalance">Post Closing Trial Balance</a>
+                            <a href="/Manager/PostClosingTrialBalance">Post Closing Trial Balance</a>
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="/Manager/EventLog">
+                        <i class="fas fa-briefcase" style="margin-right:10px;"></i>
+                        Event Log
+                    </a>
 
+                </li>
             </ul>
 
         </nav>
@@ -385,10 +375,8 @@
                             </li>
 
                             <li class="nav-item active">
-                                <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
+                                <button class=" btn btn-outline-success" href="#" style="font-size:large;margin-left:30px">
                                     Log Out
-
-
                                 </button>
                             </li>
 
@@ -400,24 +388,24 @@
             <div style="width:100%; margin:0 auto">
 
 
-                <h3 style="display:inline">General Journal</h3>
+                <h3 style="display:inline">All Transactions</h3>
                 <div class="" style=" float:right" role="group" aria-label="Basic example">
-                    <a href="@Url.Action("AccountantIndex", new { status = "all"})" class="btn btn-success" role="button" aria-pressed="true">
+                    <a href="../Manager/Transactions" class="btn btn-success" role="button" aria-pressed="true">
                         All
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "approved"})" class="btn btn-success" role="button" aria-pressed="true">
+                    <a href="../Manager/ApprovedTransactions" class="btn btn-success" role="button" aria-pressed="true">
                         <i class="fas fa-check"></i>
                         Approved
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "disapproved"})" class="btn btn-danger" role="button" aria-pressed="true">
+                    <a href="../Manager/DisapprovedTransactions" class="btn btn-danger" role="button" aria-pressed="true">
                         <i class="fas fa-times"></i>
                         Disapproved
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "pending"})" class="btn btn-warning" role="button" aria-pressed="true">
+                    <a href="../Manager/PendingTransactions" class="btn btn-warning" role="button" aria-pressed="true">
                         <i class="fas fa-exclamation-circle" style="color:white"></i>
                         Pending
                     </a>
-                    <a href="@Url.Action("AccountantIndex", new { status = "suspended"})" class="btn btn-info" role="button" aria-pressed="true">
+                    <a href="../Manager/SuspendedTransactions" class="btn btn-info" role="button" aria-pressed="true">
                         Suspended
                     </a>
                 </div>
@@ -428,66 +416,52 @@
                     <table id="GeneralJournalTable" class="table table-responsive table-hover shadow" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                         <thead style="background-color:white" class="shadow">
                             <tr class="shadow">
-                                <th style="width:20%">Manager Comment</th>
-                                <th style="width:20%">Date</th>
+                                <th style="width:20%">Date Submitted</th>
                                 <th style="width:10%">Entry ID</th>
+                                <th style="width:8%">Type</th>
                                 <th style="width:50%">Accounts Affected</th>
                                 <th>Debit</th>
                                 <th>Credit</th>
                                 <th style="width:10%">Status</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody  class="" style="background-color:white; width:100%">
+                        <tbody style="background-color:white; width:100%">
                             @for (int i = 0; i < Model.entries.Count; i++)
                             {
-                            <tr>
-                                <td>@Model.entries[i].comment</td>
-                                <td>@Model.entries[i].submitDate</td>
-                                <td>@Model.entries[i].entryID</td>
-                                <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
-                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                                <td>
-                                    @*@Model.entries[i].status*@
-                                    @if (@Model.entries[i].status == "approved")
-                                    {<i class="fas fa-check" style="color: limegreen;"></i>
+                                <tr>
+                                    <td>@Model.entries[i].DateSubmitted</td>
+                                    <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model.entries[i].entryID</td>
+                                    <td>@Model.entries[i].Entry_Type</td>
+                                    <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                                    <td>
+                                        @*@Model.entries[i].status*@
+                                        @if (@Model.entries[i].status == "approved")
+                                        {<i class="fas fa-check" style="color: limegreen;"></i>
 
-                                        <span style="color: limegreen;">@Model.entries[i].status</span>
+                                            <span style="color: limegreen;">@Model.entries[i].status</span>
 
-                                    }
-                                    else if (@Model.entries[i].status == "disapproved")
-                                    { <i class="fas fa-times" style="color: red;"></i>
+                                        }
+                                        else if (@Model.entries[i].status == "disapproved")
+                                        { <i class="fas fa-times" style="color: red;"></i>
 
-                                        <span style="color: red;">  @Model.entries[i].status</span>
-                                    }
-                                    else if (@Model.entries[i].status == "pending")
-                                    { <i class="fas fa-exclamation-circle" style="color:darkorange"></i>
+                                            <span style="color: red;">  @Model.entries[i].status</span>
+                                        }
+                                        else if (@Model.entries[i].status == "pending")
+                                        { <i class="fas fa-exclamation-circle" style="color:darkorange"></i>
 
-                                        <span style="color: darkorange;">  @Model.entries[i].status</span>
+                                            <span style="color: darkorange;">  @Model.entries[i].status</span>
 
-                                    }
-                                    else
-                                    {<i class="fas fa-exclamation" style="color:#17a2b8;"></i>
+                                        }
+                                        else
+                                        {<i class="fas fa-exclamation" style="color:#17a2b8;"></i>
 
 
-                                        <span style="color:#17a2b8;">  @Model.entries[i].status</span>
-                                    }
-                                </td>
-                                <td>
-                                    @if (@Model.entries[i].status == "suspended")
-                                    {
-                                        <a style="color: blue" href="@Url.Action("EditJournal", new { id = Model.entries[i].entryID})">
-                                            Edit
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <button type="button" class="viewModal" onclick="PopulateEntryModal(this)" data-toggle="modal" data-target="#EntryModal">View</button>
-                                    }
-
-                                </td>
-                            </tr>
+                                            <span style="color:#17a2b8;">  @Model.entries[i].status</span>
+                                        }
+                                    </td>
+                                </tr>
 
                             }
                         </tbody>
@@ -554,6 +528,9 @@
                             <table id="ModalFiles" style="color:blue"></table>
 
                         </div>
+                        @*@{Html.RenderAction("TransactionSummary", "Accountant");}*@
+                        @*@{Html.RenderAction("TransactionSummary", "Accountant", new { id = Model.id });}*@
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
@@ -601,31 +578,54 @@
 
     <script>
 
-        function PopulateEntryModal(button) {
+        function PopulateEntryModal(id) {
 
-            var row = $(button).closest('tr');
+
+            var ID = $(id).text();
+            //alert("Text is: " + String);
+
+            @*$.ajax({
+                url: "/Accountant/TransactionSummary",
+                contentType: "application/json; charset=utf-8",
+                data: "{'id':'" + ClickedText + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    alert(result);
+                }
+            });
+
+
+            var url = '@Url.Action("TransactionSummary", "Accountant")';
+            url += '/?id=' + ClickedText;
+            $("#ajaxresult").load(url);*@
+            //loa
+
+
+
+            var row = $(id).closest('tr');
             var table = document.getElementById("GeneralJournalTable");
 
-            var ID = table.rows[row[0].rowIndex].cells[1].innerText;
+            //var ID = table.rows[row[0].rowIndex].cells[1].innerText;
             var ModalID = document.getElementById("ModalEntryID");
             ModalID.innerHTML = "ID: " + ID;
 
             var Date = table.rows[row[0].rowIndex].cells[0].innerText;
             var ModalDate = document.getElementById("ModalDate");
-            ModalDate.innerHTML = "Date Created: " + Date;
+            ModalDate.innerHTML = "Date Submitted: " + Date;
 
-            var Stat = table.rows[row[0].rowIndex].cells[5].innerText;
+            var Stat = table.rows[row[0].rowIndex].cells[6].innerText;
             var ModalStat = document.getElementById("ModalStatus");
             ModalStat.innerHTML = "Status: " + Stat;
 
 
-            var Accounts = table.rows[row[0].rowIndex].cells[2].innerText;            
+            var Accounts = table.rows[row[0].rowIndex].cells[3].innerText;
             var text = Accounts.replace(/\t/g, "&nbsp;&nbsp;&nbsp;");
             var res0 = text.split("\n");
             var finalAcc = "";
 
             for (i = 0; i < res0.length; i++) {
-                
+
                 finalAcc += res0[i] + "<br>";
             }
 
@@ -633,7 +633,7 @@
             ModalAcc.innerHTML = finalAcc;
 
 
-            var De = table.rows[row[0].rowIndex].cells[3].innerText;
+            var De = table.rows[row[0].rowIndex].cells[4].innerText;
             var res = De.split("\n");
             var finalDe = "";
 
@@ -645,7 +645,7 @@
             ModalDe.innerHTML = finalDe;
 
 
-            var Cr = table.rows[row[0].rowIndex].cells[4].innerText;
+            var Cr = table.rows[row[0].rowIndex].cells[5].innerText;
             var res2 = Cr.split("\n");
             var finalCr = "";
 
@@ -656,7 +656,7 @@
             var ModalCr = document.getElementById("Creds");
             ModalCr.innerHTML = finalCr;
 
-            
+
             var Query;
 
             $.ajax(
@@ -694,9 +694,9 @@
 
             ModalUser.innerText = Accountant;
 
-            $("#ModalFiles tr").remove(); 
+            $("#ModalFiles tr").remove();
             GetAllRelatedFiles(ID);
-           
+
         }
 
     </script>
@@ -715,7 +715,7 @@
                     dataType: "json",
                     contentType: "application/json;",
                     data: { "id": Id },
-                    success: function (result) {                        
+                    success: function (result) {
                         Query = result;
 
                     },
@@ -725,13 +725,13 @@
                 });
 
 
-            
+
             var Q1 = Query.replace("[", "");
-            var Q2 = Q1.replace("]", "");            
+            var Q2 = Q1.replace("]", "");
             var res = Q2.split("\",\"");
 
             for (var i = 0; i < res.length; i++) {
-                var file = res[i].replace(/"/g, "");                
+                var file = res[i].replace(/"/g, "");
 
                 var table = document.getElementById("ModalFiles");
                 var row = table.insertRow();

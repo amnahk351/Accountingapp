@@ -237,6 +237,7 @@
     <Compile Include="Models\Extended\NewUserModel.cs" />
     <Compile Include="Models\Extended\ResetPasswordModel.cs" />
     <Compile Include="Models\Extended\SecurityQuestionsModel.cs" />
+    <Compile Include="Models\Extended\UserRequestsModel.cs" />
     <Compile Include="Models\Extended\UserStatsModel.cs" />
     <Compile Include="Models\FileModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -252,24 +253,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FileModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Transaction.cs">
-      <DependentUpon>TransactionModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TransactionModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TransactionModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TransactionModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TransactionModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TransactionModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TransactionModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\TransactionTable.cs">
       <DependentUpon>TransactionTableModel.tt</DependentUpon>
@@ -359,16 +342,6 @@
       <DependentUpon>FileModel.edmx</DependentUpon>
       <LastGenOutput>FileModel.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\TransactionModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>TransactionModel.edmx</DependentUpon>
-      <LastGenOutput>TransactionModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\TransactionModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>TransactionModel.edmx</DependentUpon>
-      <LastGenOutput>TransactionModel.cs</LastGenOutput>
-    </Content>
     <Content Include="Models\TransactionTableModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>TransactionTableModel.edmx</DependentUpon>
@@ -399,13 +372,6 @@
     </EntityDeploy>
     <Content Include="Models\EventLog.edmx.diagram">
       <DependentUpon>EventLog.edmx</DependentUpon>
-    </Content>
-    <EntityDeploy Include="Models\TransactionModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>TransactionModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\TransactionModel.edmx.diagram">
-      <DependentUpon>TransactionModel.edmx</DependentUpon>
     </Content>
     <EntityDeploy Include="Models\ChartOfAcc.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -489,7 +455,6 @@
     <Content Include="Views\Shared\_Layout_Accountant.cshtml" />
     <Content Include="Views\Shared\_Layout_Admin.cshtml" />
     <Content Include="Views\Accountant\Journalize.cshtml" />
-    <Content Include="Views\Manager\Journalize.cshtml" />
     <Content Include="Views\Manager\IncomeStatement.cshtml" />
     <Content Include="Views\Manager\BalanceSheet.cshtml" />
     <Content Include="Views\Manager\RetainedEarnings.cshtml" />
@@ -507,8 +472,19 @@
     <Content Include="Views\Accountant\EditJournal.cshtml" />
     <Content Include="Views\Accountant\Dashboard.cshtml" />
     <Content Include="Views\Shared\_Layout_Journalize.cshtml" />
-    <Content Include="Views\Accountant\TransactionSummary.cshtml" />
     <Content Include="Views\Admin\UserStatistics.cshtml" />
+    <Content Include="Views\Admin\AccountRequests.cshtml" />
+    <Content Include="Views\Accountant\PendingTransactions.cshtml" />
+    <Content Include="Views\Accountant\DisapprovedTransactions.cshtml" />
+    <Content Include="Views\Accountant\Transactions.cshtml" />
+    <Content Include="Views\Accountant\ApprovedTransactions.cshtml" />
+    <Content Include="Views\Accountant\SuspendedTransactions.cshtml" />
+    <Content Include="Views\Accountant\TransactionSummary.cshtml" />
+    <Content Include="Views\Manager\Transactions.cshtml" />
+    <Content Include="Views\Manager\ApprovedTransactions.cshtml" />
+    <Content Include="Views\Manager\DisapprovedTransactions.cshtml" />
+    <Content Include="Views\Manager\PendingTransactions.cshtml" />
+    <Content Include="Views\Manager\SuspendedTransactions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />

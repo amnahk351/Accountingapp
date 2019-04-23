@@ -27,5 +27,8 @@ namespace AccountingApp.Models
         public Nullable<decimal> Credit { get; set; }
         public Nullable<int> EntryId { get; set; }
         public string Entry_Type { get; set; }
+        public Nullable<int> PostReference { get; set; }
+        public Nullable<decimal> BeforeBalance { get; set; }
+        public Nullable<decimal> AfterBalance { get; set; }
     }
 }
