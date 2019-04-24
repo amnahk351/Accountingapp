@@ -728,17 +728,22 @@
                 allowedfileextensions: ['.JPG', '.jpg', '.JPEG', '.jpeg', '.PNG', '.png', '.GIF', '.gif', '.txt', '.TXT', '.doc', '.DOC', '.docx', '.DOCX', '.pdf', '.PDF', '.xls', '.XLS', '.xlsx', '.XLSX'],
                 fallback_id: 'input',
                 paramname: 'files',
+                maxfilesize: 10,
                 dragOver: function () {
                     $('#dropArea').addClass('active-drop');
                 },
                 dragLeave: function () {
                     $('#dropArea').removeClass('active-drop');
                 },
-                drop: function () {
+                drop: function (e) {
                     $('#dropArea').removeClass('active-drop');
+                    //AppendToUploadList(e.name);
                 },
-                uploadFinished: function (i, file, response, time) {
+                uploadStarted: function (i, file, response, time) {                    
                     AppendToUploadList(file.name);
+                },
+                uploadFinished: function (i, file, response, time) {                    
+                    FinalizeTableFile(file.name);
                 }
             })
         })
@@ -764,7 +769,7 @@
 
                     },
                     error: function (error) {
-                        alert(JSON.stringify(error));
+                        //alert(JSON.stringify(error));
                     }
                 });
 
@@ -773,8 +778,30 @@
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             // the ../ goes back one directory, needed to prevent calling Accountant twice
-            cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
-            cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
+            //cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
+            //cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
+            cell1.innerText = fileName + " (Uploading...)";
+            //cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
+        }
+
+        function FinalizeTableFile(fileName) {
+            var table = document.getElementById("uploadList");
+
+            //table.rows[0].cells[0].innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
+            //table.rows[0].cells[1].innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
+
+            for (var i = 0; i < table.rows.length; i++) {
+                var item = table.rows[i].cells[0];
+
+                if (item.innerHTML.indexOf(fileName) !== -1) {
+                    //file name matched with row
+                    table.rows[i].cells[0].innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
+                    table.rows[i].cells[1].innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
+                    
+                }
+
+            }
+
         }
 
         function DeleteFile(button) {
