@@ -728,6 +728,7 @@
                 allowedfileextensions: ['.JPG', '.jpg', '.JPEG', '.jpeg', '.PNG', '.png', '.GIF', '.gif', '.txt', '.TXT', '.doc', '.DOC', '.docx', '.DOCX', '.pdf', '.PDF', '.xls', '.XLS', '.xlsx', '.XLSX'],
                 fallback_id: 'input',
                 paramname: 'files',
+                maxfilesize: 10,
                 dragOver: function () {
                     $('#dropArea').addClass('active-drop');
                 },
@@ -764,7 +765,7 @@
 
                     },
                     error: function (error) {
-                        alert(JSON.stringify(error));
+                        //alert(JSON.stringify(error));
                     }
                 });
 
@@ -775,6 +776,23 @@
             // the ../ goes back one directory, needed to prevent calling Accountant twice
             cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
             cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
+        }
+
+        function FinalizeTableFile(fileName) {
+            var table = document.getElementById("uploadList");
+
+            for (var i = 0; i < table.rows.length; i++) {
+                var item = table.rows[i].cells[0];
+
+                if (item.innerHTML.indexOf(fileName) !== -1) {
+                    //file name matched with row
+                    table.rows[i].cell[0].innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
+                    table.rows[i].cell[1].innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
+                    
+                }
+
+            }
+
         }
 
         function DeleteFile(button) {
