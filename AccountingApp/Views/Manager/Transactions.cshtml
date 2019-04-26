@@ -96,6 +96,44 @@
             margin: 40px 0;
         }
 
+        table.AccountsModalTable {
+            background-color: #EEEEEE;
+            width: 100%;
+            text-align: left;
+            border-collapse: collapse;
+        }
+
+            table.AccountsModalTable td, table.AccountsModalTable th {
+                border: 1px solid #AAAAAA;
+                padding: 3px 2px;
+            }
+
+            table.AccountsModalTable tbody td {
+                font-size: 13px;
+            }
+
+            table.AccountsModalTable tr:nth-child(even) {
+                background: #D0E4F5;
+            }
+
+            table.AccountsModalTable thead {
+                background: #3885A4;
+                background: -moz-linear-gradient(top, #6aa3bb 0%, #4c91ad 66%, #3885A4 100%);
+                background: -webkit-linear-gradient(top, #6aa3bb 0%, #4c91ad 66%, #3885A4 100%);
+                background: linear-gradient(to bottom, #6aa3bb 0%, #4c91ad 66%, #3885A4 100%);
+            }
+
+                table.AccountsModalTable thead th {
+                    font-size: 15px;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                    border-left: 2px solid #D0E4F5;
+                }
+
+                    table.AccountsModalTable thead th:first-child {
+                        border-left: none;
+                    }
+
         i,
         span {
             display: inline-block;
@@ -433,7 +471,7 @@
                                     <td>@Model.entries[i].DateSubmitted</td>
                                     <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model.entries[i].entryID</td>
                                     <td>@Model.entries[i].Entry_Type</td>
-                                    <td style="white-space: pre-wrap;"> <a href="#" style="color:blue">@Model.entries[i].FormattedAccountNames()</a></td>
+                                    <td onclick="PopulateAccountsModal(this)" style="white-space: pre-wrap; color:blue; cursor:pointer;" data-toggle="modal" data-target="#AccountsModal">@Model.entries[i].FormattedAccountNames()</td>
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
                                     <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
                                     <td>
@@ -480,6 +518,43 @@
                 </footer>
             </div>
 
+            <div class="modal fade" id="AccountsModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+                            <h4 style="text-align:left" class="modal-title">Account Details</h4>
+                        </div>
+                        <div id="AccountsModalContent" class="modal-body">
+
+                            <div id="AccountsModalEntryID">ID: </div>
+                            <br />
+                            <table id="AccountsModalTable" class="AccountsModalTable">
+
+                                <thead>
+                                    <tr>
+                                        <th>Account Name</th>
+                                        <th>Number</th>
+                                        <th>Type</th>
+                                        <th>Balance</th>
+                                        <th>Active</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+
+                            </table>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Modal -->
             <div class="modal fade" id="EntryModal" role="dialog">
                 <div class="modal-dialog">
@@ -496,7 +571,7 @@
                             <div id="ModalDate">Date Created: </div>
                             <div id="ModalStatus">Status: </div>
                             <br />
-                            <table>
+                            <table class="AccountsModalTable">
                                 <tr>
                                     <th>Accounts</th>
                                     <th>Debits</th>
@@ -578,6 +653,101 @@
     </script>
 
     <script>
+
+        function formatMoney(n, c, d, t) {
+            var c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
+
+        function PopulateAccountsModal(AllAccounts) {
+
+            $("#AccountsModalTable tbody tr").remove();
+
+            var row = $(AllAccounts).closest('tr');
+            var table = document.getElementById("GeneralJournalTable");
+
+            var ID = table.rows[row[0].rowIndex].cells[1].innerText;
+            var ModalID = document.getElementById("AccountsModalEntryID");
+            ModalID.innerHTML = "ID: " + ID;
+
+            var Accounts = $(AllAccounts).text();
+
+            var NewText = Accounts.replace(/\t/g, "");
+            var AllAccounts = NewText.split("\n");
+
+
+            for (i = 0; i < AllAccounts.length; i++) {
+
+                var CurrentAccountName = AllAccounts[i];
+                var newSt = CurrentAccountName.replace(/\s+/g, ' ').trim()
+                var Query;
+
+                $.ajax(
+                    {
+                        url: '/Manager/RetrieveAccountModalSummary/',
+                        type: "GET",
+                        async: false,
+                        dataType: "json",
+                        contentType: "application/json;",
+                        data: { "name": newSt },
+                        success: function (result) {
+                            //alert(result);
+                            Query = result;
+
+                        },
+                        error: function (error) {
+                            //alert(JSON.stringify(error));
+                        }
+                    });
+
+                //remove quotes and split
+                var Query2 = Query.replace(/"/g, "");
+                var resul = Query2.split("|^|");
+
+                var AccNum = resul[0];
+                var type = resul[1];
+                var Money = formatMoney(resul[2]);
+                var Act = resul[3];
+
+                var tableRef = document.getElementById('AccountsModalTable').getElementsByTagName('tbody')[0];
+
+                // Insert a row in the table at the last row
+                var row = tableRef.insertRow(tableRef.rows.length);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                var cell5 = row.insertCell(4);
+                var cell6 = row.insertCell(5);
+
+                //Account Name
+                cell1.innerText = newSt;
+
+                cell2.innerText = AccNum;
+
+                cell3.innerText = type;
+
+                cell4.innerText = "$ " + Money;
+
+
+                if (Act == "True") {
+                    cell5.innerText = "Yes";
+                } else {
+                    cell5.innerText = "No";
+                }
+
+                var cellText = "View Ledger";
+                cell6.innerHTML = "<a style=\"color:blue\" href=\"..//Manager/GeneralLedger?name=" + newSt + "\" target=\"_blank\">" + cellText + "</a>";
+
+            }
+        }
 
         function PopulateEntryModal(id) {
 

@@ -327,6 +327,27 @@ namespace AccountingApp.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public ActionResult RetrieveAccountModalSummary(string name)
+        {
+            List<ChartOfAcc> Chart;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @N", new { N = name }).ToList();
+            }
+
+            int x = Chart[0].AccountNumber;
+            string type = Chart[0].AccountType;
+            decimal Num = (decimal)Chart[0].CurrentBalance;
+            bool ActiveType = Chart[0].Active;
+
+            string split = "|^|";
+            string res = x + split + type + split + Num + split + ActiveType;
+            var result = JsonConvert.SerializeObject(res);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public ActionResult RejectSpecifiedEntry(int id, string comment) {
 
