@@ -659,7 +659,8 @@ namespace AccountingApp.Controllers
         public ActionResult UploadEditedFiles(string id)
         {
             string str = id.Replace("/Accountant/EditJournal/", "");
-            int x = Int32.Parse(str);
+            string str2 = str.Replace("/Manager/EditJournal/", "");
+            int x = Int32.Parse(str2);
 
 
             HttpFileCollectionBase files = Request.Files;

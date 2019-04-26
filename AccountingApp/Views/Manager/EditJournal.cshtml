@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.Title = "Edit Journal";
-    Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
+    Layout = "~/Views/Shared/_Layout_Manager.cshtml";
 }
 
 
@@ -14,8 +14,8 @@
 
     <!-- Bootstrap CSS -->
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
@@ -600,7 +600,7 @@
         function PageID() {
 
             var str = window.location.pathname;
-            var newstr = str.replace("/Accountant/EditJournal/", "");
+            var newstr = str.replace("/Manager/EditJournal/", "");
             return newstr;
         }
 
@@ -611,9 +611,9 @@
         <script src="~/Scripts/jquery.filedrop.js"></script>
         <script type="text/javascript">
 
-            
+
         $(function () {
-            $('#dropArea').filedrop({                
+            $('#dropArea').filedrop({
                 url: '@Url.Action("UploadEditedFiles", "Accountant")?id=' + window.location.pathname,
                 allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/pdf', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
                 allowedfileextensions: ['.JPG', '.jpg', '.JPEG', '.jpeg', '.PNG', '.png', '.GIF', '.gif', '.txt', '.TXT', '.doc', '.DOC', '.docx', '.DOCX', '.pdf', '.PDF', '.xls', '.XLS', '.xlsx', '.XLSX'],
@@ -687,7 +687,7 @@
         function DeleteFile(button) {
 
             var str = window.location.pathname;
-            var Number = str.replace("/Accountant/EditJournal/", "");
+            var Number = str.replace("/Manager/EditJournal/", "");
 
             var row = $(button).closest('tr');
             var table = document.getElementById("uploadList");
@@ -892,9 +892,8 @@
 
 
             var str = window.location.pathname;
-            var newstr = str.replace("/Accountant/EditJournal/", "");
-
-            //alert(newstr);
+            var newstr = str.replace("/Manager/EditJournal/", "");
+            
             GetTransactions(newstr);
             GetAllRelatedFiles(newstr);
 
@@ -922,7 +921,7 @@
 
                     },
                     error: function (error) {
-                        alert(JSON.stringify(error));
+                        //alert(JSON.stringify(error));
                     }
                 });
 
@@ -981,7 +980,7 @@
 
                     },
                     error: function (error) {
-                        alert(JSON.stringify(error));
+                        //alert(JSON.stringify(error));
                     }
                 });
 
@@ -1031,7 +1030,7 @@
 
                 var m7 = m6.replace(/"/g, "");
 
-                
+
                 var Result = m7.split(",");
 
 
@@ -1075,12 +1074,12 @@
 
                 //Add delete button to last column
                 cell5.innerHTML = '<input type="button" title=\"Click to Remove Row\" class="deletebutton" onclick="RemoveLine(this)"/>';
-                
+
 
 
                 QueryString = QueryString.replace(m2, "");
                 var Newm = QueryString.match(/AccountName.*?,"EntryId/);
-                
+
                 if (Newm == null) {
                     break;
                 }
@@ -1125,7 +1124,7 @@
 
             //Select first item
             $("#AccountNumber").get(0).selectedIndex = 0;
-            
+
         }
 
         function RemoveAccountfromList(account) {
@@ -1890,8 +1889,8 @@
 
 
             var str = window.location.pathname;
-            var Number = str.replace("/Accountant/EditJournal/", "");
-            
+            var Number = str.replace("/Manager/EditJournal/", "");
+
 
             //Send the JSON array to Controller using AJAX.
             $.ajax({
@@ -1909,7 +1908,7 @@
                     //alert(err.Message);
                 }
             });
-            window.location.href = '../../Accountant/AccountantIndex';
+            window.location.href = '../../Manager/ManagerIndex';
             //location.reload;
             //ResetFunction();
 
@@ -2103,9 +2102,9 @@
             //});
 
             var str = window.location.pathname;
-            var Number = str.replace("/Accountant/EditJournal/", "");
+            var Number = str.replace("/Manager/EditJournal/", "");
 
-            
+
             //Send the JSON array to Controller using AJAX.
             $.ajax({
                 type: "POST",
@@ -2123,9 +2122,9 @@
                 }
             });
 
-            window.location.href = '../../Accountant/AccountantIndex';
+            window.location.href = '../../Manager/ManagerIndex';
             //ResetFunction();
-            //location.reload();            
+            //location.reload();
 
         });
 

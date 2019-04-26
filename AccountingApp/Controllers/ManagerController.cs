@@ -28,6 +28,33 @@ namespace AccountingApp.Controllers
             
         }
 
+        public ActionResult EditJournal(double id)
+        {
+            List<ChartOfAcc> listAccounts;
+            bool t = true;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Active=@Value", new { Value = t }).ToList();
+            }
+            List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+
+            foreach (ChartOfAcc coa in listAccounts)
+            {
+                SelectListItem item = new SelectListItem
+                {
+                    Text = coa.AccountName,
+                    Value = coa.AccountNumber.ToString()
+                };
+                sliAccountList.Add(item);
+            }
+
+            ViewBag.accountlist = sliAccountList;
+
+
+            return View();
+        }
+
         public ActionResult ManagerApproval()
         { 
             return View(getAllEntriesOfStatus("pending"));
