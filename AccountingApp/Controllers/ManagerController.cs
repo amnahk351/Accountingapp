@@ -744,6 +744,20 @@ namespace AccountingApp.Controllers
             return Json("Entry Approved.");
         }
 
+        [HttpPost]
+        public ActionResult UploadFiles()
+        {
+            HttpFileCollectionBase files = Request.Files;
+            for (int i = 0; i < files.Count; i++)
+            {
+                FileUploadService service = new FileUploadService();
+                HttpPostedFileBase file = files[i];
+                service.SaveFileDetails(file);
+            }
+            return Json(files.Count + " Files Uploaded!");
+
+        }
+
         public ActionResult PendingTransactions()
         {
 
