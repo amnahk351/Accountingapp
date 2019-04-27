@@ -276,7 +276,7 @@ namespace AccountingApp.Controllers
             }
             TempData["Message"] = "Your entry was successfully updated!";
 
-            return RedirectToAction("ShowUserData");
+            return RedirectToAction("AllUsers");
 
         }
 
