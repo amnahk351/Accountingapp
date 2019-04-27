@@ -728,7 +728,7 @@
                 allowedfileextensions: ['.JPG', '.jpg', '.JPEG', '.jpeg', '.PNG', '.png', '.GIF', '.gif', '.txt', '.TXT', '.doc', '.DOC', '.docx', '.DOCX', '.pdf', '.PDF', '.xls', '.XLS', '.xlsx', '.XLSX'],
                 fallback_id: 'input',
                 paramname: 'files',
-                maxfilesize: 10,
+                maxfilesize: 100,
                 dragOver: function () {
                     $('#dropArea').addClass('active-drop');
                 },
@@ -737,7 +737,6 @@
                 },
                 drop: function (e) {
                     $('#dropArea').removeClass('active-drop');
-                    //AppendToUploadList(e.name);
                 },
                 uploadStarted: function (i, file, response, time) {                    
                     AppendToUploadList(file.name);
@@ -753,8 +752,6 @@
     <script>
 
         function AppendToUploadList(fileName) {
-
-            var Number;
 
             $.ajax(
                 {
@@ -777,18 +774,11 @@
             var row = table.insertRow();
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
-            // the ../ goes back one directory, needed to prevent calling Accountant twice
-            //cell1.innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
-            //cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
             cell1.innerText = fileName + " (Uploading...)";
-            //cell2.innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
         }
 
         function FinalizeTableFile(fileName) {
             var table = document.getElementById("uploadList");
-
-            //table.rows[0].cells[0].innerHTML = "<a href=\"../Accountant/Download?file=" + fileName + "&id=" + Number + "\" target=\"_blank\">" + fileName + "</a>";
-            //table.rows[0].cells[1].innerHTML = '<input type="button" title=\"Click to Delete File\" class="btnDeleteFile" onclick="DeleteFile(this)" />';
 
             for (var i = 0; i < table.rows.length; i++) {
                 var item = table.rows[i].cells[0];
@@ -801,7 +791,6 @@
                 }
 
             }
-
         }
 
         function DeleteFile(button) {

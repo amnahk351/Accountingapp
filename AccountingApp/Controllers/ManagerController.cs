@@ -28,6 +28,33 @@ namespace AccountingApp.Controllers
             
         }
 
+        public ActionResult EditJournal(double id)
+        {
+            List<ChartOfAcc> listAccounts;
+            bool t = true;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where Active=@Value", new { Value = t }).ToList();
+            }
+            List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+
+            foreach (ChartOfAcc coa in listAccounts)
+            {
+                SelectListItem item = new SelectListItem
+                {
+                    Text = coa.AccountName,
+                    Value = coa.AccountNumber.ToString()
+                };
+                sliAccountList.Add(item);
+            }
+
+            ViewBag.accountlist = sliAccountList;
+
+
+            return View();
+        }
+
         public ActionResult ManagerApproval()
         { 
             return View(getAllEntriesOfStatus("pending"));
@@ -309,6 +336,223 @@ namespace AccountingApp.Controllers
         }
 
         [HttpGet]
+        public ActionResult RetrieveCurrentRatio()
+        {
+            string Q1 = "Assets";
+            string Q2 = "Liabilities";
+
+            List<ChartOfAcc> Chart;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q1 }).ToList();
+            }
+
+
+            List<ChartOfAcc> Chart2;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart2 = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q2 }).ToList();
+            }
+
+            decimal totalAssets = 0;
+
+            foreach (ChartOfAcc x in Chart)
+            {
+                totalAssets += (decimal)x.CurrentBalance;
+            }
+
+            decimal totalLiab = 0;
+
+            foreach (ChartOfAcc x2 in Chart2)
+            {
+                totalLiab += (decimal)x2.CurrentBalance;
+            }
+
+            decimal final = totalAssets / totalLiab;
+            decimal Ratio = Math.Round(final, 2);
+            
+            var result = JsonConvert.SerializeObject(Ratio);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult RetrieveBothRatios()
+        {
+            string Q1 = "Revenue";
+            string Q2 = "Liabilities";
+            string Q3 = "Expense";
+            string Q4 = "Equity";
+            string Q5 = "Assets";
+
+            List<ChartOfAcc> Chart;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q1 }).ToList();
+            }
+
+
+            List<ChartOfAcc> Chart2;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart2 = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q2 }).ToList();
+            }
+
+
+            List<ChartOfAcc> Chart3;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart3 = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q3 }).ToList();
+            }
+
+            List<ChartOfAcc> Chart4;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart4 = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q4 }).ToList();
+            }            
+
+            List<ChartOfAcc> Chart5;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart5 = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q5 }).ToList();
+            }
+
+
+            decimal totalRevenue = 0;
+
+            foreach (ChartOfAcc x in Chart)
+            {
+                totalRevenue += (decimal)x.CurrentBalance;
+            }
+
+            decimal totalLiab = 0;
+
+            foreach (ChartOfAcc x2 in Chart2)
+            {
+                if (x2.AccountName != "Accumulated Depreciation Equipment") {
+                    totalLiab += (decimal)x2.CurrentBalance;
+                }
+                
+            }
+
+            decimal totalExpense = 0;
+
+            foreach (ChartOfAcc x3 in Chart3)
+            {
+                totalExpense += (decimal)x3.CurrentBalance;
+            }
+
+            decimal totalEquity = 0;
+
+            foreach (ChartOfAcc x4 in Chart4)
+            {
+                totalEquity += (decimal)x4.CurrentBalance;
+            }
+
+            decimal totalAssets = 0;
+
+            foreach (ChartOfAcc x5 in Chart5)
+            {
+                totalAssets += (decimal)x5.CurrentBalance;
+            }
+
+
+            decimal NetIncome = totalRevenue - totalExpense;
+            decimal totalShareholderEquity = NetIncome + totalEquity;
+
+            decimal DebttoEquityRatio = totalLiab / totalShareholderEquity;
+
+            decimal DebttoAssetRatio = totalLiab / totalAssets;
+
+            decimal finalDebtoEq = Math.Round(DebttoEquityRatio, 2);
+            decimal finalDebtoAss = Math.Round(DebttoAssetRatio, 2);
+
+            string Ratios = finalDebtoEq + ";" + finalDebtoAss;            
+
+            var result = JsonConvert.SerializeObject(Ratios);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult RetrieveAllTotalTypes()
+        {            
+            string Q1 = "Assets";
+            string Q2 = "Liabilities";
+            string Q3 = "Revenue";
+            string Q4 = "Expense";
+
+            List<ChartOfAcc> Chart;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q1 }).ToList();
+            }
+
+            List<ChartOfAcc> Chart2;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart2 = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q2 }).ToList();
+            }
+
+            List<ChartOfAcc> Chart3;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart3 = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q3 }).ToList();
+            }
+
+            List<ChartOfAcc> Chart4;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart4 = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q4 }).ToList();
+            }
+
+
+            decimal totalAssets = 0;
+
+            foreach (ChartOfAcc x in Chart)
+            {
+                totalAssets += (decimal)x.CurrentBalance;
+            }
+
+            decimal totalLiab = 0;
+
+            foreach (ChartOfAcc x2 in Chart2)
+            {
+                if (x2.AccountName != "Accumulated Depreciation Equipment")
+                {
+                    totalLiab += (decimal)x2.CurrentBalance;
+                }
+
+            }
+
+            decimal totalRevenue = 0;
+
+            foreach (ChartOfAcc x3 in Chart3)
+            {
+                totalRevenue += (decimal)x3.CurrentBalance;
+            }            
+
+            decimal totalExpense = 0;
+
+            foreach (ChartOfAcc x4 in Chart4)
+            {
+                totalExpense += (decimal)x4.CurrentBalance;
+            }
+
+
+            decimal RoundedAssets = Math.Round(totalAssets, 2);
+            decimal RoundedLiab = Math.Round(totalLiab, 2);
+            decimal RoundedRev = Math.Round(totalRevenue, 2);
+            decimal RoundedExp = Math.Round(totalExpense, 2);
+
+            string s = RoundedAssets + ";" + RoundedLiab + ";" + RoundedRev + ";" + RoundedExp;
+
+            var result = JsonConvert.SerializeObject(s);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         public ActionResult RetrieveAccountBalanceAndStatus(string name)
         {
             List<ChartOfAcc> Chart;
@@ -322,6 +566,27 @@ namespace AccountingApp.Controllers
             
             string split = "|^|";
             string res = Num + split + ActiveType;
+            var result = JsonConvert.SerializeObject(res);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult RetrieveAccountModalSummary(string name)
+        {
+            List<ChartOfAcc> Chart;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @N", new { N = name }).ToList();
+            }
+
+            int x = Chart[0].AccountNumber;
+            string type = Chart[0].AccountType;
+            decimal Num = (decimal)Chart[0].CurrentBalance;
+            bool ActiveType = Chart[0].Active;
+
+            string split = "|^|";
+            string res = x + split + type + split + Num + split + ActiveType;
             var result = JsonConvert.SerializeObject(res);
 
             return Json(result, JsonRequestBehavior.AllowGet);

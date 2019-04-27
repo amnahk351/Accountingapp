@@ -370,7 +370,7 @@
 
                                         Notification
                                     </h4>
-                                    <a href="@Url.Action("ManagerApproval")" style="color:blue;float:right">View All</a>
+                                    <a href="@Url.Action("PendingTransactions")" style="color:blue;float:right">View All</a>
                                     <hr />
                                     <h4 style="color: dimgray">You have (@ViewBag.pendingCount) pending transactions.</h4>
 
@@ -508,6 +508,40 @@
 
 
     <script>
+
+        var Query3;
+
+        $.ajax(
+            {
+                url: '/Manager/RetrieveAllTotalTypes/',
+                type: "GET",
+                async: false,
+                dataType: "json",
+                contentType: "application/json;",
+                success: function (result) {
+                    //alert(result);
+                    Query3 = result;
+
+                },
+                error: function (error) {
+                    //alert(JSON.stringify(error));
+                }
+            });
+
+        var result2 = Query3.replace(/"/g, "");
+
+
+        var nums = result2.split(";");
+
+
+        var TotalAssets = Number(nums[0]);
+        var TotalLiab = Number(nums[1]);
+        var TotalRev = Number(nums[2]);
+        var TotalExp = Number(nums[3]);
+
+        var WorkingCapital = TotalAssets - TotalLiab;
+
+
         //working capital
         var chart = Highcharts.chart('capital', {
             chart: {
@@ -554,13 +588,15 @@
                 type: 'bar',
                 colorByPoint: true,
                 data: [
-                    { y: 16000, color: 'green' }
+                    { y: WorkingCapital, color: 'green' }
                 ],
                 showInLegend: false,
 
             }]
 
         });
+
+       
 
 
         //currentliabilities and assets
@@ -587,8 +623,8 @@
                 type: 'column',
                 colorByPoint: true,
                 data: [
-                    { y: 6000, color: 'green' },
-                    { y: 2000, color: 'orange' }],
+                    { y: TotalAssets, color: 'green' },
+                    { y: TotalLiab, color: 'orange' }],
                 showInLegend: false
             }]
 
@@ -620,8 +656,8 @@
                 type: 'column',
                 colorByPoint: true,
                 data: [
-                    { y: 6000, color: 'green' },
-                    { y: 2000, color: 'red' }],
+                    { y: TotalRev, color: 'green' },
+                    { y: TotalExp, color: 'red' }],
                 showInLegend: false
             }]
 
@@ -680,9 +716,56 @@
             }]
 
         });
+        
+       
+        var Query;
+
+        $.ajax(
+            {
+                url: '/Manager/RetrieveCurrentRatio/',
+                type: "GET",
+                async: false,
+                dataType: "json",
+                contentType: "application/json;",
+                success: function (result) {
+                    //alert(result);
+                    Query = result;
+
+                },
+                error: function (error) {
+                    //alert(JSON.stringify(error));
+                }
+            });
+
+        var CurValue = Number(Query);
 
 
+        var Query2;
 
+        $.ajax(
+            {
+                url: '/Manager/RetrieveBothRatios/',
+                type: "GET",
+                async: false,
+                dataType: "json",
+                contentType: "application/json;",
+                success: function (result) {
+                    //alert(result);
+                    Query2 = result;
+
+                },
+                error: function (error) {
+                    //alert(JSON.stringify(error));
+                }
+            });        
+
+        var result = Query2.replace(/"/g, "");
+        var ratios = result.split(";");
+                
+
+        var DebttoEq = Number(ratios[0]);
+        var DebttoAss = Number(ratios[1]);
+                        
 
         //current ratio
         Highcharts.chart('currentratio', {
@@ -802,7 +885,7 @@
                 animation: false,
 
                 name: 'Current Ratio',
-                data: [10.4],
+                data: [CurValue],
                 tooltip: {
 
                 },
@@ -940,7 +1023,7 @@
                 animation: false,
 
                 name: 'Quick Ratio',
-                data: [10.2],
+                data: [CurValue],
                 tooltip: {
 
                 },
@@ -1074,7 +1157,7 @@
                 animation: false,
 
                 name: 'Debt Asset Ratio',
-                data: [1.2],
+                data: [DebttoEq],
                 tooltip: {
 
                 },
@@ -1210,7 +1293,7 @@
                 animation: false,
 
                 name: 'Debt Equity Ratio',
-                data: [0.5],
+                data: [DebttoAss],
                 tooltip: {
 
                 },
