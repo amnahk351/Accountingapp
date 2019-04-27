@@ -221,95 +221,55 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar">
+        <nav id="sidebar" class="fixed-left">
 
             <div class="sidebar-header">
                 <h5>Menu</h5>
             </div>
 
-
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Accountant/Dashboard">
+                    <a href="/Admin/Dashboard">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
+
                 </li>
                 <li>
-                    <a href="/Accountant/ChartOfAccounts">
+
+                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-list" style="margin-right:10px;"></i>
                         Chart Of Accounts
                     </a>
-
-                </li>
-                @*<li>
-
-        <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-            <i class="fas fa-list" style="margin-right:10px;"></i>
-            Chart Of Accounts
-        </a>
-        <ul class="collapse list-unstyled" id="accountSubmenu">
-            <li>
-                <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
-            </li>
-        </ul>
-        </li>*@
-                <li>
-
-                    <a href="/Accountant/Journalize">
-                        <i class="far fa-edit" style="margin-right:10px"></i>
-                        Journalize
-                    </a>
-                </li>
-
-                <li>
-
-                    <a href="#transactionSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="fas fa-dollar-sign" style="margin-right:10px"></i>
-                        Transactions
-                    </a>
-                    <ul class="collapse list-unstyled" id="transactionSubmenu">
+                    <ul class="collapse list-unstyled" id="accountSubmenu">
                         <li>
-                            <a href="/Accountant/Transactions">All Transactions</a>
+                            <a href="/Admin/ChartOfAccounts">Chart of Accounts</a>
                         </li>
                         <li>
-                            <a href="/Accountant/ApprovedTransactions">Approved Transactions</a>
+                            <a href="/Admin/NewAccount">Create New Account</a>
                         </li>
                         <li>
-                            <a href="/Accountant/DisapprovedTransactions">Rejected Transactions</a>
-                        </li>
-                        <li>
-                            <a href="/Accountant/PendingTransactions">Pending Transactions</a>
-                        </li>
-                        <li>
-                            <a href="/Accountant/SuspendedTransactions">Suspended Transactions</a>
+                            <a href="/Admin/AccountRequests">View Requests</a>
                         </li>
 
                     </ul>
-                </li>
-                <li>
-
-                    <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                        <i class="far fa-chart-bar" style="margin-right:10px"></i>
-                        Reports
+                    <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-users" style="margin-right:10px;"></i>
+                        Users
                     </a>
-                    <ul class="collapse list-unstyled" id="reportSubmenu">
+                    <ul class="collapse list-unstyled" id="userSubmenu">
                         <li>
-                            <a href="/Accountant/TrialBalance">Trial Balance</a>
+                            <a href="/Admin/AllUsers">User List</a>
                         </li>
                         <li>
-                            <a href="/Accountant/IncomeStatement">Income Statement</a>
+                            <a href="/Admin/UserStatistics">User Statistics</a>
                         </li>
                         <li>
-                            <a href="/Accountant/RetainedEarnings">Statement Of Retained Earnings</a>
+                            <a href="/Admin/NewUser">Create New User</a>
                         </li>
-                        <li>
-                            <a href="/Accountant/BalanceSheet">Balance Sheet</a>
-                        </li>
+
                     </ul>
-                </li>
-                <li>
-                    <a href="/Accountant/EventLog">
+                    <a href="/Admin/EventLog">
                         <i class="fas fa-briefcase" style="margin-right:10px;"></i>
                         Event Log
                     </a>
@@ -318,6 +278,7 @@
             </ul>
 
         </nav>
+
         <div id="content">
 
             <nav class="navbar navbar-expand-lg sticky-top navbar-light justify-content-between">
@@ -383,7 +344,7 @@
             </div>
             <br />
             <div class="row ">
-                
+
                 <div class="column " style="width:20%; margin-left:20px;">
                     <div class="shadow" id="chart" style="width:100%"></div>
                 </div>
@@ -397,7 +358,7 @@
             </div>
             <br />
             <div class="row ">
-               
+
                 <div class="column shadow" style="width:91%; margin-left:20px; ">
                     <div class="shadow" id="expenses" style=" height: 600px; width: 100%; margin: 0 auto"></div>
                 </div>
@@ -406,16 +367,16 @@
             <br />
 
             @*<div class="row ">
-            <div class="column shadow" style="width:45%; margin-left:20px; background-color:white">
-                <canvas id="brandChart" width="700" height="350"></canvas>
+                <div class="column shadow" style="width:45%; margin-left:20px; background-color:white">
+                    <canvas id="brandChart" width="700" height="350"></canvas>
 
-            </div>
-            <div class="column shadow" style="width:45%; margin-left:20px; ">
-                <div class="shadow" id="graph" style="float:left;width:100%"></div>
+                </div>
+                <div class="column shadow" style="width:45%; margin-left:20px; ">
+                    <div class="shadow" id="graph" style="float:left;width:100%"></div>
 
-            </div>
+                </div>
 
-        </div>*@
+            </div>*@
             @*<br />
             <div class="row ">
 
@@ -522,7 +483,7 @@
                     }
                 },
                 style: {
-                    
+
                     fontSize: '38px'
                 }
             },
@@ -551,7 +512,7 @@
                     { y: WorkingCapital, color: 'green' }
                    ],
                 showInLegend: false,
-                
+
             }]
 
         });
@@ -693,7 +654,7 @@
             },
             credits: {
                 enabled: false
-            }, 
+            },
             plotOptions: {
                 series: {
                     pointWidth: 65
@@ -763,7 +724,7 @@
 
         var DebttoEq = Number(ratios[0]);
         var DebttoAss = Number(ratios[1]);
-     
+
 
         //current ratio
         Highcharts.chart('currentratio', {
@@ -811,7 +772,7 @@
             },
             credits: {
                 enabled: false
-            },      
+            },
             // the value axis
             yAxis: {
 
@@ -839,7 +800,7 @@
                     text: ''
                 },
                 plotBands: [{
-                    from: 0, 
+                    from: 0,
                     to: 1,
                     color: '#DF5353',// red
                     innerRadius: '90%',
@@ -885,7 +846,7 @@
                 name: 'Current Ratio',
                 data: [CurValue],
                 tooltip: {
-                   
+
                 },
                 dataLabels: {
                     enabled: true,
@@ -983,10 +944,10 @@
                     className: 'red-band'
 
                 }, {
-                    
+
                     from: 1,
                     to: 18,
-                        color: '#55BF3B', 
+                        color: '#55BF3B',
                     innerRadius: '90%',
                         outerRadius: '105%',
                         className: 'green-band'
@@ -1052,7 +1013,7 @@
                             color;
 
                         if (value < 1) {
-                            color = '#55BF3B'; 
+                            color = '#55BF3B';
                         } else if (value < 1) {
                             color = '#DDDF0D';
                         } else {
@@ -1305,7 +1266,7 @@
             }]
 
         });
-       
+
     </script>
     @*@Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")*@

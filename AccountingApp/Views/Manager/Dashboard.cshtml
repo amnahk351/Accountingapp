@@ -1,18 +1,15 @@
 ﻿@{
     ViewBag.Title = "Dashboard";
-    //Layout = "~/Views/Shared/_Layout_Admin.cshtml";
     Layout = null;
 }
 
 <!DOCTYPE html>
-<html>
 
+<html>
 <head>
     <meta charset="utf-8">
-    @*<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">*@
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/series-label.js"></script>
@@ -24,10 +21,14 @@
     <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 
 
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">*@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
@@ -36,31 +37,6 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
     <style>
-        .green-band {
-            fill: #55BF3B;
-            fill-opacity: 1;
-        }
-
-        .green {
-            fill: #55BF3B;
-            fill-opacity: 1;
-        }
-
-        .yellow-band {
-            fill: #DDDF0D;
-            fill-opacity: 1;
-        }
-
-        .red-band {
-            fill: #DF5353;
-            fill-opacity: 1;
-        }
-
-        .red {
-            fill: #DF5353;
-            fill-opacity: 1;
-        }
-
         #container {
             min-width: 310px;
             max-width: 800px;
@@ -207,6 +183,12 @@
             background: #6579a0;
         }
 
+        .right-div {
+            /*margin-left: 90px;*/
+            /*width: 460px;*/
+            margin-top: 0;
+        }
+
         @@media (max-width: 768px) {
             #sidebar {
                 margin-left: -300px;
@@ -221,22 +203,20 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar">
+        <nav id="sidebar" class="fixed-left">
 
             <div class="sidebar-header">
                 <h5>Menu</h5>
             </div>
-
-
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Accountant/Dashboard">
+                    <a href="/Manager/Dashboard">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
                 </li>
                 <li>
-                    <a href="/Accountant/ChartOfAccounts">
+                    <a href="/Manager/ChartOfAccounts">
                         <i class="fas fa-list" style="margin-right:10px;"></i>
                         Chart Of Accounts
                     </a>
@@ -244,21 +224,28 @@
                 </li>
                 @*<li>
 
-        <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-            <i class="fas fa-list" style="margin-right:10px;"></i>
-            Chart Of Accounts
-        </a>
-        <ul class="collapse list-unstyled" id="accountSubmenu">
-            <li>
-                <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
-            </li>
-        </ul>
-        </li>*@
+                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-list" style="margin-right:10px;"></i>
+                        Chart Of Accounts
+                    </a>
+                    <ul class="collapse list-unstyled" id="accountSubmenu">
+                        <li>
+                            <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
+                        </li>
+                    </ul>
+                    </li>*@
                 <li>
 
-                    <a href="/Accountant/Journalize">
+                    <a href="/Manager/Journalize">
                         <i class="far fa-edit" style="margin-right:10px"></i>
                         Journalize
+                    </a>
+                </li>
+                <li>
+
+                    <a href="/Manager/GeneralLedger">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+                        General Ledger
                     </a>
                 </li>
 
@@ -270,19 +257,19 @@
                     </a>
                     <ul class="collapse list-unstyled" id="transactionSubmenu">
                         <li>
-                            <a href="/Accountant/Transactions">All Transactions</a>
+                            <a href="/Manager/Transactions">All Transactions</a>
                         </li>
                         <li>
-                            <a href="/Accountant/ApprovedTransactions">Approved Transactions</a>
+                            <a href="/Manager/ApprovedTransactions">Approved Transactions</a>
                         </li>
                         <li>
-                            <a href="/Accountant/DisapprovedTransactions">Rejected Transactions</a>
+                            <a href="/Manager/DisapprovedTransactions">Rejected Transactions</a>
                         </li>
                         <li>
-                            <a href="/Accountant/PendingTransactions">Pending Transactions</a>
+                            <a href="/Manager/PendingTransactions">Pending Transactions</a>
                         </li>
                         <li>
-                            <a href="/Accountant/SuspendedTransactions">Suspended Transactions</a>
+                            <a href="/Manager/SuspendedTransactions">Suspended Transactions</a>
                         </li>
 
                     </ul>
@@ -295,21 +282,21 @@
                     </a>
                     <ul class="collapse list-unstyled" id="reportSubmenu">
                         <li>
-                            <a href="/Accountant/TrialBalance">Trial Balance</a>
+                            <a href="/Manager/TrialBalance">Trial Balance</a>
                         </li>
                         <li>
-                            <a href="/Accountant/IncomeStatement">Income Statement</a>
+                            <a href="/Manager/IncomeStatement">Income Statement</a>
                         </li>
                         <li>
-                            <a href="/Accountant/RetainedEarnings">Statement Of Retained Earnings</a>
+                            <a href="/Manager/RetainedEarnings">Statement Of Retained Earnings</a>
                         </li>
                         <li>
-                            <a href="/Accountant/BalanceSheet">Balance Sheet</a>
+                            <a href="/Manager/BalanceSheet">Balance Sheet</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a href="/Accountant/EventLog">
+                    <a href="/Manager/EventLog">
                         <i class="fas fa-briefcase" style="margin-right:10px;"></i>
                         Event Log
                     </a>
@@ -318,6 +305,7 @@
             </ul>
 
         </nav>
+
         <div id="content">
 
             <nav class="navbar navbar-expand-lg sticky-top navbar-light justify-content-between">
@@ -359,79 +347,118 @@
                     </div>
                 </div>
             </nav>
+
             <div class=" body-content" style="width:100%; margin:0 auto; height:auto">
-                <h2 style="display:inline">Dashboard</h2>
+                <div>
+                    <h2 style="display:inline">Dashboard</h2>
+
+                </div>
+                <hr class="my-4" />
+                <div class="row ">
+                    <div class="column " style="width:45%; margin-left:24px;height:170px">
+                        <div class="form-row left-div " style="width:100%">
+                            <div class="card shadow " style="flex-basis: 85rem; flex-grow: 0; border-top-width:10px; border-top-color:forestgreen" ;>
+                                <div class="card-body">
+                                    <h4 style="display:inline">
+                                        <i class="fas fa-bell" style="color:forestgreen"></i>
+
+                                        Notifications
+                                    </h4>
+                                    <a href="@Url.Action("PendingTransactions")" style="color:blue;float:right">View All</a>
+                                    <hr />
+                                    <h4 style="color: dimgray">You have (@ViewBag.pendingCount) pending transactions.</h4>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+
+                        <br />
+                        <br />
+
+                    </div>
+                    <div class="column " style="width:45%; margin-left:22px; height:170px">
+                        <div class="form-row left-div " style="width:100%">
+                            <div class="card shadow " style="flex-basis: 68rem; flex-grow: 0; border-top-width:10px; border-top-color:forestgreen" ;>
+                                <div class="card-body">
+                                    <h4>
+                                        <i class="fas fa-dollar-sign" style="color:forestgreen"></i>
+
+
+                                        Transactions
+                                    </h4>
+                                    <hr />
+                                    <h4 style="color: dimgray">(@ViewBag.approvedCount) transactions recorded this month.</h4>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+
+                        <br />
+                        <br />
+
+                    </div>
+
+                    <br />
+
+                    <br />
+                </div>
+                <br />
+                <div class="row ">
+                    <div class="column shadow" style="width:22%; margin-left:20px; background-color:white">
+                        <div id="currentratio" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
+                    </div>
+                    <div class="column shadow" style="width:22%; margin-left:20px; background-color:white" ">
+                        <div id="quickratio" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
+
+                    </div>
+                    <div class="column shadow" style="width:22%; margin-left:20px; background-color:white">
+                        <div id="debtasset" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
+                    </div>
+                    <div class="column shadow" style="width:22%; margin-left:20px; background-color:white" ">
+                        <div id="debtequity" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
+
+                    </div>
+
+                </div>
+                <br />
+                <div class="row ">
+
+                    <div class="column " style="width:20%; margin-left:20px;">
+                        <div class="shadow" id="chart" style="width:100%"></div>
+                    </div>
+                    <div class="column " style="width:20%; margin-left:20px;">
+                        <div class="shadow" id="incomeandexpense" style="width:100%"></div>
+                    </div>
+                    <div class="column " style="width:49%; margin-left:20px;">
+                        <div class="shadow" id="capital" style="width:100%"></div>
+                    </div>
+
+                </div>
+                <br />
+                <div class="row ">
+
+                    <div class="column shadow" style="width:91%; margin-left:20px; ">
+                        <div class="shadow" id="expenses" style=" height: 600px; width: 100%; margin: 0 auto"></div>
+                    </div>
+
+                </div>
+                <br />
+                <br />
+                <br />
+
             </div>
-            <hr class="my-4" />
-            <br />
-            <div class="row ">
-                <div class="column shadow" style="width:22%; margin-left:20px; background-color:white">
-                    <div id="currentratio" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
-                </div>
-                <div class="column shadow" style="width:22%; margin-left:20px; background-color:white" ">
-                    <div id="quickratio" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
-
-                </div>
-                <div class="column shadow" style="width:22%; margin-left:20px; background-color:white">
-                    <div id="debtasset" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
-                </div>
-                <div class="column shadow" style="width:22%; margin-left:20px; background-color:white" ">
-                    <div id="debtequity" style="min-width: 310px; max-width: 400px; height: 300px; margin: 0 auto"></div>
-
-                </div>
-
-            </div>
-            <br />
-            <div class="row ">
-                
-                <div class="column " style="width:20%; margin-left:20px;">
-                    <div class="shadow" id="chart" style="width:100%"></div>
-                </div>
-                <div class="column " style="width:20%; margin-left:20px;">
-                    <div class="shadow" id="incomeandexpense" style="width:100%"></div>
-                </div>
-                <div class="column " style="width:49%; margin-left:20px;">
-                    <div class="shadow" id="capital" style="width:100%"></div>
-                </div>
-
-            </div>
-            <br />
-            <div class="row ">
-               
-                <div class="column shadow" style="width:91%; margin-left:20px; ">
-                    <div class="shadow" id="expenses" style=" height: 600px; width: 100%; margin: 0 auto"></div>
-                </div>
-
-            </div>
-            <br />
-
-            @*<div class="row ">
-            <div class="column shadow" style="width:45%; margin-left:20px; background-color:white">
-                <canvas id="brandChart" width="700" height="350"></canvas>
-
-            </div>
-            <div class="column shadow" style="width:45%; margin-left:20px; ">
-                <div class="shadow" id="graph" style="float:left;width:100%"></div>
-
-            </div>
-
-        </div>*@
-            @*<br />
-            <div class="row ">
-
-
-                <div id="container"></div>
-            </div>
-            <hr />*@
-
-
-            <br />
-            <br />
-
-
             <div class="container body-content">
 
-                <hr />
                 <footer align="center">
                     <p>
                         &copy; @DateTime.Now.Year - Objective Accounting
@@ -439,18 +466,18 @@
                     </p>
                 </footer>
             </div>
-
         </div>
+
     </div>
+
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
-
     <script type="text/javascript">
 
     window.onload = function () {
@@ -468,6 +495,14 @@
 
         });
     </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#Accountstable').DataTable();
+        });
+    </script>
+
+
     <script>
 
         var Query3;
@@ -502,6 +537,7 @@
 
         var WorkingCapital = TotalAssets - TotalLiab;
 
+
         //working capital
         var chart = Highcharts.chart('capital', {
             chart: {
@@ -514,7 +550,7 @@
                         var text = this.renderer.text(
                             'Working Capital: $' + total,
                             this.plotLeft,
-                            this.plotTop +30,
+                            this.plotTop + 30,
 
                         ).attr({
                             zIndex: 5
@@ -522,7 +558,7 @@
                     }
                 },
                 style: {
-                    
+
                     fontSize: '38px'
                 }
             },
@@ -549,12 +585,14 @@
                 colorByPoint: true,
                 data: [
                     { y: WorkingCapital, color: 'green' }
-                   ],
+                ],
                 showInLegend: false,
-                
+
             }]
 
         });
+
+
 
 
         //currentliabilities and assets
@@ -621,7 +659,6 @@
 
         });
 
-
         var Query4;
 
         $.ajax(
@@ -673,7 +710,7 @@
                         var text = this.renderer.text(
                             'Expenses: $' + total,
                             this.plotLeft,
-                            this.plotTop +40,
+                            this.plotTop + 40,
 
                         ).attr({
                             zIndex: 5
@@ -686,14 +723,14 @@
                 }
             },
             title: {
-                text:''
+                text: ''
             },
             exporting: {
                 enabled: false
             },
             credits: {
                 enabled: false
-            }, 
+            },
             plotOptions: {
                 series: {
                     pointWidth: 65
@@ -701,9 +738,11 @@
             },
 
             xAxis: {
+                //categories: ['Rent Expense', 'Salaries Expense', 'Supplies Expense', 'Utilities Expense', 'Telephone Expense', 'Advertising Expense', 'Insurance Expense', 'Depriciation Expense']
                 categories: Cols
-                //categories: ['Rent Expense', 'Salaries Expense', 'Supplies Expense', 'Utilities Expense', 'Telephone Expene', 'Advertising Expense', 'Insurance Expense', 'Depriciation Expense']
+
             },
+
 
             series: [{
                 type: 'column',
@@ -763,7 +802,7 @@
 
         var DebttoEq = Number(ratios[0]);
         var DebttoAss = Number(ratios[1]);
-     
+
 
         //current ratio
         Highcharts.chart('currentratio', {
@@ -811,7 +850,7 @@
             },
             credits: {
                 enabled: false
-            },      
+            },
             // the value axis
             yAxis: {
 
@@ -839,7 +878,7 @@
                     text: ''
                 },
                 plotBands: [{
-                    from: 0, 
+                    from: 0,
                     to: 1,
                     color: '#DF5353',// red
                     innerRadius: '90%',
@@ -848,10 +887,10 @@
                 }, {
                     from: 1,
                     to: 18,
-                        color: '#55BF3B', // green
-                        innerRadius: '90%',
-                        outerRadius: '105%',
-                        className: 'green-band'
+                    color: '#55BF3B', // green
+                    innerRadius: '90%',
+                    outerRadius: '105%',
+                    className: 'green-band'
                 }]
             },
             xAxis: {
@@ -885,7 +924,7 @@
                 name: 'Current Ratio',
                 data: [CurValue],
                 tooltip: {
-                   
+
                 },
                 dataLabels: {
                     enabled: true,
@@ -983,13 +1022,13 @@
                     className: 'red-band'
 
                 }, {
-                    
+
                     from: 1,
                     to: 18,
-                        color: '#55BF3B', 
+                    color: '#55BF3B',
                     innerRadius: '90%',
-                        outerRadius: '105%',
-                        className: 'green-band'
+                    outerRadius: '105%',
+                    className: 'green-band'
 
                 }]
             },
@@ -1052,11 +1091,11 @@
                             color;
 
                         if (value < 1) {
-                            color = '#55BF3B'; 
+                            color = '#55BF3B';
                         } else if (value < 1) {
                             color = '#DDDF0D';
                         } else {
-                            color = '#DF5353' ;
+                            color = '#DF5353';
                         }
 
                         this.title.css({
@@ -1122,8 +1161,8 @@
                     to: 2,
                     color: '#DF5353', // red
                     innerRadius: '90%',
-                        outerRadius: '105%',
-                        className: 'red'
+                    outerRadius: '105%',
+                    className: 'red'
 
                 }]
             },
@@ -1258,8 +1297,8 @@
                     to: 2,
                     color: '#DF5353', // red
                     innerRadius: '90%',
-                        outerRadius: '105%',
-                        className: 'red'
+                    outerRadius: '105%',
+                    className: 'red'
 
                 }]
             },
@@ -1305,11 +1344,8 @@
             }]
 
         });
-       
+
     </script>
-    @*@Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")*@
-    @*@RenderSection("scripts", required: false)*@
 </body>
 </html>
 
@@ -1334,4 +1370,3 @@
         }
 
 </script>
-

@@ -492,6 +492,8 @@
     <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Manager\GeneralLedger.cshtml" />
     <Content Include="Views\Manager\EditJournal.cshtml" />
+    <Content Include="Views\Manager\Dashboard.cshtml" />
+    <Content Include="Views\Admin\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />

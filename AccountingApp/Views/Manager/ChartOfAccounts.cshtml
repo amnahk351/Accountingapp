@@ -187,7 +187,7 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Manager/ManagerIndex">
+                    <a href="/Manager/Dashboard">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
@@ -363,7 +363,7 @@
                         {
                             <tr>
                                 <td>@Model[i].AccountNumber</td>
-                                <td>   <a href="#" style="color:blue">@Model[i].AccountName</a></td>
+                                <td>   <a href="../Manager/GeneralLedger?name=@Model[i].AccountName" style="color:blue">@Model[i].AccountName</a></td>
                                 <td>@Model[i].AccountType</td>
                                 <td>@Model[i].NormalSide</td>
                                 <td style="text-align:end">@Model[i].OriginalBalance</td>

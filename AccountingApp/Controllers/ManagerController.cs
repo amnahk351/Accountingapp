@@ -28,6 +28,15 @@ namespace AccountingApp.Controllers
             
         }
 
+        public ActionResult Dashboard(string status)
+        {
+
+            ViewBag.pendingCount = getAllEntriesOfStatus("pending").entries.Count;
+            ViewBag.approvedCount = getAllEntriesOfStatus("approved").entries.Count;
+            return View();
+
+        }
+
         public ActionResult EditJournal(double id)
         {
             List<ChartOfAcc> listAccounts;
@@ -195,7 +204,7 @@ namespace AccountingApp.Controllers
             }
 
             ViewBag.accountlist = sliAccountList;
-            return View("~/Views/Accountant/AccountantIndex.cshtml");
+            return View("~/Views/Accountant/Dashboard");
         }
         
 
@@ -548,6 +557,35 @@ namespace AccountingApp.Controllers
             string s = RoundedAssets + ";" + RoundedLiab + ";" + RoundedRev + ";" + RoundedExp;
 
             var result = JsonConvert.SerializeObject(s);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult RetrieveExpenseDataforChart()
+        {
+            string Q4 = "Expense";            
+
+            List<ChartOfAcc> Chart;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q4 }).ToList();
+            }
+
+            List<string> items = new List<string>();
+            string final = "";
+
+            foreach (ChartOfAcc x in Chart)
+            {                
+                string name = x.AccountName;
+                decimal bal = (decimal) x.CurrentBalance;
+                string Added = name + "|^|" + bal;
+                items.Add(Added);
+            }
+
+            final = string.Join(";", items);                        
+
+            var result = JsonConvert.SerializeObject(final);
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
