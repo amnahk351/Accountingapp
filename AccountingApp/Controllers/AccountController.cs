@@ -184,15 +184,15 @@ namespace AccountingApp.Controllers
 
                     if (userDetails[0].Role == "Admin")
                     {
-                        return Redirect("~/Admin/AdminIndex"); //takes user to admin page
+                        return Redirect("~/Admin/Dashboard"); //takes user to Admin view
                     }
                     else if (userDetails[0].Role == "Accountant")
                     {
-                        return Redirect("~/Accountant/AccountantIndex");  //takes user to accountant page
+                        return Redirect("~/Accountant/Dashboard");  //takes user to Accountant view
                     }
-                    else if (userDetails[0].Role == "Manager")
+                    else if (userDetails[0].Role == "Manager")  //takes user to Manager view
                     {
-                        return Redirect("~/Manager/ManagerIndex");
+                        return Redirect("~/Manager/Dashboard");
                     }
 
 
@@ -279,7 +279,7 @@ namespace AccountingApp.Controllers
             }
             
             //return Redirect("~/Admin/AdminIndex");  //just a default page to end up at if neither option above was used, probably should make this an accountant
-            return View("~/Views/Admin/AdminIndex.cshtml"); //just a default page to end up at if neither option above was used, probably should make this an accountant
+            return View("~/Views/Accountant/Dashboard"); //just a default page to end up at if neither option above was used, probably should make this an accountant
 
         }
 
@@ -642,14 +642,14 @@ namespace AccountingApp.Controllers
 
             if (sessionRole == "Admin")
             {
-                return Redirect("~/Admin/AdminIndex");
+                return Redirect("~/Admin/Dashboard");
             }
             else if (sessionRole == "Accountant")
             {
-                return Redirect("~/Accountant/AccountantIndex");
+                return Redirect("~/Accountant/Dashboard");
             }
 
-            return Redirect("~/Admin/AdminIndex");
+            return Redirect("~/Admin/Dashboard");
         }
 
         public ActionResult AccountRecovery()

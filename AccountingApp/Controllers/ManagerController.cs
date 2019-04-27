@@ -28,6 +28,15 @@ namespace AccountingApp.Controllers
             
         }
 
+        public ActionResult Dashboard(string status)
+        {
+
+            ViewBag.pendingCount = getAllEntriesOfStatus("pending").entries.Count;
+            ViewBag.approvedCount = getAllEntriesOfStatus("approved").entries.Count;
+            return View();
+
+        }
+
         public ActionResult EditJournal(double id)
         {
             List<ChartOfAcc> listAccounts;
@@ -195,7 +204,7 @@ namespace AccountingApp.Controllers
             }
 
             ViewBag.accountlist = sliAccountList;
-            return View("~/Views/Accountant/AccountantIndex.cshtml");
+            return View("~/Views/Accountant/Dashboard");
         }
         
 

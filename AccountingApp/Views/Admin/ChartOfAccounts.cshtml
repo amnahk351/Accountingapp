@@ -177,25 +177,24 @@
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
-        <nav id="sidebar">
+        <nav id="sidebar" class="fixed-left">
 
             <div class="sidebar-header">
                 <h5>Menu</h5>
             </div>
 
             <ul class="list-unstyled components">
-                @*<li class="active">
-                    <a href="/Admin/AdminIndex">
+                <li class="active">
+                    <a href="/Admin/Dashboard">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
 
-                </li>*@
+                </li>
                 <li>
 
                     <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-list" style="margin-right:10px;"></i>
-
                         Chart Of Accounts
                     </a>
                     <ul class="collapse list-unstyled" id="accountSubmenu">
@@ -212,8 +211,6 @@
                     </ul>
                     <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                         <i class="fas fa-users" style="margin-right:10px;"></i>
-
-
                         Users
                     </a>
                     <ul class="collapse list-unstyled" id="userSubmenu">
@@ -346,7 +343,7 @@
                             {
                                 <tr>
                                     <td>@Model[i].AccountNumber</td>
-                                    <td>   <a href="#" style="color:blue">@Model[i].AccountName</a></td>
+                                    <td>@Model[i].AccountName</td>
                                     <td>@Model[i].AccountType</td>
                                     <td>@Model[i].NormalSide</td>
                                     <td style="text-align:end">@Model[i].OriginalBalance</td>

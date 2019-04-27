@@ -21,6 +21,11 @@ namespace AccountingApp.Controllers
             return View();
         }
 
+        public ActionResult Dashboard(string status)
+        {
+            return View();
+        }
+
         public ActionResult NewUser()
         {
             NewUserModel user = new NewUserModel();
