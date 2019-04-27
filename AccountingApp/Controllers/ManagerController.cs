@@ -553,6 +553,35 @@ namespace AccountingApp.Controllers
         }
 
         [HttpGet]
+        public ActionResult RetrieveExpenseDataforChart()
+        {
+            string Q4 = "Expense";            
+
+            List<ChartOfAcc> Chart;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q4 }).ToList();
+            }
+
+            List<string> items = new List<string>();
+            string final = "";
+
+            foreach (ChartOfAcc x in Chart)
+            {                
+                string name = x.AccountName;
+                decimal bal = (decimal) x.CurrentBalance;
+                string Added = name + "|^|" + bal;
+                items.Add(Added);
+            }
+
+            final = string.Join(";", items);                        
+
+            var result = JsonConvert.SerializeObject(final);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         public ActionResult RetrieveAccountBalanceAndStatus(string name)
         {
             List<ChartOfAcc> Chart;
