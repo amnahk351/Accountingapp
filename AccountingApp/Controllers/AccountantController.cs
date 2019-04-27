@@ -116,10 +116,16 @@ namespace AccountingApp.Controllers
 
             SqlConnection con = new SqlConnection(SqlAccess.GetConnectionString());
             SqlCommand cmd = new SqlCommand($"SELECT TOP 1 EntryId FROM dbo.TransactionTable ORDER BY TransactionID DESC", con);
-
+            string s = "1000";
             con.Open();
-            string s = cmd.ExecuteScalar().ToString();  //Stores the latest EntryId in the table
+            try
+            {
+                s = cmd.ExecuteScalar().ToString();  //Stores the latest EntryId in the table
+            }
+            catch
+            {
 
+            }
             con.Close();
             EntryId = Int32.Parse(s);
 
