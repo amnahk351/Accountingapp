@@ -94,6 +94,96 @@ namespace AccountingApp.Controllers
                 return View(getAllEntriesOfStatus(status));
         }
 
+        public decimal GetAccountBalance(string name)
+        {
+            decimal result;
+
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountName=@Value", new { Value = name }).ToList();
+            }
+
+            result = (decimal)listAccounts[0].CurrentBalance;
+
+            return result;
+        }
+
+        public ActionResult GeneralLedger(string name)
+        {
+            if (name == "" || name == null)
+            {
+
+                ViewBag.AccountName = "Account Name";
+
+                //int number2 = GetAccountNameNumber(name);
+                ViewBag.AccountNumber = "Account No. ";
+
+                //decimal balance2 = GetAccountBalance(name);
+                ViewBag.AccountBalance = "Balance: ";
+
+                List<ChartOfAcc> listAccounts2;
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    listAccounts2 = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Order By AccountName").ToList();
+                }
+                List<SelectListItem> sliAccountList2 = new List<SelectListItem>();
+
+
+                foreach (ChartOfAcc coa in listAccounts2)
+                {
+                    SelectListItem item = new SelectListItem
+                    {
+                        Text = coa.AccountName,
+                        Value = coa.AccountNumber.ToString()
+                    };
+                    sliAccountList2.Add(item);
+                }
+
+                ViewBag.accountlist = sliAccountList2;
+
+                return View("GeneralLedger");
+            }
+
+            List<TransactionTable> transactionList;
+            string s = "approved";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status And AccountName = @Name Order By DateReviewed", new { status = s, Name = name }).ToList();
+            }
+
+            ViewBag.AccountName = name;
+
+            int number = GetAccountNameNumber(name);
+            ViewBag.AccountNumber = "Account No. " + number.ToString();
+
+            decimal balance = GetAccountBalance(name);
+            ViewBag.AccountBalance = "Balance: " + balance.ToString();
+
+            List<ChartOfAcc> listAccounts;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Order By AccountName").ToList();
+            }
+            List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+
+            foreach (ChartOfAcc coa in listAccounts)
+            {
+                SelectListItem item = new SelectListItem
+                {
+                    Text = coa.AccountName,
+                    Value = coa.AccountNumber.ToString()
+                };
+                sliAccountList.Add(item);
+            }
+
+            ViewBag.accountlist = sliAccountList;
+
+            return View(transactionList);
+        }
+
 
         public ActionResult EventLog()
         {
