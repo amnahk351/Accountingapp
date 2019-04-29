@@ -133,7 +133,14 @@
     <script>
         $('#cmd').click(function () {
             var element = document.getElementById('printContent');
-            html2pdf().from(element).save("TrailBalance");
+            var opt = {
+                margin: 1,
+                filename: 'myfile.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save("TrailBalance");
         });
     </script>
 

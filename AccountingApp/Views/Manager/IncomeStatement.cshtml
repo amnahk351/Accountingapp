@@ -52,7 +52,7 @@
     <div class="shadow container" style="width:80%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" id="printContent" style="text-align:center;">
-                <div class="card-body" >
+                <div class="card-body">
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Income Statement</h4>
                     @*<hr style="padding: 0px; margin: 0px;" />*@
@@ -155,7 +155,14 @@
     <script>
         $('#cmd').click(function () {
             var element = document.getElementById('printContent');
-            html2pdf().from(element).save("IncomeStatement");
+            var opt = {
+                margin: 1,
+                filename: 'myfile.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save("TrailBalance");
         });
     </script>
     <script>
