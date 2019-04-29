@@ -1,7 +1,7 @@
-﻿@model AccountingApp.Models.Entries
+﻿@model List<AccountingApp.Models.TransactionTable>
 
 @{
-    ViewBag.Title = "Suspended Transactions";
+    ViewBag.Title = "General Ledger";
     //Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
     Layout = null;
 
@@ -40,6 +40,22 @@
 
 
     <style>
+
+        .Account-Select {
+            display: block;
+            /*text-align:right;*/
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+
         .navbar-text {
             padding-right: 20px;
         }
@@ -88,44 +104,6 @@
             outline: none !important;
             border: none;
         }
-
-        table.AccountsModalTable {
-            background-color: #EEEEEE;
-            width: 100%;
-            text-align: left;
-            border-collapse: collapse;
-        }
-
-            table.AccountsModalTable td, table.AccountsModalTable th {
-                border: 1px solid #AAAAAA;
-                padding: 3px 2px;
-            }
-
-            table.AccountsModalTable tbody td {
-                font-size: 13px;
-            }
-
-            table.AccountsModalTable tr:nth-child(even) {
-                background: #D0E4F5;
-            }
-
-            table.AccountsModalTable thead {
-                background: #3885A4;
-                background: -moz-linear-gradient(top, #6aa3bb 0%, #4c91ad 66%, #3885A4 100%);
-                background: -webkit-linear-gradient(top, #6aa3bb 0%, #4c91ad 66%, #3885A4 100%);
-                background: linear-gradient(to bottom, #6aa3bb 0%, #4c91ad 66%, #3885A4 100%);
-            }
-
-                table.AccountsModalTable thead th {
-                    font-size: 15px;
-                    font-weight: bold;
-                    color: #FFFFFF;
-                    border-left: 2px solid #D0E4F5;
-                }
-
-                    table.AccountsModalTable thead th:first-child {
-                        border-left: none;
-                    }
 
         .line {
             width: 100%;
@@ -416,8 +394,6 @@
                             <li class="nav-item active">
                                 <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
                                     Log Out
-
-
                                 </button>
                             </li>
 
@@ -429,98 +405,68 @@
             <div style="width:100%; margin:0 auto">
 
 
-                <h3 style="display:inline">Suspended Transactions</h3>
-                <div class="" style=" float:right" role="group" aria-label="Basic example">
-                    <a href="../Accountant/Transactions" class="btn btn-success" role="button" aria-pressed="true">
-                        All
-                    </a>
-                    <a href="../Accountant/ApprovedTransactions" class="btn btn-success" role="button" aria-pressed="true">
-                        <i class="fas fa-check"></i>
-                        Approved
-                    </a>
-                    <a href="../Accountant/DisapprovedTransactions" class="btn btn-danger" role="button" aria-pressed="true">
-                        <i class="fas fa-times"></i>
-                        Disapproved
-                    </a>
-                    <a href="../Accountant/PendingTransactions" class="btn btn-warning" role="button" aria-pressed="true">
-                        <i class="fas fa-exclamation-circle" style="color:white"></i>
-                        Pending
-                    </a>
-                    <a href="../Accountant/SuspendedTransactions" class="btn btn-info" role="button" aria-pressed="true">
-                        Suspended
-                    </a>
+                <h3 style="display:inline">General Ledger</h3>
+
+                <div style="float: right">
+                    @Html.DropDownList("AccountName", (List<SelectListItem>)ViewBag.accountList, new { @class = "Account-Select", @name = "AccountNumber[]", @onchange = "ChangeAccountPage();" })
                 </div>
                 <br />
                 <br />
+
+
+                <div style="clear: both">
+                    <h4 style="float: left">@ViewBag.AccountName</h4>
+                    <h4 id="CurrentAcccountBalance" style="float: right">@ViewBag.AccountBalance</h4>
+                    <h4 style="float: right; margin-right: 45%">@ViewBag.AccountNumber</h4>
+
+                </div>
+                <br />
+
                 <hr />
                 <div>
                     <table id="GeneralJournalTable" class="table table-responsive table-hover shadow" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                         <thead style="background-color:white" class="shadow">
                             <tr class="shadow">
-                                <th style="width:20%">Date Created</th>
-                                <th style="width:10%">Accountant Username</th>
-                                <th style="width:20%">Comment</th>
-                                <th style="width:10%">Entry ID</th>
-                                <th style="width:50%">Accounts Affected</th>
+                                <th style="width:20%">Date</th>
+                                <th style="width:10%">Description</th>
+                                <th style="width:10%">Post Reference</th>
                                 <th>Debit</th>
                                 <th>Credit</th>
-                                <th style="width:10%">Status</th>
-                                <th>Action</th>
+
+                                @*<th style="width:10%">Entry ID</th>
+                                    <th style="width:8%">Type</th>*@
+
+
+                                <th>Before Balance</th>
+                                <th>After Balance</th>
                             </tr>
                         </thead>
                         <tbody style="background-color:white; width:100%">
-                            @for (int i = 0; i < Model.entries.Count; i++)
+                            @if (Model != null)
                             {
-                            <tr>
-                                <td>@Model.entries[i].DateSubmitted</td>
-                                <td>@Model.entries[i].AccountantUsername</td>
-                                <td>@Model.entries[i].AccountantComment</td>
-                                <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model.entries[i].entryID</td>
-                                <td onclick="PopulateAccountsModal(this)" style="white-space: pre-wrap; color:blue; cursor:pointer;" data-toggle="modal" data-target="#AccountsModal">@Model.entries[i].FormattedAccountNames()</td>
-                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                                <td>
-                                    @*@Model.entries[i].status*@
-                                    @if (@Model.entries[i].status == "approved")
-                                    {<i class="fas fa-check" style="color: limegreen;"></i>
 
-                                        <span style="color: limegreen;">@Model.entries[i].status</span>
+                                for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@Model[i].DateReviewed</td>
+                                        <td>@Model[i].AccountantComment</td>
+                                        <td>@Model[i].PostReference</td>
+                                        <td align="right" style="white-space: pre-wrap;">@Model[i].Debit</td>
+                                        <td align="right" style="white-space: pre-wrap;">@Model[i].Credit</td>
 
-                                    }
-                                    else if (@Model.entries[i].status == "disapproved")
-                                    { <i class="fas fa-times" style="color: red;"></i>
-
-                                        <span style="color: red;">  @Model.entries[i].status</span>
-                                    }
-                                    else if (@Model.entries[i].status == "pending")
-                                    { <i class="fas fa-exclamation-circle" style="color:darkorange"></i>
-
-                                        <span style="color: darkorange;">  @Model.entries[i].status</span>
-
-                                    }
-                                    else
-                                    {<i class="fas fa-exclamation" style="color:#17a2b8;"></i>
+                                        @*<td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model[i].EntryId</td>
+                                            <td>@Model[i].Entry_Type</td>*@
 
 
-                                        <span style="color:#17a2b8;">  @Model.entries[i].status</span>
-                                    }
-                                </td>
-                                <td>
-                                    @if (@Model.entries[i].status == "suspended")
-                                    {
-                                        <a style="color: blue" href="@Url.Action("EditJournal", new { id = Model.entries[i].entryID})">
-                                            Edit
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <button type="button" class="viewModal" onclick="PopulateEntryModal(this)" data-toggle="modal" data-target="#EntryModal">View</button>
-                                    }
+                                        <td>@Model[i].BeforeBalance</td>
+                                        <td>@Model[i].AfterBalance</td>
 
-                                </td>
-                            </tr>
 
+                                    </tr>
+
+                                }
                             }
+
                         </tbody>
                     </table>
                 </div>
@@ -534,43 +480,6 @@
                         Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
                     </p>
                 </footer>
-            </div>
-
-            <div class="modal fade" id="AccountsModal" role="dialog">
-                <div class="modal-dialog">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-
-                            <h4 style="text-align:left" class="modal-title">Account Details</h4>
-                        </div>
-                        <div id="AccountsModalContent" class="modal-body">
-
-                            <div id="AccountsModalEntryID">ID: </div>
-                            <br />
-                            <table id="AccountsModalTable" class="AccountsModalTable">
-
-                                <thead>
-                                    <tr>
-                                        <th>Account Name</th>
-                                        <th>Number</th>
-                                        <th>Type</th>
-                                        <th>Balance</th>
-                                        <th>Active</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-
-                            </table>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Modal -->
@@ -587,8 +496,9 @@
 
                             <div id="ModalEntryID">ID: </div>
                             <div id="ModalDate">Date Created: </div>
+                            <div id="ModalStatus">Status: </div>
                             <br />
-                            <table class="AccountsModalTable">
+                            <table>
                                 <tr>
                                     <th>Accounts</th>
                                     <th>Debits</th>
@@ -668,116 +578,49 @@
 
     <script>
 
-        function formatMoney(n, c, d, t) {
-            var c = isNaN(c = Math.abs(c)) ? 2 : c,
-                d = d == undefined ? "." : d,
-                t = t == undefined ? "," : t,
-                s = n < 0 ? "-" : "",
-                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
-                j = (j = i.length) > 3 ? j % 3 : 0;
-
-            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-        };
+        function PopulateEntryModal(id) {
 
 
-        function PopulateAccountsModal(AllAccounts) {
+            var ID = $(id).text();
+            //alert("Text is: " + String);
 
-            $("#AccountsModalTable tbody tr").remove();
-
-            var row = $(AllAccounts).closest('tr');
-            var table = document.getElementById("GeneralJournalTable");
-
-            var ID = table.rows[row[0].rowIndex].cells[3].innerText;
-            var ModalID = document.getElementById("AccountsModalEntryID");
-            ModalID.innerHTML = "ID: " + ID;
-
-            var Accounts = $(AllAccounts).text();
-
-            var NewText = Accounts.replace(/\t/g, "");
-            var AllAccounts = NewText.split("\n");
-
-
-            for (i = 0; i < AllAccounts.length; i++) {
-
-                var CurrentAccountName = AllAccounts[i];
-                var newSt = CurrentAccountName.replace(/\s+/g, ' ').trim()
-                var Query;
-
-                $.ajax(
-                    {
-                        url: '/Manager/RetrieveAccountModalSummary/',
-                        type: "GET",
-                        async: false,
-                        dataType: "json",
-                        contentType: "application/json;",
-                        data: { "name": newSt },
-                        success: function (result) {
-                            //alert(result);
-                            Query = result;
-
-                        },
-                        error: function (error) {
-                            //alert(JSON.stringify(error));
-                        }
-                    });
-
-                //remove quotes and split
-                var Query2 = Query.replace(/"/g, "");
-                var resul = Query2.split("|^|");
-
-                var AccNum = resul[0];
-                var type = resul[1];
-                var Money = formatMoney(resul[2]);
-                var Act = resul[3];
-
-                var tableRef = document.getElementById('AccountsModalTable').getElementsByTagName('tbody')[0];
-
-                // Insert a row in the table at the last row
-                var row = tableRef.insertRow(tableRef.rows.length);
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-                var cell4 = row.insertCell(3);
-                var cell5 = row.insertCell(4);
-                var cell6 = row.insertCell(5);
-
-                //Account Name
-                cell1.innerText = newSt;
-
-                cell2.innerText = AccNum;
-
-                cell3.innerText = type;
-
-                cell4.innerText = "$ " + Money;
-
-
-                if (Act == "True") {
-                    cell5.innerText = "Yes";
-                } else {
-                    cell5.innerText = "No";
+            @* $.ajax({
+                url: "/Accountant/TransactionSummary",
+                contentType: "application/json; charset=utf-8",
+                data: "{'id':'" + ClickedText + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    alert(result);
                 }
+            });
 
-                var cellText = "View Ledger";
-                cell6.innerHTML = "<a style=\"color:blue\" href=\"../Accountant/GeneralLedger?name=" + newSt + "\" target=\"_blank\">" + cellText + "</a>";
 
-            }
-        }
+            var url = '@Url.Action("TransactionSummary", "Accountant")';
+            url += '/?id=' + ClickedText;
+            $("#ajaxresult").load(url);*@
+            //loa
 
-        function PopulateEntryModal(button) {
 
-            var row = $(button).closest('tr');
+
+            var row = $(id).closest('tr');
             var table = document.getElementById("GeneralJournalTable");
 
-            var ID = table.rows[row[0].rowIndex].cells[3].innerText;
+            //var ID = table.rows[row[0].rowIndex].cells[1].innerText;
+            var PostNum = table.rows[row[0].rowIndex].cells[0].innerText;
             var ModalID = document.getElementById("ModalEntryID");
-            ModalID.innerHTML = "ID: " + ID;
+            ModalID.innerHTML = "Post Reference: " + PostNum;
 
-            var Date = table.rows[row[0].rowIndex].cells[0].innerText;
+            var Date = table.rows[row[0].rowIndex].cells[1].innerText;
             var ModalDate = document.getElementById("ModalDate");
-            ModalDate.innerHTML = "Date Created: " + Date;            
+            ModalDate.innerHTML = "Date Reviewed: " + Date;
+
+            var Stat = table.rows[row[0].rowIndex].cells[10].innerText;
+            var ModalStat = document.getElementById("ModalStatus");
+            ModalStat.innerHTML = "Status: " + Stat;
 
 
-            var Accounts = table.rows[row[0].rowIndex].cells[4].innerText;
+            var Accounts = table.rows[row[0].rowIndex].cells[5].innerText;
             var text = Accounts.replace(/\t/g, "&nbsp;&nbsp;&nbsp;");
             var res0 = text.split("\n");
             var finalAcc = "";
@@ -791,7 +634,7 @@
             ModalAcc.innerHTML = finalAcc;
 
 
-            var De = table.rows[row[0].rowIndex].cells[5].innerText;
+            var De = table.rows[row[0].rowIndex].cells[6].innerText;
             var res = De.split("\n");
             var finalDe = "";
 
@@ -803,7 +646,7 @@
             ModalDe.innerHTML = finalDe;
 
 
-            var Cr = table.rows[row[0].rowIndex].cells[6].innerText;
+            var Cr = table.rows[row[0].rowIndex].cells[7].innerText;
             var res2 = Cr.split("\n");
             var finalCr = "";
 
@@ -923,6 +766,79 @@
         }
 
     </script>
+    <script>
+
+        function ChangeAccountPage() {
+
+            var skillsSelect = document.getElementById("AccountName");
+            var selectedText = skillsSelect.options[skillsSelect.selectedIndex].text;
+            window.location.href = '../Accountant/GeneralLedger?name=' + selectedText;
+        }
+
+        window.onload = function () {
+            FixPage();
+        };
+
+        function FixPage() {
+            var bal = document.getElementById("CurrentAcccountBalance").innerText;
+
+            var num = bal.replace("Balance: ", "");
+            var numFixed = formatMoney(num);
+
+            document.getElementById("CurrentAcccountBalance").innerText = "Balance: $ " + numFixed;
+
+            //var str = window.location.pathname;
+            var str = window.location.href;
+            var items = str.split("GeneralLedger");
+            var UrlEnd = items[1];
+
+            if (UrlEnd != "") {
+                //There is an account name
+
+                var AccountName = UrlEnd.replace("?name=", "");
+                //Add spaces
+                var finalAccountName = AccountName.replace("%20", " ");
+
+                //Set the drop down equal to the text
+                var dd = document.getElementById('AccountName');
+                for (var i = 0; i < dd.options.length; i++) {
+                    if (dd.options[i].text === finalAccountName) {
+                        dd.selectedIndex = i;
+                        break;
+                    }
+                }
+
+            } else {
+                //There is no account specified
+
+                //Add please select to drop down
+                var x = document.getElementById("AccountName");
+                var option = document.createElement("option");
+                option.text = "Please Select an Account";
+                x.add(option, 0);
+                x.selectedIndex = 0;
+
+            }
+
+            //alert(items[0]);
+            //alert(items[1]);
+            //var newstr = str.replace("/Accountant/EditJournal/", "");
+            //alert(str);
+        }
+
+        function formatMoney(n, c, d, t) {
+            var c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
+
+    </script>
+
     <script>
         $(document).ready(function () {
 
