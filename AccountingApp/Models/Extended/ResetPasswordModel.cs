@@ -70,7 +70,7 @@ namespace AccountingApp.Models
             {
                 matches = true;
             }
-            else if (userDetails[0].OldPasswords.Contains(Password))
+            else if (userDetails[0].OldPasswords != null && userDetails[0].OldPasswords.Contains(Password))
             {
                 matches = true;
             }
