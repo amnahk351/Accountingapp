@@ -12,6 +12,7 @@ using System.Web.Script.Serialization;
 using System.Configuration;
 using System.Data;
 using Dapper;
+using System.Diagnostics;
 
 namespace AccountingApp.Controllers
 {
@@ -30,13 +31,7 @@ namespace AccountingApp.Controllers
             string denied = GetErr.GetErrorMessage(21);
             string locked = GetErr.GetErrorMessage(30);
             string attempts = GetErr.GetErrorMessage(31);
-            //var db = new Database1Entities5();
-            
-            //checks username and password both exists for an account, left for reference
-            //var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username && validUser.Password == userLoggingIn.Password).FirstOrDefault();
-                        
-            //var userDetails = db.CreateUsers.Where(validUser => validUser.Username == userLoggingIn.Username).FirstOrDefault();  //get the account for the typed username
-            //List<CreateUser> validateLogin;
+
             List<UserModel> userDetails;
 
 
@@ -50,11 +45,13 @@ namespace AccountingApp.Controllers
             {
                 if (userDetails == null)
                 {
+                    Trace.WriteLine("------------USER NULL");
                     throw new Exception(inv);  //the username does not exist                    
                 }
 
                 else if (userDetails.Count == 0)
                 {
+                    Trace.WriteLine("------------USER EMPTY");
                     throw new Exception(inv);
                 }
 
@@ -137,8 +134,6 @@ namespace AccountingApp.Controllers
                     System.Web.HttpContext.Current.Session["Username"] = userDetails[0].Username;
                     System.Web.HttpContext.Current.Session["UserRole"] = userDetails[0].Role;
                                         
-                    
-
                     using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                     {
                         string sql = "Update dbo.UserTable set LoginAmount = @amount Where Username = @name;";
@@ -151,7 +146,6 @@ namespace AccountingApp.Controllers
                         });
                     }
 
-
                     return Redirect("~/Account/SecurityQuestions");
                 }
                 else
@@ -163,7 +157,6 @@ namespace AccountingApp.Controllers
                     
                     //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
                     
-
                     int x = 10;
 
                     using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -176,7 +169,6 @@ namespace AccountingApp.Controllers
                             attempts = x,
                             time = DateTime.Now,
                             name = userDetails[0].Username
-
                         });
                     }
 
@@ -194,92 +186,16 @@ namespace AccountingApp.Controllers
                     {
                         return Redirect("~/Manager/Dashboard");
                     }
-
-
                 }
             }
-
-
-            
-            //try
-            //{
-            //    if (userDetails == null)
-            //    {
-            //        throw new Exception(inv);  //the username does not exist                    
-            //    }
-
-            //    else if (userLoggingIn.Password != userDetails.Password)
-            //    {
-            //        //usernames exists, but password is wrong                    
-            //        if (userDetails.Login_Attempts == 1)
-            //        {
-            //            userDetails.Account_Locked = true;
-            //            db.SaveChanges();
-
-            //            Logger.LogAccountLocked(userDetails.ID, userDetails.Username);
-            //            Database1Entities6 db2 = new Database1Entities6();
-            //            var events = db2.EventLogs.ToList();
-            //            throw new Exception(locked);
-            //        }
-
-            //        userDetails.Login_Fails++;
-            //        userDetails.Login_Attempts--;
-            //        db.SaveChanges();
-
-            //        throw new Exception(attempts + " " + userDetails.Login_Attempts.ToString());
-            //    }
-
-            //    else if (userDetails.Active == false)
-            //        throw new Exception(denied);
-            //    else if (userDetails.Account_Locked == true)
-            //        throw new Exception(locked);
-            //    else if (userDetails.Security_Question1 == null) {
-            //        //Not answered security questions
-            //        System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
-            //        System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
-            //        System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;
-
-            //        userDetails.Login_Amount++;
-            //        db.SaveChanges();
-
-            //        System.Diagnostics.Debug.WriteLine("Went to security questions.");
-            //        return Redirect("~/Account/SecurityQuestions");
-            //    }
-            //    else
-            //    {
-            //        //The account is allowed
-            //        System.Web.HttpContext.Current.Session["UserID"] = userDetails.ID;
-            //        System.Web.HttpContext.Current.Session["FirstNameofUser"] = userDetails.FirstName;
-            //        System.Web.HttpContext.Current.Session["Username"] = userDetails.Username;
-            //        System.Web.HttpContext.Current.Session["UserRole"] = userDetails.Role;  //UserRole is stored in session ID, helpful link https://code.msdn.microsoft.com/How-to-create-and-access-447ada98
-
-            //        userDetails.Login_Attempts = 10;
-            //        userDetails.Login_Amount++;
-            //        db.SaveChanges();
-
-            //        if (userDetails.Role == "Admin")
-            //        {
-            //            return Redirect("~/Admin/AdminIndex"); //takes user to admin page
-            //            //return View("~/Views/Admin/AdminIndex.cshtml"); //takes user to admin page
-            //        }
-            //        else if (userDetails.Role == "Manager")
-            //        {
-            //            return Redirect("~/Manager/ManagerIndex");
-            //        }
-            //        else if (userDetails.Role == "Accountant")
-            //        {
-            //            return Redirect("~/Accountant/AccountantIndex");  //takes user to accountant page, probably should make this one go to a manager page
-            //            //return View("~/Views/Home/Index.cshtml"); //takes user to accountant page, probably should make this one go to a manager page
-            //        }
-            //    }
-            //}
             catch (Exception exception)
             {
-                Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'Login';</script>");
+                Trace.WriteLine("HI CATCH ", exception.Message);
+                Response.Write("<script language=javascript>alert('" + exception.Message + "'); window.location = 'LogIn';</script>");
             }
             
             //return Redirect("~/Admin/AdminIndex");  //just a default page to end up at if neither option above was used, probably should make this an accountant
-            return View("~/Views/Accountant/Dashboard"); //just a default page to end up at if neither option above was used, probably should make this an accountant
+            return Redirect("~/Accountant/Dashboard"); //just a default page to end up at if neither option above was used, probably should make this an accountant
 
         }
 

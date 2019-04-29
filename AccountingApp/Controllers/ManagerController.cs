@@ -226,12 +226,10 @@ namespace AccountingApp.Controllers
         public ActionResult TrialBalance()
         {
 
-            List<ChartOfAcc> coa;
+            List<ChartOfAcc> coa = GetCOABalanceByDate(DateTime.Now);
             decimal debTotal = 0;
             decimal credTotal = 0;
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+            
                 foreach (ChartOfAcc c in coa)
                 {
                     if (c.NormalSide.ToLower() == "debit")
@@ -242,9 +240,53 @@ namespace AccountingApp.Controllers
 
                 ViewBag.DebitTotal = debTotal;
                 ViewBag.CreditTotal = credTotal;
-            }
+            
 
             return View(coa);
+        }
+
+        private List<ChartOfAcc> GetCOABalanceByDate(DateTime until)
+        {
+            List<ChartOfAcc> coaAtDate = new List<ChartOfAcc>();
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                List<TransactionTable> transactionsAtDate = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where DateReviewed <= @date AND status = @status",
+                    new { date = until, status = "approved" }).ToList();
+                coaAtDate = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+
+
+                for (int i = 0; i < coaAtDate.Count; i++)
+                {
+                    coaAtDate[i].CurrentBalance = coaAtDate[i].OriginalBalance;
+                    for (int j = 0; j < transactionsAtDate.Count; j++)
+                    {
+                        if (transactionsAtDate[j].AccountName == coaAtDate[i].AccountName)
+                        {
+                            if (transactionsAtDate[j].Debit == null)
+                                transactionsAtDate[j].Debit = 0;
+
+                            if (transactionsAtDate[j].Credit == null)
+                                transactionsAtDate[j].Credit = 0;
+
+                            if (coaAtDate[i].NormalSide.ToLower() == "debit")
+                            {
+                                coaAtDate[i].CurrentBalance += transactionsAtDate[j].Debit.Value;
+                                coaAtDate[i].CurrentBalance -= transactionsAtDate[j].Credit.Value;
+                            }
+                            else //normal side is credit
+                            {
+                                coaAtDate[i].CurrentBalance += transactionsAtDate[j].Credit.Value;
+                                coaAtDate[i].CurrentBalance -= transactionsAtDate[j].Debit.Value;
+                            }
+
+                            //transactionsAtDate.RemoveAt(j);
+                        }
+                    }
+                }
+            }
+
+            return coaAtDate;
         }
 
         public ActionResult IncomeStatement()
