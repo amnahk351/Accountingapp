@@ -71,16 +71,16 @@
                     <table id="retainedEarningsTable" align="center" class="table-striped" style="width:510px">
                         <tr class="titleRow">
                             <td style="text-align: left">
-                                Beg Retained Earnings,
-                                <script>
-                                    var options = { year: 'numeric', month: 'long', day: 'numeric' };
-
-                                    document.write(new Date().toLocaleDateString("en-US", options))</script>
+                                Retained Earnings, Beginning
                             </td>
-                            <td style="text-align: right">$0.00</td>
+                            <td style="text-align: right">$ 0.00</td>
                         </tr>
                         <tr class="titleRow">
                             <td style="text-align: left">Add: Net Income</td>
+                            <td style="border-bottom: .15rem solid; text-align: right; width: 100px">@ViewBag.NetIncome</td>
+                        </tr>
+                        <tr class="titleRow">
+                            <td style="text-align: left; text-indent: 5%">Total</td>
                             <td style="border-bottom: .15rem solid; text-align: right; width: 100px">@ViewBag.NetIncome</td>
                         </tr>
                         <tr class="titleRow">
@@ -89,11 +89,7 @@
                         </tr>
                         <tr class="titleRow">
                             <td style="text-align: left">
-                                End Retained Earnings,
-                                <script>
-                                    var options = { year: 'numeric', month: 'long', day: 'numeric' };
-
-                                    document.write(new Date().toLocaleDateString("en-US", options))</script>
+                                Retained Earnings, Ending
                             </td>
                             <td style="text-align: right; border-bottom: .4rem double;">$@ViewBag.NetIncome</td>
                         </tr>
@@ -214,9 +210,12 @@
             var table2 = document.getElementById("retainedEarningsTable");
 
             var num = table2.rows.length - 1;
-            var x = table2.rows[num].cells[1].innerText;
-
+            var x = table2.rows[num].cells[1].innerText;            
             table2.rows[num].cells[1].innerText = "$ " + x;
+
+            var num2 = table2.rows.length - 3;
+            var x2 = table2.rows[num2].cells[1].innerText;
+            table2.rows[num2].cells[1].innerText = "$ " + x2;
         }
     </script>
 
