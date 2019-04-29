@@ -1022,11 +1022,8 @@ namespace AccountingApp.Controllers
         }
 
         public ActionResult GeneralLedger(string name)
-        {
-            System.Diagnostics.Debug.WriteLine("here is name: " + name);
+        {            
             if(name == "" || name == null) {
-
-                System.Diagnostics.Debug.WriteLine("it got here");
 
                 ViewBag.AccountName = "Account Name";
 
@@ -1058,8 +1055,7 @@ namespace AccountingApp.Controllers
 
                 return View("GeneralLedger");
             }
-
-            System.Diagnostics.Debug.WriteLine("it got here2");
+                         
             List<TransactionTable> transactionList;
             string s = "approved";
 

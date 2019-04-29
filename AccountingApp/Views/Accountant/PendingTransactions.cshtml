@@ -320,6 +320,13 @@
                         Journalize
                     </a>
                 </li>
+                <li>
+
+                    <a href="/Accountant/GeneralLedger">
+                        <i class="fas fa-book" style="margin-right:10px"></i>
+                        General Ledger
+                    </a>
+                </li>
 
                 <li>
 
@@ -535,6 +542,7 @@
                                         <th>Type</th>
                                         <th>Balance</th>
                                         <th>Active</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -664,7 +672,7 @@
             var row = $(AllAccounts).closest('tr');
             var table = document.getElementById("GeneralJournalTable");
 
-            var ID = table.rows[row[0].rowIndex].cells[1].innerText;
+            var ID = table.rows[row[0].rowIndex].cells[3].innerText;
             var ModalID = document.getElementById("AccountsModalEntryID");
             ModalID.innerHTML = "ID: " + ID;
 
@@ -716,6 +724,7 @@
                 var cell3 = row.insertCell(2);
                 var cell4 = row.insertCell(3);
                 var cell5 = row.insertCell(4);
+                var cell6 = row.insertCell(5);
 
                 //Account Name
                 cell1.innerText = newSt;
@@ -733,6 +742,8 @@
                     cell5.innerText = "No";
                 }
 
+                var cellText = "View Ledger";
+                cell6.innerHTML = "<a style=\"color:blue\" href=\"../Accountant/GeneralLedger?name=" + newSt + "\" target=\"_blank\">" + cellText + "</a>";
 
             }
         }
