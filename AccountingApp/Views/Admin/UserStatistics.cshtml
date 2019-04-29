@@ -2,91 +2,456 @@
 
 @{
     ViewBag.Title = "User Statistics";
-    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
-    //Layout = null;
+    //Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+    Layout = null;
 }
 
-<h2>User Statistics</h2>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">*@
+    <!-- Bootstrap CSS -->
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
 
-<table id="StatsTable" class="table">
-    <tr>
-        <th>
-            User ID
-        </th>
-        <th>
-            Username
-        </th>
-        <th>
-            Date Created
-        </th>
-        <th>
-            Date Modified
-        </th>
-        <th>
-            Most Recent Login
-        </th>
-        <th>
-            Last Time Online
-        </th>
-        <th>
-            Total Login
-        </th>
-        <th>
-            Login Fails
-        </th>
-        <th></th>
-    </tr>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateModified)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastLogin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastSignout)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoginAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoginFails)
-            </td>
-        </tr>
-    }
-
-</table>
-
-
-<script>
-    window.onload = RemoveTimes();
-
-    function RemoveTimes() {   //Removes all excess times from date created and date modified
-        var table = document.getElementById("StatsTable");
-
-        for (var i = 1; i < table.rows.length; i++) {
-            var Created = table.rows[i].cells[2].innerText;
-            var res = Created.split(" ");
-            table.rows[i].cells[2].innerText = res[0];
-
-            var Modified = table.rows[i].cells[3].innerText;
-            var res2 = Modified.split(" ");
-            table.rows[i].cells[3].innerText = res2[0];
-
+    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <style>
+        a,
+        a:hover,
+        a:focus {
+            color: inherit;
+            text-decoration: none;
+            transition: all 0.3s;
         }
-    }
 
-</script>
+        .navbar {
+            padding: 15px 10px;
+            background: #fff;
+            border: none;
+            border-radius: 0;
+            margin-bottom: 40px;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-btn {
+            box-shadow: none;
+            outline: none !important;
+            border: none;
+        }
+
+        .line {
+            width: 100%;
+            height: 1px;
+            border-bottom: 1px dashed #ddd;
+            margin: 40px 0;
+        }
+
+        i,
+        span {
+            display: inline-block;
+        }
+
+
+        #content {
+            width: 100%;
+            padding: 20px;
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+
+
+        .wrapper {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .wrapper {
+            display: flex;
+            align-items: stretch;
+        }
+
+        #sidebar {
+            min-width: 300px;
+            max-width: 650px;
+            min-height: 100vh;
+        }
+        /*#sidebar.active {
+                margin-left: -150px;
+            }*/
+        a[data-toggle="collapse"] {
+            position: relative;
+        }
+
+        .dropdown-toggle::after {
+            display: block;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+        }
+
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background: #f4f4f4;
+            font-size: 1.2em;
+        }
+
+        p {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 1.1em;
+            font-weight: 300;
+            line-height: 1.7em;
+            color: #999;
+        }
+
+        a, a:hover, a:focus {
+            color: inherit;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        #sidebar {
+            background: #3e547f;
+            color: lightgray;
+            transition: all 0.3s;
+        }
+
+            #sidebar .sidebar-header {
+                padding: 20px;
+                background: #3e547f;
+                border-bottom: 1px solid #47748b;
+            }
+
+            #sidebar ul.components {
+                padding: 20px 0;
+                border-bottom: 1px solid #47748b;
+            }
+
+            #sidebar ul p {
+                color: #d5d8e0;
+                padding: 20px;
+            }
+
+            #sidebar ul li a {
+                padding: 20px;
+                font-size: 1.2em;
+                display: block;
+            }
+
+                #sidebar ul li a:hover {
+                    color: #3e547f;
+                    background: #d5d8e0;
+                }
+
+            #sidebar ul li.active > a, a[aria-expanded="true"] {
+                color: #fff;
+                background: #3e547f;
+            }
+
+        ul ul a {
+            font-size: 0.9em !important;
+            padding-left: 30px !important;
+            background: #6579a0;
+        }
+
+        @@media (max-width: 768px) {
+            #sidebar {
+                margin-left: -300px;
+            }
+
+                #sidebar.active {
+                    margin-left: 0;
+                }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar" class="fixed-left">
+
+            <div class="sidebar-header">
+                <h5>Menu</h5>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="/Admin/Dashboard">
+                        <i class="fas fa-home" style="margin-right:10px;"></i>
+                        Dashboard
+                    </a>
+
+                </li>
+                <li>
+
+                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-list" style="margin-right:10px;"></i>
+                        Chart Of Accounts
+                    </a>
+                    <ul class="collapse list-unstyled" id="accountSubmenu">
+                        <li>
+                            <a href="/Admin/ChartOfAccounts">Chart of Accounts</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/NewAccount">Create New Account</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/AccountRequests">View Requests</a>
+                        </li>
+
+                    </ul>
+                    <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-users" style="margin-right:10px;"></i>
+                        Users
+                    </a>
+                    <ul class="collapse list-unstyled" id="userSubmenu">
+                        <li>
+                            <a href="/Admin/AllUsers">User List</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/UserStatistics">User Statistics</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/NewUser">Create New User</a>
+                        </li>
+
+                    </ul>
+                    <a href="/Admin/EventLog">
+                        <i class="fas fa-briefcase" style="margin-right:10px;"></i>
+                        Event Log
+                    </a>
+
+                </li>
+            </ul>
+
+        </nav>
+
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg sticky-top navbar-light justify-content-between">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-info" style="background-color:#3e547f">
+                        <i class="fas fa-bars"></i>
+
+                    </button>
+                    <a class="navbar-brand" href="#">
+                        <img src="~/img/Accounting Logo.PNG" width="150" height="40" style="margin-right: 15px; margin-left: 10px;" />
+
+                    </a>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto" style="float:right">
+                            <li class="nav-item active" style="margin-top:10px">
+                                <a>
+                                    <i class="fas fa-user-circle" style="color:#3e547f;font-size:24px; "></i>
+
+
+                                    <i id="LoggedName" class="nav-item" style="font-size: large;  font-style: normal;">Welcome, Admin</i>
+                                </a>
+
+                            </li>
+
+                            <li class="nav-item active">
+                                <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
+                                    Log Out
+
+
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </nav>
+
+
+            @*<div class=" body-content" style="width:85%; margin:0 auto">
+                <hr class="my-4" />
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        @TempData["Message"]
+                    </div>
+                }
+
+
+                <a href="@Url.Action("NewAccount")" class="btn btn-success icon" role="button" aria-pressed="true">
+                    Create Account
+                </a>*@
+
+            <br />
+
+
+            <div class="body-content" style="width:100%; margin:0 auto">
+
+
+                <div>
+                    <h4 style="display:inline">User Statistics</h4>
+
+                </div>
+                <br />
+                <hr class="my-4" />
+
+
+                <table id="StatsTable" class="table table-responsive table-hover shadow " style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
+                    <thead class="shadow" style="background-color:white; ">
+                        <tr style="width:100%">
+                            <th>
+                                User ID
+                            </th>
+                            <th style="width:20%">
+                                Username
+                            </th>
+                            <th style="width:20%">
+                                Date Created
+                            </th>
+                            <th  style="width:20%">
+                                Date Modified
+                            </th>
+                            <th  style="width:20%">
+                                Most Recent Login
+                            </th>
+                            <th>
+                                Last Time Online
+                            </th>
+                            <th>
+                                Total Login
+                            </th>
+                            <th>
+                                Login Fails
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Username)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateModified)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LastLogin)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LastSignout)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoginAmount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LoginFails)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <hr />
+
+            </div>
+            <div class="container body-content">
+
+                <footer align="center">
+                    <p>
+                        &copy; @DateTime.Now.Year - Objective Accounting
+                        Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
+                    </p>
+                </footer>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+
+    window.onload = function () {
+        var username = '@Session["FirstNameofUser"]';
+        document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
+    };
+
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#StatsTable').DataTable();
+        });
+    </script>
+    <script>
+        window.onload = RemoveTimes();
+        function RemoveTimes() {   //Removes all excess times from date created and date modified
+            var table = document.getElementById("StatsTable");
+            for (var i = 1; i < table.rows.length; i++) {
+                var Created = table.rows[i].cells[2].innerText;
+                var res = Created.split(" ");
+                table.rows[i].cells[2].innerText = res[0];
+                var Modified = table.rows[i].cells[3].innerText;
+                var res2 = Modified.split(" ");
+                table.rows[i].cells[3].innerText = res2[0];
+            }
+        }
+    </script>
+    <script>
+
+        function LogOutUser() {
+
+            var username = '@Session["Username"]';
+
+            $.ajax({
+                url: "/Account/LogOutUser",
+                contentType: "application/json; charset=utf-8",
+                data: "{'username':'" + username + "'}",
+                type: 'POST',
+                cache: false,
+                success: function (result) {
+                    //alert(result);
+                }
+            });
+
+            window.location.href = '../../Account/Login';
+        }
+
+    </script>
+
+</body>
+</html>

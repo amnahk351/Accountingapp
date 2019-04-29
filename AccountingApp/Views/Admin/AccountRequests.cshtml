@@ -5,72 +5,73 @@
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
 }
 
-<h2>Account Requests</h2>
+<h4>Account Requests</h4>
 
 
-<table class="table">
-    <tr>
-        <th>
-            Date Created
-        </th>
-        <th>
-            Account Number
-        </th>
-        <th>
-            Account Name
-        </th>
-        <th>
-            Account Type
-        </th>
-        <th>
-            Normal Side
-        </th>
-        <th>
-            Original Balance
-        </th>
-        <th>
-            Description
-        </th>
-        <th>
-            Created By
-        </th>
-        <th>
-            Classification
-        </th>
-        <th></th>
-    </tr>
+<table id="Accountstable" class="table table-responsive table-hover shadow " style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
+    <thead class="shadow" style="background-color:white; ">
+    <th>
+        Date Created
+    </th>
+    <th>
+        Account Number
+    </th>
+    <th>
+        Account Name
+    </th>
+    <th>
+        Account Type
+    </th>
+    <th>
+        Normal Side
+    </th>
+    <th>
+        Original Balance
+    </th>
+    <th>
+        Description
+    </th>
+    <th>
+        Created By
+    </th>
+    <th>
+        Classification
+    </th>
+    <th></th>
+    </thead>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateCreated)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AccountNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AccountName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AccountType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NormalSide)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OriginalBalance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedBy)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Type)
-        </td>
-        
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NormalSide)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OriginalBalance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+
+        </tr>
+    }
 
 </table>
