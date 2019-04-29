@@ -192,7 +192,7 @@ namespace AccountingApp.Controllers
                     }
                     else if (userDetails[0].Role == "Manager")  //takes user to Manager view
                     {
-                        return Redirect("~/Manager/Dashboard");
+                        return Redirect("~/Manager/ManagerIndex");
                     }
 
 
