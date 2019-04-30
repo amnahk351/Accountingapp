@@ -23,20 +23,20 @@ namespace AccountingApp.Models
         public DateTime DateReviewed { get; set; }
 
         public DateTime submitDate;
-        public List<String> accountNames { get; set; }
-        public List<Decimal> debits { get; set; }
-        public List<Decimal> credits { get; set; }
+        public List<string> accountNames { get; set; }
+        public List<decimal> debits { get; set; }
+        public List<decimal> credits { get; set; }
         public List<DocumentsTable> files { get; set; }
-        public List<String> fileNames { get; set; }
+        public List<string> fileNames { get; set; }
 
         public Entry()
         {
             transactions = new List<TransactionTable>();
-            accountNames = new List<String>();
-            debits = new List<Decimal>();
-            credits = new List<Decimal>();
+            accountNames = new List<string>();
+            debits = new List<decimal>();
+            credits = new List<decimal>();
             files = new List<DocumentsTable>();
-            fileNames = new List<String>();
+            fileNames = new List<string>();
         }
 
         public Entry(int entryID, string status, DateTime submitDate, string comment)
@@ -46,17 +46,17 @@ namespace AccountingApp.Models
             this.submitDate = submitDate;
             this.comment = comment;
             transactions = new List<TransactionTable>();
-            accountNames = new List<String>();
-            debits = new List<Decimal>();
-            credits = new List<Decimal>();
+            accountNames = new List<string>();
+            debits = new List<decimal>();
+            credits = new List<decimal>();
             files = new List<DocumentsTable>();
-            fileNames = new List<String>();
+            fileNames = new List<string>();
         }
 
         public string FormattedFileNames() {
 
             string formatted = "";
-            List<String> AllFiles = new List<String>();
+            List<string> AllFiles = new List<string>();
 
             foreach (DocumentsTable f in files)
             {
@@ -97,13 +97,15 @@ namespace AccountingApp.Models
 
             string formatted = "";
             
-            foreach (Decimal debit in debits)
+            foreach (decimal debit in debits)
             {
+                string deb = debit.ToString("#,##0.00");
+
                 if (formatted != "")
                 {
                     formatted += "\r\n";
                 }
-                formatted += debit.ToString();
+                formatted += deb;
             }
 
             return formatted;
@@ -113,22 +115,24 @@ namespace AccountingApp.Models
         {
 
             string formatted = "";
-            foreach (Decimal credit in credits)
+            foreach (decimal credit in credits)
             {
+                string cre = credit.ToString("#,##0.00");
+
                 if (formatted != "")
                 {
                     formatted += "\r\n";
                 }
-                formatted += credit.ToString();
+                formatted += cre;
             }
-
+            
             return formatted;
         }
 
         private int findIndexOfCredit()
         {
             int index = 0;
-            foreach (Decimal amount in credits)
+            foreach (decimal amount in credits)
             {
                 if (amount == 0)
                 {

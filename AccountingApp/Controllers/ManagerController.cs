@@ -828,7 +828,16 @@ namespace AccountingApp.Controllers
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
-            }            
+            }
+
+            foreach (TransactionTable t in transactionList)
+            {
+
+                t.DebitString = String.Format("{0:n}", t.Debit);
+                t.CreditString = String.Format("{0:n}", t.Credit);
+                t.BeforeString = String.Format("{0:n}", t.BeforeBalance);
+                t.AfterString = String.Format("{0:n}", t.AfterBalance);
+            }
 
             return View(transactionList);
         }
