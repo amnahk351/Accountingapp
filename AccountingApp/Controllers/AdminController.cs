@@ -93,7 +93,7 @@ namespace AccountingApp.Controllers
                 }
                 TempData["Message"] = "Your entry was successfully added!";
 
-                return RedirectToAction("ShowUserData");
+                return RedirectToAction("AllUsers");
             }
             return View("NewUser", new NewUserModel());
         }

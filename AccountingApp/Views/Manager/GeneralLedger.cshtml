@@ -771,6 +771,7 @@
 
         window.onload = function () {
             FixPage();
+            //SelectPageTwo();
         };
 
         function FixPage() {
@@ -834,13 +835,13 @@
     </script>
 
     <script>
-        $(document).ready(function () {
+        //$(document).ready(function () {
 
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-            });
+        //    $('#sidebarCollapse').on('click', function () {
+        //        $('#sidebar').toggleClass('active');
+        //    });
 
-        });
+        //});
     </script>
 
     @*@RenderSection("scripts", required: false)*@
@@ -852,6 +853,45 @@
         $(document).ready(function () {
             $('#GeneralJournalTable').DataTable();
         });
+
+
+        function SelectPageTwo() {
+            var str = window.location.href;
+            var items = str.split("GeneralLedger");
+            var UrlEnd = items[1];
+
+            if (UrlEnd != "") {
+                //There is an account name
+
+                var AccountName = UrlEnd.replace("?name=", "");
+                //Add spaces
+                var finalAccountName = AccountName.replace("%20", " ");
+
+                if (finalAccountName == "Cash") {
+
+                    
+                    var y = document.getElementsByClassName("paginate_button page-item active");
+                    y[0].className = "paginate_button page-item";
+
+                    var x = document.getElementsByClassName("paginate_button page-item");
+
+                    for (var i = 0; i < x.length; i++) {
+                        if (x[i].innerText == 2) {
+                            //alert("found it");
+                            x[i].click();
+                            //document.querySelector('paginate_button page-item').click();
+                            //x[i].className = "paginate_button page-item active";
+                            break;
+                        }
+                    }
+
+
+                    
+                }
+
+            }
+
+        }
     </script>
 
 
