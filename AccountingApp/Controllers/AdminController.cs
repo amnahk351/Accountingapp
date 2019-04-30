@@ -447,6 +447,13 @@ namespace AccountingApp.Controllers
             {                
                 listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
             }
+
+            foreach (ChartOfAcc c in listAccounts)
+            {
+                c.CurrentBalString = String.Format("{0:n}", c.CurrentBalance);
+                c.OriginalBalString = String.Format("{0:n}", c.OriginalBalance);
+            }
+
             return View(listAccounts);
         }
 
