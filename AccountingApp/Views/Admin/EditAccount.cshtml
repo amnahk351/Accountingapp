@@ -5,8 +5,6 @@
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
 }
 
-@*<h2>EditAccount</h2>*@
-
 
 <style>
 
@@ -15,8 +13,6 @@
         font-size: 80%;
         color: #dc3545;
     }
-
-
 </style>
 
 @using (Html.BeginForm())
@@ -79,8 +75,8 @@
             @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="checkbox">
-                @Html.EditorFor(model => model.Active)
-                @Html.ValidationMessageFor(model => model.Active, "", new { @class = "errorMsg" })
+                    @Html.EditorFor(model => model.Active)
+                    @Html.ValidationMessageFor(model => model.Active, "", new { @class = "errorMsg" })
                 </div>
             </div>
         </div>
@@ -97,7 +93,7 @@
         <br />
     </div>
 }
-    <script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
 <script>
 
     $(document).ready(function () {
@@ -110,14 +106,14 @@
     });
 
     //window.onload = function () {
-        
+
     //};
 
     function GetAccountType() {
 
         var str = window.location.pathname;
         var ID = str.replace("/Admin/EditAccount/", "");
-        
+
         var Query;
 
         $.ajax(

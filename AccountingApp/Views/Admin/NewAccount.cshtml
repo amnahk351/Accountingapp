@@ -5,8 +5,6 @@
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
 }
 
-@*<h2>NewAccount</h2>*@
-
 <style>
 
     .errorMsg {
@@ -30,7 +28,7 @@
                 <div class="form-group">
                     <label style="padding-left: 1rem" for="AccountNumber">Account Number</label>
                     @*@Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                    
+
                     @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "errorMsg" })
                 </div>
@@ -39,7 +37,7 @@
                 <div class="form-group">
                     @*@Html.LabelFor(model => model.AccountName, htmlAttributes: new { @class = "control-label col-md-2" })*@
                     <label style="padding-left: 1rem" for="AccountName">Account Name</label>
-                    
+
                     @Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.AccountName, "", new { @class = "errorMsg" })
                 </div>
@@ -51,7 +49,7 @@
                 <div class="form-group">
                     <label style="padding-left: 1rem" for="AccountType">Account Type</label>
                     @*@Html.LabelFor(model => model.AccountType, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                    
+
                     @*@Html.EditorFor(model => model.AccountType, new { htmlAttributes = new { @class = "form-control" } })*@
                     <select name="AccountType" class="form-control" id="AccountType" value="@Request["AccountType"]">
                         <option value="">Select..</option>
@@ -70,7 +68,7 @@
                 <div class="form-group">
                     <label style="padding-left: 1rem" for="BeginningBalance">Beginning Balance</label>
                     @*@Html.LabelFor(model => model.OriginalBalance, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                    
+
                     @Html.EditorFor(model => model.OriginalBalance, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.OriginalBalance, "", new { @class = "errorMsg" })
                 </div>
@@ -80,11 +78,11 @@
         <div class="form-group">
             <label style="padding-left: 1rem" for="Description">Account Description</label>
             @*@Html.LabelFor(model => model.AccountDescription, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            
-                @*@Html.EditorFor(model => model.AccountDescription, new { htmlAttributes = new { @class = "form-control" } })*@
-                <textarea class="form-control" id="AccountDescription" rows="4" name="AccountDescription" placeholder="(optional)"></textarea>
-                @Html.ValidationMessageFor(model => model.AccountDescription, "", new { @class = "errorMsg" })
-            
+
+            @*@Html.EditorFor(model => model.AccountDescription, new { htmlAttributes = new { @class = "form-control" } })*@
+            <textarea class="form-control" id="AccountDescription" rows="4" name="AccountDescription" placeholder="(optional)"></textarea>
+            @Html.ValidationMessageFor(model => model.AccountDescription, "", new { @class = "errorMsg" })
+
         </div>
 
         <div class="form-group">

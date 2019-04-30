@@ -492,27 +492,9 @@ namespace AccountingApp.Controllers
         public ActionResult EditAccount(EditAccountModel model)
         {
             if (ModelState.IsValid)
-            {
-                //List<ChartOfAcc> CurrentAccount;
-                //using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-                //{
-
-                //    CurrentAccount = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountNumber = @ID", new { ID = model.AccountNumber }).ToList();
-                //}             
-
-                //CurrentAccount[0].AccountNumber = model.AccountNumber;
-                //CurrentAccount[0].AccountName = model.AccountName;
-                //CurrentAccount[0].AccountType = model.AccountType;
-                //CurrentAccount[0].NormalSide = model.NormalSide;
-                //CurrentAccount[0].OriginalBalance = model.OriginalBalance;
-                //CurrentAccount[0].AccountDescription = model.AccountDescription;
-                //CurrentAccount[0].Active = model.Active;
-                //CurrentAccount[0].CreatedBy = model.CreatedBy;
-                //CurrentAccount[0].CurrentBalance = model.CurrentBalance;
-
+            {                
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-
                     string sql = "Update dbo.ChartOfAccounts set AccountName = @AccountName, " +
                         "AccountType = @AccountType, AccountDescription = @AccountDescription," +
                         "Active = @Active Where AccountNumber = @AccountNumber";
@@ -528,23 +510,7 @@ namespace AccountingApp.Controllers
                         
                     });
                 }
-                //if (ModelState.IsValid)
-                //{
-                //    var item = db.ChartOfAccs.Where(x => x.AccountNumber == model.AccountNumber).First();
-
-                //    item.AccountNumber = model.AccountNumber;
-                //    item.AccountName = model.AccountName;
-                //    item.AccountType = model.AccountType;
-                //    item.NormalSide = model.NormalSide;
-                //    item.OriginalBalance = model.OriginalBalance;
-                //    item.AccountDescription = model.AccountDescription;
-                //    item.Active = model.Active;
-                //    item.CreatedBy = model.CreatedBy;
-                //    item.CurrentBalance = model.CurrentBalance;
-
-
-                //    db.SaveChanges();
-                //    var item2 = db.ChartOfAccs.ToList();
+                
                 TempData["Message"] = "Your entry was successfully updated!";
 
                 return RedirectToAction("ChartOfAccounts");
