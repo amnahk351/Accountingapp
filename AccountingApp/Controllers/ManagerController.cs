@@ -347,8 +347,8 @@ namespace AccountingApp.Controllers
         [HttpGet]
         public ActionResult RetrieveCurrentRatio()
         {
-            string Q1 = "Assets";
-            string Q2 = "Liabilities";
+            string Q1 = "Asset";
+            string Q2 = "Liability";
 
             List<ChartOfAcc> Chart;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -389,10 +389,10 @@ namespace AccountingApp.Controllers
         public ActionResult RetrieveBothRatios()
         {
             string Q1 = "Revenue";
-            string Q2 = "Liabilities";
+            string Q2 = "Liability";
             string Q3 = "Expense";
             string Q4 = "Equity";
-            string Q5 = "Assets";
+            string Q5 = "Asset";
 
             List<ChartOfAcc> Chart;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -486,8 +486,8 @@ namespace AccountingApp.Controllers
         [HttpGet]
         public ActionResult RetrieveAllTotalTypes()
         {            
-            string Q1 = "Assets";
-            string Q2 = "Liabilities";
+            string Q1 = "Asset";
+            string Q2 = "Liability";
             string Q3 = "Revenue";
             string Q4 = "Expense";
 

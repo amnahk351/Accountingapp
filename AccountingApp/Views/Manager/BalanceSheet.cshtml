@@ -80,7 +80,7 @@
 
                             @for (int i = 0; i < Model.Count; i++)
                             {
-                                if (Model[i].AccountType.ToLower() == "assets")
+                                if (Model[i].AccountType.ToLower() == "asset")
                                 {
                                     if (Model[i].AccountName.ToLower() != "office supplies")
                                     {
@@ -154,7 +154,7 @@
 
                             @for (int i = 0; i < Model.Count; i++)
                             {
-                                if (Model[i].AccountType.ToLower() == "liabilities")
+                                if (Model[i].AccountType.ToLower() == "liability")
                                 {
 
                                     if (Model[i].AccountName.ToLower() != "unearned revenue" && Model[i].AccountName.ToLower() != "accumulated depreciation equipment")

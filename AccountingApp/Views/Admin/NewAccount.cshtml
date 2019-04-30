@@ -1,453 +1,148 @@
-﻿@model AccountingApp.Models.ChartOfAcc
+﻿@model AccountingApp.Models.NewAccountModel
 
 @{
     ViewBag.Title = "New Account";
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
-    //Layout = null;
 }
 
 <style>
 
-
-    .errorMessage {
-        width: 100%;
+    .errorMsg {
         margin-top: 0.25rem;
         font-size: 80%;
         color: #dc3545;
     }
-
 </style>
-<html>
-<head>
-    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">*@
 
-</head>
-<body>
-    <br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-    @*@using (Html.BeginForm())
-        {*@
+    <div class="container shadow" style="width:70%; background-color:white">
+        <br />
+        <h4>New Account</h4>
+        <hr />
+        @Html.ValidationSummary(true, "The following errors were found:", new { @class = "text-danger" })
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label style="padding-left: 1rem" for="AccountNumber">Account Number</label>
+                    @*@Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })*@
 
-    <form method="post" id="accountform" class="needs-validation" novalidate>
-        <div class="container" style="width: 43%">
-            @Html.ValidationSummary(true, "The following errors were found:", new { @class = "alert alert-danger" })
+                    @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "errorMsg" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.AccountName, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    <label style="padding-left: 1rem" for="AccountName">Account Name</label>
+
+                    @Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AccountName, "", new { @class = "errorMsg" })
+                </div>
+            </div>
         </div>
 
-        <div class="container shadow" style="width:70%; background-color:white">
-            <br />
-            <h3> Create New Account</h3>
-            <hr />
-            <br />
-            @*<hr />*@
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label style="padding-left: 1rem" for="AccountType">Account Type</label>
+                    @*@Html.LabelFor(model => model.AccountType, htmlAttributes: new { @class = "control-label col-md-2" })*@
 
-            <div class="form-row">
-                <div class="form-group col-md-6">
+                    @*@Html.EditorFor(model => model.AccountType, new { htmlAttributes = new { @class = "form-control" } })*@
+                    <select name="AccountType" class="form-control" id="AccountType" value="@Request["AccountType"]">
+                        <option value="">Select..</option>
 
-                    <label for="AccountNumber" class="control-label">Account Number</label>
-                    <input type="text" class="form-control" onkeyup="CheckAccountNumber()" id="AccountNumber" name="AccountNumber" required>
-                    @*@Html.ValidationMessageFor(m => m.AccountNumber, "", new { @class = "text-danger" })*@
-                    <div id="AccountNumberError" class="invalid-feedback">
+                        <option value="Asset">Asset</option>
+                        <option value="Liability">Liability</option>
+                        <option value="Equity">Equity</option>
+                        <option value="Revenue">Revenue</option>
+                        <option value="Expense">Expense</option>
 
-                    </div>
-
-                    <span id="AccountNumberExistsError" class="errorMessage"></span>
-                </div>
-                <div class="form-group col-md-6">
-
-                    <label for="AccountName" class="control-label">Account Name</label>
-                    <input type="text" class="form-control" onkeyup="CheckAccountName()" id="AccountName" name="AccountName" required>
-                    @*@Html.ValidationMessageFor(m => m.AccountName, "", new { @class = "text-danger" })*@
-                    <div id="AccountNameError" class="invalid-feedback">
-
-                    </div>
-
-                    <span id="AccountNameExistsError" class="errorMessage"></span>
+                    </select>
+                    @Html.ValidationMessageFor(model => model.AccountType, "", new { @class = "errorMsg" })
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <div class="form-group">
-                        <label for="AccountType" class="control-label">Account Type</label>
-                        <select name="AccountType" class="form-control" id="AccountType" required>
-                            <option value="">Select..</option>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label style="padding-left: 1rem" for="BeginningBalance">Beginning Balance</label>
+                    @*@Html.LabelFor(model => model.OriginalBalance, htmlAttributes: new { @class = "control-label col-md-2" })*@
 
-                            <option value="Assets">Assets</option>
-                            <option value="Liabilities">Liabilities</option>
-                            <option value="Equity">Equity</option>
-                            <option value="Revenue">Revenue</option>
-                            <option value="Expense">Expense</option>
-
-                        </select>
-                        @*@Html.ValidationMessageFor(m => m.AccountType, "", new { @class = "text-danger" })*@
-                        <div id="AccountTypeError" class="invalid-feedback">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-md-6">
-
-                    <div class="form-group">
-                        <label for="NormalSide">Normal Side</label>
-                        <select class="cutom-select form-control" id="NormalSide" name="NormalSide" required>
-                            <option value="">Select..</option>
-
-                            <option value="Debit">Debit</option>
-                            <option value="Credit">Credit</option>
-
-                        </select>
-                        <div id="AccountSideError" class="invalid-feedback">
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <div class="form-group">
-                        <label for="OriginalBalance">Original Balance</label>
-                        <input type="text" class="form-control text-right right-justified" id="OriginalBalance" placeholder="0.00" name="OriginalBalance" required>
-                        @*@Html.ValidationMessageFor(m => m.OriginalBalance, "", new { @class = "text-danger" })*@
-                        <div id="AccountOriginalBalanceError" class="invalid-feedback">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-md-6">
-                    <div class="form-group">
-                        <label for="CurrentBalance">Current Balance</label>
-                        <input type="text" class="form-control text-right" id="CurrentBalance" readonly="readonly" value="0.00" name="CurrentBalance" required>
-                        @*@Html.ValidationMessageFor(m => m.CurrentBalance, "", new { @class = "text-danger" })*@
-                        <div class="invalid-feedback">
-
-                        </div>
-                    </div>
+                    @Html.EditorFor(model => model.OriginalBalance, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.OriginalBalance, "", new { @class = "errorMsg" })
                 </div>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="AccountDescription">Account Description</label>
-                <textarea class="form-control" id="AccountDescription" rows="5" name="AccountDescription" placeholder="(optional)"></textarea>
-            </div>
-            @*<div class="form-group">
-                <label for="CreatedBy">Created By</label>
-                <input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy" required>*@
-            @*@Html.ValidationMessageFor(m => m.CreatedBy, "", new { @class = "text-danger" })*@
-            @*<div class="invalid-feedback">
-                        This field is required
-                    </div>
-                </div>*@
+        <div class="form-group">
+            <label style="padding-left: 1rem" for="Description">Account Description</label>
+            @*@Html.LabelFor(model => model.AccountDescription, htmlAttributes: new { @class = "control-label col-md-2" })*@
 
-            @*<div class="form-group">
-                <label for="Active" class="control-label">Active</label>
-                <input data-val="true" id="Active" name="Active" type="checkbox" value="true" required />
-                <input name="Active" type="hidden" value="false" />
+            @*@Html.EditorFor(model => model.AccountDescription, new { htmlAttributes = new { @class = "form-control" } })*@
+            <textarea class="form-control" id="AccountDescription" rows="4" name="AccountDescription" placeholder="(optional)"></textarea>
+            @Html.ValidationMessageFor(model => model.AccountDescription, "", new { @class = "errorMsg" })
 
-                @Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })*@
-            @*</div>*@
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="Active" name="Active" required>
-                    <label class="form-check-label" for="Active" style="font-size:large; padding-left:0">
-                        Active
-                    </label>
+        </div>
 
+        <div class="form-group">
+            @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Active)
+                    @Html.ValidationMessageFor(model => model.Active, "", new { @class = "errorMsg" })
                 </div>
             </div>
-            <hr />
+        </div>
 
-            <button type="submit" class="btn btn-success" href="@Url.Action("ChartOfAccounts")" id="btnsubmit">Save</button>
-            <a href="@Url.Action("ChartOfAccounts")" class="btn btn-warning">
-                <span class="glyphicon glyphicon-remove"></span> Cancel
-            </a>
-            <hr />
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit" class="btn btn-success" />
+                <a href="@Url.Action("ChartOfAccounts")" class="btn btn-warning">
+                    Cancel
+                </a>
+            </div>
+
         </div>
         <br />
-        <br />
-    </form>
-    @*}*@
-
-    <script>
-        (function () {
-            'use strict';
-            window.addEventListener('load', function () {
-                var forms = document.getElementsByClassName('needs-validation');
-                var validation = Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            alert("It got here");
-                            
-                        } else if (document.getElementById("AccountNumberExistsError").innerText != "" || document.getElementById("AccountNameExistsError").innerText != "") {
-                            event.preventDefault();
-                            event.stopPropagation();
-                            alert("Please fix all errors before submitting");
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-
-    </script>
-
-    <script>
-
-        // Restricts input for the given textbox to the given inputFilter.
-        function setInputFilter(textbox, inputFilter) {
-            ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
-                textbox.addEventListener(event, function () {
-                    if (inputFilter(this.value)) {
-                        this.oldValue = this.value;
-                        this.oldSelectionStart = this.selectionStart;
-                        this.oldSelectionEnd = this.selectionEnd;
-                    } else if (this.hasOwnProperty("oldValue")) {
-                        this.value = this.oldValue;
-                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-                    }
-                });
-            });
-        }
-
-        setInputFilter(document.getElementById("AccountNumber"), function (value) {
-            return /^\d*$/.test(value);
-        });
-
-        setInputFilter(document.getElementById("OriginalBalance"), function (value) {
-            return /^-?\d*[.,]?\d{0,2}$/.test(value);
-        });
-
-    </script>
-
-    <script>
-
-        function validateFloatKeyPress(el, evt) {
-            var charCode = (evt.which) ? evt.which : event.keyCode;
-            var number = el.value.split('.');
-            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-                return false;
-            }
-            //just one dot
-            if (number.length > 1 && charCode == 46) {
-                return false;
-            }
-            //get the carat position
-            var caratPos = getSelectionStart(el);
-            var dotPos = el.value.indexOf(".");
-            if (caratPos > dotPos && dotPos > -1 && (number[1].length > 1)) {
-                return false;
-            }
-            return true;
-        }
-
-        function getSelectionStart(o) {
-            if (o.createTextRange) {
-                var r = document.selection.createRange().duplicate()
-                r.moveEnd('character', o.value.length)
-                if (r.text == '') return o.value.length
-                return o.value.lastIndexOf(r.text)
-            } else return o.selectionStart
-        }
+    </div>
+}
 
 
-        //$("btnsubmit").click(function (event) {
+<script>
 
-        //    var E1 = document.getElementById("AccountNumberExistsError").innerText;
-        //    var E2 = document.getElementById("AccountNameExistsError").innerText;
-
-        //    if (E1 != "" || E2 != "") {
-        //        event.preventDefault();
-        //        alert("Please fix all errors on the page before submitting.");
-        //    }
-
-        //    alert("method called");
-
-        //});
-
-        
-        //$('#btnsubmit').bind('click', submit_click);
-
-        //function submit_click(event) {
-        //    event.preventDefault();
-        //    alert('clicked submit');
-        //}
-
-    </script>
-    
-    <script>
-
-        function CheckAccountNumber() {
-
-            //CheckAccountName();
-
-            var text = document.getElementById("AccountNumber").value;
-
-            var Query;
-
-            $.ajax(
-                {
-                    url: '/Admin/GetAllAccountNumbers/',
-                    type: "GET",
-                    async: false,
-                    dataType: "json",
-                    contentType: "application/json;",
-                    //data: { "id": Id },
-                    success: function (result) {
-                        //alert(result);
-                        Query = result;
-
-                    },
-                    error: function (error) {
-                        //alert(JSON.stringify(error));
-                    }
-                });
-
-            var Q1 = Query.replace("[", "");
-            var Q2 = Q1.replace("]", "");
-            var Q3 = Q2.replace(/"/g, "");
-            
-            var res = Q3.split(",");
-
-            var n = false;
-
-            for (var i = 0; i < res.length; i++) {
-
-                if (res[i] == text) {
-                    n = true;
-                    break;
-                }
-            }
-
-
-            //var btn = document.getElementById("btnsubmit");
-
-            //if (btn.disabled == true) {
-
-
-
-            //}
-
-            if (n==true)
-            {
-                //document.getElementById("btnsubmit").disabled = true;
-
-                $.ajax({
-                    url: "/Account/GetErrors",
-                    method: 'post',
-                    dataType: 'json',
-                    success: function (data) {                        
-                        //alert(data[56]);
-                        document.getElementById("AccountNumberExistsError").innerText = data[56];
-                        document.getElementById("AccountNumber").style.borderColor = "#dc3545";
-                    }
-                });
-
-            }            
-            else
-            {
-                document.getElementById("AccountNumberExistsError").innerText = "";
-
-                document.getElementById("AccountNumber").style.borderColor = "#28a745";
-                //document.getElementById("btnsubmit").disabled = false;
-            }
-        }
-
-        function CheckAccountName() {
-
-            //CheckAccountNumber();
-
-            var text0 = document.getElementById("AccountName").value;
-            var text = text0.replace(/\s+/g, ' ').trim();
-
-            var Query;
-
-            $.ajax(
-                {
-                    url: '/Admin/GetAllAccountNames/',
-                    type: "GET",
-                    async: false,
-                    dataType: "json",
-                    contentType: "application/json;",
-                    //data: { "id": Id },
-                    success: function (result) {
-                        //alert(result);
-                        Query = result;
-
-                    },
-                    error: function (error) {
-                        //alert(JSON.stringify(error));
-                    }
-                });
-
-            var Q1 = Query.replace("[", "");
-            var Q2 = Q1.replace("]", "");
-            var Q3 = Q2.replace(/"/g, "");
-
-            var res = Q3.split(",");
-
-            var n = false;
-
-            for (var i = 0; i < res.length; i++) {
-
-                if (res[i] == text) {
-                    n = true;
-                    break;
-                }
-            }
-
-
-            if (n == true) {
-                //document.getElementById("btnsubmit").disabled = true;
-
-                $.ajax({
-                    url: "/Account/GetErrors",
-                    method: 'post',
-                    dataType: 'json',
-                    success: function (data) {
-                        //alert(data[57]);
-                        document.getElementById("AccountNameExistsError").innerText = data[57];
-                        document.getElementById("AccountName").style.borderColor = "#dc3545";
-                    }
-                });
-
-            } else {
-                document.getElementById("AccountNameExistsError").innerText = "";
-                document.getElementById("AccountName").style.borderColor = "#28a745";
-                //document.getElementById("btnsubmit").disabled = false;
-            }
-        }
-
-    </script>
-
-    @Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
-
-    <script>
-
-        window.onload = onPageLoad();
-
-        function onPageLoad() {
-            document.getElementById("Active").checked = true;
-
-
-            $.ajax({
-                url: "/Account/GetErrors",
-                method: 'post',
-                dataType: 'json',
-                success: function (data) {
-                    //Index starts from 0 so number is 1 off from database
-                    //Populate error message from database
-                    document.getElementById('AccountNumberError').innerText = data[50];
-                    document.getElementById('AccountNameError').innerText = data[51];
-                    document.getElementById('AccountTypeError').innerText = data[52];
-                    document.getElementById('AccountSideError').innerText = data[53];
-                    document.getElementById('AccountOriginalBalanceError').innerText = data[54];
+    // Restricts input for the given textbox to the given inputFilter.
+    function setInputFilter(textbox, inputFilter) {
+        ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
+            textbox.addEventListener(event, function () {
+                if (inputFilter(this.value)) {
+                    this.oldValue = this.value;
+                    this.oldSelectionStart = this.selectionStart;
+                    this.oldSelectionEnd = this.selectionEnd;
+                } else if (this.hasOwnProperty("oldValue")) {
+                    this.value = this.oldValue;
+                    this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
                 }
             });
+        });
+    }
 
-        }
+    setInputFilter(document.getElementById("AccountNumber"), function (value) {
+        return /^\d*$/.test(value);
+    });
 
-    </script>
+    setInputFilter(document.getElementById("OriginalBalance"), function (value) {
+        return /^-?\d*[.,]?\d{0,2}$/.test(value);
+    });
 
-</body>
-</html>
+</script>
+
+<script type="text/javascript">
+
+    window.onload = function () {
+        var username = '@Session["FirstNameofUser"]';
+        document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
+    };
+
+</script>

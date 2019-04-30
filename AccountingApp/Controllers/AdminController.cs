@@ -334,25 +334,23 @@ namespace AccountingApp.Controllers
 
         public ActionResult NewAccount()
         {
-            return View();
+            NewAccountModel m = new NewAccountModel();
+            return View(m);
         }
 
         [HttpPost]
-        public ActionResult NewAccount(ChartOfAcc model)
+        public ActionResult NewAccount(NewAccountModel model)
         {
             var sessionUser = Session["Username"] as string;
 
-            ChartOfAcc tb2 = new ChartOfAcc();
-            tb2.AccountNumber = model.AccountNumber;
-            tb2.AccountName = model.AccountName;
-            tb2.AccountType = model.AccountType;
-            tb2.NormalSide = model.NormalSide;
-            tb2.OriginalBalance = model.OriginalBalance;
-            tb2.CurrentBalance = model.CurrentBalance;
-            tb2.AccountDescription = model.AccountDescription;
-            tb2.CreatedBy = sessionUser;
-            tb2.Active = model.Active;
-            
+            string Normal = "";
+            if (model.AccountType == "Asset" || model.AccountType == "Liability")
+            {
+                Normal = "Debit";
+            }
+            else {
+                Normal = "Credit";
+            }
 
             if (ModelState.IsValid)
             {
@@ -369,9 +367,9 @@ namespace AccountingApp.Controllers
                         AccountNumber = model.AccountNumber,
                         AccountName = model.AccountName,
                         AccountType = model.AccountType,
-                        NormalSide = model.NormalSide,
+                        NormalSide = Normal,
                         OriginalBalance = model.OriginalBalance,
-                        CurrentBalance = model.CurrentBalance,
+                        CurrentBalance = 0,
                         AccountDescription = model.AccountDescription,
                         CreatedBy = sessionUser,
                         Active = model.Active,
@@ -385,13 +383,13 @@ namespace AccountingApp.Controllers
 
             //    db.SaveChanges();
             //    var item = db.ChartOfAccs.ToList();
-                TempData["Message"] = "A new account was successfully created !";
+                TempData["Message"] = "A new account was successfully created!";
 
 
                 return RedirectToAction("ChartOfAccounts");
             }
-
-            return View("NewAccount", new ChartOfAcc());
+            //ModelState.Clear();
+            return View("NewAccount", new NewAccountModel());
         }
 
 
@@ -452,8 +450,23 @@ namespace AccountingApp.Controllers
             return View(listAccounts);
         }
 
+        [HttpGet]
+        public ActionResult GetAccountType(int id)
+        {
+            List<ChartOfAcc> listAccounts;
 
-        public ActionResult EditAccount(double id)
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                listAccounts = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountNumber=@ID", new { ID = id }).ToList();
+            }
+
+            string res = listAccounts[0].AccountType;
+            var result = JsonConvert.SerializeObject(res);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult EditAccount(int id)
         {
             List<ChartOfAcc> editAccount;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -462,36 +475,26 @@ namespace AccountingApp.Controllers
                 editAccount = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountNumber = @ID", new { ID = id }).ToList();
             }
             //return View(editAccount);
-            return View(editAccount[0]);
+
+            EditAccountModel e = new EditAccountModel();
+            e.AccountNumber = editAccount[0].AccountNumber;
+            e.AccountName = editAccount[0].AccountName;
+            e.AccountType = editAccount[0].AccountType;
+            e.AccountDescription = editAccount[0].AccountDescription;
+            e.Active = editAccount[0].Active;
+
+            return View(e);
             //var item = db.ChartOfAccs.Where(x => x.AccountNumber == id).First();
             //return View(item);
         }
 
         [HttpPost]
-        public ActionResult EditAccount(ChartOfAcc model)
+        public ActionResult EditAccount(EditAccountModel model)
         {
             if (ModelState.IsValid)
-            {
-                List<ChartOfAcc> CurrentAccount;
+            {                
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-
-                    CurrentAccount = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountNumber = @ID", new { ID = model.AccountNumber }).ToList();
-                }             
-
-                CurrentAccount[0].AccountNumber = model.AccountNumber;
-                CurrentAccount[0].AccountName = model.AccountName;
-                CurrentAccount[0].AccountType = model.AccountType;
-                CurrentAccount[0].NormalSide = model.NormalSide;
-                CurrentAccount[0].OriginalBalance = model.OriginalBalance;
-                CurrentAccount[0].AccountDescription = model.AccountDescription;
-                CurrentAccount[0].Active = model.Active;
-                CurrentAccount[0].CreatedBy = model.CreatedBy;
-                CurrentAccount[0].CurrentBalance = model.CurrentBalance;
-
-                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-                {
-
                     string sql = "Update dbo.ChartOfAccounts set AccountName = @AccountName, " +
                         "AccountType = @AccountType, AccountDescription = @AccountDescription," +
                         "Active = @Active Where AccountNumber = @AccountNumber";
@@ -499,38 +502,22 @@ namespace AccountingApp.Controllers
 
                     db.Execute(sql, new
                     {
-                        AccountNumber = CurrentAccount[0].AccountNumber,
-                        AccountName = CurrentAccount[0].AccountName,
-                        AccountType = CurrentAccount[0].AccountType,
-                        AccountDescription = CurrentAccount[0].AccountDescription,
-                        Active = CurrentAccount[0].Active
-
-
+                        AccountNumber = model.AccountNumber,
+                        AccountName = model.AccountName,
+                        AccountType = model.AccountType,
+                        AccountDescription = model.AccountDescription,
+                        Active = model.Active
+                        
                     });
                 }
-                //if (ModelState.IsValid)
-                //{
-                //    var item = db.ChartOfAccs.Where(x => x.AccountNumber == model.AccountNumber).First();
-
-                //    item.AccountNumber = model.AccountNumber;
-                //    item.AccountName = model.AccountName;
-                //    item.AccountType = model.AccountType;
-                //    item.NormalSide = model.NormalSide;
-                //    item.OriginalBalance = model.OriginalBalance;
-                //    item.AccountDescription = model.AccountDescription;
-                //    item.Active = model.Active;
-                //    item.CreatedBy = model.CreatedBy;
-                //    item.CurrentBalance = model.CurrentBalance;
-
-
-                //    db.SaveChanges();
-                //    var item2 = db.ChartOfAccs.ToList();
+                
                 TempData["Message"] = "Your entry was successfully updated!";
 
                 return RedirectToAction("ChartOfAccounts");
             
             }
-                return View(model);
+
+            return View(model);
         }
 
 
