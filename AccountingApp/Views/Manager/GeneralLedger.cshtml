@@ -281,16 +281,16 @@
                 </li>
                 @*<li>
 
-                <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                    <i class="fas fa-list" style="margin-right:10px;"></i>
-                    Chart Of Accounts
-                </a>
-                <ul class="collapse list-unstyled" id="accountSubmenu">
-                    <li>
-                        <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
-                    </li>
-                </ul>
-                </li>*@
+                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-list" style="margin-right:10px;"></i>
+                        Chart Of Accounts
+                    </a>
+                    <ul class="collapse list-unstyled" id="accountSubmenu">
+                        <li>
+                            <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
+                        </li>
+                    </ul>
+                    </li>*@
                 <li>
 
                     <a href="/Manager/Journalize">
@@ -434,7 +434,7 @@
                                 <th>Credit</th>
 
                                 @*<th style="width:10%">Entry ID</th>
-                        <th style="width:8%">Type</th>*@
+                                    <th style="width:8%">Type</th>*@
 
 
                                 <th>Before Balance</th>
@@ -442,28 +442,29 @@
                             </tr>
                         </thead>
                         <tbody style="background-color:white; width:100%">
-                            @if (Model != null) {
-                            
-                            for (int i = 0; i < Model.Count; i++)
+                            @if (Model != null)
                             {
-                                <tr>
-                                    <td>@Model[i].DateReviewed</td>
-                                    <td>@Model[i].AccountantComment</td>
-                                    <td>@Model[i].PostReference</td>
-                                    <td align="right" style="white-space: pre-wrap;">@Model[i].Debit</td>
-                                    <td align="right" style="white-space: pre-wrap;">@Model[i].Credit</td>
 
-                                    @*<td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model[i].EntryId</td>
-                <td>@Model[i].Entry_Type</td>*@
+                                for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@Model[i].DateReviewed</td>
+                                        <td>@Model[i].AccountantComment</td>
+                                        <td>@Model[i].PostReference</td>
+                                        <td align="right" style="white-space: pre-wrap;">@Model[i].Debit</td>
+                                        <td align="right" style="white-space: pre-wrap;">@Model[i].Credit</td>
+
+                                        @*<td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model[i].EntryId</td>
+                                            <td>@Model[i].Entry_Type</td>*@
 
 
-                                    <td>@Model[i].BeforeBalance</td>
-                                    <td>@Model[i].AfterBalance</td>
+                                        <td>@Model[i].BeforeBalance</td>
+                                        <td>@Model[i].AfterBalance</td>
 
 
-                                </tr>
+                                    </tr>
 
-                            }
+                                }
                             }
 
                         </tbody>
@@ -768,7 +769,7 @@
     <script>
 
         function ChangeAccountPage() {
-            
+
             var skillsSelect = document.getElementById("AccountName");
             var selectedText = skillsSelect.options[skillsSelect.selectedIndex].text;
             window.location.href = '../Manager/GeneralLedger?name=' + selectedText;
@@ -838,15 +839,15 @@
         };
 
     </script>
-
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
     <script>
-        //$(document).ready(function () {
+        $(document).ready(function () {
 
-        //    $('#sidebarCollapse').on('click', function () {
-        //        $('#sidebar').toggleClass('active');
-        //    });
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
 
-        //});
+        });
     </script>
 
     @*@RenderSection("scripts", required: false)*@
@@ -874,7 +875,7 @@
 
                 if (finalAccountName == "Cash") {
 
-                    
+
                     var y = document.getElementsByClassName("paginate_button page-item active");
                     y[0].className = "paginate_button page-item";
 
@@ -891,7 +892,7 @@
                     }
 
 
-                    
+
                 }
 
             }
