@@ -157,7 +157,6 @@ namespace AccountingApp.Controllers
             List<ChartOfAcc> listAccounts;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-
                 listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
             }
             List<SelectListItem> sliAccountList = new List<SelectListItem>();
@@ -223,10 +222,17 @@ namespace AccountingApp.Controllers
                 return View(getAllEntriesOfStatus(status));
         }
 
-        public ActionResult TrialBalance()
+        public ActionResult TrialBalance(DateTime? until)
         {
 
-            List<ChartOfAcc> coa = GetCOABalanceByDate(DateTime.Now);
+            if (until == null)
+            {
+                until = DateTime.Now;
+                Trace.WriteLine("---------Selected Date Was null");
+            }
+                
+
+            List<ChartOfAcc> coa = LoadGeneratedReportDate(until.Value);
             decimal debTotal = 0;
             decimal credTotal = 0;
             
@@ -245,8 +251,10 @@ namespace AccountingApp.Controllers
             return View(coa);
         }
 
-        private List<ChartOfAcc> GetCOABalanceByDate(DateTime until)
+        [HttpPost]
+        public List<ChartOfAcc> LoadGeneratedReportDate(DateTime until)
         {
+            Trace.WriteLine("------------Hit Load Report Data");
             List<ChartOfAcc> coaAtDate = new List<ChartOfAcc>();
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))

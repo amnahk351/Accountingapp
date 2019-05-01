@@ -47,7 +47,9 @@
     <button class="btn btn-info btn-lg" id="cmd">Generate PDF</button>
     <br />
     <br />
-
+    <div id="tableDiv">
+        @Html.Partial("trialTable")
+    </div>
     <div class="shadow container" style="width:80%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" id="printContent" style="text-align:center;">
@@ -114,9 +116,10 @@
                 </div>
                 <div class="modal-body">
                     <h5>Select a Date:</h5>
-                    <input type="text" id="Date" onkeydown="return false;" autocomplete="off" class="form_datetime" style="text-align:right" value="" placeholder="mm/dd/yyyy">
+                    <input type="text" id="Date" onkeydown="return false;" autocomplete="off" class="form_datetime" style="text-align:right" placeholder="mm/dd/yyyy">
                 </div>
                 <div class="modal-footer">
+
                     <button type="button" id="GenerateReport" onclick="LoadGeneratedReportDate()" class="btn btn-success" data-dismiss="modal">Generate</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
@@ -166,9 +169,18 @@
 
         function LoadGeneratedReportDate() {
 
+            var selectedDate = document.getElementById("Date").value;
+            alert(selectedDate);
 
-
-
+            $.ajax({
+                type: 'POST',
+                url: '/Manager/LoadGeneratedReportDate/',
+                contentType: "application/json; charset=utf-8",
+                data: "{'until': '" + selectedDate + "'}",
+                success: function (result) {
+                    $('#trialTable').html(result);
+                }
+            });
         }
 
     </script>
