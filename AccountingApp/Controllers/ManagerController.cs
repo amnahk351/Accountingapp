@@ -222,20 +222,15 @@ namespace AccountingApp.Controllers
                 return View(getAllEntriesOfStatus(status));
         }
 
-        public ActionResult TrialBalance(DateTime? until)
+        public ActionResult TrialBalance()
         {
 
-            if (until == null)
-            {
-                until = DateTime.Now;
-                Trace.WriteLine("---------Selected Date Was null");
-            }
-                
-
-            List<ChartOfAcc> coa = LoadGeneratedReportDate(until.Value);
+            List<ChartOfAcc> coa;
             decimal debTotal = 0;
             decimal credTotal = 0;
-            
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
                 foreach (ChartOfAcc c in coa)
                 {
                     if (c.NormalSide.ToLower() == "debit")
@@ -246,15 +241,15 @@ namespace AccountingApp.Controllers
 
                 ViewBag.DebitTotal = debTotal;
                 ViewBag.CreditTotal = credTotal;
-            
+            }
 
             return View(coa);
         }
 
         [HttpPost]
-        public List<ChartOfAcc> LoadGeneratedReportDate(DateTime until)
+        public ActionResult TrialTable (DateTime until)
         {
-            Trace.WriteLine("------------Hit Load Report Data");
+            Trace.WriteLine("------------Hit Load Report Data " + until);
             List<ChartOfAcc> coaAtDate = new List<ChartOfAcc>();
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -263,10 +258,10 @@ namespace AccountingApp.Controllers
                     new { date = until, status = "approved" }).ToList();
                 coaAtDate = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
 
-
                 for (int i = 0; i < coaAtDate.Count; i++)
                 {
                     coaAtDate[i].CurrentBalance = coaAtDate[i].OriginalBalance;
+                    Trace.WriteLine("---Before: " + coaAtDate[i].AccountName + ": " + coaAtDate[i].CurrentBalance);
                     for (int j = 0; j < transactionsAtDate.Count; j++)
                     {
                         if (transactionsAtDate[j].AccountName == coaAtDate[i].AccountName)
@@ -291,10 +286,11 @@ namespace AccountingApp.Controllers
                             //transactionsAtDate.RemoveAt(j);
                         }
                     }
+                    Trace.WriteLine("---After: " + coaAtDate[i].AccountName + ": " + coaAtDate[i].CurrentBalance);
                 }
             }
 
-            return coaAtDate;
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
         public ActionResult IncomeStatement()
