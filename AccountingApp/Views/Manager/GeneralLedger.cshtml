@@ -417,7 +417,7 @@
                 <div style="clear: both">
                     <h4 style="float: left">@ViewBag.AccountName</h4>
                     <h4 id="CurrentAcccountBalance" style="float: right">@ViewBag.AccountBalance</h4>
-                    <h4 style="float: right; margin-right: 45%">@ViewBag.AccountNumber</h4>
+                    <h4 style="float: right; margin-right: 30%">@ViewBag.AccountNumber</h4>
 
                 </div>
                 <br />
@@ -769,8 +769,7 @@
         }
 
         window.onload = function () {
-            FixPage();
-            //SelectPageTwo();
+            FixPage();            
         };
 
         function FixPage() {
@@ -791,8 +790,8 @@
 
                 var AccountName = UrlEnd.replace("?name=", "");
                 //Add spaces
-                var finalAccountName = AccountName.replace("%20", " ");
-
+                var finalAccountName = AccountName.replace(/%20/g, " ");
+                
                 //Set the drop down equal to the text
                 var dd = document.getElementById('AccountName');
                 for (var i = 0; i < dd.options.length; i++) {
@@ -871,14 +870,19 @@
 
                     for (var i = 0; i < x.length; i++) {
                         if (x[i].innerText == NumberToUse) {
-                            //alert("found it");
-                            x[i].click();
-                            //document.querySelector('paginate_button page-item').click();
-                            //x[i].className = "paginate_button page-item active";
+                            x[i].click();  //Click the right page number
                             break;
                         }
                     }
-                }               
+                }
+
+                var table = document.getElementById("GeneralJournalTable");
+                for (var i = 0; i < table.rows.length; i++) {
+                    if (table.rows[i].cells[2].innerText == PostNumber) {
+                        table.rows[i].style.backgroundColor = "#6fd2f2";
+                    }
+                    
+                }
 
 
             } else {
@@ -891,12 +895,7 @@
                 x.add(option, 0);
                 x.selectedIndex = 0;
 
-            }
-
-            //alert(items[0]);
-            //alert(items[1]);
-            //var newstr = str.replace("/Accountant/EditJournal/", "");
-            //alert(str);
+            }            
         }
 
         function formatMoney(n, c, d, t) {
@@ -931,45 +930,7 @@
         $(document).ready(function () {
             $('#GeneralJournalTable').DataTable();
         });
-
-
-        function SelectPageTwo() {
-            var str = window.location.href;
-            var items = str.split("GeneralLedger");
-            var UrlEnd = items[1];
-
-            if (UrlEnd != "") {
-                //There is an account name
-
-                var AccountName = UrlEnd.replace("?name=", "");
-                //Add spaces
-                var finalAccountName = AccountName.replace("%20", " ");
-
-                if (finalAccountName == "Cash") {
-
-                    
-                    var y = document.getElementsByClassName("paginate_button page-item active");
-                    y[0].className = "paginate_button page-item";
-
-                    var x = document.getElementsByClassName("paginate_button page-item");
-
-                    for (var i = 0; i < x.length; i++) {
-                        if (x[i].innerText == 2) {
-                            //alert("found it");
-                            x[i].click();
-                            //document.querySelector('paginate_button page-item').click();
-                            //x[i].className = "paginate_button page-item active";
-                            break;
-                        }
-                    }
-
-
-                    
-                }
-
-            }
-
-        }
+                
     </script>
 
 

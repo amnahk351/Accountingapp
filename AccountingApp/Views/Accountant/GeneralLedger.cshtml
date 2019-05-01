@@ -417,7 +417,7 @@
                 <div style="clear: both">
                     <h4 style="float: left">@ViewBag.AccountName</h4>
                     <h4 id="CurrentAcccountBalance" style="float: right">@ViewBag.AccountBalance</h4>
-                    <h4 style="float: right; margin-right: 45%">@ViewBag.AccountNumber</h4>
+                    <h4 style="float: right; margin-right: 30%">@ViewBag.AccountNumber</h4>
 
                 </div>
                 <br />
@@ -791,12 +791,12 @@
             var items = str.split("GeneralLedger");
             var UrlEnd = items[1];
 
-            if (UrlEnd != "") {
+            if (UrlEnd != "" && UrlEnd.includes("name")) {
                 //There is an account name
 
                 var AccountName = UrlEnd.replace("?name=", "");
                 //Add spaces
-                var finalAccountName = AccountName.replace("%20", " ");
+                var finalAccountName = AccountName.replace(/%20/g, " ");
 
                 //Set the drop down equal to the text
                 var dd = document.getElementById('AccountName');
@@ -804,6 +804,88 @@
                     if (dd.options[i].text === finalAccountName) {
                         dd.selectedIndex = i;
                         break;
+                    }
+                }
+
+            } else if (UrlEnd != "" && UrlEnd.includes("PostReference")) {
+                //There is a post reference number included
+
+                var PostNumber = UrlEnd.replace("?PostReference=", "");
+
+                var Query;
+
+                $.ajax(
+                    {
+                        url: '/Manager/RetrieveAccountNameForLedger/',
+                        type: "GET",
+                        async: false,
+                        dataType: "json",
+                        contentType: "application/json;",
+                        data: { "id": PostNumber },
+                        success: function (result) {
+                            //alert(result);
+                            Query = result;
+
+                        },
+                        error: function (error) {
+                            //alert(JSON.stringify(error));
+                        }
+                    });
+
+                var NameToUse = Query.replace(/"/g, "");
+
+                //Set the drop down equal to the text
+                var dd = document.getElementById('AccountName');
+                for (var i = 0; i < dd.options.length; i++) {
+                    if (dd.options[i].text === NameToUse) {
+                        dd.selectedIndex = i;
+                        break;
+                    }
+                }
+
+
+                var Query2;
+
+                $.ajax(
+                    {
+                        url: '/Manager/RetrievePostReferencePageNumber/',
+                        type: "GET",
+                        async: false,
+                        dataType: "json",
+                        contentType: "application/json;",
+                        data: { "id": PostNumber },
+                        success: function (result) {
+                            //alert(result);
+                            Query2 = result;
+
+                        },
+                        error: function (error) {
+                            //alert(JSON.stringify(error));
+                        }
+                    });
+
+                var NumberToUse = Query2.replace(/"/g, "");
+
+
+                if (NumberToUse != 1) {
+                    //Select the correct page
+                    var y = document.getElementsByClassName("paginate_button page-item active");
+                    y[0].className = "paginate_button page-item";
+
+                    var x = document.getElementsByClassName("paginate_button page-item");
+
+                    for (var i = 0; i < x.length; i++) {
+                        if (x[i].innerText == NumberToUse) {
+                            x[i].click();  //Click the right page number
+                            break;
+                        }
+                    }
+                }
+
+                var table = document.getElementById("GeneralJournalTable");
+                for (var i = 0; i < table.rows.length; i++) {
+                    if (table.rows[i].cells[2].innerText == PostNumber) {
+                        table.rows[i].style.backgroundColor = "#6fd2f2";
                     }
                 }
 
@@ -816,13 +898,7 @@
                 option.text = "Please Select an Account";
                 x.add(option, 0);
                 x.selectedIndex = 0;
-
             }
-
-            //alert(items[0]);
-            //alert(items[1]);
-            //var newstr = str.replace("/Accountant/EditJournal/", "");
-            //alert(str);
         }
 
         function formatMoney(n, c, d, t) {
