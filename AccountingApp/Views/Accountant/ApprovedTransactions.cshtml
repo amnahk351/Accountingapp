@@ -472,7 +472,7 @@
                             @for (int i = 0; i < Model.Count; i++)
                             {
                             <tr>
-                                <td>@Model[i].PostReference</td>
+                                <td><a style="color:blue" href="../Accountant/GeneralLedger?PostReference=@Model[i].PostReference">@Model[i].PostReference</a></td>                                
                                 <td>@Model[i].DateReviewed</td>
                                 <td>@Model[i].ManagerUsername : @Model[i].ManagerComment</td>
                                 <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model[i].EntryId</td>

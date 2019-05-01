@@ -634,8 +634,7 @@ namespace AccountingApp.Controllers
 
             int PageDifference = id - StartTransactionNumber;
 
-            int PageNumber = (PageDifference / 10) + 1;
-            System.Diagnostics.Debug.WriteLine("page number " + PageNumber);
+            int PageNumber = (PageDifference / 10) + 1;            
                         
             var result = JsonConvert.SerializeObject(PageNumber);
 
@@ -1097,13 +1096,8 @@ namespace AccountingApp.Controllers
         {
             if (name == null && PostReference == null)
             {
-
-                ViewBag.AccountName = "Account Name";
-
-                //int number2 = GetAccountNameNumber(name);
-                ViewBag.AccountNumber = "Account No. ";
-
-                //decimal balance2 = GetAccountBalance(name);
+                ViewBag.AccountName = "Account Name";                
+                ViewBag.AccountNumber = "Account No. ";                                
                 ViewBag.AccountBalance = "Balance: ";
 
                 List<ChartOfAcc> listAccounts2;
@@ -1201,7 +1195,6 @@ namespace AccountingApp.Controllers
                 }
 
                 ViewBag.AccountName = AccName;
-
                 int number = GetAccountNameNumber(AccName);
 
                 ViewBag.AccountNumber = "Account No. " + number.ToString();
@@ -1240,7 +1233,6 @@ namespace AccountingApp.Controllers
 
                 return View(transactionList);
             }
-
 
             return View("GeneralLedger");
         }
