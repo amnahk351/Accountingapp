@@ -247,7 +247,7 @@ namespace AccountingApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult TrialTable (DateTime until)
+        public ActionResult TrialBalance (DateTime until)
         {
             Trace.WriteLine("------------Hit Load Report Data " + until);
             List<ChartOfAcc> coaAtDate = new List<ChartOfAcc>();
@@ -289,8 +289,8 @@ namespace AccountingApp.Controllers
                     Trace.WriteLine("---After: " + coaAtDate[i].AccountName + ": " + coaAtDate[i].CurrentBalance);
                 }
             }
-
-            return View(coaAtDate);
+            return RedirectToAction("TrialBalance", coaAtDate);
+            //return View(coaAtDate);
         }
 
         public ActionResult IncomeStatement()
