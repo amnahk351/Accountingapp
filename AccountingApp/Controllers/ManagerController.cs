@@ -290,7 +290,7 @@ namespace AccountingApp.Controllers
                 }
             }
 
-            return Redirect(Request.UrlReferrer.ToString());
+            return View(coaAtDate);
         }
 
         public ActionResult IncomeStatement()
