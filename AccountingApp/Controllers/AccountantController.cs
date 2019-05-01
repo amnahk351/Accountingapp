@@ -179,6 +179,14 @@ namespace AccountingApp.Controllers
                 sliAccountList.Add(item);
             }
 
+            foreach (TransactionTable t in transactionList)
+            {
+                t.DebitString = String.Format("{0:n}", t.Debit);
+                t.CreditString = String.Format("{0:n}", t.Credit);
+                t.BeforeString = String.Format("{0:n}", t.BeforeBalance);
+                t.AfterString = String.Format("{0:n}", t.AfterBalance);
+            }
+
             ViewBag.accountlist = sliAccountList;
 
             return View(transactionList);

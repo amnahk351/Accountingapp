@@ -445,16 +445,15 @@
                                     <td>@Model[i].DateReviewed</td>
                                     <td>@Model[i].AccountantComment</td>
                                     <td>@Model[i].PostReference</td>
-                                    <td align="right" style="white-space: pre-wrap;">@Model[i].Debit</td>
-                                    <td align="right" style="white-space: pre-wrap;">@Model[i].Credit</td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model[i].DebitString</td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model[i].CreditString</td>
 
                                     @*<td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model[i].EntryId</td>
-                <td>@Model[i].Entry_Type</td>*@
+                                    <td>@Model[i].Entry_Type</td>*@
 
 
-                                    <td align="right">@Model[i].BeforeBalance</td>
-                                    <td align="right">@Model[i].AfterBalance</td>
-
+                                    <td align="right">@Model[i].BeforeString</td>
+                                    <td align="right">@Model[i].AfterString</td>
 
                                 </tr>
 
@@ -787,7 +786,7 @@
             var items = str.split("GeneralLedger");
             var UrlEnd = items[1];
 
-            if (UrlEnd != "") {
+            if (UrlEnd != "" && UrlEnd.includes("name")) {
                 //There is an account name
 
                 var AccountName = UrlEnd.replace("?name=", "");
@@ -802,6 +801,85 @@
                         break;
                     }
                 }
+
+            } else if (UrlEnd != "" && UrlEnd.includes("PostReference")){
+                //There is a post reference number included
+
+                var PostNumber = UrlEnd.replace("?PostReference=", "");
+
+                var Query;
+
+                $.ajax(
+                    {
+                        url: '/Manager/RetrieveAccountNameForLedger/',
+                        type: "GET",
+                        async: false,
+                        dataType: "json",
+                        contentType: "application/json;",
+                        data: { "id": PostNumber },
+                        success: function (result) {
+                            //alert(result);
+                            Query = result;
+
+                        },
+                        error: function (error) {
+                            //alert(JSON.stringify(error));
+                        }
+                    });
+
+                var NameToUse = Query.replace(/"/g, "");
+
+                //Set the drop down equal to the text
+                var dd = document.getElementById('AccountName');
+                for (var i = 0; i < dd.options.length; i++) {
+                    if (dd.options[i].text === NameToUse) {
+                        dd.selectedIndex = i;
+                        break;
+                    }
+                }
+
+
+                var Query2;
+
+                $.ajax(
+                    {
+                        url: '/Manager/RetrievePostReferencePageNumber/',
+                        type: "GET",
+                        async: false,
+                        dataType: "json",
+                        contentType: "application/json;",
+                        data: { "id": PostNumber },
+                        success: function (result) {
+                            //alert(result);
+                            Query2 = result;
+
+                        },
+                        error: function (error) {
+                            //alert(JSON.stringify(error));
+                        }
+                    });
+
+                var NumberToUse = Query2.replace(/"/g, "");
+
+
+                if (NumberToUse != 1) {
+                    //Select the correct page
+                    var y = document.getElementsByClassName("paginate_button page-item active");
+                    y[0].className = "paginate_button page-item";
+
+                    var x = document.getElementsByClassName("paginate_button page-item");
+
+                    for (var i = 0; i < x.length; i++) {
+                        if (x[i].innerText == NumberToUse) {
+                            //alert("found it");
+                            x[i].click();
+                            //document.querySelector('paginate_button page-item').click();
+                            //x[i].className = "paginate_button page-item active";
+                            break;
+                        }
+                    }
+                }               
+
 
             } else {
                 //There is no account specified
