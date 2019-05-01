@@ -1,6 +1,6 @@
 ﻿@model List<AccountingApp.Models.ChartOfAcc>
 @{
-    ViewBag.Title = "BalanceSheet";
+    ViewBag.Title = "Balance Sheet";
     Layout = "~/Views/Shared/_Layout_Accountant.cshtml";
     //Layout = null;
 }
@@ -10,6 +10,24 @@
 <html>
 
 <head>
+
+    <link href="~/Scripts/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+
+        .form_datetime {
+            display: block;
+            width: 40%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -26,12 +44,15 @@
 
 <body>
 
-
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" style="margin-right: 1%" data-target="#myModal">Generate Report</button>
+    <button class="btn btn-info btn-lg" id="cmd">Generate PDF</button>
+    <br />
+    <br />
     @*Amnah*@
-    <div class="shadow container" style="width:80%; background-color:gainsboro;">
+    <div class="shadow container" style="width:70%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" id="printContent" style="text-align:center;">
-                <div class="card-body" style="display:inline-block;">
+                <div class="card-body">
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Addams & Family Inc.</h4>
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Balance Sheet</h4>
                     @*<hr style="padding: 0px; margin: 0px;" />*@
@@ -45,7 +66,7 @@
                     @*<br />*@
                     <hr style="border-width: 2px; border-color: black" />
                     <div align="center">
-                        <table id="assetsTable" class="table-striped" style="width:600px;">
+                        <table id="assetsTable" class="table table-hover" style="width:100%;">
 
                             <tr class="titleRow">
                                 <th class="text-left" colspan="3">Assets</th>
@@ -107,7 +128,7 @@
                             </tr>
 
                             <tr>
-                                <th class="text-left">Total Asset</th>
+                                <th class="text-left">Total Assets</th>
                                 <td> </td>
                                 <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right">@ViewBag.totalAssets</td>
                             </tr>
@@ -115,7 +136,7 @@
 
                         <br />
 
-                        <table id="liabilitiesTable" class="table-striped" style="width:600px;">
+                        <table id="liabilitiesTable" class="table table-hover" style="width:100%;">
 
                             <tr class="titleRow">
                                 <th class="text-left">Liabilities & Stockholder's Equity</th>
@@ -219,15 +240,75 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    @*<button type="button" class="close" data-dismiss="modal">&times;</button>*@
+                    <h4 class="modal-title">Generate Report By Date</h4>
+                </div>
+                <div class="modal-body">
+                    <h5>Select a Date:</h5>
+                    <input type="text" id="Date" onkeydown="return false;" autocomplete="off" class="form_datetime" style="text-align:right" value="" placeholder="mm/dd/yyyy">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="GenerateReport" onclick="LoadGeneratedReportDate()" class="btn btn-success" data-dismiss="modal">Generate</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    @Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Scripts/bootstrap-datetimepicker.js")
+
+    <script type="text/javascript">
+        $('.form_datetime').datetimepicker({
+            format: "m/d/yyyy",
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,  //this parameter removes the time selection, documentation: https://www.malot.fr/bootstrap-datetimepicker/
+            forceParse: 0,
+            showMeridian: 1
+        });
+    </script>
+
+    <script>
+
+        function LoadGeneratedReportDate() {
+
+
+
+
+        }
+
+    </script>
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script src="~/Scripts/html2pdf.bundle.min.js"></script>
-    <button id="cmd">Generate PDF</button>
+
+
     <script>
         $('#cmd').click(function () {
             var element = document.getElementById('printContent');
-            html2pdf().from(element).save("BalanceSheet");
+            var opt = {
+                margin: 1,
+                filename: 'myfile.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save("TrailBalance");
         });
     </script>
     <script>
@@ -236,6 +317,21 @@
             FormatTableAmounts();
 
             PlaceDollarSigns();
+
+            //Populate date field with today
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+
+            today = mm + '/' + dd + '/' + yyyy;
+
+            var d = document.getElementById("Date");
+            d.value = today;
         });
     </script>
 
@@ -252,12 +348,19 @@
                 var newDhtml = Dhtml.replace("$", "");
                 var newChtml = Chtml.replace("$", "");
 
-                if (newDhtml != "") {
-                    table.rows[i].cells[1].innerText = formatMoney(newDhtml);
-                }
+                if (Dhtml.includes("(")) {
+                    var x = Dhtml.replace("(", "");
+                    var x2 = x.replace(")", "");
+                    table.rows[i].cells[1].innerText = "(" + formatMoney(x2) + ")";
+                } else {
 
-                if (newChtml != "") {
-                    table.rows[i].cells[2].innerText = formatMoney(newChtml);
+                    if (newDhtml != "") {
+                        table.rows[i].cells[1].innerText = formatMoney(newDhtml);
+                    }
+
+                    if (newChtml != "") {
+                        table.rows[i].cells[2].innerText = formatMoney(newChtml);
+                    }
                 }
 
             }
@@ -270,12 +373,20 @@
                 var newDhtml = Dhtml.replace("$", "");
                 var newChtml = Chtml.replace("$", "");
 
-                if (newDhtml != "") {
-                    table2.rows[j].cells[1].innerText = formatMoney(newDhtml);
-                }
+                if (Dhtml.includes("(")) {
+                    var x = Dhtml.replace("(", "");
+                    var x2 = x.replace(")", "");
+                    table2.rows[j].cells[1].innerText = formatMoney(x2);
+                    table2.rows[j].cells[1].innerText = "(" + formatMoney(x2) + ")";
+                } else {
 
-                if (newChtml != "") {
-                    table2.rows[j].cells[2].innerText = formatMoney(newChtml);
+                    if (newDhtml != "") {
+                        table2.rows[j].cells[1].innerText = formatMoney(newDhtml);
+                    }
+
+                    if (newChtml != "") {
+                        table2.rows[j].cells[2].innerText = formatMoney(newChtml);
+                    }
                 }
 
             }
