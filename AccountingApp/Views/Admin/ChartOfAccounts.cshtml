@@ -14,7 +14,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />
-   
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
     @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">*@
@@ -267,8 +267,6 @@
                             <li class="nav-item active">
                                 <button class=" btn btn-outline-success" onclick="LogOutUser()" style="font-size:large;margin-left:30px">
                                     Log Out
-
-
                                 </button>
                             </li>
                         </ul>
@@ -295,129 +293,130 @@
                     Create Account
                 </a>*@
 
+            <br />
+
+
+            <div class="body-content" style="width:100%; margin:0 auto">
+
+
+                <div>
+                    <h4 style="display:inline">Chart Of Accounts</h4>
+
+                    <a type=" button" href="@Url.Action("NewAccount")" class="btn btn-success btn-lg" role="button" aria-pressed="true" style="float:right">
+                        <i class="fas fa-plus"></i>
+                        Create New Account
+                    </a>
+                </div>
                 <br />
-    
-
-                <div class="body-content" style="width:100%; margin:0 auto">
-
-
-                    <div>
-                        <h4 style="display:inline">Chart Of Accounts</h4>
-                        <a type="button" class="btn btn-success btn-lg" href="@Url.Action("NewAccount")" role="button" aria-pressed="true" style="float:right">
-                            <i class="fas fa-plus"></i>
-
-                            Create New Account
-                        </a>
+                <hr class="my-4" />
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        @TempData["Message"]
                     </div>
-                    <br />
-                    <hr class="my-4" />
-                    @if (TempData["Message"] != null)
-                    {
-                        <div class="alert alert-success alert-dismissible" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            @TempData["Message"]
-                        </div>
-                    }
+                }
 
-                    <table id="Accountstable" class="table table-responsive table-hover shadow " style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
-                        <thead class="shadow" style="background-color:white; ">
+                <table id="Accountstable" class="table table-responsive table-hover shadow " style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
+                    <thead class="shadow" style="background-color:white; ">
+                        <tr>
+                            <th style="width:10%">Account Number</th>
+                            <th style="width:20%">Account Name</th>
+                            <th style="width:10%">Account Type</th>
+                            <th style="width:10%">Normal Side</th>
+                            <th style="width:10%">Original Balance</th>
+                            <th style="width:10%">Current Balance</th>
+                            <th style="width:10%">Account Description</th>
+                            <th style="width:10%">Active</th>
+                            <th style="width:10%">Created By</th>
+                            <th style="width:10%">Edit</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @for (int i = 0; i < Model.Count(); i++)
+                        {
                             <tr>
-                                <th style="width:10%">Account Number</th>
-                                <th style="width:20%">Account Name</th>
-                                <th style="width:10%">Account Type</th>
-                                <th style="width:10%">Normal Side</th>
-                                <th style="width:10%">Original Balance</th>
-                                <th style="width:10%">Current Balance</th>
-                                <th style="width:10%">Account Description</th>
-                                <th style="width:10%">Active</th>
-                                <th style="width:10%">Created By</th>
-                                <th style="width:10%">Edit</th>
+                                <td>@Model[i].AccountNumber</td>
+                                <td>@Model[i].AccountName</td>
+                                <td>@Model[i].AccountType</td>
+                                <td>@Model[i].NormalSide</td>
+                                <td style="text-align:end">@Model[i].OriginalBalString</td>
+                                <td style="text-align:end">@Model[i].CurrentBalString</td>
+                                <td>@Model[i].AccountDescription</td>
+                                <td>@(Model[i].Active ? "Y" : "N")</td>
+                                <td>@Model[i].CreatedBy</td>
+                                <td>
+
+                                    <a href="@Url.Action("EditAccount", new { id = Model[i].AccountNumber})">
+                                        <i class="fas fa-edit" style="color:#3e547f"></i>
+
+                                    </a>
+
+                                    @*<a href="@Url.Action("Delete", new { id = Model[i].AccountNumber})">
+                                            <i class="fas fa-user-edit"></i>
+                                            Delete
+                                        </a>*@
+                                </td>
+
+
 
                             </tr>
-                        </thead>
-                        <tbody>
+                        }
+                    </tbody>
+                </table>
+                <hr />
 
-                            @for (int i = 0; i < Model.Count(); i++)
-                            {
-                                <tr>
-                                    <td>@Model[i].AccountNumber</td>
-                                    <td>@Model[i].AccountName</td>
-                                    <td>@Model[i].AccountType</td>
-                                    <td>@Model[i].NormalSide</td>
-                                    <td style="text-align:end">@Model[i].OriginalBalance</td>
-                                    <td style="text-align:end">@Model[i].CurrentBalance</td>
-                                    <td>@Model[i].AccountDescription</td>
-                                    <td>@(Model[i].Active ? "Y" : "N")</td>
-                                    <td>@Model[i].CreatedBy</td>
-                                    <td>
+            </div>
+            <div class="container body-content">
 
-                                        <a href="@Url.Action("EditAccount", new { id = Model[i].AccountNumber})">
-                                            <i class="fas fa-edit" style="color:#3e547f"></i>
-
-                                        </a>
-
-                                        @*<a href="@Url.Action("Delete", new { id = Model[i].AccountNumber})">
-                                <i class="fas fa-user-edit"></i>
-                                Delete
-                            </a>*@
-                                    </td>
-
-
-
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <hr />
-
-                </div>
-                <div class="container body-content">
-
-                    <footer align="center">
-                        <p>
-                            &copy; @DateTime.Now.Year - Objective Accounting
-                            Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
-                        </p>
-                    </footer>
-                </div>
+                <footer align="center">
+                    <p>
+                        &copy; @DateTime.Now.Year - Objective Accounting
+                        Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
+                    </p>
+                </footer>
+            </div>
 
         </div>
     </div>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-        <script type="text/javascript">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
 
     window.onload = function () {
         var username = '@Session["FirstNameofUser"]';
         document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
     };
 
-        </script>
-        <script>
-            $(document).ready(function () {
+    </script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script>
+        $(document).ready(function () {
 
-                $('#sidebarCollapse').on('click', function () {
-                    $('#sidebar').toggleClass('active');
-                });
-
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
             });
-        </script>
 
-        <script>
-            $(document).ready(function () {
-                $('#Accountstable').DataTable();
-            });
-        </script>
+        });
+    </script>
 
-        <script>
+    <script>
+        $(document).ready(function () {
+            $('#Accountstable').DataTable();
+        });
+    </script>
+
+    <script>
 
         function LogOutUser() {
 
@@ -437,7 +436,7 @@
             window.location.href = '../../Account/Login';
         }
 
-        </script>
+    </script>
 
-    </body>
+</body>
 </html>

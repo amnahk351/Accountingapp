@@ -478,10 +478,10 @@
                                 <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model[i].EntryId</td>
                                 <td>@Model[i].Entry_Type</td>                                
                                 <td onclick="PopulateAccountsModal(this)" style="white-space: pre-wrap; color:blue; cursor:pointer;" data-toggle="modal" data-target="#AccountsModal">@Model[i].AccountName</td>
-                                <td align="right" style="white-space: pre-wrap;">@Model[i].Debit</td>
-                                <td align="right" style="white-space: pre-wrap;">@Model[i].Credit</td>
-                                <td>@Model[i].BeforeBalance</td>
-                                <td>@Model[i].AfterBalance</td>
+                                <td align="right" style="white-space: pre-wrap;">@Model[i].DebitString</td>
+                                <td align="right" style="white-space: pre-wrap;">@Model[i].CreditString</td>
+                                <td>@Model[i].BeforeString</td>
+                                <td>@Model[i].AfterString</td>
                                 <td>
 
 
@@ -523,7 +523,7 @@
                 <hr />
                 <footer align="center">
                     <p>
-                        &copy; @DateTime.Now.Year - Objective Accounting
+                        &copy; @DateTime.Now.Year - Objective Accounting - 
                         Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
                     </p>
                 </footer>
@@ -661,7 +661,7 @@
 
     </script>
 
-    <script>
+    <script>                
 
         function formatMoney(n, c, d, t) {
             var c = isNaN(c = Math.abs(c)) ? 2 : c,

@@ -30,5 +30,9 @@ namespace AccountingApp.Models
         public Nullable<int> PostReference { get; set; }
         public Nullable<decimal> BeforeBalance { get; set; }
         public Nullable<decimal> AfterBalance { get; set; }
+        public string DebitString { get; set; }
+        public string CreditString { get; set; }
+        public string BeforeString { get; set; }
+        public string AfterString { get; set; }
     }
 }

@@ -24,5 +24,7 @@ namespace AccountingApp.Models
         public bool Active { get; set; }
         public string CreatedBy { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
+        public string OriginalBalString { get; set; }
+        public string CurrentBalString { get; set; }
     }
 }

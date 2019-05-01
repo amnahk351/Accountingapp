@@ -187,7 +187,7 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Manager/Dashboard">
+                    <a href="/Manager/ManagerIndex">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
@@ -201,16 +201,16 @@
                 </li>
                 @*<li>
 
-                <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                    <i class="fas fa-list" style="margin-right:10px;"></i>
-                    Chart Of Accounts
-                </a>
-                <ul class="collapse list-unstyled" id="accountSubmenu">
-                    <li>
-                        <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
-                    </li>
-                </ul>
-                </li>*@
+                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-list" style="margin-right:10px;"></i>
+                        Chart Of Accounts
+                    </a>
+                    <ul class="collapse list-unstyled" id="accountSubmenu">
+                        <li>
+                            <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
+                        </li>
+                    </ul>
+                    </li>*@
                 <li>
 
                     <a href="/Manager/Journalize">
@@ -366,8 +366,8 @@
                                 <td>   <a href="../Manager/GeneralLedger?name=@Model[i].AccountName" style="color:blue">@Model[i].AccountName</a></td>
                                 <td>@Model[i].AccountType</td>
                                 <td>@Model[i].NormalSide</td>
-                                <td style="text-align:end">@Model[i].OriginalBalance</td>
-                                <td style="text-align:end">@Model[i].CurrentBalance</td>
+                                <td style="text-align:end">@Model[i].OriginalBalString</td>
+                                <td style="text-align:end">@Model[i].CurrentBalString</td>
                                 <td>@Model[i].AccountDescription</td>
                                 <td>@(Model[i].Active ? "Y" : "N")</td>
                                 <td>@Model[i].CreatedBy</td>
@@ -382,7 +382,7 @@
 
                 <footer align="center">
                     <p>
-                        &copy; @DateTime.Now.Year - Objective Accounting
+                        &copy; @DateTime.Now.Year - Objective Accounting -
                         Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
                     </p>
                 </footer>
@@ -416,8 +416,8 @@
                             <label for="AccountType" class="control-label">Account Type</label>
                             <select name="AccountType" class="form-control" id="AccountType">
                                 <option value="">Select..</option>
-                                <option value="Assets">Assets</option>
-                                <option value="Liabilities">Liabilities</option>
+                                <option value="Asset">Asset</option>
+                                <option value="Liability">Liability</option>
                                 <option value="Equity">Equity</option>
                                 <option value="Revenue">Revenue</option>
                                 <option value="Expense">Expense</option>
@@ -493,7 +493,7 @@
                         <br />
                         <div>
                             <label for="Description" class="control-label">Specify What Needs Updated</label>
-                            <textarea class="form-control" id="UpdateDescription" name="Description" rows="3" placeholder="Optional"></textarea>
+                            <textarea class="form-control" id="UpdateDescription" name="Description" rows="3" placeholder="Description"></textarea>
                         </div>
                         <div id="DescriptionError" class="text-danger">
 

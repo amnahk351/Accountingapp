@@ -267,7 +267,7 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Manager/Dashboard">
+                    <a href="/Manager/ManagerIndex">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
@@ -424,21 +424,16 @@
 
                 <hr />
                 <div>
-                    <table id="GeneralJournalTable" class="table table-responsive table-hover shadow" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
-                        <thead style="background-color:white" class="shadow">
-                            <tr class="shadow">
+                    <table id="GeneralJournalTable" class="table table-responsive table-hover shadow" style="font-size:1.1rem; background-color:white; width:100%">
+                        <thead class="shadow" style="background-color:white">
+                            <tr>
                                 <th style="width:20%">Date</th>
-                                <th style="width:10%">Description</th>
-                                <th style="width:10%">Post Reference</th>
-                                <th>Debit</th>
-                                <th>Credit</th>
-
-                                @*<th style="width:10%">Entry ID</th>
-                        <th style="width:8%">Type</th>*@
-
-
-                                <th>Before Balance</th>
-                                <th>After Balance</th>
+                                <th style="width:20%">Description</th>
+                                <th style="width:20%">Post Reference</th>
+                                <th style="width:12%">Debit</th>
+                                <th style="width:12%">Credit</th>
+                                <th style="width:12%">Before Balance</th>
+                                <th style="width:12%">After Balance</th>
                             </tr>
                         </thead>
                         <tbody style="background-color:white; width:100%">
@@ -457,8 +452,8 @@
                 <td>@Model[i].Entry_Type</td>*@
 
 
-                                    <td>@Model[i].BeforeBalance</td>
-                                    <td>@Model[i].AfterBalance</td>
+                                    <td align="right">@Model[i].BeforeBalance</td>
+                                    <td align="right">@Model[i].AfterBalance</td>
 
 
                                 </tr>
@@ -475,7 +470,7 @@
                 <hr />
                 <footer align="center">
                     <p>
-                        &copy; @DateTime.Now.Year - Objective Accounting
+                        &copy; @DateTime.Now.Year - Objective Accounting - 
                         Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
                     </p>
                 </footer>
@@ -776,6 +771,7 @@
 
         window.onload = function () {
             FixPage();
+            //SelectPageTwo();
         };
 
         function FixPage() {
@@ -839,13 +835,13 @@
     </script>
 
     <script>
-        $(document).ready(function () {
+        //$(document).ready(function () {
 
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-            });
+        //    $('#sidebarCollapse').on('click', function () {
+        //        $('#sidebar').toggleClass('active');
+        //    });
 
-        });
+        //});
     </script>
 
     @*@RenderSection("scripts", required: false)*@
@@ -857,6 +853,45 @@
         $(document).ready(function () {
             $('#GeneralJournalTable').DataTable();
         });
+
+
+        function SelectPageTwo() {
+            var str = window.location.href;
+            var items = str.split("GeneralLedger");
+            var UrlEnd = items[1];
+
+            if (UrlEnd != "") {
+                //There is an account name
+
+                var AccountName = UrlEnd.replace("?name=", "");
+                //Add spaces
+                var finalAccountName = AccountName.replace("%20", " ");
+
+                if (finalAccountName == "Cash") {
+
+                    
+                    var y = document.getElementsByClassName("paginate_button page-item active");
+                    y[0].className = "paginate_button page-item";
+
+                    var x = document.getElementsByClassName("paginate_button page-item");
+
+                    for (var i = 0; i < x.length; i++) {
+                        if (x[i].innerText == 2) {
+                            //alert("found it");
+                            x[i].click();
+                            //document.querySelector('paginate_button page-item').click();
+                            //x[i].className = "paginate_button page-item active";
+                            break;
+                        }
+                    }
+
+
+                    
+                }
+
+            }
+
+        }
     </script>
 
 

@@ -1,226 +1,149 @@
-﻿@model AccountingApp.Models.ChartOfAcc
+﻿@model AccountingApp.Models.EditAccountModel
 
 @{
     ViewBag.Title = "Edit Account";
     Layout = "~/Views/Shared/_Layout_Admin.cshtml";
-    //Layout = null;
-    var selectListItems = new[]
-{
-new SelectListItem(){ Value = "Assets", Text = "Assets", Selected = false},
-new SelectListItem(){ Value = "Liabilities", Text = "Liabilities", Selected = false},
-new SelectListItem(){ Value = "Expense", Text = "Expense", Selected = false},
-new SelectListItem(){ Value = "Revenue", Text = "Revenue", Selected = false},
-new SelectListItem(){ Value = "Equity", Text = "Equity", Selected = false},
-
-
-};
-
-    //  var selectItems = new[]
-    //{
-    //      new SelectItems(){ Value = "Debit", Text = "Debit", Selected = false},
-    //      new SelectItems(){ Value = "Credit", Text = "Credit", Selected = false},
-
-
-
-    //  };
 }
 
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    @*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css" integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
-    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+<style>
 
+    .errorMsg {
+        margin-top: 0.25rem;
+        font-size: 80%;
+        color: #dc3545;
+    }
+</style>
 
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-</head>
-<body>
-    <br />
+    <div class="container shadow" style="width:70%;background-color:white">
+        <br />
+        <h4>Edit Account</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.AccountNumber, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    <label style="padding-left: 1rem">Account Number</label>
+                    @Html.EditorFor(model => model.AccountNumber, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.AccountNumber, "", new { @class = "errorMsg" })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.AccountName, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    <label style="padding-left: 1rem">Account Name</label>
+                    @Html.EditorFor(model => model.AccountName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AccountName, "", new { @class = "errorMsg" })
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.AccountType, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                    <label style="padding-left: 1rem">Account Type</label>
+                    @*@Html.EditorFor(model => model.AccountType, new { htmlAttributes = new { @class = "form-control" } })*@
+                    <select name="AccountType" class="form-control" id="AccountType">
+                        <option value="Asset">Asset</option>
+                        <option value="Liability">Liability</option>
+                        <option value="Equity">Equity</option>
+                        <option value="Revenue">Revenue</option>
+                        <option value="Expense">Expense</option>
 
-    @*@using (Html.BeginForm())
-        {*@
-
-    <form method="post" id="accountform" class="needs-validation" novalidate>
-        <div class="container" style="width: 50%">
-            @Html.ValidationSummary(true, "The following errors were found:", new { @class = "alert alert-danger" })
+                    </select>
+                    @Html.ValidationMessageFor(model => model.AccountType, "", new { @class = "errorMsg" })
+                </div>
+            </div>
         </div>
 
-        <div class="container shadow" style="width: 70%; background-color:white">
-            <br />
-            <h2>Edit Account</h2>
-            <hr />
-            <div class="form-row">
-                <div class="form-group col-md-6">
-
-                    <label for="AccountNumber" class="control-label">Account Number</label>
-                    @* <input type="text" class="form-control" id="AccountNumber" name="AccountNumber">*@
-                    @Html.TextBoxFor(x => x.AccountNumber, new { @class = "form-control", @required = "required", @readonly = "readonly" })
-
-
-                </div>
-                <div class="form-group col-md-6">
-
-                    <label for="AccountName" class="control-label">Account Name</label>
-                    @*<input type="text" class="form-control" id="AccountName" name="AccountName">*@
-                    @Html.TextBoxFor(x => x.AccountName, new { @class = "form-control", @required = "required" })
-                    <div id="AccountNameError" class="invalid-feedback">
-
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <div class="form-group">
-                        <label for="AccountType" class="control-label">Account Type</label>
-                        @*<select name="AccountType" class="form-control" id="AccountType">
-                                <option value="Assets">Assets</option>
-                                <option value="Liabilities">Liabilities</option>
-                                <option value="Equity">Equity</option>
-                                <option value="Revenue">Revenue</option>
-                                <option value="Expense">Expense</option>
-
-                            </select>*@
-                        @Html.DropDownListFor(x => x.AccountType, selectListItems, new { @class = "form-control", @required = "required" })
-
-                    </div>
-                </div>
-                @*<div class="form-group col-md-6">
-
-                    <div class="form-group">
-                        <label for="NormalSide">Normal Side</label>
-                        <select class="cutom-select form-control" id="NormalSide" name="NormalSide" required>
-                            <option value="Debit">Debit</option>
-                            <option value="Credit">Credit</option>
-
-                        </select>*@
-                @*@Html.DropDownListFor(x => x.NormalSide, selectListItems, new { @class = "form-control", @required = "required" })*@
-
-                @*</div>
-                    </div>*@
-
-            </div>
-
-            @*<div class="form-row">
-                <div class="form-group col-md-6">
-                    <div class="form-group">
-                        <label for="OriginalBalance">Original Balance</label>*@
-            @* <input type="text" class="form-control text-right" id="OriginalBalance" placeholder="0.00" name="OriginalBalance">*@
-            @*@Html.TextBoxFor(x => x.OriginalBalance, new { @class = "form-control", @required = "required" })
-
-                    </div>
-                </div>
-                <div class="form-group col-md-6">
-                    <div class="form-group">
-                        <label for="CurrentBalance">Current Balance</label>*@
-            @* <input type="text" class="form-control text-right" id="CurrentBalance" placeholder="0.00" name="CurrentBalance">*@
-            @*@Html.TextBoxFor(x => x.CurrentBalance, new { @class = "form-control", @required = "required" })
-
-                        </div>
-                    </div>
-                </div>*@
-
-            <div class="form-group ">
-                <label for="AccountDescription">Account Description</label>
-                @* <textarea class="form-control" id="AccountDescription" rows="5" name="AccountDescription"></textarea>*@
-                @Html.TextAreaFor(x => x.AccountDescription, new { @class = "form-control", @required = "required" })
-            </div>
-
-            @*</div>
-                <div class="form-group ">
-                    <label for="CreatedBy">Created By</label>*@
-            @*<input type="text" class="form-control" id="CreatedBy" placeholder="Admin" name="CreatedBy">*@
-            @*@Html.TextBoxFor(x => x.CreatedBy, new { @class = "form-control", @required = "required" })
-
-                </div>*@
-
-
-            <div class="form-group ">
-                <label for="Active" class="control-label">Active</label>
-                @*<input data-val="true" id="Active" name="Active" type="checkbox" value="true" />
-                    <input name="Active" type="hidden" value="false" />*@
-                @Html.EditorFor(model => model.Active)
-
-                @*@Html.ValidationMessageFor(m => m.Active, "", new { @class = "text-danger" })*@
-            </div>
-
-            <hr />
-            <button type="submit" class="btn btn-success" href="@Url.Action("ChartOfAccounts")" id="btnsubmit">Save</button>
-            <a href="@Url.Action("ChartOfAccounts")" class="btn btn-warning">
-                <span class="glyphicon glyphicon-remove"></span> Cancel
-            </a>
-            <hr />
-
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.AccountDescription, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label style="padding-left: 1rem">Account Description</label>
+            @*<div class="col-md-10">*@
+            @*@Html.EditorFor(model => model.AccountDescription, new { htmlAttributes = new { @class = "form-control" } })*@
+            @Html.TextAreaFor(model => model.AccountDescription, new { @class = "form-control", @required = "required", @rows = "4" })
+            @Html.ValidationMessageFor(model => model.AccountDescription, "", new { @class = "errorMsg" })
+            @*</div>*@
         </div>
 
-    </form>
-    @*}*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Active)
+                    @Html.ValidationMessageFor(model => model.Active, "", new { @class = "errorMsg" })
+                </div>
+            </div>
+        </div>
 
-    @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
-
-
-
-</body>
-</html>
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success" />
+                <a href="@Url.Action("ChartOfAccounts")" class="btn btn-warning">
+                    Cancel
+                </a>
+            </div>
+        </div>
+        <br />
+    </div>
+}
+<script src="~/Scripts/jquery-3.3.1.js"></script>
 <script>
-    (function () {
-        'use strict';
-        window.addEventListener('load', function () {
-            var forms = document.getElementsByClassName('needs-validation');
-            var validation = Array.prototype.filter.call(forms, function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
 
-</script>
-<script type="text/javascript">
+    $(document).ready(function () {
 
-    window.onload = function () {
         var username = '@Session["FirstNameofUser"]';
         document.getElementById("LoggedName").innerHTML = "Welcome, " + username;
-    };
 
-</script>
+        GetAccountType();
 
-@Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
+    });
 
-<script>
+    //window.onload = function () {
 
-    window.onload = onPageLoad();
+    //};
 
-    function onPageLoad() {
-        
-        $.ajax({
-            url: "/Account/GetErrors",
-            method: 'post',
-            dataType: 'json',
-            success: function (data) {
-                //Index starts from 0 so number is 1 off from database
-                //Populate error message from database
-                document.getElementById('AccountNameError').innerText = data[51];
+    function GetAccountType() {
+
+        var str = window.location.pathname;
+        var ID = str.replace("/Admin/EditAccount/", "");
+
+        var Query;
+
+        $.ajax(
+            {
+                url: '/Admin/GetAccountType/',
+                type: "GET",
+                async: false,
+                dataType: "json",
+                contentType: "application/json;",
+                data: { "id": ID },
+                success: function (result) {
+                    //alert(result);
+                    Query = result;
+
+                },
+                error: function (error) {
+                    //alert(JSON.stringify(error));
+                }
+            });
+
+        var Query2 = Query.replace(/"/g, "");
+
+        var dd = document.getElementById('AccountType');
+        for (var i = 0; i < dd.options.length; i++) {
+            if (dd.options[i].text === Query2) {
+                dd.selectedIndex = i;
+                break;
             }
-        });
-
+        }
     }
 
 </script>
+

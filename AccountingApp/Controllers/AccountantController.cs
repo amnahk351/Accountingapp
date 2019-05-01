@@ -830,6 +830,14 @@ namespace AccountingApp.Controllers
                 transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status", new { status = s }).ToList();
             }
 
+            foreach (TransactionTable t in transactionList) {
+
+                t.DebitString = String.Format("{0:n}", t.Debit);
+                t.CreditString = String.Format("{0:n}", t.Credit);
+                t.BeforeString = String.Format("{0:n}", t.BeforeBalance);
+                t.AfterString = String.Format("{0:n}", t.AfterBalance);
+            }
+
             return View(transactionList);
         }
 
@@ -914,7 +922,7 @@ namespace AccountingApp.Controllers
                         NewE.debits.Add(t2.Debit.GetValueOrDefault());
                         NewE.credits.Add(t2.Credit.GetValueOrDefault());
                     }
-                }
+                }                
                 entries.entries.Add(NewE);
             }
 
@@ -979,6 +987,13 @@ namespace AccountingApp.Controllers
             {
                 listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts").ToList();
             }
+
+            foreach (ChartOfAcc c in listAccounts)
+            {
+                c.CurrentBalString = String.Format("{0:n}", c.CurrentBalance);
+                c.OriginalBalString = String.Format("{0:n}", c.OriginalBalance);
+            }
+
             return View(listAccounts);
         }
 

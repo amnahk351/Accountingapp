@@ -287,13 +287,11 @@
 
                     <h4 style="display:inline">@ViewBag.Title</h4>
                     <a type=" button" href="@Url.Action("NewUser")" class="btn btn-success btn-lg" role="button" aria-pressed="true" style="float:right">
-
-
                         <i class="fas fa-plus"></i>
-                        Create User
-
+                        Create New User
                     </a>
                 </div>
+                <br />
 
                 <hr class="my-4" />
                 @if (TempData["Message"] != null)
@@ -368,7 +366,7 @@
 
                 <footer align="center">
                     <p>
-                        &copy; @DateTime.Now.Year - Objective Accounting
+                        &copy; @DateTime.Now.Year - Objective Accounting - 
                         Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
                     </p>
                 </footer>

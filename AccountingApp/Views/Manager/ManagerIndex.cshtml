@@ -210,7 +210,7 @@
             </div>
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="/Manager/Dashboard">
+                    <a href="/Manager/ManagerIndex">
                         <i class="fas fa-home" style="margin-right:10px;"></i>
                         Dashboard
                     </a>
@@ -355,7 +355,7 @@
                 </div>
                 <hr class="my-4" />
                 <div class="row ">
-                    <div class="column " style="width:45%; margin-left:24px;height:170px">
+                    <div class="column " style="width:45.25%; margin-left:24px;height:170px">
                         <div class="form-row left-div " style="width:100%">
                             <div class="card shadow " style="flex-basis: 85rem; flex-grow: 0; border-top-width:10px; border-top-color:forestgreen" ;>
                                 <div class="card-body">
@@ -381,7 +381,7 @@
                         <br />
 
                     </div>
-                    <div class="column " style="width:45%; margin-left:22px; height:170px">
+                    <div class="column " style="width:45.25%; margin-left:22px; height:170px">
                         <div class="form-row left-div " style="width:100%">
                             <div class="card shadow " style="flex-basis: 68rem; flex-grow: 0; border-top-width:10px; border-top-color:forestgreen" ;>
                                 <div class="card-body">
@@ -439,7 +439,7 @@
                     <div class="column " style="width:20%; margin-left:20px;">
                         <div class="shadow" id="incomeandexpense" style="width:100%"></div>
                     </div>
-                    <div class="column " style="width:49%; margin-left:20px;">
+                    <div class="column " style="width:49.25%; margin-left:20px;">
                         <div class="shadow" id="capital" style="width:100%"></div>
                     </div>
 
@@ -447,8 +447,8 @@
                 <br />
                 <div class="row ">
 
-                    <div class="column shadow" style="width:91%; margin-left:20px; ">
-                        <div class="shadow" id="expenses" style=" height: 600px; width: 100%; margin: 0 auto"></div>
+                    <div class="column shadow" style="width:91.75%; margin-left:20px; ">
+                        <div class="shadow" id="expenses" style=" height: 500px; width: 100%; margin: 0 auto"></div>
                     </div>
 
                 </div>
@@ -459,7 +459,7 @@
 
                 <footer align="center">
                     <p>
-                        &copy; @DateTime.Now.Year - Objective Accounting
+                        &copy; @DateTime.Now.Year - Objective Accounting - 
                         Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
                     </p>
                 </footer>
@@ -557,7 +557,7 @@
                 },
                 style: {
 
-                    fontSize: '38px'
+                    fontSize: '28px'
                 }
             },
             title: {
@@ -596,7 +596,7 @@
         //currentliabilities and assets
         var chart = Highcharts.chart('chart', {
             title: {
-                text: 'Current Assets And Liabilities'
+                text: 'Current Assets vs Liabilities'
             },
             exporting: {
                 enabled: false
@@ -619,7 +619,20 @@
                 data: [
                     { y: TotalAssets, color: 'green' },
                     { y: TotalLiab, color: 'orange' }],
-                showInLegend: false
+                showInLegend: false,
+                dataLabels: {
+                    enabled: true,
+                    color: 'black',
+
+                    //rotation: -90,
+                    //align: 'right',
+                    //format: '{point.y:.1f}', // one decimal
+                    //y: 10, // 10 pixels down from the top
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
             }]
 
         });
@@ -629,7 +642,7 @@
         //incomeandexpense
         var chart = Highcharts.chart('incomeandexpense', {
             title: {
-                text: 'Revenue And Expense'
+                text: 'Revenue vs Expense'
             },
             exporting: {
                 enabled: false
@@ -652,7 +665,20 @@
                 data: [
                     { y: TotalRev, color: 'green' },
                     { y: TotalExp, color: 'red' }],
-                showInLegend: false
+                showInLegend: false,
+                dataLabels: {
+                    enabled: true,
+                    color: 'black',
+
+                    //rotation: -90,
+                    //align: 'right',
+                    //format: '{point.y:.1f}', // one decimal
+                    //y: 10, // 10 pixels down from the top
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
             }]
 
         });
@@ -708,7 +734,7 @@
                         var text = this.renderer.text(
                             'Expenses: $' + total,
                             this.plotLeft,
-                            this.plotTop + 40,
+                            this.plotTop + 20,
 
                         ).attr({
                             zIndex: 5
@@ -717,7 +743,7 @@
                 },
                 style: {
 
-                    fontSize: '38px'
+                    fontSize: '28px'
                 }
             },
             title: {
@@ -748,6 +774,19 @@
                 data: Series,
                 //data: [{ y: 60, color: '#3367A0' }, { y: 71, color: '#3367A0' }, { y: 106, color: '#3367A0' }, { y: 129, color: '#3367A0' }, { y: 144, color: '#3367A0' }, { y: 176, color: '#3367A0' }, { y: 135, color: '#3367A0' }, { y: 148, color: '#2B5F98' }],
                 showInLegend: false,
+                dataLabels: {
+                    enabled: true,
+                    color: 'black',
+
+                    //rotation: -90,
+                    //align: 'right',
+                    //format: '{point.y:.1f}', // one decimal
+                    //y: 10, // 10 pixels down from the top
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
             }]
 
         });

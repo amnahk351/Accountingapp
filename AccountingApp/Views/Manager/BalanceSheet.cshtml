@@ -50,7 +50,7 @@
     <br />
     <br />
     @*Amnah*@
-    <div class="shadow container" style="width:80%; background-color:gainsboro;">
+    <div class="shadow container" style="width:70%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" id="printContent" style="text-align:center;">
                 <div class="card-body" style="display:inline-block;">
@@ -67,7 +67,7 @@
                     @*<br />*@
                     <hr style="border-width: 2px; border-color: black" />
                     <div align="center">
-                        <table id="assetsTable" class="table-striped" style="width:600px;">
+                        <table id="assetsTable" class="table table-hover" style="width:100%;">
 
                             <tr class="titleRow">
                                 <th class="text-left" colspan="3">Assets</th>
@@ -80,7 +80,7 @@
 
                             @for (int i = 0; i < Model.Count; i++)
                             {
-                                if (Model[i].AccountType.ToLower() == "assets")
+                                if (Model[i].AccountType.ToLower() == "asset")
                                 {
                                     if (Model[i].AccountName.ToLower() != "office supplies")
                                     {
@@ -137,7 +137,7 @@
 
                         <br />
 
-                        <table id="liabilitiesTable" class="table-striped" style="width:600px;">
+                        <table id="liabilitiesTable" class="table table-hover" style="width:100%;">
 
                             <tr class="titleRow">
                                 <th class="text-left">Liabilities & Stockholder's Equity</th>
@@ -154,7 +154,7 @@
 
                             @for (int i = 0; i < Model.Count; i++)
                             {
-                                if (Model[i].AccountType.ToLower() == "liabilities")
+                                if (Model[i].AccountType.ToLower() == "liability")
                                 {
 
                                     if (Model[i].AccountName.ToLower() != "unearned revenue" && Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
@@ -302,7 +302,14 @@
     <script>
         $('#cmd').click(function () {
             var element = document.getElementById('printContent');
-            html2pdf().from(element).save("BalanceSheet");
+            var opt = {
+                margin: 1,
+                filename: 'myfile.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save("TrailBalance");
         });
     </script>
     <script>

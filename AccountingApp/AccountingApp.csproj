@@ -231,9 +231,11 @@
     <Compile Include="Models\Extended\AccountRecoveryModel.cs" />
     <Compile Include="Models\Extended\AnswerQuestionsModel.cs" />
     <Compile Include="Models\Extended\ChangePasswordModel.cs" />
+    <Compile Include="Models\Extended\EditAccountModel.cs" />
     <Compile Include="Models\Extended\EditUserModel.cs" />
     <Compile Include="Models\Extended\ForgotPasswordModel.cs" />
     <Compile Include="Models\Extended\LoginModel.cs" />
+    <Compile Include="Models\Extended\NewAccountModel.cs" />
     <Compile Include="Models\Extended\NewUserModel.cs" />
     <Compile Include="Models\Extended\ResetPasswordModel.cs" />
     <Compile Include="Models\Extended\SecurityQuestionsModel.cs" />
@@ -435,8 +437,6 @@
     <Content Include="Views\Account\LogIn.cshtml" />
     <Content Include="Views\Admin\AdminIndex.cshtml" />
     <Content Include="Views\Admin\ChartOfAccounts.cshtml" />
-    <Content Include="Views\Admin\NewAccount.cshtml" />
-    <Content Include="Views\Admin\EditAccount.cshtml" />
     <Content Include="Views\Accountant\AccountantIndex.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
@@ -492,9 +492,10 @@
     <Content Include="Views\Admin\AllUsers.cshtml" />
     <Content Include="Views\Manager\GeneralLedger.cshtml" />
     <Content Include="Views\Manager\EditJournal.cshtml" />
-    <Content Include="Views\Manager\Dashboard.cshtml" />
     <Content Include="Views\Admin\Dashboard.cshtml" />
     <Content Include="Views\Accountant\GeneralLedger.cshtml" />
+    <Content Include="Views\Admin\NewAccount.cshtml" />
+    <Content Include="Views\Admin\EditAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />
