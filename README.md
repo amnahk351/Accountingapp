@@ -13,3 +13,5 @@ Manager: Password_1
 Accountant: Password_1
 
 To build this project clone this repository then open the projectfile in visual studio 2017.  Clean and rebuild the solution to download all the dependencies.  Running the software should launch the login screen in your web browser.
+
+[Youtube Video Walkthrough](https://www.youtube.com/playlist?list=PLYUVDriFPonOVfmYx3xxFesUQXbmPAlTh)
