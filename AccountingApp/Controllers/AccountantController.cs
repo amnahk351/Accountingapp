@@ -1104,48 +1104,69 @@ namespace AccountingApp.Controllers
 
 
 
-                //revenueExpense = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountType = @revenue OR AccountType = @expense", new { revenue = "Revenue", expense = "Expense"}).ToList();
-                //lastTransaction = db.Query<TransactionTable>($"Select * from dbo.TransactionTable").LastOrDefault();
+                var revenueExpense = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountType = @revenue OR AccountType = @expense", new { revenue = "Revenue", expense = "Expense" }).ToList();
+                lastTransaction = db.Query<TransactionTable>($"Select * from dbo.TransactionTable").LastOrDefault();
+                decimal totalRevenues = 0;
+                decimal totalExpenses = 0;
+                string sqlstatement = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, "
+    + "DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type)"
+    + "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status,@AccountName," + "@Debit,@Credit,@EntryId,@Entry_Type)";
+                foreach (ChartOfAcc coa in revenueExpense)
+                {
+                    decimal amount = coa.CurrentBalance.Value;
 
-                //foreach (ChartOfAcc coa in revenueExpense)
-                //{
+                    if (coa.NormalSide == "Debit")
+                    {
+                        totalExpenses = totalExpenses + amount;
 
 
+                        db.Execute(sqlstatement, new
+                        {
+                            AccountantUsername = "Accountant",
+                            AccountantComment = "Closing Accounts",
+                            DateSubmitted = DateTime.Now,
+                            Status = "pending",
+                            AccountName = coa.AccountName,
+                            Debit = 0,
+                            Credit = amount,
+                            EntryId = lastTransaction.EntryId + 1,
+                            Entry_Type = "Closing"
+                        });
+                    }
+                    else
+                    {
+                        totalRevenues = totalRevenues + amount;
 
-                //    decimal amount = coa.CurrentBalance.Value;
+                        db.Execute(sqlstatement, new
+                        {
+                            AccountantUsername = "Accountant",
+                            AccountantComment = "Closing Accounts",
+                            DateSubmitted = DateTime.Now,
+                            Status = "pending",
+                            AccountName = coa.AccountName,
+                            Debit = amount,
+                            Credit = 0,
+                            EntryId = lastTransaction.EntryId + 1,
+                            Entry_Type = "Closing"
+                        });
+                    }
+                    //string EventLogTo = GenerateEventLogTransactionDetail(lastTransaction.EntryId + 1);
 
-                //    TransactionTable t = new TransactionTable();
-                //    t.AccountName = coa.AccountName;
-                //    t.AccountantUsername = "Accountant";
-                //    t.AccountantComment = "Closing Accounts";
-                //    t.AccountName = "Accountant";
-                //    t.DateSubmitted = DateTime.Now;
-                //    t.Status = "pending";
-                //    t.TransactionID = lastTransaction.TransactionID + 1;
-                //    t.EntryId = lastTransaction.EntryId + 1;
-                //    t.PostReference = 123; //check this
-                //    t.Entry_Type = "Closing";
+                    //Logger.LogJournalEntrySubmitted(sessionUser, EventLogTo, lastTransaction.EntryId.ToString(), type);
 
-                //    if (coa.NormalSide == "Debit")
-                //    {
-                //        t.Debit = 0;
-                //        t.Credit = amount; //zero account
-                //    }
-                //    else
-                //    {
-                //        t.Debit = amount; //zero account
-                //        t.Credit = 0;
-                //    }
-
-                //    //string sql = $"Insert into dbo.TransactionsTable (TransactionID, AccountantUsername, " +
-                //    //    "AccountantComment, DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type, PostReference)" + 
-                //    //    "values(@TransactionID,@AccountantUsername,@AccountantComment,@Status,@AccountName," +
-                //    //    "@Debit,@Credit,@EntryId,@Entry_Type,@PostReference,@City)";
-
-                //    //db.Execute(sql, new {
-
-                //    //});
-                //}
+                }
+                db.Execute(sqlstatement, new
+                {
+                    AccountantUsername = "Accountant",
+                    AccountantComment = "Closing Accounts",
+                    DateSubmitted = DateTime.Now,
+                    Status = "pending",
+                    AccountName = "Retained Earnings",
+                    Debit = 0,
+                    Credit = totalRevenues-totalExpenses,
+                    EntryId = lastTransaction.EntryId + 1,
+                    Entry_Type = "Closing"
+                });
             }
 
             return Redirect("ChartOfAccounts");
