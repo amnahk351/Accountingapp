@@ -1075,6 +1075,7 @@ namespace AccountingApp.Controllers
         {
             //Trace.WriteLine("Accounts Totally Closed");
             var sessionUser = Session["Username"] as string;
+            EventLogHandler Logger = new EventLogHandler();
 
             //List<ChartOfAcc> revenueExpense;
             TransactionTable lastTransaction;
@@ -1102,7 +1103,7 @@ namespace AccountingApp.Controllers
                     Entry_Type = c
                 });
 
-
+                Logger.LogAccountantCloseAccountRequest(sessionUser, num);
 
                 var revenueExpense = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountType = @revenue OR AccountType = @expense", new { revenue = "Revenue", expense = "Expense" }).ToList();
                 lastTransaction = db.Query<TransactionTable>($"Select * from dbo.TransactionTable").LastOrDefault();
