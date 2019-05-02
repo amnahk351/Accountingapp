@@ -323,7 +323,7 @@ namespace AccountingApp.Controllers
 
                 string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
                     "[From], [To], IPAddress, Screen, AccessLevel, DetailedTo) values" +
-                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, DetTo)";
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, @DetTo)";
                 db.Execute(sql, new
                 {
                     Date = model.Date,
