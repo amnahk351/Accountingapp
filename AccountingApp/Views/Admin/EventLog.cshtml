@@ -331,7 +331,7 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            if (item.From.Contains("Edited User"))
+                            if (item.From != null && item.From.Contains("Edited User"))
                             {
                                 <tr>
                                     <td>
@@ -359,7 +359,7 @@
                                     </td>
                                 </tr>
                             }
-                            else if (item.From.Contains("Edited Journal Entry"))
+                            else if (item.From != null && item.From.Contains("Edited Journal Entry"))
                             {
                                 <tr>
                                     <td>
@@ -387,7 +387,7 @@
                                     </td>
                                 </tr>
                             }
-                            else if (item.From.Contains("Edited Account"))
+                            else if (item.From != null && item.From.Contains("Edited Account"))
                             {
                                 <tr>
                                     <td>
