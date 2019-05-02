@@ -21,11 +21,11 @@ namespace AccountingApp.Controllers
         // GET: Manager
         public ActionResult ManagerIndex(string status)
         {
-            
+
             ViewBag.pendingCount = getAllEntriesOfStatus("pending").entries.Count;
             ViewBag.approvedCount = getAllEntriesOfStatus("approved").entries.Count;
             return View();
-            
+
         }
 
         public ActionResult Dashboard(string status)
@@ -65,7 +65,7 @@ namespace AccountingApp.Controllers
         }
 
         public ActionResult ManagerApproval()
-        { 
+        {
             return View(getAllEntriesOfStatus("pending"));
         }
 
@@ -147,7 +147,7 @@ namespace AccountingApp.Controllers
                     db.Execute(sql, new { status = t.Status, entryID = t.EntryId });
                 }
             }
-            
+
 
             return View();
         }
@@ -205,7 +205,7 @@ namespace AccountingApp.Controllers
             ViewBag.accountlist = sliAccountList;
             return View("~/Views/Accountant/Dashboard");
         }
-        
+
 
 
         public ActionResult GeneralJournal(string status)
@@ -340,8 +340,6 @@ namespace AccountingApp.Controllers
                         revenueTotal += c.CurrentBalance.Value;
                     if (c.AccountType.ToLower() == "expense")
                         expenseTotal += c.CurrentBalance.Value;
-
-
                 }
 
                 ViewBag.RevenueTotal = revenueTotal;
@@ -370,8 +368,8 @@ namespace AccountingApp.Controllers
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
-                
-                for(int i = 0; i < coa.Count; i++)
+
+                for (int i = 0; i < coa.Count; i++)
                 {
                     if (coa[i].AccountName.ToLower() == "cash" || coa[i].AccountName.ToLower() == "accounts receivable" || coa[i].AccountName.ToLower() == "supplies" || coa[i].AccountName.ToLower() == "prepaid insurance" || coa[i].AccountName.ToLower() == "prepaid rent")
                     {
@@ -398,7 +396,7 @@ namespace AccountingApp.Controllers
                         contributedCapital += coa[i].CurrentBalance.Value;
                     }
                 }
-                
+
             }
 
             totalAssets = totalCurrentAssets + propPlanEquipNet;
@@ -456,7 +454,7 @@ namespace AccountingApp.Controllers
 
             decimal final = totalAssets / totalLiab;
             decimal Ratio = Math.Round(final, 2);
-            
+
             var result = JsonConvert.SerializeObject(Ratio);
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -495,7 +493,7 @@ namespace AccountingApp.Controllers
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 Chart4 = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @N", new { N = Q4 }).ToList();
-            }            
+            }
 
             List<ChartOfAcc> Chart5;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -515,10 +513,11 @@ namespace AccountingApp.Controllers
 
             foreach (ChartOfAcc x2 in Chart2)
             {
-                if (x2.AccountName != "Accumulated Depreciation Equipment") {
+                if (x2.AccountName != "Accumulated Depreciation Equipment")
+                {
                     totalLiab += (decimal)x2.CurrentBalance;
                 }
-                
+
             }
 
             decimal totalExpense = 0;
@@ -553,7 +552,7 @@ namespace AccountingApp.Controllers
             decimal finalDebtoEq = Math.Round(DebttoEquityRatio, 2);
             decimal finalDebtoAss = Math.Round(DebttoAssetRatio, 2);
 
-            string Ratios = finalDebtoEq + ";" + finalDebtoAss;            
+            string Ratios = finalDebtoEq + ";" + finalDebtoAss;
 
             var result = JsonConvert.SerializeObject(Ratios);
 
@@ -562,7 +561,7 @@ namespace AccountingApp.Controllers
 
         [HttpGet]
         public ActionResult RetrieveAllTotalTypes()
-        {            
+        {
             string Q1 = "Asset";
             string Q2 = "Liability";
             string Q3 = "Revenue";
@@ -616,7 +615,7 @@ namespace AccountingApp.Controllers
             foreach (ChartOfAcc x3 in Chart3)
             {
                 totalRevenue += (decimal)x3.CurrentBalance;
-            }            
+            }
 
             decimal totalExpense = 0;
 
@@ -641,7 +640,7 @@ namespace AccountingApp.Controllers
         [HttpGet]
         public ActionResult RetrieveExpenseDataforChart()
         {
-            string Q4 = "Expense";            
+            string Q4 = "Expense";
 
             List<ChartOfAcc> Chart;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -653,14 +652,14 @@ namespace AccountingApp.Controllers
             string final = "";
 
             foreach (ChartOfAcc x in Chart)
-            {                
+            {
                 string name = x.AccountName;
-                decimal bal = (decimal) x.CurrentBalance;
+                decimal bal = (decimal)x.CurrentBalance;
                 string Added = name + "|^|" + bal;
                 items.Add(Added);
             }
 
-            final = string.Join(";", items);                        
+            final = string.Join(";", items);
 
             var result = JsonConvert.SerializeObject(final);
 
@@ -668,21 +667,75 @@ namespace AccountingApp.Controllers
         }
 
         [HttpGet]
-        public ActionResult RetrieveAccountBalanceAndStatus(string name)
+        public ActionResult RetrieveAccountNameForLedger(int id)
         {
-            List<ChartOfAcc> Chart;
+            List<TransactionTable> transactionList;
+
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @N", new { N = name }).ToList();
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where PostReference=@ID", new { ID = id }).ToList();
             }
-            
-            decimal Num = (decimal)Chart[0].CurrentBalance;
-            bool ActiveType = Chart[0].Active;
-            
-            string split = "|^|";
-            string res = Num + split + ActiveType;
-            var result = JsonConvert.SerializeObject(res);
 
+            string AccountName = transactionList[0].AccountName;
+
+            var result = JsonConvert.SerializeObject(AccountName);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult RetrievePostReferencePageNumber(int id)
+        {
+            List<TransactionTable> transactionList;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where PostReference=@ID", new { ID = id }).ToList();
+            }
+
+            string AccountName = transactionList[0].AccountName;
+
+
+            List<ChartOfAcc> ChartOfAccountsNumber;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                ChartOfAccountsNumber = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName=@Name", new { Name = AccountName }).ToList();
+            }
+
+            int Number = ChartOfAccountsNumber[0].AccountNumber;
+
+            int StartTransactionNumber = Number * 5055;
+
+            int PageDifference = id - StartTransactionNumber;
+
+            int PageNumber = (PageDifference / 10) + 1;
+
+            var result = JsonConvert.SerializeObject(PageNumber);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult RetrieveAccountBalanceAndStatus(string name)
+        {
+            string res = "";
+            if (name != "")
+            {
+                List<ChartOfAcc> Chart;
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @N", new { N = name }).ToList();
+                }
+
+                decimal Num = (decimal)Chart[0].CurrentBalance;
+                bool ActiveType = Chart[0].Active;
+
+                string split = "|^|";
+                res = Num + split + ActiveType;
+
+            }
+            var result = JsonConvert.SerializeObject(res);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -708,8 +761,9 @@ namespace AccountingApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult RejectSpecifiedEntry(int id, string comment) {
-
+        public ActionResult RejectSpecifiedEntry(int id, string comment)
+        {
+            EventLogHandler Logger = new EventLogHandler();
             string s = "disapproved";
             var sessionUser = Session["Username"] as string;
 
@@ -718,16 +772,79 @@ namespace AccountingApp.Controllers
                 string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
                 db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
             }
+            Logger.LogManagerRejectedEntry(sessionUser, id);
 
             return Json("Entry Disapproved.");
+        }
+
+        public string GenerateEventLogTransactionDetail(int id)
+        {
+            var sessionUser = Session["Username"] as string;
+            List<TransactionTable> transactionList;
+            List<string> Entries = new List<string>();
+            List<string> TotalList = new List<string>();
+            string AllEntries = "";
+            string Resultant = "";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            TotalList.Add(transactionList[0].EntryId.ToString());
+            TotalList.Add("Status: " + transactionList[0].Status);
+            TotalList.Add("Type: " + transactionList[0].Entry_Type);
+
+            for (int i = 0; i < transactionList.Count; i++)
+            {
+
+                string EntryAccountName = transactionList[i].AccountName;
+                decimal DebitAmount = transactionList[i].Debit.GetValueOrDefault();
+                decimal CreditAmount = transactionList[i].Credit.GetValueOrDefault();
+
+                string line = "";
+
+                if (CreditAmount == 0)
+                {
+                    //This line is a debit
+                    line = EntryAccountName + "-Debit-" + DebitAmount;
+                    Entries.Add(line);
+                }
+
+                if (DebitAmount == 0)
+                {
+                    //This line is a credit
+                    line = EntryAccountName + "-Credit-" + CreditAmount;
+                    Entries.Add(line);
+                }
+
+            }
+
+            AllEntries = String.Join(",", Entries);
+            TotalList.Add(AllEntries);
+            TotalList.Add("Comment: " + transactionList[0].AccountantComment);
+            Resultant = String.Join("|^|", TotalList);
+
+            return Resultant;
+        }
+
+        public void EmptyAccount(string name)
+        {
+            //update current balance in chart of accounts
+            decimal NewBal = 0;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {                
+                string sql = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql, new { Cu = NewBal, AccName = name });
+            }
+
         }
 
         [HttpPost]
         public ActionResult ApproveSpecifiedEntry(int id, string comment)
         {
-            //System.Diagnostics.Debug.WriteLine("it got called");
-            //System.Diagnostics.Debug.WriteLine("id " + id);
-            //System.Diagnostics.Debug.WriteLine("comm " + comment);
+            EventLogHandler Logger = new EventLogHandler();
             string s = "approved";
             var sessionUser = Session["Username"] as string;
 
@@ -738,123 +855,171 @@ namespace AccountingApp.Controllers
                 transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
             }
 
-                        
-            for (int i = 0; i < transactionList.Count; i++) {
+            if (transactionList[0].Entry_Type == "Closing")
+            {
+                List<ChartOfAcc> revenueList;
 
-                //POST REFERENCE LOGIC
-                //get the account name at i
-                string AccountName = transactionList[i].AccountName;
-                decimal RowDebit = (decimal) transactionList[i].Debit.GetValueOrDefault();
-                decimal RowCredit = (decimal) transactionList[i].Credit.GetValueOrDefault();
-
-                List<TransactionTable> TempList;
-
-                //query transaction table database and get all records with that account name and status is approved
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    TempList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where AccountName = @Name And Status = @Stat", new { Name = AccountName, Stat = s }).ToList();
-                }                
-
-                //get post reference number at the selected query and put in a list<int>
-                List<int> ReferenceNumbers = new List<int>();
-
-                foreach (TransactionTable t in TempList) {
-                    ReferenceNumbers.Add(t.PostReference.GetValueOrDefault());
-                    //System.Diagnostics.Debug.WriteLine("current post refere " + t.PostReference.GetValueOrDefault());
+                    revenueList = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @Ty", new { Ty = "Revenue" }).ToList();
                 }
 
-                int biggest = 0;
+                List<ChartOfAcc> expenseList;
 
-                if (ReferenceNumbers.Count != 0)
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    biggest = ReferenceNumbers.Max();
+                    expenseList = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @Ty", new { Ty = "Expense" }).ToList();
                 }
                 
-                //System.Diagnostics.Debug.WriteLine("biggest " + biggest);
+                
+                decimal RevenueSum = 0;
+                decimal ExpenseSum = 0;
 
-                int PostReference;
+                for (int i = 0; i < revenueList.Count; i++) {
+                    RevenueSum += (decimal)revenueList[i].CurrentBalance;
+                    EmptyAccount(revenueList[i].AccountName);
+                }
 
-                List<ChartOfAcc> Chart;
-                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                for (int i = 0; i < expenseList.Count; i++)
                 {
-                    Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @Name", new { Name = AccountName }).ToList();
+                    ExpenseSum += (decimal)expenseList[i].CurrentBalance;
+                    EmptyAccount(expenseList[i].AccountName);
                 }
-
-                if (biggest == 0)
-                {
-                    //if list has null values, (this is first post reference for the account name)
-                    int AccountNum = Chart[0].AccountNumber;
-
-                    //take the account number and multiply it by 5055 and set that as the first post reference number    
-                    PostReference = AccountNum * 5055;
-                }
-                else {
-                    //take the maximum and add 1
-                    PostReference = biggest + 1;
-                }
-
-                //System.Diagnostics.Debug.WriteLine("post ref " + PostReference);
-
-                decimal CurrentAccountBalance = (decimal) Chart[0].CurrentBalance;
-                string NormalSide = Chart[0].NormalSide;
-
-                decimal NewBalance = CurrentAccountBalance;
-
-                if (RowCredit == 0 && NormalSide == "Debit")
-                {
-                    //Debit has a value, it is an asset or expense account
-                    //Debits increase asset and expense accounts.
-                    NewBalance += RowDebit;
-                }
-
-                if (RowCredit == 0 && NormalSide == "Credit")
-                {
-                    //Debit has a value, it is a liability, equity, or revenue account
-                    //Debits decrease liability, equity, and revenue accounts.
-                    NewBalance -= RowDebit;
-                }
-
-                if (RowDebit == 0 && NormalSide == "Debit")
-                {
-                    //Credit has a value, it is an asset or expense account
-                    //Credits decrease asset and expense accounts.
-                    NewBalance -= RowCredit;
-                }
-
-                if (RowDebit == 0 && NormalSide == "Credit")
-                {
-                    //Credit has a value, it is a liability, equity, or revenue account
-                    //Credits increase liability, equity, and revenue accounts.
-                    NewBalance += RowCredit;
-                }
-
-                //System.Diagnostics.Debug.WriteLine("current account " + AccountName);
-                //System.Diagnostics.Debug.WriteLine("new balance " + NewBalance);
-
-                //update transaction table at i with the post reference, add before balance and after balance
-                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-                {
-                    string sql = $"UPDATE dbo.TransactionTable SET PostReference = @Post, BeforeBalance = @Be, AfterBalance = @Af WHERE EntryID = @entryID And AccountName = @AccName";
-                    db.Execute(sql, new { Post = PostReference, Be = CurrentAccountBalance, Af = NewBalance, entryID = id, AccName = AccountName });
-                }
+                decimal Profit = RevenueSum - ExpenseSum;
 
 
-                //update current balance in chart of accounts
+
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
                     string sql = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
-                    db.Execute(sql, new { Cu = NewBalance, AccName = AccountName });
+                    db.Execute(sql, new { Cu = Profit, AccName = "Retained Earnings" });
+                }
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
+                    db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
                 }
 
             }
-
-            
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            else
             {
-                string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
-                db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
-            }
+                for (int i = 0; i < transactionList.Count; i++)
+                {
 
+                    //POST REFERENCE LOGIC
+                    //get the account name at i
+                    string AccountName = transactionList[i].AccountName;
+                    decimal RowDebit = (decimal)transactionList[i].Debit.GetValueOrDefault();
+                    decimal RowCredit = (decimal)transactionList[i].Credit.GetValueOrDefault();
+
+                    List<TransactionTable> TempList;
+
+                    //query transaction table database and get all records with that account name and status is approved
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                    {
+                        TempList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where AccountName = @Name And Status = @Stat", new { Name = AccountName, Stat = s }).ToList();
+                    }
+
+                    //get post reference number at the selected query and put in a list<int>
+                    List<int> ReferenceNumbers = new List<int>();
+
+                    foreach (TransactionTable t in TempList)
+                    {
+                        ReferenceNumbers.Add(t.PostReference.GetValueOrDefault());
+                    }
+
+                    int biggest = 0;
+
+                    if (ReferenceNumbers.Count != 0)
+                    {
+                        biggest = ReferenceNumbers.Max();
+                    }
+                                        
+
+                    int PostReference;
+
+                    List<ChartOfAcc> Chart;
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                    {
+                        Chart = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountName = @Name", new { Name = AccountName }).ToList();
+                    }
+
+                    if (biggest == 0)
+                    {
+                        //if list has null values, (this is first post reference for the account name)
+                        int AccountNum = Chart[0].AccountNumber;
+
+                        //take the account number and multiply it by 5055 and set that as the first post reference number    
+                        PostReference = AccountNum * 5055;
+                    }
+                    else
+                    {
+                        //take the maximum and add 1
+                        PostReference = biggest + 1;
+                    }
+
+                    //System.Diagnostics.Debug.WriteLine("post ref " + PostReference);
+
+                    decimal CurrentAccountBalance = (decimal)Chart[0].CurrentBalance;
+                    string NormalSide = Chart[0].NormalSide;
+
+                    decimal NewBalance = CurrentAccountBalance;
+
+                    if (RowCredit == 0 && NormalSide == "Debit")
+                    {
+                        //Debit has a value, it is an asset or expense account
+                        //Debits increase asset and expense accounts.
+                        NewBalance += RowDebit;
+                    }
+
+                    if (RowCredit == 0 && NormalSide == "Credit")
+                    {
+                        //Debit has a value, it is a liability, equity, or revenue account
+                        //Debits decrease liability, equity, and revenue accounts.
+                        NewBalance -= RowDebit;
+                    }
+
+                    if (RowDebit == 0 && NormalSide == "Debit")
+                    {
+                        //Credit has a value, it is an asset or expense account
+                        //Credits decrease asset and expense accounts.
+                        NewBalance -= RowCredit;
+                    }
+
+                    if (RowDebit == 0 && NormalSide == "Credit")
+                    {
+                        //Credit has a value, it is a liability, equity, or revenue account
+                        //Credits increase liability, equity, and revenue accounts.
+                        NewBalance += RowCredit;
+                    }
+
+
+                    //update transaction table at i with the post reference, add before balance and after balance
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                    {
+                        string sql = $"UPDATE dbo.TransactionTable SET PostReference = @Post, BeforeBalance = @Be, AfterBalance = @Af WHERE EntryID = @entryID And AccountName = @AccName";
+                        db.Execute(sql, new { Post = PostReference, Be = CurrentAccountBalance, Af = NewBalance, entryID = id, AccName = AccountName });
+                    }
+
+
+                    //update current balance in chart of accounts
+                    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                    {
+                        string sql = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                        db.Execute(sql, new { Cu = NewBalance, AccName = AccountName });
+                    }
+
+                }
+
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
+                    db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
+                }
+            }
+            Logger.LogManagerApprovedEntry(sessionUser, id);
 
             return Json("Entry Approved.");
         }
@@ -900,7 +1065,7 @@ namespace AccountingApp.Controllers
         public ActionResult ApprovedTransactions()
         {
             List<TransactionTable> transactionList;
-            string s = "approved";            
+            string s = "approved";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
@@ -1012,12 +1177,18 @@ namespace AccountingApp.Controllers
             List<ChartOfAcc> coa;
             decimal revenueTotal = 0;
             decimal expenseTotal = 0;
+            decimal earnings = 0;
+            decimal divedends = 0;
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
                 foreach (ChartOfAcc c in coa)
                 {
+                    if (c.AccountName == "Retained Earnings")
+                        earnings = c.CurrentBalance.Value;
+                    if (c.AccountName == "Divadends")
+                        divedends = c.CurrentBalance.Value;
                     if (c.AccountType.ToLower() == "revenue")
                         revenueTotal += c.CurrentBalance.Value;
                     if (c.AccountType.ToLower() == "expense")
@@ -1026,7 +1197,11 @@ namespace AccountingApp.Controllers
 
                 }
             }
+            ViewBag.RetainedEarnings = earnings;
             ViewBag.NetIncome = revenueTotal - expenseTotal;
+            ViewBag.EarningsPlusIncome = earnings + revenueTotal - expenseTotal;
+            ViewBag.Dividends = divedends;
+            ViewBag.Total = earnings + revenueTotal - expenseTotal - divedends;
             return View();
         }
 
@@ -1109,21 +1284,17 @@ namespace AccountingApp.Controllers
                 listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountName=@Value", new { Value = name }).ToList();
             }
 
-            result = (decimal) listAccounts[0].CurrentBalance;
+            result = (decimal)listAccounts[0].CurrentBalance;
 
             return result;
         }
 
-        public ActionResult GeneralLedger(string name)
-        {            
-            if(name == "" || name == null) {
-
+        public ActionResult GeneralLedger(string name, string PostReference)
+        {
+            if (name == null && PostReference == null)
+            {
                 ViewBag.AccountName = "Account Name";
-
-                //int number2 = GetAccountNameNumber(name);
                 ViewBag.AccountNumber = "Account No. ";
-
-                //decimal balance2 = GetAccountBalance(name);
                 ViewBag.AccountBalance = "Balance: ";
 
                 List<ChartOfAcc> listAccounts2;
@@ -1148,44 +1319,120 @@ namespace AccountingApp.Controllers
 
                 return View("GeneralLedger");
             }
-                         
-            List<TransactionTable> transactionList;
-            string s = "approved";
 
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            if (name != null)
             {
-                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status And AccountName = @Name Order By DateReviewed", new { status = s, Name = name }).ToList();
-            }
+                List<TransactionTable> transactionList;
+                string s = "approved";
 
-            ViewBag.AccountName = name;
-
-            int number = GetAccountNameNumber(name);
-            ViewBag.AccountNumber = "Account No. " + number.ToString();
-
-            decimal balance = GetAccountBalance(name);
-            ViewBag.AccountBalance = "Balance: " + balance.ToString();
-
-            List<ChartOfAcc> listAccounts;
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Order By AccountName").ToList();
-            }
-            List<SelectListItem> sliAccountList = new List<SelectListItem>();
-
-
-            foreach (ChartOfAcc coa in listAccounts)
-            {
-                SelectListItem item = new SelectListItem
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    Text = coa.AccountName,
-                    Value = coa.AccountNumber.ToString()
-                };
-                sliAccountList.Add(item);
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status And AccountName = @Name Order By DateReviewed", new { status = s, Name = name }).ToList();
+                }
+
+                ViewBag.AccountName = name;
+
+                int number = GetAccountNameNumber(name);
+                ViewBag.AccountNumber = "Account No. " + number.ToString();
+
+                decimal balance = GetAccountBalance(name);
+                ViewBag.AccountBalance = "Balance: " + balance.ToString();
+
+                List<ChartOfAcc> listAccounts;
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Order By AccountName").ToList();
+                }
+                List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+
+                foreach (ChartOfAcc coa in listAccounts)
+                {
+                    SelectListItem item = new SelectListItem
+                    {
+                        Text = coa.AccountName,
+                        Value = coa.AccountNumber.ToString()
+                    };
+                    sliAccountList.Add(item);
+                }
+
+
+                foreach (TransactionTable t in transactionList)
+                {
+                    t.DebitString = String.Format("{0:n}", t.Debit);
+                    t.CreditString = String.Format("{0:n}", t.Credit);
+                    t.BeforeString = String.Format("{0:n}", t.BeforeBalance);
+                    t.AfterString = String.Format("{0:n}", t.AfterBalance);
+                }
+
+                ViewBag.accountlist = sliAccountList;
+
+                return View(transactionList);
             }
 
-            ViewBag.accountlist = sliAccountList;
+            if (PostReference != null)
+            {
+                string s = "approved";
 
-            return View(transactionList);
+                string AccName = "";
+
+                List<TransactionTable> transactionListName;
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    transactionListName = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where PostReference = @Num", new { Num = PostReference }).ToList();
+                }
+
+                AccName = transactionListName[0].AccountName;
+
+                List<TransactionTable> transactionList;
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status And AccountName = @Name Order By DateReviewed", new { status = s, Name = AccName }).ToList();
+                }
+
+                ViewBag.AccountName = AccName;
+                int number = GetAccountNameNumber(AccName);
+
+                ViewBag.AccountNumber = "Account No. " + number.ToString();
+
+                decimal balance = GetAccountBalance(AccName);
+                ViewBag.AccountBalance = "Balance: " + balance.ToString();
+
+                List<ChartOfAcc> listAccounts;
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Order By AccountName").ToList();
+                }
+                List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+
+                foreach (ChartOfAcc coa in listAccounts)
+                {
+                    SelectListItem item = new SelectListItem
+                    {
+                        Text = coa.AccountName,
+                        Value = coa.AccountNumber.ToString()
+                    };
+                    sliAccountList.Add(item);
+                }
+
+
+                foreach (TransactionTable t in transactionList)
+                {
+                    t.DebitString = String.Format("{0:n}", t.Debit);
+                    t.CreditString = String.Format("{0:n}", t.Credit);
+                    t.BeforeString = String.Format("{0:n}", t.BeforeBalance);
+                    t.AfterString = String.Format("{0:n}", t.AfterBalance);
+                }
+
+                ViewBag.accountlist = sliAccountList;
+
+                return View(transactionList);
+            }
+
+            return View("GeneralLedger");
         }
 
 

@@ -52,7 +52,7 @@
 
 
     @*Amnah*@
-    <div class="shadow container" style="width:100%; background-color:gainsboro;">
+    <div class="shadow container" style="width:87%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" id="printContent" style="text-align:center;">
                 <div class="card-body">
@@ -73,7 +73,7 @@
                             <td style="text-align: left">
                                 Retained Earnings, Beginning
                             </td>
-                            <td style="text-align: right">$ 0.00</td>
+                            <td style="text-align: right">$ @ViewBag.RetainedEarnings</td>
                         </tr>
                         <tr class="titleRow">
                             <td style="text-align: left">Add: Net Income</td>
@@ -81,17 +81,17 @@
                         </tr>
                         <tr class="titleRow">
                             <td style="text-align: left; text-indent: 5%">Total</td>
-                            <td style="border-bottom: .15rem solid; text-align: right; width: 100px">@ViewBag.NetIncome</td>
+                            <td style="border-bottom: .15rem solid; text-align: right; width: 100px">@ViewBag.EarningsPlusIncome</td>
                         </tr>
                         <tr class="titleRow">
                             <td style="text-align: left">Less: Dividents Paid</td>
-                            <td style="text-align: right; border-bottom: .15rem solid">0.00</td>
+                            <td style="text-align: right; border-bottom: .15rem solid">@ViewBag.Dividends</td>
                         </tr>
                         <tr class="titleRow">
                             <td style="text-align: left">
                                 Retained Earnings, Ending
                             </td>
-                            <td style="text-align: right; border-bottom: .4rem double; width: 12%">$@ViewBag.NetIncome</td>
+                            <td style="text-align: right; border-bottom: .4rem double; width: 12%">$@ViewBag.Total</td>
                         </tr>
 
                     </table>
@@ -161,12 +161,12 @@
             var element = document.getElementById('printContent');
             var opt = {
                 margin: 1,
-                filename: 'myfile.pdf',
+                filename: 'RetainedEarnings.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
-            html2pdf().set(opt).from(element).save("TrailBalance");
+            html2pdf().set(opt).from(element).save();
         });
     </script>
     <script>

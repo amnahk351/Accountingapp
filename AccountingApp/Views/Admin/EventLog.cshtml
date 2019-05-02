@@ -21,6 +21,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
     <!-- Bootstrap CSS -->
     @*
@@ -305,14 +306,12 @@
                 <table class="table table-responsive table-hover shadow " id="Events" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                     <thead class="shadow" style="background-color:white; ">
                     <th>
-                        @*@Html.DisplayNameFor(model => model.Event_ID)*@
                         Event ID
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Date)
                     </th>
                     <th>
-                        @*@Html.DisplayNameFor(model => model.User_ID)*@
                         User ID
                     </th>
                     <th>
@@ -322,7 +321,6 @@
                         @Html.DisplayNameFor(model => model.To)
                     </th>
                     <th>
-                        @*@Html.DisplayNameFor(model => model.IP_Address)*@
                         IP Address
                     </th>
                     <th>
@@ -333,30 +331,120 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.EventID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Date)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UserID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.From)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.To)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IPAddress)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Screen)
-                                </td>
+                            if (item.From != null && item.From.Contains("Edited User"))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EventID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UserID)
+                                    </td>
 
-                            </tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.From)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.To)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IPAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Screen)
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.From != null && item.From.Contains("Edited Journal Entry"))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EventID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UserID)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.From)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.To)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IPAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Screen)
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.From != null && item.From.Contains("Edited Account"))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EventID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UserID)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.From)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.To)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IPAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Screen)
+                                    </td>
+                                </tr>
+
+                            }
+
+                            else
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EventID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UserID)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.From)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.To)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IPAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Screen)
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -367,7 +455,7 @@
                 <hr />
                 <footer align="center">
                     <p>
-                        &copy; @DateTime.Now.Year - Objective Accounting - 
+                        &copy; @DateTime.Now.Year - Objective Accounting -
                         Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
                     </p>
                 </footer>
@@ -382,7 +470,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script type="text/javascript">
 
     window.onload = function () {
@@ -403,12 +492,65 @@
     @Scripts.Render("~/bundles/dataTables")
     </script>
 
-    <script>
+    @*<script>
         $(document).ready(function () {
             $('#Events').DataTable();
         });
-    </script>
+    </script>*@
+    <script>
+        $(document).ready(function () {
+            var table = $('#Events').DataTable({
+                "dom": '<"toolbar">frtip'
+            });
+            $("div.toolbar").html('<input id="date_range" type="text" placeholder= "Search By: Start Date to End Date" style="width:30%" class="form-control">');
 
+            $("#date_range").daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    "cancelLabel": "Clear",
+                }
+            });
+
+            $("#date_range").on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' to ' + picker.endDate.format('MM/DD/YYYY'));
+                table.draw();
+            });
+
+            $("#date_range").on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+                table.draw();
+            });
+
+            $.fn.dataTableExt.afnFiltering.push(
+                function (oSettings, aData, iDataIndex) {
+
+                    var grab_daterange = $("#date_range").val();
+                    var give_results_daterange = grab_daterange.split(" to ");
+                    var filterstart = give_results_daterange[0];
+                    var filterend = give_results_daterange[1];
+                    var iStartDateCol = 1;
+                    var iEndDateCol = 1;
+                    var tabledatestart = aData[iStartDateCol];
+                    var tabledateend = aData[iEndDateCol];
+
+                    if (!filterstart && !filterend) {
+                        return true;
+                    }
+                    else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && filterend === "") {
+                        return true;
+                    }
+                    else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isAfter(tabledatestart)) && filterstart === "") {
+                        return true;
+                    }
+                    else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && (moment(filterend).isSame(tabledateend) || moment(filterend).isAfter(tabledateend))) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+        });
+    </script>
     <script>
 
         function LogOutUser() {

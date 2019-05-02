@@ -201,16 +201,16 @@
                 </li>
                 @*<li>
 
-        <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-            <i class="fas fa-list" style="margin-right:10px;"></i>
-            Chart Of Accounts
-        </a>
-        <ul class="collapse list-unstyled" id="accountSubmenu">
-            <li>
-                <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
-            </li>
-        </ul>
-        </li>*@
+                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-list" style="margin-right:10px;"></i>
+                        Chart Of Accounts
+                    </a>
+                    <ul class="collapse list-unstyled" id="accountSubmenu">
+                        <li>
+                            <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
+                        </li>
+                    </ul>
+                    </li>*@
                 <li>
 
                     <a href="/Accountant/Journalize">
@@ -331,6 +331,7 @@
                 <div>
                     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" onclick="FormatNewAccountModal()" data-target="#RequestAccountModal">Request New Account</button>
                     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" onclick="LoadAccountList()" data-target="#RequestUpdateModal">Request Account Update</button>
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" onclick="CloseAccounts()" data-target="#CloseAccountModal">Request Closing Accounts</button>
                 </div>
                 <hr class="my-4" />
                 @if (TempData["Message"] != null)
@@ -363,7 +364,7 @@
                         {
                             <tr>
                                 <td>@Model[i].AccountNumber</td>
-                                <td>@Model[i].AccountName</td>
+                                <td><a href="../Accountant/GeneralLedger?name=@Model[i].AccountName" style="color:blue">@Model[i].AccountName</a></td>
                                 <td>@Model[i].AccountType</td>
                                 <td>@Model[i].NormalSide</td>
                                 <td style="text-align:end">@Model[i].OriginalBalString</td>
@@ -382,7 +383,7 @@
 
                 <footer align="center">
                     <p>
-                        &copy; @DateTime.Now.Year - Objective Accounting - 
+                        &copy; @DateTime.Now.Year - Objective Accounting -
                         Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
                     </p>
                 </footer>
@@ -479,13 +480,11 @@
                         <div class="modal-header">
                             <h4 style="text-align:left" class="modal-title">Request Account Update</h4>
                         </div>
-                        <div class="modal-body">                            
+                        <div class="modal-body">
 
                             <div class="form-group">
                                 <label for="AccountSelect">Select an Account</label>
-                                <select class="cutom-select form-control" id="AccountSelect" name="AccountSelect">
-                                    
-                                </select>
+                                <select class="cutom-select form-control" id="AccountSelect" name="AccountSelect"></select>
                             </div>
                             <div id="AccountSelectError" class="text-danger">
 
@@ -498,7 +497,7 @@
                             </div>
                             <div id="DescriptionError" class="text-danger">
 
-                            </div>                            
+                            </div>
 
 
                         </div>
@@ -510,6 +509,27 @@
 
                 </div>
             </div>
+
+            <div class="modal fade" id="CloseAccountModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 style="text-align:left" class="modal-title">Request Account Closure</h4>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to close accounts?
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" value="Yes" class="btn btn-success" onclick="location.href='@Url.Action("CloseAccountsEntry")'" />
+                            <button id="CloseUpdateModal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -544,7 +564,7 @@
     <script>
 
         function LoadAccountList() {
-            
+
             document.getElementById("UpdateDescription").value = "";
             document.getElementById('DescriptionError').innerText = "";
 
@@ -575,7 +595,7 @@
 
             for (var i = 0; i < res.length; i++) {
                 var Account = res[i].replace(/"/g, "");
-                
+
                 var x = document.getElementById("AccountSelect");
                 var option = document.createElement("option");
                 option.text = Account;
@@ -587,10 +607,16 @@
     </script>
 
     <script>
+        function CloseAccounts() {
+
+        }
+    </script>
+
+    <script>
 
         function SubmitUpdateRequest() {
 
-            
+
             var de = document.getElementById("UpdateDescription").value;
             if (de == "") {
 
@@ -607,7 +633,7 @@
             } else {
                 //There is something to submit
 
-                //Get selected account                
+                //Get selected account
                 var skillsSelect = document.getElementById("AccountSelect");
                 var name = skillsSelect.options[skillsSelect.selectedIndex].text;
 
@@ -634,7 +660,7 @@
             }
 
         }
-        
+
 
         function SubmitAccountRequest() {
 
@@ -666,7 +692,7 @@
 
             var Select = document.getElementById("AccountType");
             var type = Select.options[Select.selectedIndex].text;
-            
+
             if (type == "Select..") {
 
                 $.ajax({
@@ -703,7 +729,7 @@
                     success: function (data) {
                         document.getElementById('AccountOriginalBalanceError').innerText = data[54];
                     }
-                });                                
+                });
             }
 
             if (num == "" || name == "" || type == "Select.." || side == "Select.." || bal == "") {
@@ -731,15 +757,15 @@
 
                 //Simulate button click to close modal
                 document.getElementById('CloseModal').click();
-            
-                
+
+
                 document.getElementById('AccountNumber').value = "";
                 document.getElementById('AccountName').value = "";
                 document.getElementById("AccountType").selectedIndex = "0";
                 document.getElementById("NormalSide").selectedIndex = "0";
                 document.getElementById('OriginalBalance').value = "";
                 document.getElementById('Description').value = "";
-                
+
 
                 document.getElementById('NumberError').innerText = "";
                 document.getElementById('NameError').innerText = "";
@@ -787,7 +813,7 @@
         setInputFilter(document.getElementById("AccountNumber"), function (value) {
             return /^\d*$/.test(value);
         });
-        
+
 
         setInputFilter(document.getElementById("OriginalBalance"), function (value) {
             return /^-?\d*[.,]?\d{0,2}$/.test(value);

@@ -49,7 +49,7 @@
     <br />
     <br />
     @*Amnah*@
-    <div class="shadow container" style="width:70%; background-color:gainsboro;">
+    <div class="shadow container" style="width:87%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" id="printContent" style="text-align:center;">
                 <div class="card-body">
@@ -84,8 +84,8 @@
                                     if (Model[i].AccountName.ToLower() != "office supplies")
                                     {
                                         <tr>
-                                            <td align="left" style="text-indent: 8%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                            <td style="text-align: right">@Model[i].CurrentBalance</td>
+                                            <td align="left" style="text-indent: 8%; color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
+                                            <td style="text-align: right; width: 135px">@Model[i].CurrentBalance</td>
                                             <td> </td>
                                         </tr>
                                     }
@@ -94,7 +94,7 @@
                             <tr>
                                 <th class="text-left" style="text-indent: 4%">&nbsp;&nbsp;&nbsp;Total Current Assets</th>
                                 <td style="border-top: .15rem solid"> </td>
-                                <td style="border-bottom: .4rem double; text-align: right">@ViewBag.totalCurrentAssets</td>
+                                <td style="border-bottom: .4rem double; text-align: right; width: 135px">@ViewBag.totalCurrentAssets</td>
                             </tr>
 
                             <tr>
@@ -107,14 +107,14 @@
                                 if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
                                 {
                                     <tr>
-                                        <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                        <td align="left" style="text-indent: 8%; color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
                                         @if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                         {
-                                            <td style="text-align: right">@Model[i].CurrentBalance</td>
+                                            <td style="text-align: right; width: 135px">@Model[i].CurrentBalance</td>
                                         }
                                         else
                                         {
-                                            <td style="border-bottom: .15rem solid; text-align: right">(@Model[i].CurrentBalance)</td>
+                                            <td style="border-bottom: .15rem solid; text-align: right; width: 135px">(@Model[i].CurrentBalance)</td>
                                         }
                                         <td> </td>
                                     </tr>
@@ -124,13 +124,13 @@
                             <tr>
                                 <th class="text-left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Property Plant & Equipment, Net</th>
                                 <td></td>
-                                <td style="text-align: right">@ViewBag.propPlanEquipNet</td>
+                                <td style="text-align: right; width: 135px">@ViewBag.propPlanEquipNet</td>
                             </tr>
 
                             <tr>
                                 <th class="text-left">Total Assets</th>
                                 <td> </td>
-                                <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right">@ViewBag.totalAssets</td>
+                                <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right; width: 135px">@ViewBag.totalAssets</td>
                             </tr>
                         </table>
 
@@ -159,8 +159,8 @@
                                     if (Model[i].AccountName.ToLower() != "unearned revenue" && Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                     {
                                         <tr>
-                                            <td align="left" style="text-indent: 8%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
-                                            <td align="right">@Model[i].CurrentBalance</td>
+                                            <td align="left" style="text-indent: 8%; color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
+                                            <td align="right" style="width: 135px">@Model[i].CurrentBalance</td>
                                             <td> </td>
                                         </tr>
                                     }
@@ -169,7 +169,7 @@
                                     {
                                         <tr>
                                             <td align="left" style="text-indent:4%;"><b>&nbsp;&nbsp;&nbsp;@Model[i].AccountName</b></td>
-                                            <td align="right" style="border-bottom: .15rem solid">@Model[i].CurrentBalance</td>
+                                            <td align="right" style="border-bottom: .15rem solid; width: 135px">@Model[i].CurrentBalance</td>
                                             <td></td>
                                         </tr>
                                     }
@@ -179,12 +179,12 @@
                             <tr>
                                 <td align="left" style="text-indent: 4%;"><b>&nbsp;&nbsp;&nbsp;Total Current Liabilities</b></td>
                                 <td> </td>
-                                <td align="right">@ViewBag.totalCurrentLiabilities</td>
+                                <td align="right" style="width: 135px">@ViewBag.totalCurrentLiabilities</td>
                             </tr>
                             <tr>
                                 <td align="left"><b>Total Liabilities</b></td>
                                 <td> </td>
-                                <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right">@ViewBag.totalLiabilities</td>
+                                <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right; width: 135px">@ViewBag.totalLiabilities</td>
                             </tr>
                             <tr height=20px>
                                 <td></td>
@@ -203,25 +203,25 @@
                                 {
                                     <tr>
 
-                                        <td align="left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                        <td align="left" style="text-indent: 4%; color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
                                         <td></td>
-                                        <td style="text-align: right">@Model[i].CurrentBalance</td>
+                                        <td style="text-align: right; width: 135px">@Model[i].CurrentBalance</td>
 
 
                                     </tr>
                                 }
                             }
 
-                            <tr>
-                                <td align="left" style="text-indent: 4%;">&nbsp;&nbsp;&nbsp;Retained Earnings</td>
-                                <td> </td>
-                                <td style="text-align: right">@ViewBag.retainedEarnings</td>
-                            </tr>
+                                    <tr>                                        
+                                        <td align="left" style="text-indent: 4%; color: blue"><a href="/Accountant/GeneralLedger?name=Retained Earnings">&nbsp;&nbsp;&nbsp;Retained Earnings</a></td>
+                                        <td> </td>
+                                        <td style="text-align: right; width: 135px">@ViewBag.retainedEarnings</td>
+                                    </tr>
 
                             <tr>
                                 <th class="text-left">Total Stockholders' Equity</th>
                                 <td> </td>
-                                <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right">@ViewBag.totalStockHolderEquity</td>
+                                <td style="border-top: .15rem solid; border-bottom: .4rem double; text-align: right; width: 135px">@ViewBag.totalStockHolderEquity</td>
                             </tr>
                             <tr height=20px>
                                 <td></td>
@@ -231,7 +231,7 @@
                             <tr>
                                 <th class="text-left">Total Liabilities & Stockholders' Equity</th>
                                 <td> </td>
-                                <td style="border-bottom: .4rem double; text-align: right">@ViewBag.totalLiabilitesStockEquity</td>
+                                <td style="border-bottom: .4rem double; text-align: right; width: 135px">@ViewBag.totalLiabilitesStockEquity</td>
                             </tr>
                         </table>
                     </div>
@@ -303,12 +303,12 @@
             var element = document.getElementById('printContent');
             var opt = {
                 margin: 1,
-                filename: 'myfile.pdf',
+                filename: 'BalanceSheet.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
-            html2pdf().set(opt).from(element).save("TrailBalance");
+            html2pdf().set(opt).from(element).save();
         });
     </script>
     <script>

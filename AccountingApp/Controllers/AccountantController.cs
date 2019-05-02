@@ -109,17 +109,12 @@ namespace AccountingApp.Controllers
             return result;
         }
 
-        public ActionResult GeneralLedger(string name)
+        public ActionResult GeneralLedger(string name, string PostReference)
         {
-            if (name == "" || name == null)
+            if (name == null && PostReference == null)
             {
-
                 ViewBag.AccountName = "Account Name";
-
-                //int number2 = GetAccountNameNumber(name);
                 ViewBag.AccountNumber = "Account No. ";
-
-                //decimal balance2 = GetAccountBalance(name);
                 ViewBag.AccountBalance = "Balance: ";
 
                 List<ChartOfAcc> listAccounts2;
@@ -145,43 +140,119 @@ namespace AccountingApp.Controllers
                 return View("GeneralLedger");
             }
 
-            List<TransactionTable> transactionList;
-            string s = "approved";
-
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            if (name != null)
             {
-                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status And AccountName = @Name Order By DateReviewed", new { status = s, Name = name }).ToList();
-            }
+                List<TransactionTable> transactionList;
+                string s = "approved";
 
-            ViewBag.AccountName = name;
-
-            int number = GetAccountNameNumber(name);
-            ViewBag.AccountNumber = "Account No. " + number.ToString();
-
-            decimal balance = GetAccountBalance(name);
-            ViewBag.AccountBalance = "Balance: " + balance.ToString();
-
-            List<ChartOfAcc> listAccounts;
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-            {
-                listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Order By AccountName").ToList();
-            }
-            List<SelectListItem> sliAccountList = new List<SelectListItem>();
-
-
-            foreach (ChartOfAcc coa in listAccounts)
-            {
-                SelectListItem item = new SelectListItem
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    Text = coa.AccountName,
-                    Value = coa.AccountNumber.ToString()
-                };
-                sliAccountList.Add(item);
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status And AccountName = @Name Order By DateReviewed", new { status = s, Name = name }).ToList();
+                }
+
+                ViewBag.AccountName = name;
+
+                int number = GetAccountNameNumber(name);
+                ViewBag.AccountNumber = "Account No. " + number.ToString();
+
+                decimal balance = GetAccountBalance(name);
+                ViewBag.AccountBalance = "Balance: " + balance.ToString();
+
+                List<ChartOfAcc> listAccounts;
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Order By AccountName").ToList();
+                }
+                List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+
+                foreach (ChartOfAcc coa in listAccounts)
+                {
+                    SelectListItem item = new SelectListItem
+                    {
+                        Text = coa.AccountName,
+                        Value = coa.AccountNumber.ToString()
+                    };
+                    sliAccountList.Add(item);
+                }
+
+
+                foreach (TransactionTable t in transactionList)
+                {
+                    t.DebitString = String.Format("{0:n}", t.Debit);
+                    t.CreditString = String.Format("{0:n}", t.Credit);
+                    t.BeforeString = String.Format("{0:n}", t.BeforeBalance);
+                    t.AfterString = String.Format("{0:n}", t.AfterBalance);
+                }
+
+                ViewBag.accountlist = sliAccountList;
+
+                return View(transactionList);
             }
 
-            ViewBag.accountlist = sliAccountList;
+            if (PostReference != null)
+            {
+                string s = "approved";
 
-            return View(transactionList);
+                string AccName = "";
+
+                List<TransactionTable> transactionListName;
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    transactionListName = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where PostReference = @Num", new { Num = PostReference }).ToList();
+                }
+
+                AccName = transactionListName[0].AccountName;
+
+                List<TransactionTable> transactionList;
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where Status = @status And AccountName = @Name Order By DateReviewed", new { status = s, Name = AccName }).ToList();
+                }
+
+                ViewBag.AccountName = AccName;
+                int number = GetAccountNameNumber(AccName);
+
+                ViewBag.AccountNumber = "Account No. " + number.ToString();
+
+                decimal balance = GetAccountBalance(AccName);
+                ViewBag.AccountBalance = "Balance: " + balance.ToString();
+
+                List<ChartOfAcc> listAccounts;
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    listAccounts = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Order By AccountName").ToList();
+                }
+                List<SelectListItem> sliAccountList = new List<SelectListItem>();
+
+
+                foreach (ChartOfAcc coa in listAccounts)
+                {
+                    SelectListItem item = new SelectListItem
+                    {
+                        Text = coa.AccountName,
+                        Value = coa.AccountNumber.ToString()
+                    };
+                    sliAccountList.Add(item);
+                }
+
+
+                foreach (TransactionTable t in transactionList)
+                {
+                    t.DebitString = String.Format("{0:n}", t.Debit);
+                    t.CreditString = String.Format("{0:n}", t.Credit);
+                    t.BeforeString = String.Format("{0:n}", t.BeforeBalance);
+                    t.AfterString = String.Format("{0:n}", t.AfterBalance);
+                }
+
+                ViewBag.accountlist = sliAccountList;
+
+                return View(transactionList);
+            }
+
+            return View("GeneralLedger");
         }
 
 
@@ -313,7 +384,9 @@ namespace AccountingApp.Controllers
                     }
                 }
 
-                Logger.LogJournalEntrySubmitted(sessionUser, NewEntryId.ToString(), type);
+                string EventLogTo = GenerateEventLogTransactionDetail(NewEntryId+1);
+
+                Logger.LogJournalEntrySubmitted(sessionUser, EventLogTo, NewEntryId.ToString(), type);
 
             }
 
@@ -396,7 +469,7 @@ namespace AccountingApp.Controllers
                 transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
             }
 
-            TotalList.Add(sessionUser + " Edited Journal " + transactionList[0].EntryId);
+            TotalList.Add(transactionList[0].EntryId.ToString());
             TotalList.Add("Status: " + transactionList[0].Status);
             TotalList.Add("Type: " + transactionList[0].Entry_Type);
 
@@ -428,7 +501,7 @@ namespace AccountingApp.Controllers
             AllEntries = String.Join(",", Entries);
             TotalList.Add(AllEntries);
             TotalList.Add("Comment: " + transactionList[0].AccountantComment);
-            Resultant = String.Join(";", TotalList);
+            Resultant = String.Join("|^|", TotalList);
 
             return Resultant;
         }
@@ -442,17 +515,17 @@ namespace AccountingApp.Controllers
             int EditedEntryID = Int32.Parse(id);
             var sessionUser = Session["Username"] as string;
             EventLogHandler Logger = new EventLogHandler();
-            
-            //string type = "";
 
-            //if (transactions[0].Status == "pending")
-            //{
-            //    type = "Submitted";
-            //}
-            //else
-            //{
-            //    type = "Suspended";
-            //}
+            string type = "";
+
+            if (transactions[0].Status == "pending")
+            {
+                type = "Submitted";
+            }
+            else
+            {
+                type = "Suspended";
+            }
 
 
             string EventLogFrom = GenerateEventLogTransactionDetail(EditedEntryID);
@@ -547,7 +620,7 @@ namespace AccountingApp.Controllers
 
             string EventLogTo = GenerateEventLogTransactionDetail(EditedEntryID);
 
-            Logger.LogEditedJournalEntry(sessionUser, EventLogFrom, EventLogTo);
+            Logger.LogEditedJournalEntry(sessionUser, EventLogFrom, EventLogTo, EditedEntryID, type);
 
             return Json(insertedRecords);
         }
@@ -998,7 +1071,85 @@ namespace AccountingApp.Controllers
         }
 
 
-        
+        public ActionResult CloseAccountsEntry()
+        {
+            //Trace.WriteLine("Accounts Totally Closed");
+            var sessionUser = Session["Username"] as string;
+
+            //List<ChartOfAcc> revenueExpense;
+            TransactionTable lastTransaction;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                lastTransaction = db.Query<TransactionTable>($"Select * from dbo.TransactionTable").LastOrDefault();
+
+                int num = (int) lastTransaction.EntryId + 1;
+                string s = "pending";
+                string c = "Closing";
+                
+
+                string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
+                        "DateSubmitted, Status, EntryId, Entry_Type)" +
+                        "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status," +
+                        "@EntryId,@Entry_Type)";
+
+                db.Execute(sql, new
+                {
+                    AccountantUsername = sessionUser,
+                    AccountantComment = "Closing Accounts",
+                    DateSubmitted = DateTime.Now,
+                    Status = s,                    
+                    EntryId = num,
+                    Entry_Type = c
+                });
+
+
+
+                //revenueExpense = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountType = @revenue OR AccountType = @expense", new { revenue = "Revenue", expense = "Expense"}).ToList();
+                //lastTransaction = db.Query<TransactionTable>($"Select * from dbo.TransactionTable").LastOrDefault();
+
+                //foreach (ChartOfAcc coa in revenueExpense)
+                //{
+
+
+
+                //    decimal amount = coa.CurrentBalance.Value;
+
+                //    TransactionTable t = new TransactionTable();
+                //    t.AccountName = coa.AccountName;
+                //    t.AccountantUsername = "Accountant";
+                //    t.AccountantComment = "Closing Accounts";
+                //    t.AccountName = "Accountant";
+                //    t.DateSubmitted = DateTime.Now;
+                //    t.Status = "pending";
+                //    t.TransactionID = lastTransaction.TransactionID + 1;
+                //    t.EntryId = lastTransaction.EntryId + 1;
+                //    t.PostReference = 123; //check this
+                //    t.Entry_Type = "Closing";
+
+                //    if (coa.NormalSide == "Debit")
+                //    {
+                //        t.Debit = 0;
+                //        t.Credit = amount; //zero account
+                //    }
+                //    else
+                //    {
+                //        t.Debit = amount; //zero account
+                //        t.Credit = 0;
+                //    }
+
+                //    //string sql = $"Insert into dbo.TransactionsTable (TransactionID, AccountantUsername, " +
+                //    //    "AccountantComment, DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type, PostReference)" + 
+                //    //    "values(@TransactionID,@AccountantUsername,@AccountantComment,@Status,@AccountName," +
+                //    //    "@Debit,@Credit,@EntryId,@Entry_Type,@PostReference,@City)";
+
+                //    //db.Execute(sql, new {
+
+                //    //});
+                //}
+            }
+
+            return Redirect("ChartOfAccounts");
+        }
 
         //colt's code
         public ActionResult TrialBalance()
@@ -1131,12 +1282,18 @@ namespace AccountingApp.Controllers
             List<ChartOfAcc> coa;
             decimal revenueTotal = 0;
             decimal expenseTotal = 0;
+            decimal earnings = 0;
+            decimal divedends = 0;
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
                 foreach (ChartOfAcc c in coa)
                 {
+                    if (c.AccountName == "Retained Earnings")
+                        earnings = c.CurrentBalance.Value;
+                    if (c.AccountName == "Divadends")
+                        divedends = c.CurrentBalance.Value;
                     if (c.AccountType.ToLower() == "revenue")
                         revenueTotal += c.CurrentBalance.Value;
                     if (c.AccountType.ToLower() == "expense")
@@ -1145,7 +1302,11 @@ namespace AccountingApp.Controllers
 
                 }
             }
+            ViewBag.RetainedEarnings = earnings;
             ViewBag.NetIncome = revenueTotal - expenseTotal;
+            ViewBag.EarningsPlusIncome = earnings + revenueTotal - expenseTotal;
+            ViewBag.Dividends = divedends;
+            ViewBag.Total = earnings + revenueTotal - expenseTotal - divedends;
             return View();
         }
 

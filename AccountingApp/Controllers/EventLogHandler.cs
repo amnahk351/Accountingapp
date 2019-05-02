@@ -14,42 +14,39 @@ namespace AccountingApp.Controllers
     {
         Database1Entities6 db = new Database1Entities6();
 
-        //public void LogNewUser(string Username)
-        //{
-        //    var sessionUserID = HttpContext.Current.Session["UserID"] as string;
-        //    string ip = HttpContext.Current.Request.UserHostAddress;
+        public void LogNewUser(string Username)
+        {
+            var sessionUserID = HttpContext.Current.Session["UserID"] as string;
+            string ip = HttpContext.Current.Request.UserHostAddress;
 
-        //    EventLog model = new EventLog();
-        //    model.Date = DateTime.Now;
-        //    model.User_ID = Convert.ToInt32(sessionUserID);
-        //    model.From = null;
-        //    model.To = "User Created: " + Username;
-        //    model.IP_Address = ip;
-        //    model.Screen = "NewUser";
-        //    model.Access_Level = "All";
+            EventLog model = new EventLog();
+            model.Date = DateTime.Now;
+            model.UserID = Convert.ToInt32(sessionUserID);
+            model.From = "";
+            model.To = "New User Created: " + Username;
+            model.IPAddress = ip;
+            model.Screen = "NewUser";
+            model.Access_Level = "Admin";
 
-        //    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-        //    {
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
 
-        //        string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
-        //            "[From], [To], IPAddress, Screen, AccessLevel) values" +
-        //            "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
-        //        db.Execute(sql, new
-        //        {
-
-        //            Date = model.Date,
-        //            UserID = model.User_ID,
-        //            From = model.From,
-        //            To = model.To,
-        //            IPAddress = model.IP_Address,
-        //            Screen = model.Screen,
-        //            AccessLevel = model.Access_Level
-
-        //        });
-        //    }
-        //    //db.EventLogs.Add(model);
-        //    //db.SaveChanges();
-        //}
+                string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
+                    "[From], [To], IPAddress, Screen, AccessLevel) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
+                db.Execute(sql, new
+                {
+                    Date = model.Date,
+                    UserID = model.UserID,
+                    From = model.From,
+                    To = model.To,
+                    IPAddress = model.IPAddress,
+                    Screen = model.Screen,
+                    AccessLevel = model.Access_Level
+                });
+            }
+            
+        }
 
         private int FindUserId(string Username) {
             List<CreateUser> user;
@@ -104,8 +101,8 @@ namespace AccountingApp.Controllers
             EventLog model = new EventLog();
             model.Date = DateTime.Now;
             model.UserID = UserId;
-            model.From = Original;
-            model.To = Updated;
+            model.From = Username + " Edited User: " + UserId;
+            model.To = Username + " Updated User: " + UserId;
             model.IPAddress = ip;
             model.Screen = "EditUser";
             model.Access_Level = "Admin";
@@ -114,24 +111,21 @@ namespace AccountingApp.Controllers
             {
 
                 string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
-                    "[From], [To], IPAddress, Screen, AccessLevel) values" +
-                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
+                    "[From], [To], IPAddress, Screen, AccessLevel, DetailedFrom, DetailedTo) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, @DetFrom, DetTo)";
                 db.Execute(sql, new
                 {
-
                     Date = model.Date,
                     UserID = model.UserID,
                     From = model.From,
                     To = model.To,
                     IPAddress = model.IPAddress,
                     Screen = model.Screen,
-                    AccessLevel = model.Access_Level
-
+                    AccessLevel = model.Access_Level,
+                    DetFrom = Original,
+                    DetTo = Updated
                 });
             }
-
-            //db.EventLogs.Add(model);
-            //db.SaveChanges();
         }
 
         public void LogForgotPassword(string Email)
@@ -141,20 +135,14 @@ namespace AccountingApp.Controllers
             List<CreateUser> user;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                
-
                 user = db.Query<CreateUser>("Select * from dbo.UserTable where Email = @Email;", new { Email }).ToList();
             }
-
-            //var user = db2.CreateUsers.Where(x => x.Email == Email).FirstOrDefault();
 
             string ip = HttpContext.Current.Request.UserHostAddress;
 
             EventLog model = new EventLog();
             model.Date = DateTime.Now;
             model.UserID = Convert.ToInt32(user[0].ID);
-
-            //model.User_ID = Convert.ToInt32(user.ID);
             model.From = "";
             model.To = "Requested Password Reset Link to: " + Email;
             model.IPAddress = ip;
@@ -169,7 +157,6 @@ namespace AccountingApp.Controllers
                     "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
                 db.Execute(sql, new
                 {
-
                     Date = model.Date,
                     UserID = model.UserID,
                     From = model.From,
@@ -177,11 +164,8 @@ namespace AccountingApp.Controllers
                     IPAddress = model.IPAddress,
                     Screen = model.Screen,
                     AccessLevel = model.Access_Level
-
                 });
             }
-            //db.EventLogs.Add(model);
-            //db.SaveChanges();
         }
 
         public void LogPasswordReset(int UserID, string Username)
@@ -205,7 +189,6 @@ namespace AccountingApp.Controllers
                     "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
                 db.Execute(sql, new
                 {
-
                     Date = model.Date,
                     UserID = model.UserID,
                     From = model.From,
@@ -213,11 +196,8 @@ namespace AccountingApp.Controllers
                     IPAddress = model.IPAddress,
                     Screen = model.Screen,
                     AccessLevel = model.Access_Level
-
                 });
             }
-            //db.EventLogs.Add(model);
-            //db.SaveChanges();
         }
 
         public void LogPasswordChange()
@@ -254,8 +234,6 @@ namespace AccountingApp.Controllers
 
                 });
             }
-            //db.EventLogs.Add(model);
-            //db.SaveChanges();
         }
 
         public void LogAccountLocked(int UserID, string Username)  //When user fails login 10 times
@@ -290,8 +268,6 @@ namespace AccountingApp.Controllers
 
                 });
             }
-            //db.EventLogs.Add(model);
-            //db.SaveChanges();
         }
 
         public void LogAccountRecovered(int UserId, string Username)
@@ -326,12 +302,9 @@ namespace AccountingApp.Controllers
 
                 });
             }
-
-            //db.EventLogs.Add(model);
-            //db.SaveChanges();
         }
 
-        public void LogJournalEntrySubmitted(string Username, string EntryID, string type)
+        public void LogJournalEntrySubmitted(string Username, string To, string EntryID, string type)
         {
             string ip = HttpContext.Current.Request.UserHostAddress;
             EventLog model = new EventLog();
@@ -340,7 +313,7 @@ namespace AccountingApp.Controllers
             model.Date = DateTime.Now;
             model.UserID = FindUserId(Username);
             model.From = "";
-            model.To = Username + " " + type + " Journal Entry, " + EntryID;
+            model.To = Username + " " + type + " Journal Entry: " + EntryID;
             model.IPAddress = ip;
             model.Screen = "Journalize";
             model.Access_Level = "All";
@@ -349,25 +322,24 @@ namespace AccountingApp.Controllers
             {
 
                 string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
-                    "[From], [To], IPAddress, Screen, AccessLevel) values" +
-                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
+                    "[From], [To], IPAddress, Screen, AccessLevel, DetailedTo) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, DetTo)";
                 db.Execute(sql, new
                 {
-
                     Date = model.Date,
                     UserID = model.UserID,
                     From = model.From,
                     To = model.To,
                     IPAddress = model.IPAddress,
                     Screen = model.Screen,
-                    AccessLevel = model.Access_Level
-
+                    AccessLevel = model.Access_Level,
+                    DetTo = To
                 });
-            }            
+            }
         }
 
 
-        public void LogEditedJournalEntry(string Username, string From, string To)
+        public void LogEditedJournalEntry(string Username, string From, string To, int EntryID, string NewType)
         {
             string ip = HttpContext.Current.Request.UserHostAddress;
             EventLog model = new EventLog();
@@ -375,10 +347,45 @@ namespace AccountingApp.Controllers
 
             model.Date = DateTime.Now;
             model.UserID = FindUserId(Username);
-            model.From = From;
-            model.To = To;
+            model.From = Username + " Edited Journal Entry: " + EntryID;
+            model.To = Username + " " + NewType + " Journal Entry: " + EntryID;
             model.IPAddress = ip;
             model.Screen = "EditJournal";
+            model.Access_Level = "All";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
+                    "[From], [To], IPAddress, Screen, AccessLevel, DetailedFrom, DetailedTo) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, @DetFrom, DetTo)";
+                db.Execute(sql, new
+                {
+                    Date = model.Date,
+                    UserID = model.UserID,
+                    From = model.From,
+                    To = model.To,
+                    IPAddress = model.IPAddress,
+                    Screen = model.Screen,
+                    AccessLevel = model.Access_Level,
+                    DetFrom = From,
+                    DetTo = To
+                });
+            }
+        }
+
+        public void LogAdminCreateAccount(string Username, string AccountName)
+        {
+            string ip = HttpContext.Current.Request.UserHostAddress;
+            EventLog model = new EventLog();
+
+
+            model.Date = DateTime.Now;
+            model.UserID = FindUserId(Username);
+            model.From = "";
+            model.To = Username + " Created New Account: " + AccountName;
+            model.IPAddress = ip;
+            model.Screen = "NewAccount";
             model.Access_Level = "All";
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -389,7 +396,107 @@ namespace AccountingApp.Controllers
                     "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
                 db.Execute(sql, new
                 {
+                    Date = model.Date,
+                    UserID = model.UserID,
+                    From = model.From,
+                    To = model.To,
+                    IPAddress = model.IPAddress,
+                    Screen = model.Screen,
+                    AccessLevel = model.Access_Level
+                });
+            }
+        }
 
+        public void LogAdminEditAccount(string Username, string AccountName, string From, string To)
+        {
+            string ip = HttpContext.Current.Request.UserHostAddress;
+            EventLog model = new EventLog();
+
+
+            model.Date = DateTime.Now;
+            model.UserID = FindUserId(Username);
+            model.From = Username + " Edited Account: " + AccountName;
+            model.To = Username + " Updated Account: " + AccountName;
+            model.IPAddress = ip;
+            model.Screen = "EditAccount";
+            model.Access_Level = "All";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
+                    "[From], [To], IPAddress, Screen, AccessLevel, DetailedFrom, DetailedTo) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, @DetFrom, DetTo)";
+                db.Execute(sql, new
+                {
+                    Date = model.Date,
+                    UserID = model.UserID,
+                    From = model.From,
+                    To = model.To,
+                    IPAddress = model.IPAddress,
+                    Screen = model.Screen,
+                    AccessLevel = model.Access_Level,
+                    DetFrom = From,
+                    DetTo = To
+                });
+            }
+        }
+
+        public void LogManagerApprovedEntry(string Username, int EntryID)
+        {
+            string ip = HttpContext.Current.Request.UserHostAddress;
+            EventLog model = new EventLog();
+
+
+            model.Date = DateTime.Now;
+            model.UserID = FindUserId(Username);
+            model.From = "Pending Journal Entry: " + EntryID;
+            model.To = Username + " Approved Journal Entry: " + EntryID;
+            model.IPAddress = ip;
+            model.Screen = "PendingTransactions";
+            model.Access_Level = "All";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
+                    "[From], [To], IPAddress, Screen, AccessLevel) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
+                db.Execute(sql, new
+                {
+                    Date = model.Date,
+                    UserID = model.UserID,
+                    From = model.From,
+                    To = model.To,
+                    IPAddress = model.IPAddress,
+                    Screen = model.Screen,
+                    AccessLevel = model.Access_Level
+                });
+            }
+        }
+
+        public void LogManagerRejectedEntry(string Username, int EntryID)
+        {
+            string ip = HttpContext.Current.Request.UserHostAddress;
+            EventLog model = new EventLog();
+
+
+            model.Date = DateTime.Now;
+            model.UserID = FindUserId(Username);
+            model.From = "Pending Journal Entry: " + EntryID;
+            model.To = Username + " Disapproved Journal Entry: " + EntryID;
+            model.IPAddress = ip;
+            model.Screen = "PendingTransactions";
+            model.Access_Level = "All";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
+                    "[From], [To], IPAddress, Screen, AccessLevel) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
+                db.Execute(sql, new
+                {
                     Date = model.Date,
                     UserID = model.UserID,
                     From = model.From,

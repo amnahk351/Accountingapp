@@ -48,7 +48,7 @@
     <br />
     <br />
 
-    <div class="shadow container" style="width:80%; background-color:gainsboro;">
+    <div class="shadow container" style="width:87%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
             <div class="card" id="printContent" style="text-align:center;">
                 <div class="card-body" id="content" style="display:inline-block;">
@@ -76,9 +76,10 @@
 
                         @for (int i = 0; i < Model.Count; i++)
                         {
-
+                            if (Model[i].CurrentBalance != 0)
+                            {
                             <tr>
-                                <td style="text-align:left"> @Model[i].AccountName</td>
+                                <td style="text-align:left; color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">@Model[i].AccountName</a></td>
                                 @if (Model[i].NormalSide.ToLower() == "debit")
                                 {
                                     <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
@@ -90,6 +91,7 @@
                                     <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
                                 }
                             </tr>
+                            }
                         }
                         <tr class="totalRow">
                             <td style="text-align:left; padding-right: 2%"><b>Totals</b></td>
@@ -135,12 +137,12 @@
             var element = document.getElementById('printContent');
             var opt = {
                 margin: 1,
-                filename: 'myfile.pdf',
+                filename: 'TrialBalance.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
-            html2pdf().set(opt).from(element).save("TrailBalance");
+            html2pdf().set(opt).from(element).save();
         });
     </script>
 

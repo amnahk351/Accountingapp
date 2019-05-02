@@ -280,7 +280,7 @@ namespace AccountingApp.Controllers
             }
 
             //return Redirect("~/Admin/AdminIndex");  //just a default page to end up at if neither option above was used, probably should make this an accountant
-            return View("~/Views/Accountant/Dashboard"); //just a default page to end up at if neither option above was used, probably should make this an accountant
+            return new EmptyResult();//just a default page to end up at if neither option above was used, probably should make this an accountant
 
         }
 
