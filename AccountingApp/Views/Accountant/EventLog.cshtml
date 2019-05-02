@@ -125,6 +125,44 @@
             transform: translateY(-50%);
         }
 
+        table.AccountsModalTable {
+            background-color: #EEEEEE;
+            width: 100%;
+            text-align: left;
+            border-collapse: collapse;
+        }
+
+            table.AccountsModalTable td, table.AccountsModalTable th {
+                border: 1px solid #AAAAAA;
+                padding: 3px 2px;
+            }
+
+            table.AccountsModalTable tbody td {
+                font-size: 18px;
+            }
+
+            table.AccountsModalTable tr:nth-child(even) {
+                background: #D0E4F5;
+            }
+
+            table.AccountsModalTable thead {
+                background: #3885A4;
+                background: -moz-linear-gradient(top, #6aa3bb 0%, #4c91ad 66%, #3885A4 100%);
+                background: -webkit-linear-gradient(top, #6aa3bb 0%, #4c91ad 66%, #3885A4 100%);
+                background: linear-gradient(to bottom, #6aa3bb 0%, #4c91ad 66%, #3885A4 100%);
+            }
+
+                table.AccountsModalTable thead th {
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: #FFFFFF;
+                    border-left: 2px solid #D0E4F5;
+                }
+
+                    table.AccountsModalTable thead th:first-child {
+                        border-left: none;
+                    }
+
         body {
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
             background: #f4f4f4;
@@ -384,35 +422,111 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.EventID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Date)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UserID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.From)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.To)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IPAddress)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Screen)
-                                </td>
+                            if (item.From != null)
+                            {
 
-                            </tr>
+                                if (item.From.Contains("Edited Journal Entry"))
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EventID)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UserID)
+                                        </td>
+
+                                        <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Html.DisplayFor(modelItem => item.From)</td>
+
+                                        <td onclick="UpdatePopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Html.DisplayFor(modelItem => item.To)</td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IPAddress)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Screen)
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EventID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UserID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.From)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.To)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IPAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Screen)
+                                    </td>
+
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
 
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="EntryModal" role="dialog">
+                <div class="modal-dialog modal-lg">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+                            <h4 id="JournalEntryModalTitle" style="text-align:left" class="modal-title">Entry Details</h4>
+                        </div>
+                        <div id="EntryModalContent" class="modal-body">
+
+                            <div id="ModalEntryID">ID: </div>
+                            <div id="ModalDate">Date Created: </div>
+                            <br />
+                            <div id="EntryID">Journal Entry: </div>
+                            <div id="ModalStatus">Status: </div>
+                            <div id="ModalType">Type: </div>
+                            <br />
+                            <table id="ModalJournalTable" class="AccountsModalTable">
+                                <thead>
+                                    <tr>
+                                        <th>Account Name</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+
+                            <br />
+                            <div id="ModalComment">Comment: </div>
+                            <br />
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="container body-content">
 
                 <hr />
@@ -443,6 +557,173 @@
     };
 
     </script>
+
+    <script>
+
+        function UpdatePopulateEntryModal(id) {
+
+            $("#ModalJournalTable tbody tr").remove();
+
+            var row = $(id).closest('tr');
+            var table = document.getElementById("Events");
+
+            var EntryModalHeader = document.getElementById("JournalEntryModalTitle");
+            EntryModalHeader.innerText = "Updated Entry Details";
+
+            var ID = table.rows[row[0].rowIndex].cells[0].innerText;
+            var ModalID = document.getElementById("ModalEntryID");
+            ModalID.innerHTML = "ID: " + ID;
+
+            var Date = table.rows[row[0].rowIndex].cells[1].innerText;
+            var ModalDate = document.getElementById("ModalDate");
+            ModalDate.innerHTML = "Event Date: " + Date;
+
+
+            var Query;
+
+            $.ajax(
+                {
+                    url: '/Admin/RetrieveEditedDetailsTo/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    data: { "id": ID },
+                    success: function (result) {
+                        //alert(result);
+                        Query = result;
+
+                    },
+                    error: function (error) {
+                        //alert(JSON.stringify(error));
+                    }
+                });
+
+            var Query2 = Query.replace(/"/g, "");
+            var Data = Query2.split("|^|");
+
+
+            var EntryIDModal = document.getElementById("EntryID");
+            EntryIDModal.innerHTML = "Journal Entry: " + Data[0];
+
+
+            var ModalStatus = document.getElementById("ModalStatus");
+            ModalStatus.innerHTML = Data[1];
+
+
+            var ModalType = document.getElementById("ModalType");
+            ModalType.innerHTML = Data[2];
+
+            var JournalDetails = Data[3];
+
+            var Items = JournalDetails.split(",");
+
+            for (var i = 0; i < Items.length; i++) {
+
+                var Split = Items[i].split("-");
+
+                var tableRef = document.getElementById('ModalJournalTable').getElementsByTagName('tbody')[0];
+
+                // Insert a row in the table at the last row
+                var row = tableRef.insertRow(tableRef.rows.length);
+
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                cell1.innerHTML = Split[0];
+                cell2.innerHTML = Split[1];
+                cell3.innerHTML = Split[2];
+            }
+
+            var ModalComment = document.getElementById("ModalComment");
+            ModalComment.innerHTML = Data[4];
+
+
+        }
+
+
+        function PopulateEntryModal(id) {
+
+            $("#ModalJournalTable tbody tr").remove();
+
+            var row = $(id).closest('tr');
+            var table = document.getElementById("Events");
+
+            var EntryModalHeader = document.getElementById("JournalEntryModalTitle");
+            EntryModalHeader.innerText = "Old Entry Details";
+
+            var ID = table.rows[row[0].rowIndex].cells[0].innerText;
+            var ModalID = document.getElementById("ModalEntryID");
+            ModalID.innerHTML = "ID: " + ID;
+
+            var Date = table.rows[row[0].rowIndex].cells[1].innerText;
+            var ModalDate = document.getElementById("ModalDate");
+            ModalDate.innerHTML = "Event Date: " + Date;
+
+
+            var Query;
+
+            $.ajax(
+                {
+                    url: '/Admin/RetrieveEditedDetailsFrom/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    data: { "id": ID },
+                    success: function (result) {
+                        //alert(result);
+                        Query = result;
+
+                    },
+                    error: function (error) {
+                        //alert(JSON.stringify(error));
+                    }
+                });
+
+            var Query2 = Query.replace(/"/g, "");
+            var Data = Query2.split("|^|");
+
+
+            var EntryIDModal = document.getElementById("EntryID");
+            EntryIDModal.innerHTML = "Journal Entry: " + Data[0];
+
+
+            var ModalStatus = document.getElementById("ModalStatus");
+            ModalStatus.innerHTML = Data[1];
+
+
+            var ModalType = document.getElementById("ModalType");
+            ModalType.innerHTML = Data[2];
+
+            var JournalDetails = Data[3];
+
+            var Items = JournalDetails.split(",");
+
+            for (var i = 0; i < Items.length; i++) {
+
+                var Split = Items[i].split("-");
+
+                var tableRef = document.getElementById('ModalJournalTable').getElementsByTagName('tbody')[0];
+
+                // Insert a row in the table at the last row
+                var row = tableRef.insertRow(tableRef.rows.length);
+
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                cell1.innerHTML = Split[0];
+                cell2.innerHTML = Split[1];
+                cell3.innerHTML = Split[2];
+            }
+
+            var ModalComment = document.getElementById("ModalComment");
+            ModalComment.innerHTML = Data[4];
+
+        }
+
+    </script>
+
     <script>
         $(document).ready(function () {
 

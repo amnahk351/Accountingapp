@@ -825,6 +825,9 @@ namespace AccountingApp.Controllers
                     db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
                 }
 
+                int x = (int) transactionList[0].EntryId;
+                Logger.LogManagerClosingApproval(sessionUser, x);
+
             }
             else
             {

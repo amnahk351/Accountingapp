@@ -281,12 +281,43 @@ namespace AccountingApp.Controllers
 
         }
 
+        [HttpGet]
+        public ActionResult RetrieveEditedDetailsFrom(int id)
+        {
+            List<EventLog> evenList;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                evenList = db.Query<EventLog>($"Select * From dbo.EventLogTable Where EventID=@ID", new { ID = id }).ToList();
+            }
+
+            string From = evenList[0].DetailedFrom;            
+            var result = JsonConvert.SerializeObject(From);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult RetrieveEditedDetailsTo(int id)
+        {
+            List<EventLog> evenList;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                evenList = db.Query<EventLog>($"Select * From dbo.EventLogTable Where EventID=@ID", new { ID = id }).ToList();
+            }
+
+            string To = evenList[0].DetailedTo;
+            var result = JsonConvert.SerializeObject(To);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult EventLog()
         {
             List<Models.EventLog> events;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-
                 events = db.Query<Models.EventLog>($"Select * from dbo.EventLogTable").ToList();
             }
 

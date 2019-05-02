@@ -22,5 +22,7 @@ namespace AccountingApp.Models
         public string IPAddress { get; set; }
         public string Screen { get; set; }
         public string Access_Level { get; set; }
+        public string DetailedFrom { get; set; }
+        public string DetailedTo { get; set; }
     }
 }
