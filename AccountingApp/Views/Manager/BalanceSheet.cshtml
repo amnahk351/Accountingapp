@@ -108,7 +108,7 @@
                                 if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
                                 {
                                     <tr>
-                                        <td align="left" style="color:blue"><a href="/Manager/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
+                                        <td align="left" style="text-indent: 8%; color:blue"><a href="/Manager/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
                                         @if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                         {
                                             <td style="text-align: right">@Model[i].CurrentBalance</td>

@@ -77,7 +77,7 @@
                             if (Model[i].AccountType.ToLower() == "revenue")
                             {
                                 <tr>
-                                    <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                    <td align="left" style="color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
                                     <td align="right">@Model[i].CurrentBalance</td>
                                 </tr>
                             }
@@ -103,7 +103,7 @@
                             if (Model[i].AccountType.ToLower() == "expense")
                             {
                                 <tr>
-                                    <td align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</td>
+                                    <td align="left" style="color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
                                     <td align="right">@Model[i].CurrentBalance</td>
                                 </tr>
                             }

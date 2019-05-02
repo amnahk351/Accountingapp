@@ -78,7 +78,7 @@
                         {
 
                             <tr>
-                                <td style="text-align:left"> @Model[i].AccountName</td>
+                                <td style="text-align:left; color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">@Model[i].AccountName</a></td>
                                 @if (Model[i].NormalSide.ToLower() == "debit")
                                 {
                                     <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
