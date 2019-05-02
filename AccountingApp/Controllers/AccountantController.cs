@@ -1109,9 +1109,12 @@ namespace AccountingApp.Controllers
 
                     string sql = $"Insert into dbo.TransactionsTable (TransactionID, AccountantUsername, " +
                         "AccountantComment, DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type, PostReference)" + 
-                        "values(@TransactionID,@AccountName,@AccountantComment,@Password,@Role," +
-                        "@Phone,@Email,@Date,@Active,@Address,@City,@State,@ZIP_Code," +
-                        "@AccountLocked, @LoginAttempts, @LoginAmount, @LoginFails)";
+                        "values(@TransactionID,@AccountantUsername,@AccountantComment,@Status,@AccountName," +
+                        "@Debit,@Credit,@EntryId,@Entry_Type,@PostReference,@City)";
+
+                    db.Execute(sql, new {
+
+                    });
                 }
             }
 
