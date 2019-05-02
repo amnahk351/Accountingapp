@@ -805,10 +805,9 @@ namespace AccountingApp.Controllers
 
                 for (int i = 0; i < expenseList.Count; i++)
                 {
-                    RevenueSum += (decimal)expenseList[i].CurrentBalance;
+                    ExpenseSum += (decimal)expenseList[i].CurrentBalance;
                     EmptyAccount(expenseList[i].AccountName);
                 }
-
                 decimal Profit = RevenueSum - ExpenseSum;
 
 
