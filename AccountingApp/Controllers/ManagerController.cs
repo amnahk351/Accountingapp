@@ -340,6 +340,7 @@ namespace AccountingApp.Controllers
             }
             else
             {
+                ViewBag.DisplayDate = until.ToString();
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
                     List<TransactionTable> transactionsAtDate = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where DateReviewed <= @date AND status = @status",

@@ -1273,6 +1273,7 @@ namespace AccountingApp.Controllers
             }
             else
             {
+                ViewBag.DisplayDate = until.ToString();
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
                     List<TransactionTable> transactionsAtDate = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where DateReviewed <= @date AND status = @status",
@@ -1282,7 +1283,8 @@ namespace AccountingApp.Controllers
                     for (int i = 0; i < coaAtDate.Count; i++)
                     {
                         coaAtDate[i].CurrentBalance = coaAtDate[i].OriginalBalance;
-                        Trace.WriteLine("---Before: " + coaAtDate[i].AccountName + ": " + coaAtDate[i].CurrentBalance);
+                        Trace.WriteLine("--------Before Current: " + coaAtDate[i].CurrentBalance);
+                        Trace.WriteLine("--------Before Original: " + coaAtDate[i].OriginalBalance);
                         for (int j = 0; j < transactionsAtDate.Count; j++)
                         {
                             if (transactionsAtDate[j].AccountName == coaAtDate[i].AccountName)
@@ -1309,7 +1311,9 @@ namespace AccountingApp.Controllers
                             }
                         }
                     }
-
+                    revenueTotal = 0;
+                    expenseTotal = 0;
+                    
                     foreach (ChartOfAcc c in coaAtDate)
                     {
                         if (c.AccountType.ToLower() == "revenue")
