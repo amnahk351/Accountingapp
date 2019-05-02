@@ -384,7 +384,9 @@ namespace AccountingApp.Controllers
                     }
                 }
 
-                Logger.LogJournalEntrySubmitted(sessionUser, NewEntryId.ToString(), type);
+                string EventLogTo = GenerateEventLogTransactionDetail(NewEntryId+1);
+
+                Logger.LogJournalEntrySubmitted(sessionUser, EventLogTo, NewEntryId.ToString(), type);
 
             }
 
@@ -467,7 +469,7 @@ namespace AccountingApp.Controllers
                 transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
             }
 
-            TotalList.Add(sessionUser + " Edited Journal " + transactionList[0].EntryId);
+            TotalList.Add(transactionList[0].EntryId.ToString());
             TotalList.Add("Status: " + transactionList[0].Status);
             TotalList.Add("Type: " + transactionList[0].Entry_Type);
 
@@ -499,7 +501,7 @@ namespace AccountingApp.Controllers
             AllEntries = String.Join(",", Entries);
             TotalList.Add(AllEntries);
             TotalList.Add("Comment: " + transactionList[0].AccountantComment);
-            Resultant = String.Join(";", TotalList);
+            Resultant = String.Join("|^|", TotalList);
 
             return Resultant;
         }
@@ -513,17 +515,17 @@ namespace AccountingApp.Controllers
             int EditedEntryID = Int32.Parse(id);
             var sessionUser = Session["Username"] as string;
             EventLogHandler Logger = new EventLogHandler();
-            
-            //string type = "";
 
-            //if (transactions[0].Status == "pending")
-            //{
-            //    type = "Submitted";
-            //}
-            //else
-            //{
-            //    type = "Suspended";
-            //}
+            string type = "";
+
+            if (transactions[0].Status == "pending")
+            {
+                type = "Submitted";
+            }
+            else
+            {
+                type = "Suspended";
+            }
 
 
             string EventLogFrom = GenerateEventLogTransactionDetail(EditedEntryID);
@@ -618,7 +620,7 @@ namespace AccountingApp.Controllers
 
             string EventLogTo = GenerateEventLogTransactionDetail(EditedEntryID);
 
-            Logger.LogEditedJournalEntry(sessionUser, EventLogFrom, EventLogTo);
+            Logger.LogEditedJournalEntry(sessionUser, EventLogFrom, EventLogTo, EditedEntryID, type);
 
             return Json(insertedRecords);
         }

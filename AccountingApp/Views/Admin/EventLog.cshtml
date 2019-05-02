@@ -306,14 +306,12 @@
                 <table class="table table-responsive table-hover shadow " id="Events" style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                     <thead class="shadow" style="background-color:white; ">
                     <th>
-                        @*@Html.DisplayNameFor(model => model.Event_ID)*@
                         Event ID
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Date)
                     </th>
                     <th>
-                        @*@Html.DisplayNameFor(model => model.User_ID)*@
                         User ID
                     </th>
                     <th>
@@ -323,7 +321,6 @@
                         @Html.DisplayNameFor(model => model.To)
                     </th>
                     <th>
-                        @*@Html.DisplayNameFor(model => model.IP_Address)*@
                         IP Address
                     </th>
                     <th>
@@ -334,30 +331,120 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.EventID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Date)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UserID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.From)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.To)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IPAddress)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Screen)
-                                </td>
+                            if (item.From.Contains("Edited User"))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EventID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UserID)
+                                    </td>
 
-                            </tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.From)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.To)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IPAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Screen)
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.From.Contains("Edited Journal Entry"))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EventID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UserID)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.From)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.To)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IPAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Screen)
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.From.Contains("Edited Account"))
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EventID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UserID)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.From)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.To)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IPAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Screen)
+                                    </td>
+                                </tr>
+
+                            }
+
+                            else
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EventID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UserID)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.From)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.To)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IPAddress)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Screen)
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
