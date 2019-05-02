@@ -496,6 +496,7 @@
     <Content Include="Views\Accountant\GeneralLedger.cshtml" />
     <Content Include="Views\Admin\NewAccount.cshtml" />
     <Content Include="Views\Admin\EditAccount.cshtml" />
+    <Content Include="Views\Manager\trialTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />

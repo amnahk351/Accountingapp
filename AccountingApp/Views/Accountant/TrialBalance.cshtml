@@ -47,6 +47,9 @@
     <button class="btn btn-info btn-lg" id="cmd">Generate PDF</button>
     <br />
     <br />
+    @*<div id="tableDiv">
+            @Html.Partial("trialTable")
+        </div>*@
 
     <div class="shadow container" style="width:87%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
@@ -59,8 +62,8 @@
                         As of
                         <script>
                             var options = { year: 'numeric', month: 'long', day: 'numeric' };
-
-                            document.write(new Date().toLocaleDateString("en-US", options))
+                            var date = new Date(Date.parse('@ViewBag.DisplayDate'));
+                            document.write(date.toLocaleDateString("en-US", options))
                         </script>
                     </h4>
 
@@ -78,19 +81,19 @@
                         {
                             if (Model[i].CurrentBalance != 0)
                             {
-                            <tr>
-                                <td style="text-align:left; color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">@Model[i].AccountName</a></td>
-                                @if (Model[i].NormalSide.ToLower() == "debit")
-                                {
-                                    <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
-                                    <td class="" style="text-align:right"></td>
-                                }
-                                else
-                                {
-                                    <td class="" style="text-align:right"></td>
-                                    <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
-                                }
-                            </tr>
+                                <tr>
+                                    <td style="text-align:left; color: blue"><a href="/Manager/GeneralLedger?name=@Model[i].AccountName">@Model[i].AccountName</a></td>
+                                    @if (Model[i].NormalSide.ToLower() == "debit")
+                                    {
+                                        <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
+                                        <td class="" style="text-align:right"></td>
+                                    }
+                                    else
+                                    {
+                                        <td class="" style="text-align:right"></td>
+                                        <td class="rowData" style="text-align:right">@Model[i].CurrentBalance</td>
+                                    }
+                                </tr>
                             }
                         }
                         <tr class="totalRow">
@@ -116,9 +119,10 @@
                 </div>
                 <div class="modal-body">
                     <h5>Select a Date:</h5>
-                    <input type="text" id="Date" onkeydown="return false;" autocomplete="off" class="form_datetime" style="text-align:right" value="" placeholder="mm/dd/yyyy">
+                    <input type="text" id="Date" onkeydown="return false;" autocomplete="off" class="form_datetime" style="text-align:right" placeholder="mm/dd/yyyy">
                 </div>
                 <div class="modal-footer">
+
                     <button type="button" id="GenerateReport" onclick="LoadGeneratedReportDate()" class="btn btn-success" data-dismiss="modal">Generate</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
@@ -137,7 +141,7 @@
             var element = document.getElementById('printContent');
             var opt = {
                 margin: 1,
-                filename: 'TrialBalance.pdf',
+                filename: 'TrailBalance.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
@@ -168,9 +172,9 @@
 
         function LoadGeneratedReportDate() {
 
+            var selectedDate = document.getElementById("Date").value;
 
-
-
+            window.location.href = '../Accountant/TrialBalance?until=' + selectedDate;
         }
 
     </script>

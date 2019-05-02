@@ -1155,16 +1155,78 @@ namespace AccountingApp.Controllers
         }
 
         //colt's code
-        public ActionResult TrialBalance()
+        public ActionResult TrialBalance(DateTime? until)
         {
-
-            List<ChartOfAcc> coa;
             decimal debTotal = 0;
             decimal credTotal = 0;
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            if (until == null)
             {
-                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
-                foreach (ChartOfAcc c in coa)
+                ViewBag.DisplayDate = DateTime.Now.ToString();
+                List<ChartOfAcc> coa;
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                    foreach (ChartOfAcc c in coa)
+                    {
+                        if (c.NormalSide.ToLower() == "debit")
+                            debTotal += c.CurrentBalance.Value;
+                        else
+                            credTotal += c.CurrentBalance.Value;
+                    }
+
+                    ViewBag.DebitTotal = debTotal;
+                    ViewBag.CreditTotal = credTotal;
+                }
+
+                return View(coa);
+            }
+            else
+            {
+                List<ChartOfAcc> coaAtDate = new List<ChartOfAcc>();
+                ViewBag.DisplayDate = until.ToString();
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    List<TransactionTable> transactionsAtDate = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where DateReviewed <= @date AND status = @status",
+                        new { date = until, status = "approved" }).ToList();
+                    coaAtDate = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+
+                    for (int i = 0; i < coaAtDate.Count; i++)
+                    {
+                        coaAtDate[i].CurrentBalance = coaAtDate[i].OriginalBalance;
+                        Trace.WriteLine("---Before: " + coaAtDate[i].AccountName + ": " + coaAtDate[i].CurrentBalance);
+                        for (int j = 0; j < transactionsAtDate.Count; j++)
+                        {
+                            if (transactionsAtDate[j].AccountName == coaAtDate[i].AccountName)
+                            {
+                                if (transactionsAtDate[j].Debit == null)
+                                    transactionsAtDate[j].Debit = 0;
+
+                                if (transactionsAtDate[j].Credit == null)
+                                    transactionsAtDate[j].Credit = 0;
+
+                                if (coaAtDate[i].NormalSide.ToLower() == "debit")
+                                {
+                                    coaAtDate[i].CurrentBalance += transactionsAtDate[j].Debit.Value;
+                                    coaAtDate[i].CurrentBalance -= transactionsAtDate[j].Credit.Value;
+
+                                }
+                                else //normal side is credit
+                                {
+                                    coaAtDate[i].CurrentBalance += transactionsAtDate[j].Credit.Value;
+                                    coaAtDate[i].CurrentBalance -= transactionsAtDate[j].Debit.Value;
+
+                                }
+
+                            }
+                        }
+                        Trace.WriteLine("---After: " + coaAtDate[i].AccountName + ": " + coaAtDate[i].CurrentBalance);
+                    }
+                }
+
+                credTotal = 0;
+                debTotal = 0;
+                foreach (ChartOfAcc c in coaAtDate)
                 {
                     if (c.NormalSide.ToLower() == "debit")
                         debTotal += c.CurrentBalance.Value;
@@ -1174,59 +1236,158 @@ namespace AccountingApp.Controllers
 
                 ViewBag.DebitTotal = debTotal;
                 ViewBag.CreditTotal = credTotal;
+
+                return View(coaAtDate);
             }
 
-            return View(coa);
         }
 
-
-
-        public ActionResult IncomeStatement()
+        public ActionResult IncomeStatement(DateTime? until)
         {
 
             List<ChartOfAcc> coa;
             decimal revenueTotal = 0;
             decimal expenseTotal = 0;
-
-            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            if (until == null)
             {
-                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
-                foreach (ChartOfAcc c in coa)
+                until = DateTime.Now;
+                ViewBag.DisplayDate = until.ToString();
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
-                    if (c.AccountType.ToLower() == "revenue")
-                        revenueTotal += c.CurrentBalance.Value;
-                    if (c.AccountType.ToLower() == "expense")
-                        expenseTotal += c.CurrentBalance.Value;
+                    coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                    foreach (ChartOfAcc c in coa)
+                    {
+                        if (c.AccountType.ToLower() == "revenue")
+                            revenueTotal += c.CurrentBalance.Value;
+                        if (c.AccountType.ToLower() == "expense")
+                            expenseTotal += c.CurrentBalance.Value;
+                    }
 
-
+                    ViewBag.RevenueTotal = revenueTotal;
+                    ViewBag.ExpenseTotal = expenseTotal;
+                    ViewBag.NetIncome_Loss = revenueTotal - expenseTotal;
                 }
 
-                ViewBag.RevenueTotal = revenueTotal;
-                ViewBag.ExpenseTotal = expenseTotal;
-                ViewBag.NetIncome_Loss = revenueTotal - expenseTotal;
+                return View(coa);
             }
+            else
+            {
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    List<TransactionTable> transactionsAtDate = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where DateReviewed <= @date AND status = @status",
+                        new { date = until, status = "approved" }).ToList();
+                    List<ChartOfAcc> coaAtDate = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active AND AccountType = @revenue OR AccountType = @expense", new { active = true, revenue = "Revenue", expense = "Expense" }).ToList();
 
-            return View(coa);
+                    for (int i = 0; i < coaAtDate.Count; i++)
+                    {
+                        coaAtDate[i].CurrentBalance = coaAtDate[i].OriginalBalance;
+                        Trace.WriteLine("---Before: " + coaAtDate[i].AccountName + ": " + coaAtDate[i].CurrentBalance);
+                        for (int j = 0; j < transactionsAtDate.Count; j++)
+                        {
+                            if (transactionsAtDate[j].AccountName == coaAtDate[i].AccountName)
+                            {
+                                if (transactionsAtDate[j].Debit == null)
+                                    transactionsAtDate[j].Debit = 0;
+
+                                if (transactionsAtDate[j].Credit == null)
+                                    transactionsAtDate[j].Credit = 0;
+
+                                if (coaAtDate[i].NormalSide.ToLower() == "debit")
+                                {
+                                    coaAtDate[i].CurrentBalance += transactionsAtDate[j].Debit.Value;
+                                    coaAtDate[i].CurrentBalance -= transactionsAtDate[j].Credit.Value;
+
+                                }
+                                else //normal side is credit
+                                {
+                                    coaAtDate[i].CurrentBalance += transactionsAtDate[j].Credit.Value;
+                                    coaAtDate[i].CurrentBalance -= transactionsAtDate[j].Debit.Value;
+
+                                }
+
+                            }
+                        }
+                    }
+
+                    foreach (ChartOfAcc c in coaAtDate)
+                    {
+                        if (c.AccountType.ToLower() == "revenue")
+                            revenueTotal += c.CurrentBalance.Value;
+                        if (c.AccountType.ToLower() == "expense")
+                            expenseTotal += c.CurrentBalance.Value;
+                    }
+                    ViewBag.RevenueTotal = revenueTotal;
+                    ViewBag.ExpenseTotal = expenseTotal;
+                    ViewBag.NetIncome_Loss = revenueTotal - expenseTotal;
+
+                    return View(coaAtDate);
+                }
+            }
         }
 
-        public ActionResult BalanceSheet()
+        public ActionResult BalanceSheet(DateTime? until)
         {
-
             List<ChartOfAcc> coa;
-            decimal totalCurrentAssets = 0;
-            decimal totalAssets = 0;
-            decimal propPlanEquipNet = 0;
-            decimal totalCurrentLiabilities = 0;
-            decimal totalLiabilities = 0;
-            decimal retainedEarnings = 0;
-            decimal totalStockHolderEquity = 0;
-            decimal totalLiabilitesStockEquity = 0;
-            decimal unearnedRevenue = 0;
-            decimal contributedCapital = 0;
-
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+
+
+                if (until == null)
+                {
+                    until = DateTime.Now;
+                    ViewBag.DisplayDate = until.ToString();
+
+                }
+                else
+                {
+                    ViewBag.DisplayDate = until.ToString();
+
+                    List<TransactionTable> transactionsAtDate = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where DateReviewed <= @date AND status = @status",
+                            new { date = until, status = "approved" }).ToList();
+                    for (int i = 0; i < coa.Count; i++)
+                    {
+                        coa[i].CurrentBalance = coa[i].OriginalBalance;
+                        for (int j = 0; j < transactionsAtDate.Count; j++)
+                        {
+                            if (transactionsAtDate[j].AccountName == coa[i].AccountName)
+                            {
+                                if (transactionsAtDate[j].Debit == null)
+                                    transactionsAtDate[j].Debit = 0;
+
+                                if (transactionsAtDate[j].Credit == null)
+                                    transactionsAtDate[j].Credit = 0;
+
+                                if (coa[i].NormalSide.ToLower() == "debit")
+                                {
+                                    coa[i].CurrentBalance += transactionsAtDate[j].Debit.Value;
+                                    coa[i].CurrentBalance -= transactionsAtDate[j].Credit.Value;
+
+                                }
+                                else //normal side is credit
+                                {
+                                    coa[i].CurrentBalance += transactionsAtDate[j].Credit.Value;
+                                    coa[i].CurrentBalance -= transactionsAtDate[j].Debit.Value;
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                decimal totalCurrentAssets = 0;
+                decimal totalAssets = 0;
+                decimal propPlanEquipNet = 0;
+                decimal totalCurrentLiabilities = 0;
+                decimal totalLiabilities = 0;
+                decimal retainedEarnings = 0;
+                decimal totalStockHolderEquity = 0;
+                decimal totalLiabilitesStockEquity = 0;
+                decimal unearnedRevenue = 0;
+                decimal contributedCapital = 0;
+
 
                 for (int i = 0; i < coa.Count; i++)
                 {
@@ -1256,41 +1417,85 @@ namespace AccountingApp.Controllers
                     }
                 }
 
+
+
+                totalAssets = totalCurrentAssets + propPlanEquipNet;
+                totalLiabilities = unearnedRevenue + totalCurrentLiabilities;
+
+                retainedEarnings = totalAssets - totalLiabilities - contributedCapital;
+
+                totalStockHolderEquity = retainedEarnings + contributedCapital;
+                totalLiabilitesStockEquity = totalStockHolderEquity + totalLiabilities;
+
+                ViewBag.totalCurrentAssets = totalCurrentAssets;
+                ViewBag.totalAssets = totalAssets;
+                ViewBag.propPlanEquipNet = propPlanEquipNet;
+                ViewBag.totalCurrentLiabilities = totalCurrentLiabilities;
+                ViewBag.totalLiabilities = totalLiabilities;
+                ViewBag.retainedEarnings = retainedEarnings;
+                ViewBag.totalStockHolderEquity = totalStockHolderEquity;
+                ViewBag.totalLiabilitesStockEquity = totalLiabilitesStockEquity;
             }
-
-            totalAssets = totalCurrentAssets + propPlanEquipNet;
-            totalLiabilities = unearnedRevenue + totalCurrentLiabilities;
-
-            retainedEarnings = totalAssets - totalLiabilities - contributedCapital;
-
-            totalStockHolderEquity = retainedEarnings + contributedCapital;
-            totalLiabilitesStockEquity = totalStockHolderEquity + totalLiabilities;
-
-            ViewBag.totalCurrentAssets = totalCurrentAssets;
-            ViewBag.totalAssets = totalAssets;
-            ViewBag.propPlanEquipNet = propPlanEquipNet;
-            ViewBag.totalCurrentLiabilities = totalCurrentLiabilities;
-            ViewBag.totalLiabilities = totalLiabilities;
-            ViewBag.retainedEarnings = retainedEarnings;
-            ViewBag.totalStockHolderEquity = totalStockHolderEquity;
-            ViewBag.totalLiabilitesStockEquity = totalLiabilitesStockEquity;
-
             return View(coa);
         }
         //colt's code
 
 
-        public ActionResult RetainedEarnings()
+        public ActionResult RetainedEarnings(DateTime? until)
         {
-            List<ChartOfAcc> coa;
-            decimal revenueTotal = 0;
-            decimal expenseTotal = 0;
-            decimal earnings = 0;
-            decimal divedends = 0;
-
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-                coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+                List<ChartOfAcc> coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
+
+                if (until == null)
+                {
+                    until = DateTime.Now;
+                    ViewBag.DisplayDate = until.ToString();
+                }
+                else
+                {
+                    ViewBag.DisplayDate = until.ToString();
+                    List<TransactionTable> transactionsAtDate = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where DateReviewed <= @date AND status = @status",
+                            new { date = until, status = "approved" }).ToList();
+                    for (int i = 0; i < coa.Count; i++)
+                    {
+                        coa[i].CurrentBalance = coa[i].OriginalBalance;
+                        for (int j = 0; j < transactionsAtDate.Count; j++)
+                        {
+                            if (transactionsAtDate[j].AccountName == coa[i].AccountName)
+                            {
+                                if (transactionsAtDate[j].Debit == null)
+                                    transactionsAtDate[j].Debit = 0;
+
+                                if (transactionsAtDate[j].Credit == null)
+                                    transactionsAtDate[j].Credit = 0;
+
+                                if (coa[i].NormalSide.ToLower() == "debit")
+                                {
+                                    coa[i].CurrentBalance += transactionsAtDate[j].Debit.Value;
+                                    coa[i].CurrentBalance -= transactionsAtDate[j].Credit.Value;
+
+                                }
+                                else //normal side is credit
+                                {
+                                    coa[i].CurrentBalance += transactionsAtDate[j].Credit.Value;
+                                    coa[i].CurrentBalance -= transactionsAtDate[j].Debit.Value;
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+
+                decimal revenueTotal = 0;
+                decimal expenseTotal = 0;
+                decimal earnings = 0;
+                decimal divedends = 0;
+
+
+
                 foreach (ChartOfAcc c in coa)
                 {
                     if (c.AccountName == "Retained Earnings")
@@ -1304,12 +1509,13 @@ namespace AccountingApp.Controllers
 
 
                 }
+
+                ViewBag.RetainedEarnings = earnings;
+                ViewBag.NetIncome = revenueTotal - expenseTotal;
+                ViewBag.EarningsPlusIncome = earnings + revenueTotal - expenseTotal;
+                ViewBag.Dividends = divedends;
+                ViewBag.Total = earnings + revenueTotal - expenseTotal - divedends;
             }
-            ViewBag.RetainedEarnings = earnings;
-            ViewBag.NetIncome = revenueTotal - expenseTotal;
-            ViewBag.EarningsPlusIncome = earnings + revenueTotal - expenseTotal;
-            ViewBag.Dividends = divedends;
-            ViewBag.Total = earnings + revenueTotal - expenseTotal - divedends;
             return View();
         }
 

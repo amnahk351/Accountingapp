@@ -9,7 +9,7 @@
 <html>
 
 <head>
-
+    
     <link href="~/Scripts/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <style>
 
@@ -47,6 +47,9 @@
     <button class="btn btn-info btn-lg" id="cmd">Generate PDF</button>
     <br />
     <br />
+    @*<div id="tableDiv">
+        @Html.Partial("trialTable")
+    </div>*@
 
     <div class="shadow container" style="width:87%; background-color:gainsboro;">
         <div class="card-columns" style="width:100%; column-count:1; padding-top:20px;">
@@ -56,11 +59,11 @@
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">Trial Balance</h4>
 
                     <h4 class="card-title" style="padding: 0px; margin: 0px;">
-                        As of
+                        As of 
                         <script>
                             var options = { year: 'numeric', month: 'long', day: 'numeric' };
-
-                            document.write(new Date().toLocaleDateString("en-US", options))
+                            var date = new Date(Date.parse('@ViewBag.DisplayDate'));
+                            document.write(date.toLocaleDateString("en-US", options))
                         </script>
                     </h4>
 
@@ -116,9 +119,10 @@
                 </div>
                 <div class="modal-body">
                     <h5>Select a Date:</h5>
-                    <input type="text" id="Date" onkeydown="return false;" autocomplete="off" class="form_datetime" style="text-align:right" value="" placeholder="mm/dd/yyyy">
+                    <input type="text" id="Date" onkeydown="return false;" autocomplete="off" class="form_datetime" style="text-align:right" placeholder="mm/dd/yyyy">
                 </div>
                 <div class="modal-footer">
+
                     <button type="button" id="GenerateReport" onclick="LoadGeneratedReportDate()" class="btn btn-success" data-dismiss="modal">Generate</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
@@ -168,9 +172,9 @@
 
         function LoadGeneratedReportDate() {
 
+            var selectedDate = document.getElementById("Date").value;
 
-
-
+            window.location.href = '../Manager/TrialBalance?until=' + selectedDate;
         }
 
     </script>
