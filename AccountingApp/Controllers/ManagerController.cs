@@ -684,7 +684,7 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult RejectSpecifiedEntry(int id, string comment)
         {
-
+            EventLogHandler Logger = new EventLogHandler();
             string s = "disapproved";
             var sessionUser = Session["Username"] as string;
 
@@ -694,15 +694,66 @@ namespace AccountingApp.Controllers
                 db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
             }
 
+            Logger.LogManagerRejectedEntry(sessionUser, id);
+
             return Json("Entry Disapproved.");
+        }
+
+        public string GenerateEventLogTransactionDetail(int id)
+        {
+            var sessionUser = Session["Username"] as string;
+            List<TransactionTable> transactionList;
+            List<string> Entries = new List<string>();
+            List<string> TotalList = new List<string>();
+            string AllEntries = "";
+            string Resultant = "";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
+            }
+
+            TotalList.Add(transactionList[0].EntryId.ToString());
+            TotalList.Add("Status: " + transactionList[0].Status);
+            TotalList.Add("Type: " + transactionList[0].Entry_Type);
+
+            for (int i = 0; i < transactionList.Count; i++)
+            {
+
+                string EntryAccountName = transactionList[i].AccountName;
+                decimal DebitAmount = transactionList[i].Debit.GetValueOrDefault();
+                decimal CreditAmount = transactionList[i].Credit.GetValueOrDefault();
+
+                string line = "";
+
+                if (CreditAmount == 0)
+                {
+                    //This line is a debit
+                    line = EntryAccountName + "-Debit-" + DebitAmount;
+                    Entries.Add(line);
+                }
+
+                if (DebitAmount == 0)
+                {
+                    //This line is a credit
+                    line = EntryAccountName + "-Credit-" + CreditAmount;
+                    Entries.Add(line);
+                }
+
+            }
+
+            AllEntries = String.Join(",", Entries);
+            TotalList.Add(AllEntries);
+            TotalList.Add("Comment: " + transactionList[0].AccountantComment);
+            Resultant = String.Join("|^|", TotalList);
+
+            return Resultant;
         }
 
         [HttpPost]
         public ActionResult ApproveSpecifiedEntry(int id, string comment)
         {
-            //System.Diagnostics.Debug.WriteLine("it got called");
-            //System.Diagnostics.Debug.WriteLine("id " + id);
-            //System.Diagnostics.Debug.WriteLine("comm " + comment);
+            EventLogHandler Logger = new EventLogHandler();
             string s = "approved";
             var sessionUser = Session["Username"] as string;
 
@@ -716,7 +767,6 @@ namespace AccountingApp.Controllers
 
             for (int i = 0; i < transactionList.Count; i++)
             {
-
                 //POST REFERENCE LOGIC
                 //get the account name at i
                 string AccountName = transactionList[i].AccountName;
@@ -804,10 +854,7 @@ namespace AccountingApp.Controllers
                     //Credit has a value, it is a liability, equity, or revenue account
                     //Credits increase liability, equity, and revenue accounts.
                     NewBalance += RowCredit;
-                }
-
-                //System.Diagnostics.Debug.WriteLine("current account " + AccountName);
-                //System.Diagnostics.Debug.WriteLine("new balance " + NewBalance);
+                }                
 
                 //update transaction table at i with the post reference, add before balance and after balance
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
@@ -833,6 +880,7 @@ namespace AccountingApp.Controllers
                 db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
             }
 
+            Logger.LogManagerApprovedEntry(sessionUser, id);
 
             return Json("Entry Approved.");
         }

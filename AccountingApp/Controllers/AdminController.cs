@@ -92,6 +92,7 @@ namespace AccountingApp.Controllers
                     });
                 }
                 TempData["Message"] = "Your entry was successfully added!";
+                Logger.LogNewUser(model.Username);
 
                 return RedirectToAction("AllUsers");
             }
@@ -222,8 +223,8 @@ namespace AccountingApp.Controllers
                 Updated.Add("ZIP Code: " + value.ZIP_Code);
             }
 
-            OriginalModel = String.Join(", ", Original);
-            UpdatedModel = String.Join(", ", Updated);
+            OriginalModel = String.Join("|^|", Original);
+            UpdatedModel = String.Join("|^|", Updated);
 
             if (OriginalModel != "")
             {
@@ -341,6 +342,7 @@ namespace AccountingApp.Controllers
         [HttpPost]
         public ActionResult NewAccount(NewAccountModel model)
         {
+            EventLogHandler Logger = new EventLogHandler();
             var sessionUser = Session["Username"] as string;
 
             string Normal = "";
@@ -376,19 +378,13 @@ namespace AccountingApp.Controllers
                         Date = DateTime.Now
                     });
                 }
-
-            //    if (ModelState.IsValid)
-            //{
-            //    db.ChartOfAccs.Add(tb2);
-
-            //    db.SaveChanges();
-            //    var item = db.ChartOfAccs.ToList();
+                            
                 TempData["Message"] = "A new account was successfully created!";
-
+                Logger.LogAdminCreateAccount(sessionUser, model.AccountName);
 
                 return RedirectToAction("ChartOfAccounts");
             }
-            //ModelState.Clear();
+            
             return View("NewAccount", new NewAccountModel());
         }
 
@@ -474,14 +470,13 @@ namespace AccountingApp.Controllers
         }
 
         public ActionResult EditAccount(int id)
-        {
+        {            
             List<ChartOfAcc> editAccount;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
 
                 editAccount = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountNumber = @ID", new { ID = id }).ToList();
-            }
-            //return View(editAccount);
+            }            
 
             EditAccountModel e = new EditAccountModel();
             e.AccountNumber = editAccount[0].AccountNumber;
@@ -490,16 +485,33 @@ namespace AccountingApp.Controllers
             e.AccountDescription = editAccount[0].AccountDescription;
             e.Active = editAccount[0].Active;
 
-            return View(e);
-            //var item = db.ChartOfAccs.Where(x => x.AccountNumber == id).First();
-            //return View(item);
+
+            return View(e);            
         }
 
         [HttpPost]
         public ActionResult EditAccount(EditAccountModel model)
         {
+            EventLogHandler Logger = new EventLogHandler();
+            var sessionUser = Session["Username"] as string;
+
             if (ModelState.IsValid)
-            {                
+            {
+                List<ChartOfAcc> accountsList;
+                List<string> AccountDetails = new List<string>();
+                List<string> NewAccountDetails = new List<string>();
+
+                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+                {
+                    accountsList = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountNumber = @ID", new { ID = model.AccountNumber }).ToList();
+                }
+
+                AccountDetails.Add(sessionUser + " Edited Account: " + accountsList[0].AccountName);
+                AccountDetails.Add("Active: " + accountsList[0].Active);
+                AccountDetails.Add("Type: " + accountsList[0].AccountType);
+                AccountDetails.Add("Description: " + accountsList[0].AccountDescription);
+                string DetailedFrom = String.Join("|^|", AccountDetails);
+
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
                     string sql = "Update dbo.ChartOfAccounts set AccountName = @AccountName, " +
@@ -517,11 +529,18 @@ namespace AccountingApp.Controllers
                         
                     });
                 }
-                
+
+                NewAccountDetails.Add(sessionUser + " Edited Account: " + model.AccountName);
+                NewAccountDetails.Add("Active: " + model.Active);
+                NewAccountDetails.Add("Type: " + model.AccountType);
+                NewAccountDetails.Add("Description: " + model.AccountDescription);
+                string DetailedTo = String.Join("|^|", NewAccountDetails);
+
                 TempData["Message"] = "Your entry was successfully updated!";
 
-                return RedirectToAction("ChartOfAccounts");
-            
+                Logger.LogAdminEditAccount(sessionUser, model.AccountName, DetailedFrom, DetailedTo);
+
+                return RedirectToAction("ChartOfAccounts");            
             }
 
             return View(model);

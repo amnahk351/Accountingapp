@@ -363,7 +363,7 @@
                         {
                             <tr>
                                 <td>@Model[i].AccountNumber</td>
-                                <td>@Model[i].AccountName</td>
+                                <td><a href="../Accountant/GeneralLedger?name=@Model[i].AccountName" style="color:blue">@Model[i].AccountName</a></td>
                                 <td>@Model[i].AccountType</td>
                                 <td>@Model[i].NormalSide</td>
                                 <td style="text-align:end">@Model[i].OriginalBalString</td>
