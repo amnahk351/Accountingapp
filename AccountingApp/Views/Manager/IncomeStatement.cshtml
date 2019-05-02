@@ -60,8 +60,9 @@
                         For the Period Ending
                         <script>
                             var options = { year: 'numeric', month: 'long', day: 'numeric' };
-
-                            document.write(new Date().toLocaleDateString("en-US", options))</script>
+                            var date = new Date(Date.parse('@ViewBag.DisplayDate'));
+                            document.write(date.toLocaleDateString("en-US", options))
+                        </script>
                     </h4>
                     @*<br />*@
                     <hr style="border-width: 2px; border-color: black" />
@@ -349,7 +350,9 @@
 
         function LoadGeneratedReportDate() {
 
+            var selectedDate = document.getElementById("Date").value;
 
+            window.location.href = '../Manager/IncomeStatement?until=' + selectedDate;
 
 
         }
