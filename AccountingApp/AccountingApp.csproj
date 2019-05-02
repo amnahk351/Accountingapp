@@ -396,6 +396,7 @@
     <Content Include="Models\TransactionTableModel.edmx.diagram">
       <DependentUpon>TransactionTableModel.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\ObjectiveAccounting - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\html2pdf.bundle.min.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
@@ -496,7 +497,6 @@
     <Content Include="Views\Accountant\GeneralLedger.cshtml" />
     <Content Include="Views\Admin\NewAccount.cshtml" />
     <Content Include="Views\Admin\EditAccount.cshtml" />
-    <Content Include="Views\Manager\trialTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="User_Uploads\" />
