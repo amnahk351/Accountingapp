@@ -29,6 +29,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" />
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" />*@
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
     @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -192,7 +193,7 @@
             }
 
             table.AccountsModalTable tbody td {
-                font-size: 13px;
+                font-size: 18px;
             }
 
             table.AccountsModalTable tr:nth-child(even) {
@@ -207,7 +208,7 @@
             }
 
                 table.AccountsModalTable thead th {
-                    font-size: 15px;
+                    font-size: 20px;
                     font-weight: bold;
                     color: #FFFFFF;
                     border-left: 2px solid #D0E4F5;
@@ -303,16 +304,16 @@
                 </li>
                 @*<li>
 
-                <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                    <i class="fas fa-list" style="margin-right:10px;"></i>
-                    Chart Of Accounts
-                </a>
-                <ul class="collapse list-unstyled" id="accountSubmenu">
-                    <li>
-                        <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
-                    </li>
-                </ul>
-                </li>*@
+                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-list" style="margin-right:10px;"></i>
+                        Chart Of Accounts
+                    </a>
+                    <ul class="collapse list-unstyled" id="accountSubmenu">
+                        <li>
+                            <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
+                        </li>
+                    </ul>
+                    </li>*@
                 <li>
 
                     <a href="/Manager/Journalize">
@@ -468,44 +469,44 @@
                         <tbody style="background-color:white; width:100%">
                             @for (int i = 0; i < Model.entries.Count; i++)
                             {
-                            <tr>
-                                <td>@Model.entries[i].DateSubmitted</td>
-                                <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model.entries[i].entryID</td>
-                                <td>@Model.entries[i].Entry_Type</td>                                
-                                <td onclick="PopulateAccountsModal(this)" style="white-space: pre-wrap; color:blue; cursor:pointer;" data-toggle="modal" data-target="#AccountsModal">@Model.entries[i].FormattedAccountNames()</td>
-                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
-                                <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
-                                <td>
-                                    @*@Model.entries[i].status*@
-                                    @if (@Model.entries[i].status == "approved")
-                                    {<i class="fas fa-check" style="color: limegreen;"></i>
+                                <tr>
+                                    <td>@Model.entries[i].DateSubmitted</td>
+                                    <td onclick="PopulateEntryModal(this)" style="color:blue; cursor: pointer" data-toggle="modal" data-target="#EntryModal">@Model.entries[i].entryID</td>
+                                    <td>@Model.entries[i].Entry_Type</td>
+                                    <td onclick="PopulateAccountsModal(this)" style="white-space: pre-wrap; color:blue; cursor:pointer;" data-toggle="modal" data-target="#AccountsModal">@Model.entries[i].FormattedAccountNames()</td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedDebits()</td>
+                                    <td align="right" style="white-space: pre-wrap;">@Model.entries[i].FormattedCredits()</td>
+                                    <td>
+                                        @*@Model.entries[i].status*@
+                                        @if (@Model.entries[i].status == "approved")
+                                        {<i class="fas fa-check" style="color: limegreen;"></i>
 
-                                        <span style="color: limegreen;">@Model.entries[i].status</span>
+                                            <span style="color: limegreen;">@Model.entries[i].status</span>
 
-                                    }
-                                    else if (@Model.entries[i].status == "disapproved")
-                                    { <i class="fas fa-times" style="color: red;"></i>
+                                        }
+                                        else if (@Model.entries[i].status == "disapproved")
+                                        { <i class="fas fa-times" style="color: red;"></i>
 
-                                        <span style="color: red;">  @Model.entries[i].status</span>
-                                    }
-                                    else if (@Model.entries[i].status == "pending")
-                                    { <i class="fas fa-exclamation-circle" style="color:darkorange"></i>
+                                            <span style="color: red;">  @Model.entries[i].status</span>
+                                        }
+                                        else if (@Model.entries[i].status == "pending")
+                                        { <i class="fas fa-exclamation-circle" style="color:darkorange"></i>
 
-                                        <span style="color: darkorange;">  @Model.entries[i].status</span>
+                                            <span style="color: darkorange;">  @Model.entries[i].status</span>
 
-                                    }
-                                    else
-                                    {<i class="fas fa-exclamation" style="color:#17a2b8;"></i>
+                                        }
+                                        else
+                                        {<i class="fas fa-exclamation" style="color:#17a2b8;"></i>
 
 
-                                        <span style="color:#17a2b8;">  @Model.entries[i].status</span>
-                                    }
-                                </td>
-                                <td style="text-align:center">
-                                    <button type="button" class="btn btn-success" onclick="PopulateApproveModal(this)" style="margin-bottom: 5px;height:35px;width:80px" data-toggle="modal" data-target="#ApproveModal">Approve</button>
-                                    <button type="button" class="btn btn-danger" onclick="PopulateRejectModal(this)" style="height:35px;width:80px" data-toggle="modal" data-target="#RejectModal">Reject</button>
-                                </td>
-                            </tr>
+                                            <span style="color:#17a2b8;">  @Model.entries[i].status</span>
+                                        }
+                                    </td>
+                                    <td style="text-align:center">
+                                        <button type="button" class="btn btn-success" onclick="PopulateApproveModal(this)" style="margin-bottom: 5px;height:35px;width:80px" data-toggle="modal" data-target="#ApproveModal">Approve</button>
+                                        <button type="button" class="btn btn-danger" onclick="PopulateRejectModal(this)" style="height:35px;width:80px" data-toggle="modal" data-target="#RejectModal">Reject</button>
+                                    </td>
+                                </tr>
 
                             }
                         </tbody>
@@ -517,7 +518,7 @@
                 <hr />
                 <footer align="center">
                     <p>
-                        &copy; @DateTime.Now.Year - Objective Accounting - 
+                        &copy; @DateTime.Now.Year - Objective Accounting -
                         Jared Breedlove, Amnah Ilyas, Quillan May, Colt McKissick, Broderick Thayer, and Zachary Thayer
                     </p>
                 </footer>
@@ -525,7 +526,7 @@
 
             <!-- Modal -->
             <div class="modal fade" id="EntryModal" role="dialog">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
 
                     <!-- Modal content-->
                     <div class="modal-content">
@@ -580,10 +581,10 @@
             </div>
 
             <div class="modal fade" id="AccountsModal" role="dialog">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
 
                     <!-- Modal content-->
-                    <div class="modal-content">
+                    <div class="modal-content modal-lg">
                         <div class="modal-header">
 
                             <h4 style="text-align:left" class="modal-title">Account Details</h4>
@@ -592,7 +593,7 @@
 
                             <div id="AccountsModalEntryID">ID: </div>
                             <br />
-                            <table id="AccountsModalTable" class="AccountsModalTable">                                
+                            <table id="AccountsModalTable" class="AccountsModalTable">
 
                                 <thead>
                                     <tr>
@@ -604,12 +605,9 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody></tbody>
 
-
-                                </tbody>
-
-                            </table>                            
+                            </table>
 
                         </div>
                         <div class="modal-footer">
@@ -620,7 +618,7 @@
             </div>
 
             <div class="modal fade" id="ApproveModal" role="dialog">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
 
                     <!-- Modal content-->
                     <div class="modal-content">
@@ -681,10 +679,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody>
-
-
-                                </tbody>                                
+                                <tbody></tbody>
 
                             </table>
 
@@ -769,9 +764,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody>
-
-                                </tbody>
+                                <tbody></tbody>
 
                             </table>
 
@@ -1021,7 +1014,7 @@
                 var tableRef = document.getElementById('RejectModalAccountsTable').getElementsByTagName('tbody')[0];
 
                 // Insert a row in the table at the last row
-                var row = tableRef.insertRow(tableRef.rows.length); 
+                var row = tableRef.insertRow(tableRef.rows.length);
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
                 var cell3 = row.insertCell(2);
@@ -1049,9 +1042,9 @@
         function ApproveEntrySubmit() {
 
             var de = document.getElementById("ManagerApproveComment").value;
-            
+
             if (de == "") {
-                
+
                 $.ajax({
                     url: "/Account/GetErrors",
                     method: 'post',
@@ -1069,7 +1062,7 @@
                 var ModalID = document.getElementById("ApproveModalEntryID");
                 var ID = ModalID.innerText;
                 var id = ID.replace("ID: ", "");
-                                               
+
 
                 $.ajax({
                     url: "/Manager/ApproveSpecifiedEntry",
@@ -1092,7 +1085,7 @@
                 document.getElementById("ManagerApproveComment").value = "";
                 document.getElementById('ApproveCommentError').innerText = "";
 
-                location.reload();                
+                location.reload();
 
             }
         }
@@ -1102,7 +1095,7 @@
             document.getElementById('ApproveCommentError').innerText = "";
             document.getElementById("ManagerApproveComment").value = "";
             $("#ApproveModalAccountsTable tbody tr").remove();
-            
+
 
             var row = $(id).closest('tr');
             var table = document.getElementById("GeneralJournalTable");
@@ -1177,7 +1170,7 @@
                         //alert(JSON.stringify(error));
                     }
                 });
-                        
+
             var Query2 = Query.replace(/"/g, "");
             var resul = Query2.split("|^|");
 
@@ -1185,7 +1178,7 @@
             var AccountantComment = resul[1];
 
             var ModalUser = document.getElementById("ApproveModalUsername");
-            var ModalComm = document.getElementById("ApproveModalComment");            
+            var ModalComm = document.getElementById("ApproveModalComment");
 
             if (AccountantComment == "") {
                 ModalComm.innerText = "N/A";
@@ -1199,7 +1192,7 @@
             var AllAccounts = NewText.split("\n");
 
             var table = document.getElementById("ApproveModalAccountsTable");
-            
+
 
             for (i = 0; i < AllAccounts.length; i++) {
 
@@ -1230,12 +1223,12 @@
                 var resul = Query2.split("|^|");
 
                 var Money = formatMoney(resul[0]);
-                var Act = resul[1];                
+                var Act = resul[1];
 
                 var tableRef = document.getElementById('ApproveModalAccountsTable').getElementsByTagName('tbody')[0];
 
                 // Insert a row in the table at the last row
-                var row = tableRef.insertRow(tableRef.rows.length); 
+                var row = tableRef.insertRow(tableRef.rows.length);
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
                 var cell3 = row.insertCell(2);
@@ -1247,7 +1240,7 @@
                 } else {
                     cell3.innerText = "No";
                 }
-                
+
             }
 
 
@@ -1280,7 +1273,7 @@
             var Accounts = $(AllAccounts).text();
 
             var NewText = Accounts.replace(/\t/g, "");
-            var AllAccounts = NewText.split("\n");            
+            var AllAccounts = NewText.split("\n");
 
 
             for (i = 0; i < AllAccounts.length; i++) {
@@ -1319,7 +1312,7 @@
                 var tableRef = document.getElementById('AccountsModalTable').getElementsByTagName('tbody')[0];
 
                 // Insert a row in the table at the last row
-                var row = tableRef.insertRow(tableRef.rows.length);                
+                var row = tableRef.insertRow(tableRef.rows.length);
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
                 var cell3 = row.insertCell(2);
@@ -1335,7 +1328,7 @@
                 cell3.innerText = type;
 
                 cell4.innerText = "$ " + Money;
-                                
+
 
                 if (Act == "True") {
                     cell5.innerText = "Yes";
@@ -1426,7 +1419,7 @@
 
             var ModalCr = document.getElementById("Creds");
             ModalCr.innerHTML = finalCr;
-            
+
 
             var Query;
 
@@ -1551,12 +1544,65 @@
         @Scripts.Render("~/bundles/bootstrap")*@
     @Scripts.Render("~/Scripts/jquery-1.8.3.min.js")
     @Scripts.Render("~/Scripts/bootstrap.min.js")
-    <script>
+    @*<script>
         $(document).ready(function () {
             $('#GeneralJournalTable').DataTable();
         });
-    </script>
+    </script>*@
+    <script>
+        $(document).ready(function () {
+            var table = $('#GeneralJournalTable').DataTable({
+                "dom": '<"toolbar">frtip'
+            });
+            $("div.toolbar").html('<input id="date_range" type="text" placeholder= "Search By: Start Date to End Date" style="width:30%" class="form-control">');
 
+            $("#date_range").daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    "cancelLabel": "Clear",
+                }
+            });
+
+            $("#date_range").on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' to ' + picker.endDate.format('MM/DD/YYYY'));
+                table.draw();
+            });
+
+            $("#date_range").on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+                table.draw();
+            });
+
+            $.fn.dataTableExt.afnFiltering.push(
+                function (oSettings, aData, iDataIndex) {
+
+                    var grab_daterange = $("#date_range").val();
+                    var give_results_daterange = grab_daterange.split(" to ");
+                    var filterstart = give_results_daterange[0];
+                    var filterend = give_results_daterange[1];
+                    var iStartDateCol = 0; //using column 2 in this instance
+                    var iEndDateCol = 0;
+                    var tabledatestart = aData[iStartDateCol];
+                    var tabledateend = aData[iEndDateCol];
+
+                    if (!filterstart && !filterend) {
+                        return true;
+                    }
+                    else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && filterend === "") {
+                        return true;
+                    }
+                    else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isAfter(tabledatestart)) && filterstart === "") {
+                        return true;
+                    }
+                    else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && (moment(filterend).isSame(tabledateend) || moment(filterend).isAfter(tabledateend))) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+        });
+    </script>
 
 
     @*<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>*@
@@ -1565,6 +1611,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 </body>
 </html>
