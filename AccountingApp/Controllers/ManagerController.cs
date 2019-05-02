@@ -222,38 +222,13 @@ namespace AccountingApp.Controllers
                 return View(getAllEntriesOfStatus(status));
         }
 
-        //public ActionResult TrialBalance()
-        //{
-        //    List<ChartOfAcc> coa;
-        //    decimal debTotal = 0;
-        //    decimal credTotal = 0;
-        //    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-        //    {
-        //        coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
-        //        foreach (ChartOfAcc c in coa)
-        //        {
-        //            if (c.NormalSide.ToLower() == "debit")
-        //                debTotal += c.CurrentBalance.Value;
-        //            else
-        //                credTotal += c.CurrentBalance.Value;
-        //        }
-
-        //        ViewBag.DebitTotal = debTotal;
-        //        ViewBag.CreditTotal = credTotal;
-        //    }
-
-        //    return View(coa);
-        //}
-
-        //[HttpPost]
         public ActionResult TrialBalance (DateTime? until)
         {
             decimal debTotal = 0;
             decimal credTotal = 0;
-            System.Diagnostics.Debug.WriteLine("it got called");
             if (until == null)
             {
-                System.Diagnostics.Debug.WriteLine("it got called2");
+                ViewBag.DisplayDate = DateTime.Now.ToString();
                 List<ChartOfAcc> coa;
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {   
@@ -274,10 +249,8 @@ namespace AccountingApp.Controllers
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("it got called3");
-                //ModelState.Clear();
-                Trace.WriteLine("------------Hit Load Report Data " + until);
                 List<ChartOfAcc> coaAtDate = new List<ChartOfAcc>();
+                ViewBag.DisplayDate = until.ToString();
 
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {
@@ -318,7 +291,7 @@ namespace AccountingApp.Controllers
                         Trace.WriteLine("---After: " + coaAtDate[i].AccountName + ": " + coaAtDate[i].CurrentBalance);
                     }
                 }
-                //return RedirectToAction("TrialBalance", coaAtDate);
+
                 return View(coaAtDate);
             }
             
