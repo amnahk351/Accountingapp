@@ -60,8 +60,9 @@
                         As of
                         <script>
                             var options = { year: 'numeric', month: 'long', day: 'numeric' };
-
-                            document.write(new Date().toLocaleDateString("en-US", options))</script>
+                            var date = new Date(Date.parse('@ViewBag.DisplayDate'));
+                            document.write(date.toLocaleDateString("en-US", options))
+                        </script>
                     </h4>
                     @*<br />*@
                     <hr style="border-width: 2px; border-color: black" />
@@ -84,7 +85,7 @@
                                     if (Model[i].AccountName.ToLower() != "office supplies")
                                     {
                                         <tr>
-                                            <td align="left" style="text-indent: 8%; color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
+                                            <td align="left" style="text-indent: 8%; color: blue"><a href="/Manager/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
                                             <td style="text-align: right; width: 135px">@Model[i].CurrentBalance</td>
                                             <td> </td>
                                         </tr>
@@ -94,7 +95,7 @@
                             <tr>
                                 <th class="text-left" style="text-indent: 4%">&nbsp;&nbsp;&nbsp;Total Current Assets</th>
                                 <td style="border-top: .15rem solid"> </td>
-                                <td style="border-bottom: .4rem double; text-align: right; width: 135px">@ViewBag.totalCurrentAssets</td>
+                                <td style="border-bottom: .4rem double; text-align: right">@ViewBag.totalCurrentAssets</td>
                             </tr>
 
                             <tr>
@@ -107,7 +108,7 @@
                                 if (Model[i].AccountName.ToLower() == "office supplies" || Model[i].AccountName.ToLower() == "accumulated depreciation equipment")
                                 {
                                     <tr>
-                                        <td align="left" style="text-indent: 8%; color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
+                                        <td align="left" style="text-indent: 8%; color:blue"><a href="/Manager/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
                                         @if (Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                         {
                                             <td style="text-align: right; width: 135px">@Model[i].CurrentBalance</td>
@@ -159,7 +160,7 @@
                                     if (Model[i].AccountName.ToLower() != "unearned revenue" && Model[i].AccountName.ToLower() != "accumulated depreciation equipment")
                                     {
                                         <tr>
-                                            <td align="left" style="text-indent: 8%; color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
+                                            <td align="left" style="text-indent: 8%; color: blue"><a href="/Manager/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
                                             <td align="right" style="width: 135px">@Model[i].CurrentBalance</td>
                                             <td> </td>
                                         </tr>
@@ -203,7 +204,7 @@
                                 {
                                     <tr>
 
-                                        <td align="left" style="text-indent: 4%; color: blue"><a href="/Accountant/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
+                                        <td align="left" style="text-indent: 4%; color: blue"><a href="/Manager/GeneralLedger?name=@Model[i].AccountName">&nbsp;&nbsp;&nbsp;@Model[i].AccountName</a></td>
                                         <td></td>
                                         <td style="text-align: right; width: 135px">@Model[i].CurrentBalance</td>
 
@@ -212,11 +213,11 @@
                                 }
                             }
 
-                                    <tr>                                        
-                                        <td align="left" style="text-indent: 4%; color: blue"><a href="/Accountant/GeneralLedger?name=Retained Earnings">&nbsp;&nbsp;&nbsp;Retained Earnings</a></td>
-                                        <td> </td>
-                                        <td style="text-align: right; width: 135px">@ViewBag.retainedEarnings</td>
-                                    </tr>
+                            <tr>
+                                <td align="left" style="text-indent: 4%; color: blue"><a href="/Accountant/GeneralLedger?name=Retained Earnings">&nbsp;&nbsp;&nbsp;Retained Earnings</a></td>
+                                <td> </td>
+                                <td style="text-align: right; width: 135px">@ViewBag.retainedEarnings</td>
+                            </tr>
 
                             <tr>
                                 <th class="text-left">Total Stockholders' Equity</th>
@@ -231,7 +232,7 @@
                             <tr>
                                 <th class="text-left">Total Liabilities & Stockholders' Equity</th>
                                 <td> </td>
-                                <td style="border-bottom: .4rem double; text-align: right; width: 135px">@ViewBag.totalLiabilitesStockEquity</td>
+                                <td style="border-bottom: .4rem double; text-align: right">@ViewBag.totalLiabilitesStockEquity</td>
                             </tr>
                         </table>
                     </div>
@@ -285,7 +286,9 @@
 
         function LoadGeneratedReportDate() {
 
+            var selectedDate = document.getElementById("Date").value;
 
+            window.location.href = '../Accountant/BalanceSheet?until=' + selectedDate;
 
 
         }
