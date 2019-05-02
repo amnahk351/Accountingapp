@@ -281,12 +281,43 @@ namespace AccountingApp.Controllers
 
         }
 
+        [HttpGet]
+        public ActionResult RetrieveEditedDetailsFrom(int id)
+        {
+            List<EventLog> evenList;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                evenList = db.Query<EventLog>($"Select * From dbo.EventLogTable Where EventID=@ID", new { ID = id }).ToList();
+            }
+
+            string From = evenList[0].DetailedFrom;            
+            var result = JsonConvert.SerializeObject(From);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult RetrieveEditedDetailsTo(int id)
+        {
+            List<EventLog> evenList;
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                evenList = db.Query<EventLog>($"Select * From dbo.EventLogTable Where EventID=@ID", new { ID = id }).ToList();
+            }
+
+            string To = evenList[0].DetailedTo;
+            var result = JsonConvert.SerializeObject(To);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult EventLog()
         {
             List<Models.EventLog> events;
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
-
                 events = db.Query<Models.EventLog>($"Select * from dbo.EventLogTable").ToList();
             }
 
@@ -623,10 +654,10 @@ namespace AccountingApp.Controllers
                 {
                     accountsList = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountNumber = @ID", new { ID = model.AccountNumber }).ToList();
                 }
-                AccountDetails.Add(sessionUser + " Edited Account: " + accountsList[0].AccountName);
+                AccountDetails.Add("Name:" + accountsList[0].AccountName);
                 AccountDetails.Add("Active: " + accountsList[0].Active);
                 AccountDetails.Add("Type: " + accountsList[0].AccountType);
-                AccountDetails.Add("Description: " + accountsList[0].AccountDescription);
+                AccountDetails.Add("Description:" + accountsList[0].AccountDescription);
                 string DetailedFrom = String.Join("|^|", AccountDetails);
 
 
@@ -649,10 +680,10 @@ namespace AccountingApp.Controllers
                     });
                 }
 
-                NewAccountDetails.Add(sessionUser + " Edited Account: " + model.AccountName);
+                NewAccountDetails.Add("Name:" + model.AccountName);
                 NewAccountDetails.Add("Active: " + model.Active);
                 NewAccountDetails.Add("Type: " + model.AccountType);
-                NewAccountDetails.Add("Description: " + model.AccountDescription);
+                NewAccountDetails.Add("Description:" + model.AccountDescription);
                 string DetailedTo = String.Join("|^|", NewAccountDetails);
 
                 TempData["Message"] = "Your entry was successfully updated!";
