@@ -248,13 +248,13 @@ namespace AccountingApp.Controllers
         //[HttpPost]
         public ActionResult TrialBalance (DateTime? until)
         {
+            decimal debTotal = 0;
+            decimal credTotal = 0;
             System.Diagnostics.Debug.WriteLine("it got called");
             if (until == null)
             {
                 System.Diagnostics.Debug.WriteLine("it got called2");
                 List<ChartOfAcc> coa;
-                decimal debTotal = 0;
-                decimal credTotal = 0;
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
                 {   
                     coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
@@ -303,11 +303,13 @@ namespace AccountingApp.Controllers
                                 {
                                     coaAtDate[i].CurrentBalance += transactionsAtDate[j].Debit.Value;
                                     coaAtDate[i].CurrentBalance -= transactionsAtDate[j].Credit.Value;
+                                    debTotal += coaAtDate[i].CurrentBalance.Value;
                                 }
                                 else //normal side is credit
                                 {
                                     coaAtDate[i].CurrentBalance += transactionsAtDate[j].Credit.Value;
                                     coaAtDate[i].CurrentBalance -= transactionsAtDate[j].Debit.Value;
+                                    credTotal += coaAtDate[i].CurrentBalance.Value;
                                 }
 
                                 //transactionsAtDate.RemoveAt(j);
