@@ -172,16 +172,33 @@
 
             var selectedDate = document.getElementById("Date").value;
 
-            $.ajax({
-                type: 'POST',
-                url: '/Manager/TrialBalance/',
-                contentType: "application/json; charset=utf-8",
-                data: "{'until': '" + selectedDate + "'}",
-                success: function (result) {
-                    //alert(result);
-                    //$('#trialTable').html(result);
-                }
-            });
+            //$.ajax({
+            //    type: 'POST',
+            //    url: '/Manager/TrialBalance/',
+            //    contentType: "application/json; charset=utf-8",
+            //    data: "{'until': '" + selectedDate + "'}",
+            //    success: function (result) {
+            //        //alert(result);
+            //        //$('#trialTable').html(result);
+            //    }
+            //});
+
+            //$.ajax({
+                
+            //    url: '/Manager/TrialBalance/',
+            //    type: "GET",
+            //    async: false,
+            //    dataType: "json",
+            //    contentType: "application/json;",
+            //    data: {"until": selectedDate},
+            //    success: function (result) {
+            //        //alert(result);
+            //        //$('#trialTable').html(result);
+            //    }
+            //});
+            //alert(selectedDate);
+
+            window.location.href = '../Manager/TrialBalance?until=' + selectedDate;
         }
 
     </script>

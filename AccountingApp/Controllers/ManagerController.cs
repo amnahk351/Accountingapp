@@ -248,13 +248,15 @@ namespace AccountingApp.Controllers
         //[HttpPost]
         public ActionResult TrialBalance (DateTime? until)
         {
+            System.Diagnostics.Debug.WriteLine("it got called");
             if (until == null)
             {
+                System.Diagnostics.Debug.WriteLine("it got called2");
                 List<ChartOfAcc> coa;
                 decimal debTotal = 0;
                 decimal credTotal = 0;
                 using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-                {
+                {   
                     coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
                     foreach (ChartOfAcc c in coa)
                     {
@@ -272,6 +274,8 @@ namespace AccountingApp.Controllers
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine("it got called3");
+                //ModelState.Clear();
                 Trace.WriteLine("------------Hit Load Report Data " + until);
                 List<ChartOfAcc> coaAtDate = new List<ChartOfAcc>();
 
