@@ -1084,25 +1084,6 @@ namespace AccountingApp.Controllers
                 lastTransaction = db.Query<TransactionTable>($"Select * from dbo.TransactionTable").LastOrDefault();
 
                 int num = (int) lastTransaction.EntryId + 1;
-                string s = "pending";
-                string c = "Closing";
-                
-
-                string sql = $"Insert into dbo.TransactionTable (AccountantUsername, AccountantComment, " +
-                        "DateSubmitted, Status, EntryId, Entry_Type)" +
-                        "values(@AccountantUsername,@AccountantComment,@DateSubmitted,@Status," +
-                        "@EntryId,@Entry_Type)";
-
-                db.Execute(sql, new
-                {
-                    AccountantUsername = sessionUser,
-                    AccountantComment = "Closing Accounts",
-                    DateSubmitted = DateTime.Now,
-                    Status = s,                    
-                    EntryId = num,
-                    Entry_Type = c
-                });
-
                 Logger.LogAccountantCloseAccountRequest(sessionUser, num);
 
                 var revenueExpense = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountType = @revenue OR AccountType = @expense", new { revenue = "Revenue", expense = "Expense" }).ToList();
