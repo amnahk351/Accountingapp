@@ -1069,7 +1069,54 @@ namespace AccountingApp.Controllers
         }
 
 
-        
+        public ActionResult CloseAccounts()
+        {
+            Trace.WriteLine("Accounts Totally Closed");
+
+            List<ChartOfAcc> revenueExpense;
+            TransactionTable lastTransaction;
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                revenueExpense = db.Query<ChartOfAcc>($"Select * from dbo.ChartOfAccounts Where AccountType = @revenue OR AccountType = @expense", new { revenue = "Revenue", expense = "Expense"}).ToList();
+                lastTransaction = db.Query<TransactionTable>($"Select * from dbo.TransactionTable").LastOrDefault();
+
+                foreach (ChartOfAcc coa in revenueExpense)
+                {
+                    decimal amount = coa.CurrentBalance.Value;
+
+                    TransactionTable t = new TransactionTable();
+                    t.AccountName = coa.AccountName;
+                    t.AccountantUsername = "Accountant";
+                    t.AccountantComment = "Closing";
+                    t.AccountName = "Accountant";
+                    t.DateSubmitted = DateTime.Now;
+                    t.Status = "pending";
+                    t.TransactionID = lastTransaction.TransactionID + 1;
+                    t.EntryId = lastTransaction.EntryId + 1;
+                    t.PostReference = 123; //check this
+                    t.Entry_Type = "Closing";
+
+                    if (coa.NormalSide == "Debit")
+                    {
+                        t.Debit = 0;
+                        t.Credit = amount; //zero account
+                    }
+                    else
+                    {
+                        t.Debit = amount; //zero account
+                        t.Credit = 0;
+                    }
+
+                    string sql = $"Insert into dbo.TransactionsTable (TransactionID, AccountantUsername, " +
+                        "AccountantComment, DateSubmitted, Status, AccountName, Debit, Credit, EntryId, Entry_Type, PostReference)" + 
+                        "values(@TransactionID,@AccountName,@AccountantComment,@Password,@Role," +
+                        "@Phone,@Email,@Date,@Active,@Address,@City,@State,@ZIP_Code," +
+                        "@AccountLocked, @LoginAttempts, @LoginAmount, @LoginFails)";
+                }
+            }
+
+            return Redirect("ChartOfAccounts");
+        }
 
         //colt's code
         public ActionResult TrialBalance()

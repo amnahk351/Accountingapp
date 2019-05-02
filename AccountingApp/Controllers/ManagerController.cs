@@ -263,8 +263,6 @@ namespace AccountingApp.Controllers
                         revenueTotal += c.CurrentBalance.Value;
                     if (c.AccountType.ToLower() == "expense")
                         expenseTotal += c.CurrentBalance.Value;
-
-
                 }
 
                 ViewBag.RevenueTotal = revenueTotal;
