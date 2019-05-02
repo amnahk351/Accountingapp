@@ -805,10 +805,9 @@ namespace AccountingApp.Controllers
 
                 for (int i = 0; i < expenseList.Count; i++)
                 {
-                    RevenueSum += (decimal)expenseList[i].CurrentBalance;
+                    ExpenseSum += (decimal)expenseList[i].CurrentBalance;
                     EmptyAccount(expenseList[i].AccountName);
                 }
-
                 decimal Profit = RevenueSum - ExpenseSum;
 
 
@@ -1104,12 +1103,18 @@ namespace AccountingApp.Controllers
             List<ChartOfAcc> coa;
             decimal revenueTotal = 0;
             decimal expenseTotal = 0;
+            decimal earnings = 0;
+            decimal divedends = 0;
 
             using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
             {
                 coa = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where Active = @active", new { active = true }).ToList();
                 foreach (ChartOfAcc c in coa)
                 {
+                    if (c.AccountName == "Retained Earnings")
+                        earnings = c.CurrentBalance.Value;
+                    if (c.AccountName == "Divadends")
+                        divedends = c.CurrentBalance.Value;
                     if (c.AccountType.ToLower() == "revenue")
                         revenueTotal += c.CurrentBalance.Value;
                     if (c.AccountType.ToLower() == "expense")
@@ -1118,7 +1123,11 @@ namespace AccountingApp.Controllers
 
                 }
             }
+            ViewBag.RetainedEarnings = earnings;
             ViewBag.NetIncome = revenueTotal - expenseTotal;
+            ViewBag.EarningsPlusIncome = earnings + revenueTotal - expenseTotal;
+            ViewBag.Dividends = divedends;
+            ViewBag.Total = earnings + revenueTotal - expenseTotal - divedends;
             return View();
         }
 
