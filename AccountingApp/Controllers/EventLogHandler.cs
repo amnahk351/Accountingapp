@@ -112,7 +112,7 @@ namespace AccountingApp.Controllers
 
                 string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
                     "[From], [To], IPAddress, Screen, AccessLevel, DetailedFrom, DetailedTo) values" +
-                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, @DetFrom, DetTo)";
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, @DetFrom, @DetTo)";
                 db.Execute(sql, new
                 {
                     Date = model.Date,
@@ -358,7 +358,7 @@ namespace AccountingApp.Controllers
 
                 string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
                     "[From], [To], IPAddress, Screen, AccessLevel, DetailedFrom, DetailedTo) values" +
-                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, @DetFrom, DetTo)";
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, @DetFrom, @DetTo)";
                 db.Execute(sql, new
                 {
                     Date = model.Date,
@@ -426,7 +426,7 @@ namespace AccountingApp.Controllers
 
                 string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
                     "[From], [To], IPAddress, Screen, AccessLevel, DetailedFrom, DetailedTo) values" +
-                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, @DetFrom, DetTo)";
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel, @DetFrom, @DetTo)";
                 db.Execute(sql, new
                 {
                     Date = model.Date,
@@ -485,6 +485,74 @@ namespace AccountingApp.Controllers
             model.UserID = FindUserId(Username);
             model.From = "Pending Journal Entry: " + EntryID;
             model.To = Username + " Disapproved Journal Entry: " + EntryID;
+            model.IPAddress = ip;
+            model.Screen = "PendingTransactions";
+            model.Access_Level = "All";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
+                    "[From], [To], IPAddress, Screen, AccessLevel) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
+                db.Execute(sql, new
+                {
+                    Date = model.Date,
+                    UserID = model.UserID,
+                    From = model.From,
+                    To = model.To,
+                    IPAddress = model.IPAddress,
+                    Screen = model.Screen,
+                    AccessLevel = model.Access_Level
+
+                });
+            }
+        }
+
+        public void LogAccountantCloseAccountRequest(string Username, int EntryID)
+        {
+            string ip = HttpContext.Current.Request.UserHostAddress;
+            EventLog model = new EventLog();
+
+
+            model.Date = DateTime.Now;
+            model.UserID = FindUserId(Username);
+            model.From = "";
+            model.To = Username + " Created Closing Account Entry: " + EntryID;
+            model.IPAddress = ip;
+            model.Screen = "ChartOfAccounts";
+            model.Access_Level = "All";
+
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+
+                string sql = $"Insert into dbo.EventLogTable (Date, UserID, " +
+                    "[From], [To], IPAddress, Screen, AccessLevel) values" +
+                    "(@Date, @UserID, @From, @To, @IPAddress, @Screen,@AccessLevel)";
+                db.Execute(sql, new
+                {
+                    Date = model.Date,
+                    UserID = model.UserID,
+                    From = model.From,
+                    To = model.To,
+                    IPAddress = model.IPAddress,
+                    Screen = model.Screen,
+                    AccessLevel = model.Access_Level
+
+                });
+            }
+        }
+
+        public void LogManagerClosingApproval(string Username, int EntryID)
+        {
+            string ip = HttpContext.Current.Request.UserHostAddress;
+            EventLog model = new EventLog();
+
+
+            model.Date = DateTime.Now;
+            model.UserID = FindUserId(Username);
+            model.From = "Pending Closing Account Entry: " + EntryID;
+            model.To = Username + " Approved Closing Account Entry: " + EntryID;
             model.IPAddress = ip;
             model.Screen = "PendingTransactions";
             model.Access_Level = "All";

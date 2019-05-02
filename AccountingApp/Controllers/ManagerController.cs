@@ -942,55 +942,55 @@ namespace AccountingApp.Controllers
                 transactionList = db.Query<TransactionTable>($"Select * From dbo.TransactionTable Where EntryId = @ID", new { ID = id }).ToList();
             }
 
-            if (transactionList[0].Entry_Type == "Closing")
-            {
-                List<ChartOfAcc> revenueList;
+            //if (transactionList[0].Entry_Type == "Closing")
+            //{
+            //    List<ChartOfAcc> revenueList;
 
-                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-                {
-                    revenueList = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @Ty", new { Ty = "Revenue" }).ToList();
-                }
+            //    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //    {
+            //        revenueList = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @Ty", new { Ty = "Revenue" }).ToList();
+            //    }
 
-                List<ChartOfAcc> expenseList;
+            //    List<ChartOfAcc> expenseList;
 
-                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-                {
-                    expenseList = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @Ty", new { Ty = "Expense" }).ToList();
-                }
+            //    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //    {
+            //        expenseList = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountType = @Ty", new { Ty = "Expense" }).ToList();
+            //    }
                 
                 
-                decimal RevenueSum = 0;
-                decimal ExpenseSum = 0;
+            //    decimal RevenueSum = 0;
+            //    decimal ExpenseSum = 0;
 
-                for (int i = 0; i < revenueList.Count; i++) {
-                    RevenueSum += (decimal)revenueList[i].CurrentBalance;
-                    EmptyAccount(revenueList[i].AccountName);
-                }
+            //    for (int i = 0; i < revenueList.Count; i++) {
+            //        RevenueSum += (decimal)revenueList[i].CurrentBalance;
+            //        EmptyAccount(revenueList[i].AccountName);
+            //    }
 
-                for (int i = 0; i < expenseList.Count; i++)
-                {
-                    ExpenseSum += (decimal)expenseList[i].CurrentBalance;
-                    EmptyAccount(expenseList[i].AccountName);
-                }
-                decimal Profit = RevenueSum - ExpenseSum;
+            //    for (int i = 0; i < expenseList.Count; i++)
+            //    {
+            //        ExpenseSum += (decimal)expenseList[i].CurrentBalance;
+            //        EmptyAccount(expenseList[i].AccountName);
+            //    }
+            //    decimal Profit = RevenueSum - ExpenseSum;
 
 
 
-                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-                {
-                    string sql = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
-                    db.Execute(sql, new { Cu = Profit, AccName = "Retained Earnings" });
-                }
+            //    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //    {
+            //        string sql = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+            //        db.Execute(sql, new { Cu = Profit, AccName = "Retained Earnings" });
+            //    }
 
-                using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
-                {
-                    string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
-                    db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
-                }
+            //    using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            //    {
+            //        string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
+            //        db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
+            //    }
 
-            }
-            else
-            {
+            //}
+            //else
+            //{
                 for (int i = 0; i < transactionList.Count; i++)
                 {
 
@@ -1105,7 +1105,7 @@ namespace AccountingApp.Controllers
                     string sql = $"UPDATE dbo.TransactionTable SET ManagerUsername = @User, ManagerComment = @Comm, DateReviewed = @Date, Status = @status WHERE EntryID = @entryID";
                     db.Execute(sql, new { User = sessionUser, Comm = comment, Date = DateTime.Now, status = s, entryID = id });
                 }
-            }
+            //}
             Logger.LogManagerApprovedEntry(sessionUser, id);
 
             return Json("Entry Approved.");
