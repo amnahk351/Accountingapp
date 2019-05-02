@@ -201,16 +201,16 @@
                 </li>
                 @*<li>
 
-        <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-            <i class="fas fa-list" style="margin-right:10px;"></i>
-            Chart Of Accounts
-        </a>
-        <ul class="collapse list-unstyled" id="accountSubmenu">
-            <li>
-                <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
-            </li>
-        </ul>
-        </li>*@
+                    <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas fa-list" style="margin-right:10px;"></i>
+                        Chart Of Accounts
+                    </a>
+                    <ul class="collapse list-unstyled" id="accountSubmenu">
+                        <li>
+                            <a href="/Manager/ChartOfAccounts">Chart of Accounts</a>
+                        </li>
+                    </ul>
+                    </li>*@
                 <li>
 
                     <a href="/Accountant/Journalize">
@@ -335,14 +335,14 @@
                 </div>
                 <hr class="my-4" />
                 @if (TempData["Message"] != null)
-        {
-            <div class="alert alert-success alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                @TempData["Message"]
-            </div>
-}
+                {
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        @TempData["Message"]
+                    </div>
+                }
 
                 <table id="Accountstable" class="table table-responsive table-hover shadow " style="font-size:1.1rem; background-color:white; width:100%; box-shadow: 2px 6px 6px 2px lightgray;">
                     <thead class="shadow" style="background-color:white; width:100%">
@@ -361,19 +361,19 @@
                     <tbody>
 
                         @for (int i = 0; i < Model.Count(); i++)
-                {
-                    <tr>
-                        <td>@Model[i].AccountNumber</td>
-                        <td>@Model[i].AccountName</td>
-                        <td>@Model[i].AccountType</td>
-                        <td>@Model[i].NormalSide</td>
-                        <td style="text-align:end">@Model[i].OriginalBalString</td>
-                        <td style="text-align:end">@Model[i].CurrentBalString</td>
-                        <td>@Model[i].AccountDescription</td>
-                        <td>@(Model[i].Active ? "Y" : "N")</td>
-                        <td>@Model[i].CreatedBy</td>
-                    </tr>
-        }
+                        {
+                            <tr>
+                                <td>@Model[i].AccountNumber</td>
+                                <td><a href="../Accountant/GeneralLedger?name=@Model[i].AccountName" style="color:blue">@Model[i].AccountName</a></td>
+                                <td>@Model[i].AccountType</td>
+                                <td>@Model[i].NormalSide</td>
+                                <td style="text-align:end">@Model[i].OriginalBalString</td>
+                                <td style="text-align:end">@Model[i].CurrentBalString</td>
+                                <td>@Model[i].AccountDescription</td>
+                                <td>@(Model[i].Active ? "Y" : "N")</td>
+                                <td>@Model[i].CreatedBy</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
                 <hr />
@@ -522,7 +522,7 @@
                             Are you sure you want to close accounts?
                         </div>
                         <div class="modal-footer">
-                            <input type="button" value="Yes" class="btn btn-success" onclick="location.href='@Url.Action("CloseAccountsEntry")'"/>
+                            <input type="button" value="Yes" class="btn btn-success" onclick="location.href='@Url.Action("CloseAccountsEntry")'" />
                             <button id="CloseUpdateModal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -564,7 +564,7 @@
     <script>
 
         function LoadAccountList() {
-            
+
             document.getElementById("UpdateDescription").value = "";
             document.getElementById('DescriptionError').innerText = "";
 
@@ -595,7 +595,7 @@
 
             for (var i = 0; i < res.length; i++) {
                 var Account = res[i].replace(/"/g, "");
-                
+
                 var x = document.getElementById("AccountSelect");
                 var option = document.createElement("option");
                 option.text = Account;
@@ -608,7 +608,7 @@
 
     <script>
         function CloseAccounts() {
-            
+
         }
     </script>
 
@@ -616,7 +616,7 @@
 
         function SubmitUpdateRequest() {
 
-            
+
             var de = document.getElementById("UpdateDescription").value;
             if (de == "") {
 
@@ -633,7 +633,7 @@
             } else {
                 //There is something to submit
 
-                //Get selected account                
+                //Get selected account
                 var skillsSelect = document.getElementById("AccountSelect");
                 var name = skillsSelect.options[skillsSelect.selectedIndex].text;
 
@@ -660,7 +660,7 @@
             }
 
         }
-        
+
 
         function SubmitAccountRequest() {
 
@@ -692,7 +692,7 @@
 
             var Select = document.getElementById("AccountType");
             var type = Select.options[Select.selectedIndex].text;
-            
+
             if (type == "Select..") {
 
                 $.ajax({
@@ -729,7 +729,7 @@
                     success: function (data) {
                         document.getElementById('AccountOriginalBalanceError').innerText = data[54];
                     }
-                });                                
+                });
             }
 
             if (num == "" || name == "" || type == "Select.." || side == "Select.." || bal == "") {
@@ -757,15 +757,15 @@
 
                 //Simulate button click to close modal
                 document.getElementById('CloseModal').click();
-            
-                
+
+
                 document.getElementById('AccountNumber').value = "";
                 document.getElementById('AccountName').value = "";
                 document.getElementById("AccountType").selectedIndex = "0";
                 document.getElementById("NormalSide").selectedIndex = "0";
                 document.getElementById('OriginalBalance').value = "";
                 document.getElementById('Description').value = "";
-                
+
 
                 document.getElementById('NumberError').innerText = "";
                 document.getElementById('NameError').innerText = "";
@@ -813,7 +813,7 @@
         setInputFilter(document.getElementById("AccountNumber"), function (value) {
             return /^\d*$/.test(value);
         });
-        
+
 
         setInputFilter(document.getElementById("OriginalBalance"), function (value) {
             return /^-?\d*[.,]?\d{0,2}$/.test(value);
