@@ -276,21 +276,33 @@ namespace AccountingApp.Controllers
                                 {
                                     coaAtDate[i].CurrentBalance += transactionsAtDate[j].Debit.Value;
                                     coaAtDate[i].CurrentBalance -= transactionsAtDate[j].Credit.Value;
-                                    debTotal += coaAtDate[i].CurrentBalance.Value;
+                                    
                                 }
                                 else //normal side is credit
                                 {
                                     coaAtDate[i].CurrentBalance += transactionsAtDate[j].Credit.Value;
                                     coaAtDate[i].CurrentBalance -= transactionsAtDate[j].Debit.Value;
-                                    credTotal += coaAtDate[i].CurrentBalance.Value;
+                                   
                                 }
 
-                                //transactionsAtDate.RemoveAt(j);
                             }
                         }
                         Trace.WriteLine("---After: " + coaAtDate[i].AccountName + ": " + coaAtDate[i].CurrentBalance);
                     }
                 }
+
+                credTotal = 0;
+                debTotal = 0;
+                foreach (ChartOfAcc c in coaAtDate)
+                {
+                    if (c.NormalSide.ToLower() == "debit")
+                        debTotal += c.CurrentBalance.Value;
+                    else
+                        credTotal += c.CurrentBalance.Value;
+                }
+
+                ViewBag.DebitTotal = debTotal;
+                ViewBag.CreditTotal = credTotal;
 
                 return View(coaAtDate);
             }
