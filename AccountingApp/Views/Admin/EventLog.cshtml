@@ -710,12 +710,12 @@
             var Query2 = Query.replace(/"/g, "");
             var Data = Query2.split("|^|");
 
-            for (var i = 1; i < Data.length; i++) {
+            for (var i = 0; i < Data.length; i++) {
 
                 var Split = Data[i].split(":");
 
                 var table = document.getElementById("UpdatedAccountModalTable");
-                var row = table.insertRow(0);
+                var row = table.insertRow();
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
                 cell1.innerHTML = Split[0];
@@ -771,12 +771,12 @@
             var Query2 = Query.replace(/"/g, "");
             var Data = Query2.split("|^|");
 
-            for (var i = 1; i < Data.length; i++) {
+            for (var i = 0; i < Data.length; i++) {
 
                 var Split = Data[i].split(":");
 
                 var table = document.getElementById("EditedAccountModalTable");
-                var row = table.insertRow(0);
+                var row = table.insertRow();
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
                 cell1.innerHTML = Split[0];
@@ -829,7 +829,7 @@
                 var Split = Data[i].split(":");
 
                 var table = document.getElementById("EditedUserTable");
-                var row = table.insertRow(0);
+                var row = table.insertRow();
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
                 cell1.innerHTML = Split[0];
@@ -881,7 +881,7 @@
                 var Split = Data[i].split(":");
 
                 var table = document.getElementById("ModifedUserTable");
-                var row = table.insertRow(0);
+                var row = table.insertRow();
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
                 cell1.innerHTML = Split[0];

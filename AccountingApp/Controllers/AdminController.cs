@@ -654,10 +654,10 @@ namespace AccountingApp.Controllers
                 {
                     accountsList = db.Query<ChartOfAcc>($"Select * From dbo.ChartOfAccounts Where AccountNumber = @ID", new { ID = model.AccountNumber }).ToList();
                 }
-                AccountDetails.Add(sessionUser + " Edited Account: " + accountsList[0].AccountName);
+                AccountDetails.Add("Name:" + accountsList[0].AccountName);
                 AccountDetails.Add("Active: " + accountsList[0].Active);
                 AccountDetails.Add("Type: " + accountsList[0].AccountType);
-                AccountDetails.Add("Description: " + accountsList[0].AccountDescription);
+                AccountDetails.Add("Description:" + accountsList[0].AccountDescription);
                 string DetailedFrom = String.Join("|^|", AccountDetails);
 
 
@@ -680,10 +680,10 @@ namespace AccountingApp.Controllers
                     });
                 }
 
-                NewAccountDetails.Add(sessionUser + " Edited Account: " + model.AccountName);
+                NewAccountDetails.Add("Name:" + model.AccountName);
                 NewAccountDetails.Add("Active: " + model.Active);
                 NewAccountDetails.Add("Type: " + model.AccountType);
-                NewAccountDetails.Add("Description: " + model.AccountDescription);
+                NewAccountDetails.Add("Description:" + model.AccountDescription);
                 string DetailedTo = String.Join("|^|", NewAccountDetails);
 
                 TempData["Message"] = "Your entry was successfully updated!";
