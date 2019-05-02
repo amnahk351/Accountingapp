@@ -308,6 +308,8 @@
                     </a>
                 </div>
                 <br />
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" onclick="ResetAccounts()">Reset Accounts</button>
+                <br />
                 <hr class="my-4" />
                 @if (TempData["Message"] != null)
                 {
@@ -357,9 +359,9 @@
                                     </a>
 
                                     @*<a href="@Url.Action("Delete", new { id = Model[i].AccountNumber})">
-                                            <i class="fas fa-user-edit"></i>
-                                            Delete
-                                        </a>*@
+                                <i class="fas fa-user-edit"></i>
+                                Delete
+                            </a>*@
                                 </td>
 
 
@@ -417,6 +419,30 @@
     </script>
 
     <script>
+
+        function ResetAccounts() {
+
+            var Query;
+
+            $.ajax(
+                {
+                    url: '/Admin/ResetAccounts/',
+                    type: "GET",
+                    async: false,
+                    dataType: "json",
+                    contentType: "application/json;",
+                    success: function (result) {
+                        //alert(result);
+                        Query = result;
+
+                    },
+                    error: function (error) {
+                        //alert(JSON.stringify(error));
+                    }
+                });
+            alert("Accounts Reset");
+            location.reload();
+        }
 
         function LogOutUser() {
 

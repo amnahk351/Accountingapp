@@ -302,6 +302,121 @@ namespace AccountingApp.Controllers
             return View(items);
         }
 
+        public ActionResult ResetAccounts() {
+
+            //update current balance in chart of accounts
+            using (IDbConnection db = new SqlConnection(SqlAccess.GetConnectionString()))
+            {
+                decimal balance = (decimal)8875;
+                string name = "Cash";
+                string sql = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql, new { Cu = balance, AccName = name });
+
+                decimal balance2 = (decimal)3450;
+                string name2 = "Accounts Receivable";
+                string sql2 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql2, new { Cu = balance2, AccName = name2 });
+
+                decimal balance3 = (decimal)1020;
+                string name3 = "Supplies";
+                string sql3 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql3, new { Cu = balance3, AccName = name3 });
+
+                decimal balance4 = (decimal)9300;
+                string name4 = "Office Supplies";
+                string sql4 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql4, new { Cu = balance4, AccName = name4 });
+
+                decimal balance5 = (decimal)1650;
+                string name5 = "Prepaid Insurance";
+                string sql5 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql5, new { Cu = balance5, AccName = name5 });
+
+                decimal balance6 = (decimal)3000;
+                string name6 = "Prepaid Rent";
+                string sql6 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql6, new { Cu = balance6, AccName = name6 });
+
+                decimal balance7 = (decimal)1000;
+                string name7 = "Accounts Payable";
+                string sql7 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql7, new { Cu = balance7, AccName = name7 });
+
+                decimal balance8 = (decimal)20;
+                string name8 = "Salaries Payable";
+                string sql8 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql8, new { Cu = balance8, AccName = name8 });
+
+                decimal balance9 = (decimal)1000;
+                string name9 = "Unearned Revenue";
+                string sql9 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql9, new { Cu = balance9, AccName = name9 });
+
+                decimal balance10 = (decimal)500;
+                string name10 = "Accumulated Depreciation Equipment";
+                string sql10 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql10, new { Cu = balance10, AccName = name10 });
+
+                decimal balance11 = (decimal)20250;
+                string name11 = "Contributed Capital";
+                string sql11 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql11, new { Cu = balance11, AccName = name11 });
+
+                decimal balance12 = (decimal)13425;
+                string name12 = "Service Revenue";
+                string sql12 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql12, new { Cu = balance12, AccName = name12 });
+
+                decimal balance13 = (decimal)0;
+                string name13 = "Retained Earnings";
+                string sql13 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql13, new { Cu = balance13, AccName = name13 });
+
+                decimal balance14 = (decimal)1500;
+                string name14 = "Rent Expense";
+                string sql14 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql14, new { Cu = balance14, AccName = name14 });
+
+                decimal balance15 = (decimal)5320;
+                string name15 = "Salaries Expense";
+                string sql15 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql15, new { Cu = balance15, AccName = name15 });
+
+                decimal balance16 = (decimal)980;
+                string name16 = "Supplies Expense";
+                string sql16 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql16, new { Cu = balance16, AccName = name16 });
+
+                decimal balance17 = (decimal)200;
+                string name17 = "Utilities Expense";
+                string sql17 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql17, new { Cu = balance17, AccName = name17 });
+
+                decimal balance18 = (decimal)130;
+                string name18 = "Telephone Expense";
+                string sql18 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql18, new { Cu = balance18, AccName = name18 });
+
+                decimal balance19 = (decimal)120;
+                string name19 = "Advertising Expense";
+                string sql19 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql19, new { Cu = balance19, AccName = name19 });
+
+                decimal balance20 = (decimal)150;
+                string name20 = "Insurance Expense";
+                string sql20 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql20, new { Cu = balance20, AccName = name20 });
+
+                decimal balance21 = (decimal)500;
+                string name21 = "Depreciation Expense";
+                string sql21 = $"UPDATE dbo.ChartOfAccounts SET CurrentBalance = @Cu WHERE AccountName = @AccName";
+                db.Execute(sql21, new { Cu = balance21, AccName = name21 });
+
+            }
+
+            return Json("Reset");
+        }
+
         public ActionResult UserStatistics()
         {
             List<UserStatsModel> stats = new List<UserStatsModel>();
@@ -377,18 +492,13 @@ namespace AccountingApp.Controllers
                     });
                 }
 
-            //    if (ModelState.IsValid)
-            //{
-            //    db.ChartOfAccs.Add(tb2);
-
-            //    db.SaveChanges();
-            //    var item = db.ChartOfAccs.ToList();
+                
                 TempData["Message"] = "A new account was successfully created!";
 
 
                 return RedirectToAction("ChartOfAccounts");
             }
-            //ModelState.Clear();
+            
             return View("NewAccount", new NewAccountModel());
         }
 
